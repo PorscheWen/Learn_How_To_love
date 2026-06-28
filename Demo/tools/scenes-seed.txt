@@ -1,0 +1,627 @@
+/**
+ * Scene graph — refined narrative copy
+ */
+const SCENES = {
+  prologue_rain: {
+    id: 'prologue_rain',
+    day: 1,
+    location: 'prologue_rain',
+    music: 'tender',
+    feeling: 'anxious',
+    smell: '濕紙箱、雨水、微弱體溫',
+    text: () => '三天前的傍晚，雨沒有要停的樣子。\n巷口那個紙箱輕輕動了一下——你蹲下去，對上一雙濕漉漉、還在發抖的眼睛。',
+    sub: 'Day 1。你帶牠回家。那時候，你們都還不知道，這叫作「開始」。',
+    onEnter: (s) => { addMemory(s, 'prologue_rain'); },
+    choices: [
+      {
+        text: '用毛巾轻轻包住，抱上計程車',
+        effect: (s) => { applyTrust(s, 5); applyBondProgress(s, 10); },
+        next: 'prologue_home',
+      },
+    ],
+  },
+
+  prologue_home: {
+    id: 'prologue_home',
+    day: 1,
+    location: 'living_corner',
+    music: 'night',
+    feeling: 'anxious',
+    smell: '新毯子、你的外套、仍帶雨氣的毛',
+    text: (s) => `第一夜，${s.dogName || '牠'} 不肯進窩。\n只是縮在紙箱邊，像還留在雨裡。\n你開了小夜燈，在三步之外坐下——不靠近，也不離開。`,
+    choices: [
+      { text: '時間來到 Day 3 的早晨……', effect: () => {}, next: 'day3_morning' },
+    ],
+  },
+
+  day3_morning: {
+    id: 'day3_morning',
+    day: 3,
+    location: 'living_corner',
+    music: 'warm',
+    feeling: 'anxious',
+    smell: '舊紙箱、雨味淡去、仍陌生的房間',
+    text: (s) => `Day 3，早晨。\n${s.dogName} 還蜷在紙箱旁，好像那裡才是安全邊界。\n你第一次獨自照顧一個生命——說起來簡單，做起來，每一步都像試探。`,
+    sub: '你還不知道怎麼愛。\n牠也還不知道，怎麼相信。',
+    choices: [
+      {
+        text: '輕聲喚牠的名字，在遠處坐下，等',
+        effect: (s) => {
+          applyTrust(s, 12);
+          applyBondProgress(s, 25);
+          setFeeling(s, 'curious');
+        },
+        next: 'day3_curious',
+      },
+      {
+        text: '心裡著急，提高音量：「過來！」',
+        effect: (s) => {
+          applyTrust(s, -15);
+          s.flags.yelledOnce = true;
+          setFeeling(s, 'hurt');
+        },
+        next: 'day3_hurt',
+      },
+      {
+        text: '先準備早餐，讓食物的氣味替你去問好',
+        effect: (s) => {
+          applyTrust(s, 8);
+          applyBondProgress(s, 15);
+        },
+        next: 'day3_kitchen',
+      },
+    ],
+  },
+
+  day3_hurt: {
+    id: 'day3_hurt',
+    day: 3,
+    location: 'living_corner',
+    music: 'tense',
+    feeling: 'hurt',
+    smell: '你的怒氣——太尖、太刺鼻',
+    text: (s) => `${s.dogName} 往角落縮得更深。\n你站在原地，忽然明白：愛不是把聲音放大。\n有些距離，是自己推開的。`,
+    sub: '還來得及。\n信任碎了，也可以一片一片拼回來。',
+    choices: [
+      {
+        text: '深呼吸，先去拿水盆和毛巾',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 20);
+          setFeeling(s, 'anxious');
+        },
+        next: 'day3_kitchen',
+      },
+    ],
+  },
+
+  day3_curious: {
+    id: 'day3_curious',
+    day: 3,
+    location: 'living_room',
+    music: 'warm',
+    feeling: 'curious',
+    smell: '洗過的地板、你的拖鞋、遠處的早餐',
+    text: (s) => `${s.dogName} 的耳朵豎了一下。\n鼻子朝你的方向動了動，又停住——\n像在丈量：可以再靠近一點嗎？`,
+    choices: [
+      {
+        text: '伸出手，掌心朝上，不拉、不拽',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 20);
+        },
+        next: 'day3_kitchen',
+      },
+    ],
+  },
+
+  day3_kitchen: {
+    id: 'day3_kitchen',
+    day: 3,
+    location: 'kitchen',
+    music: 'warm',
+    feeling: 'curious',
+    smell: '溫熱的飼料、新尿墊、陽台曬過的風',
+    text: (s) => `廚房的門框像一道線。\n${s.dogName} 跟到這裡就不走了——\n新家的氣味太多，牠需要時間，把「這裡」變成「安全」。`,
+    sub: 'Love isn\'t something you\'re born with.\nYou learn how—together.',
+    onEnter: (s) => { s.flags.favoriteSpot = 'kitchen'; },
+    choices: [
+      {
+        text: '帶牠認識尿墊放哪裡——慢慢來',
+        effect: (s) => { applyBondProgress(s, 15); },
+        next: 'day3_balcony',
+      },
+      {
+        text: '先餵一口：讓牠記得，這裡會有好事發生',
+        effect: (s) => {
+          applyTrust(s, 8);
+          applyBondProgress(s, 10);
+          setFeeling(s, 'content');
+        },
+        next: 'day3_balcony',
+      },
+    ],
+  },
+
+  day3_balcony: {
+    id: 'day3_balcony',
+    day: 3,
+    location: 'balcony',
+    music: 'calm',
+    feeling: 'curious',
+    smell: '曬過的風、樓下的車、很遠的草味',
+    text: (s) => `陽台。\n${s.dogName} 把鼻子貼在欄杆縫隙，吸了很深的一口氣。\n外面的世界好大——但吹過來的風，是溫的。`,
+    sub: '第一次，和你并排曬太陽。',
+    choices: [
+      {
+        text: '陪牠坐一會，不催，不拉',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 18);
+          addMemory(s, 'balcony_sun');
+          setFeeling(s, 'content');
+        },
+        next: 'day3_potty_intro',
+      },
+      {
+        text: '心裡擔心，很快帶回客廳',
+        effect: (s) => {
+          applyTrust(s, 2);
+          applyBondProgress(s, 5);
+        },
+        next: 'day3_potty_intro',
+      },
+    ],
+  },
+
+  day3_potty_intro: {
+    id: 'day3_potty_intro',
+    day: 3,
+    location: 'living_room',
+    music: 'warm',
+    feeling: 'curious',
+    smell: '尿墊、皂香、你的耐心',
+    text: () => '如廁這件事，很少一次就對。\n你要在對的瞬間，輕輕引導——\n像說一個只有你們懂的暗號。',
+    minigame: 'potty',
+    next: 'day3_afternoon',
+  },
+
+  day3_afternoon: {
+    id: 'day3_afternoon',
+    day: 3,
+    location: 'living_room',
+    music: 'calm',
+    feeling: 'content',
+    smell: '午後塵光、電風扇、漸漸熟悉的地磚',
+    text: (s) => `午後很長，也很安靜。\n${s.dogName} 在客廳來回嗅聞，開始記得：\n哪裡是門、哪裡是窩、哪裡是你常坐的位置。`,
+    choices: [
+      { text: '天色漸漸暗下來……', effect: () => {}, next: 'day3_night' },
+    ],
+  },
+
+  day3_night: {
+    id: 'day3_night',
+    day: 3,
+    location: 'bathroom_night',
+    music: 'night',
+    feeling: 'anxious',
+    smell: '意外、你的疲憊、牠的驚慌',
+    text: (s) => `深夜，你從夢裡驚醒。\n客廳傳來一點氣味——${s.dogName} 留了不該留的「禮物」。\n心往下沉。你知道，這一夜會記很久。`,
+    sub: '怎麼做，比做錯了什麼更重要。',
+    choices: [
+      {
+        text: '不罵。清理完，陪牠坐在尿墊旁',
+        effect: (s) => {
+          applyTrust(s, 18);
+          applyBondProgress(s, 35);
+          s.flags.pottyNightKind = true;
+          addMemory(s, 'potty_night');
+          addMemory(s, 'knee');
+          setFeeling(s, 'content');
+        },
+        next: 'day3_night_after',
+      },
+      {
+        text: '嘆氣，默默清理，回房關上門',
+        effect: (s) => {
+          applyTrust(s, -8);
+          applyBondProgress(s, 5);
+          setFeeling(s, 'hurt');
+        },
+        next: 'day4_repair',
+      },
+      {
+        text: '吼了出來，把牠關進浴室',
+        effect: (s) => {
+          applyTrust(s, -20);
+          s.flags.yelledOnce = true;
+          setFeeling(s, 'hurt');
+        },
+        next: 'day4_repair',
+      },
+    ],
+  },
+
+  day3_night_after: {
+    id: 'day3_night_after',
+    day: 3,
+    location: 'bedroom_night',
+    music: 'tender',
+    feeling: 'content',
+    smell: '清潔劑散去後，只剩你的體溫',
+    text: (s) => `${s.dogName} 把頭輕輕放在你膝上。\n沒有聲音，沒有撒嬌——\n只是靠著，像終於確認：你不會在這時候離開。`,
+    sub: '【Memory】尿墊之夜　·　【Moment】靠膝',
+    choices: [
+      { text: '摸一摸牠的頭，關燈', effect: () => {}, next: 'day4_morning' },
+    ],
+  },
+
+  day4_repair: {
+    id: 'day4_repair',
+    day: 4,
+    location: 'hallway',
+    music: 'tense',
+    feeling: 'hurt',
+    smell: '隔夜的沉默、未散的疏離',
+    text: (s) => `Day 4，早晨。\n${s.dogName} 在玄關張望，腳步往前半步，又退回去。\n牠還在這裡——只是不確定，你還在不在。`,
+    sub: '後果不是懲罰，是提醒：你還來得及補。',
+    choices: [
+      {
+        text: '蹲下，說對不起，拿出牠最愛的玩具',
+        effect: (s) => {
+          applyTrust(s, 15);
+          applyBondProgress(s, 25);
+          setFeeling(s, 'curious');
+        },
+        next: 'day4_morning',
+      },
+      {
+        text: '照常餵食，不說話，但也不離開',
+        effect: (s) => {
+          applyTrust(s, 5);
+          applyBondProgress(s, 10);
+          setFeeling(s, 'anxious');
+        },
+        next: 'day4_morning',
+      },
+    ],
+  },
+
+  day4_morning: {
+    id: 'day4_morning',
+    day: 4,
+    location: 'kitchen_morning',
+    music: 'calm',
+    feeling: 'anxious',
+    smell: '第四天咖啡、逐漸熟稔的廚房',
+    text: (s) => `Day 4。\n你在廚房切吐司，${s.dogName} 多靠近了半步。\n很小的一步——但你看见了。`,
+    choices: [
+      {
+        text: '固定 routine：餵食、尿墊、短暫陪伴',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 20);
+          setFeeling(s, 'content');
+        },
+        next: 'day4_afternoon',
+      },
+    ],
+  },
+
+  day4_afternoon: {
+    id: 'day4_afternoon',
+    day: 4,
+    location: 'living_room',
+    music: 'calm',
+    feeling: 'content',
+    smell: '舊玩具、你的襪子、地板上的方塊光',
+    text: (s) => `你把玩具扔出去，又後悔扔太遠。\n${s.dogName} 愣了一下，還是跑去叼回來——\n不完全是玩，更像在问：你还在吗？`,
+    sub: '信任是一來一回，不是一次做對就夠。',
+    choices: [
+      {
+        text: '誇牠，順手梳梳背上的毛',
+        effect: (s) => {
+          applyTrust(s, 8);
+          applyBondProgress(s, 15);
+        },
+        next: 'day5_prep',
+      },
+      {
+        text: '接過玩具，視線仍停在手機上',
+        effect: (s) => {
+          applyTrust(s, -3);
+          applyBondProgress(s, 3);
+        },
+        next: 'day5_prep',
+      },
+    ],
+  },
+
+  day5_prep: {
+    id: 'day5_prep',
+    day: 5,
+    location: 'doorway',
+    music: 'hopeful',
+    feeling: 'excited',
+    smell: '項圈、牽繩、門縫裡的外面',
+    text: (s) => `Day 5，第一次出門。\n${s.dogName} 在門口轉圈，尾巴起起落落——\n興奮和害怕，原來可以同時存在。`,
+    sub: '你要引導，不是硬拖。',
+    choices: [
+      {
+        text: '讓牠在門口嗅夠了，再下一階',
+        effect: (s) => {
+          applyTrust(s, 12);
+          applyBondProgress(s, 15);
+        },
+        next: 'day5_stairwell',
+      },
+      {
+        text: '「快點習慣。」直接拉出去',
+        effect: (s) => {
+          applyTrust(s, -5);
+          setFeeling(s, 'anxious');
+        },
+        next: 'day5_stairwell',
+      },
+    ],
+  },
+
+  day5_stairwell: {
+    id: 'day5_stairwell',
+    day: 5,
+    location: 'stairwell',
+    music: 'tense',
+    feeling: 'anxious',
+    smell: '鐵欄杆、鄰居便當、回音',
+    text: (s) => `樓梯每一階，對 ${s.dogName} 都太響。\n牠停住，回頭看你——\n那眼神像在问：你会等我吗？`,
+    choices: [
+      {
+        text: '蹲下，等牠準備好，再下一階',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 12);
+        },
+        next: 'day5_walk',
+      },
+      {
+        text: '輕拉牽繩：「沒事的，走。」',
+        effect: (s) => {
+          applyTrust(s, 3);
+          applyBondProgress(s, 5);
+        },
+        next: 'day5_walk',
+      },
+    ],
+  },
+
+  day5_walk: {
+    id: 'day5_walk',
+    day: 5,
+    location: 'street',
+    music: 'tense',
+    feeling: 'anxious',
+    smell: '汽油、草皮、別的狗、你的腳步',
+    text: () => '街上很吵。\n牠走幾步就回頭——\n確認你还在，確認還能回去。',
+    minigame: 'walk',
+    next: 'day5_park',
+  },
+
+  day5_park: {
+    id: 'day5_park',
+    day: 5,
+    location: 'park',
+    music: 'hopeful',
+    feeling: 'curious',
+    smell: '泥土、樹皮、別的生命留下的氣息',
+    text: (s) => `小公園。\n${s.dogName} 把鼻子埋進樹根旁的土裡，吸得很深。\n這大概是牠第一次，認真「聞」這個世界。`,
+    sub: '那棵樹，後來會被記很久。',
+    onEnter: (s) => {
+      s.flags.favoriteSpot = 'park_tree';
+      addMemory(s, 'park_tree');
+    },
+    choices: [
+      {
+        text: '坐在長椅上等，不催牠離開',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 18);
+          setFeeling(s, 'content');
+        },
+        next: 'day5_follow',
+      },
+      {
+        text: '看看錶，轻轻拉牠往回走',
+        effect: (s) => {
+          applyTrust(s, 4);
+          applyBondProgress(s, 8);
+        },
+        next: 'day5_follow',
+      },
+    ],
+  },
+
+  day5_follow: {
+    id: 'day5_follow',
+    day: 5,
+    location: 'street_sunset',
+    music: 'hopeful',
+    feeling: 'content',
+    smell: '夕陽、回家路上的影子',
+    text: (s) => {
+      const close = s.trust >= 50;
+      s.flags.followVariant = close ? 'close' : 'far';
+      if (close) {
+        addMemory(s, 'follow_foot');
+        return `回程，風變柔了。\n${s.dogName} 不再亂衝，走在你腳邊——\n像一條安靜的繩，把兩個人系在同一條路上。`;
+      }
+      return `回程。\n${s.dogName} 仍隔著幾步，但沒有走遠。\n信任還在長，只是慢一些。`;
+    },
+    sub: (s) => (s.trust >= 50 ? '【Moment】第一次跟脚' : '（還在遠處跟着——但沒有離開）'),
+    onEnter: (s) => {
+      if (s.trust >= 50) applyBondProgress(s, 30);
+      else applyBondProgress(s, 10);
+      if (s.bondProgress >= 80 || s.trust >= 45) {
+        if (s.bondLevel < 2) { s.bondLevel = 2; s.bondProgress = 100; }
+      }
+    },
+    choices: [
+      { text: '放慢腳步，配合牠的節奏', effect: (s) => { applyTrust(s, 8); }, next: 'day6_morning' },
+    ],
+  },
+
+  day6_morning: {
+    id: 'day6_morning',
+    day: 6,
+    location: 'kitchen_morning',
+    music: 'calm',
+    feeling: 'content',
+    smell: '週末吐司、洗淨的碗、懶洋洋的陽光',
+    text: (s) => `Day 6，鬧鐘還沒響。\n${s.dogName} 先用鼻子拱醒你——\n這是牠版本的「早安」，比任何鈴聲都準時。`,
+    choices: [
+      { text: '午後，雲慢慢厚了……', effect: (s) => { applyBondProgress(s, 8); }, next: 'day6_check' },
+    ],
+  },
+
+  day6_check: {
+    id: 'day6_check',
+    day: 6,
+    location: 'living_sunday',
+    music: 'calm',
+    feeling: 'content',
+    smell: '週末的塵光、書頁、茶',
+    text: () => '午後，光線淡了一點。\n雲層壓下來，像有人把房間的聲音關小。',
+    onEnter: (s) => {
+      s._thunderEligible = s.flags.pottyNightKind || s.trust >= 40;
+    },
+    choices: [
+      {
+        text: '……',
+        effect: () => {},
+        next: (s) => (s._thunderEligible ? 'day6_thunder' : 'day6_quiet'),
+      },
+    ],
+  },
+
+  day6_quiet: {
+    id: 'day6_quiet',
+    day: 6,
+    location: 'living_sunday',
+    music: 'calm',
+    feeling: 'content',
+    smell: '晒過的毯子、你的書、時間本身',
+    text: (s) => `沒有雷。\n${s.dogName} 在沙發腳邊打盹，呼吸一起一伏。\n普通的一天——後來你才知道，這種普通有多難得。`,
+    choices: [
+      { text: 'Day 7……', effect: (s) => { applyBondProgress(s, 10); }, next: 'day7_morning' },
+    ],
+  },
+
+  day6_thunder: {
+    id: 'day6_thunder',
+    day: 6,
+    location: 'living_storm',
+    music: 'storm',
+    feeling: 'anxious',
+    smell: '臭氧、雨、鐵鏽、發抖的毛',
+    text: (s) => `雷聲滚過來。\n${s.dogName} 整個身子縮成一團，鑽進桌底——\n好像世界突然只剩下「怕」這一件事。`,
+    sub: '【Memory】雷雨——若你選擇留下',
+    choices: [
+      {
+        text: '開小夜燈，坐在地上，不強拉、不責怪',
+        effect: (s) => {
+          applyTrust(s, 15);
+          applyBondProgress(s, 20);
+          s.flags.afraidOfThunder = true;
+          s.flags.thunderHandled = true;
+          addMemory(s, 'thunder');
+          setFeeling(s, 'content');
+        },
+        next: 'day6_thunder_after',
+      },
+      {
+        text: '「沒什麼好怕的！」把牠從桌下拉出來',
+        effect: (s) => {
+          applyTrust(s, -10);
+          s.flags.afraidOfThunder = true;
+          setFeeling(s, 'hurt');
+        },
+        next: 'day7_morning',
+      },
+    ],
+  },
+
+  day6_thunder_after: {
+    id: 'day6_thunder_after',
+    day: 6,
+    location: 'window_rain',
+    music: 'tender',
+    feeling: 'content',
+    smell: '雨停後的泥土、你的膝蓋、安靜下來的心跳',
+    text: (s) => `雨停了。\n${s.dogName} 從桌底慢慢挪出來，停在你膝邊。\n怕雷這件事，會記很久——包括，誰在旁邊。`,
+    choices: [
+      { text: 'Day 7……', effect: () => {}, next: 'day7_morning' },
+    ],
+  },
+
+  day7_morning: {
+    id: 'day7_morning',
+    day: 7,
+    location: 'kitchen_morning',
+    music: 'warm',
+    feeling: 'content',
+    smell: '第七個早晨——像本來就該如此',
+    text: (s) => `Day 7，早晨。\n${s.dogName} 把食盆推到你腳邊，抬頭看你。\n不用語言，你也讀懂：该吃饭了，该开始了。`,
+    choices: [
+      { text: '傍晚，你比平常更晚回家……', effect: (s) => { applyBondProgress(s, 5); }, next: 'day7_evening' },
+    ],
+  },
+
+  day7_evening: {
+    id: 'day7_evening',
+    day: 7,
+    location: 'entrance_night',
+    music: 'night',
+    feeling: 'anxious',
+    smell: '疲憊、未接的電話、門裡熟悉的氣味',
+    text: () => '傍晚，你在門口站了一會。\n鑰匙還在口袋裡，手卻抬不起來。\n今天很難——難到不想讓誰看见。',
+    onEnter: (s) => { setFeeling(s, 'attached'); },
+    choices: [
+      {
+        text: '進門，什麼也不說，直接坐在地板上',
+        effect: (s) => {
+          applyTrust(s, 10);
+          applyBondProgress(s, 25);
+          addMemory(s, 'sad_day');
+        },
+        next: 'day7_moment',
+      },
+    ],
+  },
+
+  day7_moment: {
+    id: 'day7_moment',
+    day: 7,
+    location: 'living_warm',
+    music: 'tender',
+    feeling: 'attached',
+    smell: '眼淚的鹹、暖光、毛髮的溫度',
+    text: (s) => `${s.dogName} 沒有舔你滿臉，也沒有吵。\n只是走過來，把頭靠在你膝上——\n和 Day 3 那夜一樣輕，一樣安靜。`,
+    sub: '【Moment】你難過的那一天',
+    choices: [
+      { text: '……', effect: () => {}, next: 'epilogue' },
+    ],
+  },
+
+  epilogue: {
+    id: 'epilogue',
+    day: 7,
+    location: 'epilogue_home',
+    music: 'tender',
+    feeling: 'content',
+    smell: '一週後的家——開始像「我們的」',
+    text: (s) => `七天。\n${s.dogName} 還是會闖禍，你也還是會累。\n但你們慢慢學會一件事：\n愛不是一次做對，是一次次，選擇留下來。`,
+    sub: '羈絆才剛開始寫。',
+    isEpilogue: true,
+  },
+};
+
+if (typeof module !== 'undefined') module.exports = { SCENES };

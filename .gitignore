@@ -1,0 +1,31 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Env / secrets
+.env
+.env.*
+
+# Node (Demo tools)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Large media (run Demo/tools/download-*.ps1 locally)
+Demo/assets/audio/*.ogg
+Demo/assets/dog/sfx/*.wav
+Demo/assets/dog/sfx/*.ogg
+!Demo/assets/**/CREDITS.md
+Demo/assets/dog/*.png
+Demo/assets/scene/*.png
+Demo/assets/bg/*.png
+
+# Temp / scratch
+Demo/assets/dog/sfx/_*.ogg
+temp/
