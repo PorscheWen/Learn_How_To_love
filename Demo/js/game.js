@@ -45,6 +45,20 @@
   const SCENE_ART_DIR = 'assets/scene';
   const DAY2_BREATH_MS = 2600;
   const DAY2_TEXT_MULT = 1.5;
+  const PETTING_FEELINGS = new Set(['content', 'sleepy', 'attached']);
+  const PETTING_MIN_DRAG = 26;
+  const PETTING_TRUST_GAIN = 1;
+  const PETTING_COOLDOWN_MS = 1500;
+
+  let pettingState = {
+    sceneId: '',
+    rewarded: false,
+    pointerDown: false,
+    dragDist: 0,
+    lastX: 0,
+    lastY: 0,
+  };
+  let pettingCooldownUntil = 0;
 
   const SHOP_ROUNDS = [
     {
@@ -422,8 +436,99 @@
     return true;
   }
 
+  function hasVisibleChoices() {
+    return !!els.choices?.childElementCount;
+  }
+
+  function canPetDogNow() {
+    const scene = SCENES[state.sceneId];
+    if (!scene) return false;
+    if (isTypingOrWaiting()) return false;
+    if (hasVisibleChoices()) return false;
+    if (els.minigame && !els.minigame.classList.contains('hidden')) return false;
+    if (!PETTING_FEELINGS.has(state.feeling)) return false;
+    if (scene.hideDog || !isDogAudioEnabled(scene)) return false;
+    if (els.dogStage?.classList.contains('is-hidden')) return false;
+    if (els.dogImg?.classList.contains('dog-img-hidden')) return false;
+    return true;
+  }
+
+  function updatePettingAvailability() {
+    const canPet = canPetDogNow();
+    els.dog?.classList.toggle('is-pettable', canPet);
+  }
+
+  function endPettingGesture() {
+    pettingState.pointerDown = false;
+    pettingState.dragDist = 0;
+  }
+
+  function triggerPettingFeedback() {
+    const now = Date.now();
+    if (now < pettingCooldownUntil) return;
+
+    const scene = SCENES[state.sceneId];
+    if (!scene || !canPetDogNow()) return;
+
+    pettingCooldownUntil = now + PETTING_COOLDOWN_MS;
+    els.dog?.classList.add('is-petting');
+    setTimeout(() => els.dog?.classList.remove('is-petting'), 380);
+
+    if (typeof DogSounds !== 'undefined' && isDogAudioEnabled(scene)) {
+      DogSounds.playCue('breathEase', { source: 'petting', sceneId: state.sceneId });
+    }
+
+    els.dogBehavior.textContent = applyDogPronouns(
+      `${dogLabel(state)} 瞇起眼睛，呼吸慢慢貼上你的節奏。`,
+      state,
+    );
+
+    if (!pettingState.rewarded) {
+      applyTrust(state, PETTING_TRUST_GAIN);
+      pettingState.rewarded = true;
+      saveGame(state);
+    }
+
+    setTimeout(() => {
+      if (state.sceneId !== pettingState.sceneId) return;
+      updateDogVisual(scene);
+    }, 980);
+  }
+
+  function bindPettingControls() {
+    if (!els.dog) return;
+
+    els.dog.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      if (!canPetDogNow()) return;
+      pettingState.pointerDown = true;
+      pettingState.dragDist = 0;
+      pettingState.lastX = e.clientX;
+      pettingState.lastY = e.clientY;
+      try { els.dog.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    els.dog.addEventListener('pointermove', (e) => {
+      if (!pettingState.pointerDown) return;
+      const dx = e.clientX - pettingState.lastX;
+      const dy = e.clientY - pettingState.lastY;
+      pettingState.lastX = e.clientX;
+      pettingState.lastY = e.clientY;
+      pettingState.dragDist += Math.hypot(dx, dy);
+      if (pettingState.dragDist >= PETTING_MIN_DRAG) {
+        triggerPettingFeedback();
+        pettingState.dragDist = 0;
+      }
+    });
+
+    els.dog.addEventListener('pointerup', () => endPettingGesture());
+    els.dog.addEventListener('pointercancel', () => endPettingGesture());
+    els.dog.addEventListener('pointerleave', () => endPettingGesture());
+  }
+
   function advanceStoryStep() {
     if (!canAdvanceStoryStep()) return;
+    AmbientMusic.playAdvanceTick?.();
     if (typingAbort) {
       typingAbort();
       return;
@@ -499,8 +604,11 @@
       typingAbort();
       typingAbort = null;
     }
+    els.narrativeText?.classList.remove('is-revealing');
+    els.narrativeSub?.classList.remove('is-revealing');
     els.subtitleBox?.classList.remove('is-scrolling');
     setAdvanceable(!!delaySkipper);
+    updatePettingAvailability();
   }
 
   function scrollSubtitleToBottom() {
@@ -562,8 +670,10 @@
     abortTyping();
     const content = text == null ? '' : String(text);
     el.textContent = '';
+    el.classList.add('is-revealing');
     els.subtitleBox?.classList.add('is-scrolling');
     setAdvanceable(true);
+    updatePettingAvailability();
 
     const preset = getTextSpeedPreset();
     const paceMult = options.paceMult ?? 1;
@@ -571,9 +681,11 @@
 
     if (preset.instant) {
       applyNarrativeHtml(el, content);
+      el.classList.remove('is-revealing');
       scrollSubtitleToBottom();
       els.subtitleBox?.classList.remove('is-scrolling');
       setAdvanceable(!!delaySkipper);
+      updatePettingAvailability();
       return Promise.resolve();
     }
 
@@ -587,10 +699,12 @@
         cancelled = true;
         if (timerId) clearTimeout(timerId);
         applyNarrativeHtml(el, content);
+        el.classList.remove('is-revealing');
         scrollSubtitleToBottom();
         els.subtitleBox?.classList.remove('is-scrolling');
         typingAbort = null;
         setAdvanceable(!!delaySkipper);
+        updatePettingAvailability();
         resolve();
       };
 
@@ -632,6 +746,7 @@
     } else {
       AmbientMusic.setProfile(profile);
     }
+    AmbientMusic.setSceneAmbience?.(s);
   }
 
   function updateMusicBtn() {
@@ -700,6 +815,7 @@
     els.app.classList.remove('cold', 'content');
     if (visual.temp === 'cold') els.app.classList.add('cold');
     if (visual.temp === 'content') els.app.classList.add('content');
+    updatePettingAvailability();
   }
 
   function flashDogReact() {
@@ -801,6 +917,7 @@
   function updateChoicesLayout() {
     const hasChoices = els.choices.childElementCount > 0;
     els.scene?.classList.toggle('has-choices', hasChoices);
+    updatePettingAvailability();
   }
 
   function clearUI() {
@@ -813,9 +930,12 @@
     els.minigame.classList.add('hidden');
     els.narrativeText.textContent = '';
     els.narrativeSub.textContent = '';
+    els.narrativeText.classList.remove('is-revealing');
+    els.narrativeSub.classList.remove('is-revealing');
     resetSubtitleScroll();
     updateSceneArt({});
     updateChoicesLayout();
+    updatePettingAvailability();
   }
 
   function showNamePrompt() {
@@ -854,8 +974,8 @@
       <fieldset class="name-gender-field">
         <legend class="name-gender-legend">選一個就好</legend>
         <div class="name-gender-options">
-          <label class="name-gender-option"><input type="radio" name="dog-gender" value="male"> 男孩</label>
-          <label class="name-gender-option"><input type="radio" name="dog-gender" value="female"> 女孩</label>
+          <label class="name-gender-option"><input type="radio" name="dog-gender" value="male"> 🐶 弟弟</label>
+          <label class="name-gender-option"><input type="radio" name="dog-gender" value="female"> 🎀 妹妹</label>
         </div>
       </fieldset>
       <button type="button" class="choice-btn" id="gender-confirm">記下來</button>
@@ -892,12 +1012,12 @@
     const wrap = document.createElement('div');
     wrap.className = 'name-prompt fade-in';
     wrap.innerHTML = `
-      <p class="name-gender-lead">${dogLabel(state)} 是男孩還是女孩？</p>
+      <p class="name-gender-lead">${dogLabel(state)} 是弟弟還是妹妹？</p>
       <fieldset class="name-gender-field">
         <legend class="name-gender-legend">選一個就好</legend>
         <div class="name-gender-options">
-          <label class="name-gender-option"><input type="radio" name="dog-gender" value="male"> 男孩</label>
-          <label class="name-gender-option"><input type="radio" name="dog-gender" value="female"> 女孩</label>
+          <label class="name-gender-option"><input type="radio" name="dog-gender" value="male"> 🐶 弟弟</label>
+          <label class="name-gender-option"><input type="radio" name="dog-gender" value="female"> 🎀 妹妹</label>
         </div>
       </fieldset>
       <button type="button" class="choice-btn" id="gender-confirm">記下來</button>
@@ -1445,6 +1565,15 @@
 
     state.sceneId = sceneId;
     state.day = scene.day;
+    pettingState = {
+      sceneId,
+      rewarded: false,
+      pointerDown: false,
+      dragDist: 0,
+      lastX: 0,
+      lastY: 0,
+    };
+    pettingCooldownUntil = 0;
     clearUI();
 
     updateSceneVisual(scene);
@@ -1674,6 +1803,7 @@
   }
 
   bindAdvanceControls();
+  bindPettingControls();
 
   els.textSpeedSelect?.addEventListener('change', (e) => {
     setTextSpeedId(e.target.value);

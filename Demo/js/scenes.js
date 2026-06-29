@@ -275,7 +275,7 @@ const SCENES = {
     noSceneArt: true,
     namePrompt: true,
     text: () => `店員笑了，把收銀機旁的小紙條推過來。\n\n「當然可以啊。\n名字不用完美，\n只要是你願意叫牠的那一個就好。」\n\n你盯著紙箱發呆——\n腦子裡閃過很多字，\n最後留下一個你覺得\n念起來會比較溫柔的。`,
-    sub: '替牠取名字吧。\n這可能是你們之間，\n第一個專屬於你們的小秘密。',
+    sub: '替牠取名字吧。\n這專屬於你們之間，\n第一個記憶。',
     next: 'day2_gender',
   },
 
@@ -288,8 +288,8 @@ const SCENES = {
     smellAdd: '店員的咖啡味、紙箱購物袋',
     noSceneArt: true,
     genderPrompt: true,
-    text: (s) => `店員把名字寫在便條上，\n又抬眼問：\n「對了，${dogLabel(s)} 是弟弟還是妹妹？」\n\n你想了一下，\n選一個以後喊起來順口的就好。`,
-    sub: '店員只是記下來，\n沒有多問別的。',
+    text: (s) => `店員把名字寫在便條上，\n又抬眼問：\n「對了，${dogLabel(s)} 是弟弟還是妹妹？」\n\n你停了一下，\n照著你心裡最自然的感覺回了一句。`,
+    sub: '店員握著筆，等你回一句最自然的答案。',
     next: 'day2_return',
   },
 
@@ -301,10 +301,17 @@ const SCENES = {
     feeling: 'curious',
     dogPose: 'corner',
     smellAdd: ['新買的飼料', '尿墊', '店員寫的便條'],
-    text: (s) => `玄關鑰匙轉動的聲音，\n${dogLabel(s)} 的耳朵立刻豎起來。\n\n你提著購物袋進門，\n在門口低聲念了一次${dogLabel(s)}的名字——\n還不太習慣，但舌頭記住了。\n\n${dogPronoun(s)}沒有衝過來，只是從紙箱邊探頭，\n鼻子瘋狂地嗅：這些袋子裡，有沒有「好事」的味道。\n\n你把尿墊鋪好、食盆擺正，\n動作仍有些手忙腳亂，\n但比昨夜在浴室裡，穩了一點。`,
-    sub: (s) => applyDogPronouns('店員的話還在耳邊：\n「你穩，牠才穩。」\n你深吸一口氣，準備開始 Day 2 的白天。', s),
+    text: (s) => {
+      const clerkReply = s.dogGender === 'male'
+        ? '店員點點頭笑了一下：「弟弟啊，很機靈，會很有自己脾氣的小傢伙。」\n\n'
+        : s.dogGender === 'female'
+          ? '店員點點頭笑了一下：「妹妹喔，很可愛，會是個黏人的小可愛。」\n\n'
+          : '';
+      return `${clerkReply}玄關鑰匙轉動的聲音，\n${dogLabel(s)} 的耳朵立刻豎起來。\n\n你提著購物袋進門，\n在門口低聲念了一次${dogLabel(s)}的名字——\n還不太習慣，但舌頭記住了。\n\n${dogPronoun(s)}沒有衝過來，只是從紙箱邊探頭，\n鼻子瘋狂地嗅：這些袋子裡，有沒有「好事」的味道。\n\n你把尿墊鋪好、食盆擺正，\n動作仍有些手忙腳亂，\n但比昨夜在浴室裡，穩了一點。`;
+    },
+    sub: (s) => applyDogPronouns('店員的話還在耳邊：\n「你穩，牠才穩。」\n你吸一口氣，心裡想著：\n今天，就從小地方開始，學著好好照顧這個小生命。', s),
     choices: [
-      { text: '換好水，開始這個請假的早晨', effect: () => {}, next: 'day2_morning' },
+      { text: '先換好水，從第一件小事開始學著照顧牠', effect: () => {}, next: 'day2_morning' },
     ],
   },
 

@@ -58,7 +58,7 @@ const CHOICE_REACTIONS = {
     feeling: 'curious', cue: 'breathEase', holdMs: 1200,
   },
 
-  'day2_return::換好水，開始這個請假的早晨': {
+  'day2_return::先換好水，從第一件小事開始學著照顧牠': {
     text: (s) => `${dogLabel(s)} 的鼻子貼向新食盆，又迅速縮回去。`,
     feeling: 'curious', cue: 'sniffDeep',
   },

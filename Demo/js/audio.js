@@ -6,13 +6,14 @@ const AmbientMusic = (function () {
   let ctx = null;
   let masterGain = null;
   let musicBus = null;
+  let ambienceBus = null;
   let weatherBus = null;
   let reverbGain = null;
   let dryGain = null;
   let enabled = true;
   let started = false;
   let currentProfile = 'warm';
-  let nodes = { weather: null };
+  let nodes = { weather: null, ambience: null };
   let timers = [];
   let buffers = {};
   let buffersReady = false;
@@ -27,6 +28,7 @@ const AmbientMusic = (function () {
     phraseNote: 0,
     rootShift: 0,
   };
+  let uiTickLastAt = 0;
 
   const GAIN = typeof AUDIO_GAIN === 'number' ? AUDIO_GAIN : 1;
   const capGain = (v) => Math.min(1, v * GAIN);
@@ -162,6 +164,10 @@ const AmbientMusic = (function () {
       weatherBus = ctx.createGain();
       weatherBus.gain.value = 1;
       weatherBus.connect(masterGain);
+
+      ambienceBus = ctx.createGain();
+      ambienceBus.gain.value = 1;
+      ambienceBus.connect(masterGain);
 
       musicBus = ctx.createGain();
       musicBus.gain.value = 1;
@@ -325,6 +331,19 @@ const AmbientMusic = (function () {
     return buf;
   }
 
+  function makeSoftNoiseBuffer(durationSec = 3) {
+    const len = Math.floor(ctx.sampleRate * durationSec);
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    let pink = 0;
+    for (let i = 0; i < len; i += 1) {
+      const white = Math.random() * 2 - 1;
+      pink = 0.985 * pink + 0.045 * white;
+      d[i] = pink * 0.78;
+    }
+    return buf;
+  }
+
   function stopWeatherLayer(fadeSec = 0.9) {
     const w = nodes.weather;
     if (!w) return;
@@ -352,6 +371,170 @@ const AmbientMusic = (function () {
     }
     try { w.rumbleSrc?.stop(); } catch (_) {}
     nodes.weather = null;
+  }
+
+  function stopAmbientLayer(fadeSec = 0.75) {
+    const a = nodes.ambience;
+    if (!a) return;
+    if (a.clockTimer) {
+      clearInterval(a.clockTimer);
+      a.clockTimer = null;
+    }
+    const t = ctx?.currentTime || 0;
+    if (a.baseGain && ctx) {
+      try {
+        a.baseGain.gain.setTargetAtTime(0.001, t, Math.max(0.05, fadeSec * 0.45));
+      } catch (_) {}
+    }
+    if (a.sceneGain && ctx) {
+      try {
+        a.sceneGain.gain.setTargetAtTime(0.001, t, Math.max(0.05, fadeSec * 0.45));
+      } catch (_) {}
+    }
+    setTimeout(() => {
+      try { a.baseSrc?.stop(); } catch (_) {}
+      try { a.sceneSrc?.stop(); } catch (_) {}
+      if (nodes.ambience === a) nodes.ambience = null;
+    }, fadeSec * 1000 + 100);
+  }
+
+  function stopAmbientLayerImmediate() {
+    const a = nodes.ambience;
+    if (!a) return;
+    if (a.clockTimer) {
+      clearInterval(a.clockTimer);
+      a.clockTimer = null;
+    }
+    try { a.baseSrc?.stop(); } catch (_) {}
+    try { a.sceneSrc?.stop(); } catch (_) {}
+    nodes.ambience = null;
+  }
+
+  function pickAmbientSceneType(scene, profile) {
+    const loc = scene?.location || '';
+    const weather = scene?.weather || '';
+    if (profile === 'storm' || loc.includes('storm')) return 'storm';
+    if (weather === 'rain' || loc.includes('rain') || loc === 'window_rain') return 'rain';
+    if (loc === 'park' || loc === 'street' || loc === 'street_sunset' || loc === 'balcony') return 'outdoor';
+    return 'indoor';
+  }
+
+  function shouldPlayClockTick(scene, sceneType) {
+    if (sceneType !== 'indoor') return false;
+    const loc = scene?.location || '';
+    if (!(loc.startsWith('living') || loc.startsWith('kitchen') || loc.startsWith('bedroom'))) return false;
+    return true;
+  }
+
+  function playClockTick(aNode) {
+    if (!ctx || !ambienceBus || !enabled || !started) return;
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const hp = ctx.createBiquadFilter();
+    const lp = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(1300 + Math.random() * 160, t);
+    hp.type = 'highpass';
+    hp.frequency.value = 850;
+    lp.type = 'lowpass';
+    lp.frequency.value = 2600;
+
+    const vol = capGain(0.012 + Math.random() * 0.004);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.linearRampToValueAtTime(vol, t + 0.006);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+
+    osc.connect(hp);
+    hp.connect(lp);
+    lp.connect(gain);
+    gain.connect(ambienceBus);
+
+    osc.start(t);
+    osc.stop(t + 0.09);
+  }
+
+  function startAmbientLayer(scene, profile) {
+    stopAmbientLayerImmediate();
+    if (!ctx || !ambienceBus || !enabled || !started) return;
+
+    const sceneType = pickAmbientSceneType(scene, profile);
+    const baseSrc = ctx.createBufferSource();
+    baseSrc.buffer = makeSoftNoiseBuffer(4);
+    baseSrc.loop = true;
+
+    const baseLp = ctx.createBiquadFilter();
+    baseLp.type = 'lowpass';
+    baseLp.frequency.value = sceneType === 'storm' ? 520 : sceneType === 'rain' ? 680 : 980;
+    baseLp.Q.value = 0.42;
+
+    const baseHp = ctx.createBiquadFilter();
+    baseHp.type = 'highpass';
+    baseHp.frequency.value = 80;
+    baseHp.Q.value = 0.28;
+
+    const baseGain = ctx.createGain();
+    baseGain.gain.value = 0.001;
+
+    baseSrc.connect(baseLp);
+    baseLp.connect(baseHp);
+    baseHp.connect(baseGain);
+    baseGain.connect(ambienceBus);
+    baseSrc.start();
+
+    const sceneSrc = ctx.createBufferSource();
+    sceneSrc.buffer = makeBrownNoiseBuffer(4);
+    sceneSrc.loop = true;
+
+    const sceneFilter = ctx.createBiquadFilter();
+    sceneFilter.type = 'bandpass';
+    sceneFilter.frequency.value = sceneType === 'storm' ? 230 : sceneType === 'rain' ? 880 : 1450;
+    sceneFilter.Q.value = sceneType === 'outdoor' ? 0.56 : 0.72;
+
+    const sceneGain = ctx.createGain();
+    sceneGain.gain.value = 0.001;
+
+    sceneSrc.connect(sceneFilter);
+    sceneFilter.connect(sceneGain);
+    sceneGain.connect(ambienceBus);
+    sceneSrc.start();
+
+    const t = ctx.currentTime;
+    const baseTarget = capGain(sceneType === 'storm' ? 0.018 : sceneType === 'rain' ? 0.022 : 0.015);
+    const sceneTarget = capGain(sceneType === 'storm' ? 0.026 : sceneType === 'rain' ? 0.019 : sceneType === 'outdoor' ? 0.015 : 0.008);
+    baseGain.gain.linearRampToValueAtTime(baseTarget, t + 1.8);
+    sceneGain.gain.linearRampToValueAtTime(sceneTarget, t + 1.6);
+
+    const ambienceNode = {
+      sceneType,
+      baseSrc,
+      baseGain,
+      sceneSrc,
+      sceneGain,
+      clockTimer: null,
+    };
+
+    if (shouldPlayClockTick(scene, sceneType)) {
+      const tickBase = 1800 + Math.random() * 900;
+      ambienceNode.clockTimer = setInterval(() => {
+        if (!enabled || !started) return;
+        playClockTick(ambienceNode);
+      }, tickBase);
+      setTimeout(() => {
+        if (!enabled || !started) return;
+        playClockTick(ambienceNode);
+      }, 800 + Math.random() * 700);
+    }
+
+    nodes.ambience = ambienceNode;
+  }
+
+  function setSceneAmbience(scene) {
+    if (!started) return;
+    ensureContext();
+    const { profile } = profileForScene(scene || {});
+    startAmbientLayer(scene || {}, profile);
   }
 
   function playThunderRoll(opts = {}) {
@@ -485,12 +668,57 @@ const AmbientMusic = (function () {
     stopActiveTracks();
     stopPadNodes();
     stopWeatherLayer();
+    stopAmbientLayer();
   }
 
   function stopNodesImmediate() {
     stopActiveTracksImmediate();
     stopPadNodesImmediate();
     stopWeatherLayerImmediate();
+    stopAmbientLayerImmediate();
+  }
+
+  function playAdvanceTick() {
+    if (!ctx || !ambienceBus || !enabled || !started) return;
+    const now = performance.now();
+    if (now - uiTickLastAt < 80) return;
+    uiTickLastAt = now;
+
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const clickNoise = ctx.createBufferSource();
+    clickNoise.buffer = makeSoftNoiseBuffer(0.16);
+
+    const toneGain = ctx.createGain();
+    const noiseGain = ctx.createGain();
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 2400;
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(760 + Math.random() * 80, t);
+    osc.frequency.exponentialRampToValueAtTime(540 + Math.random() * 60, t + 0.055);
+
+    const tonePeak = capGain(0.012);
+    toneGain.gain.setValueAtTime(0.0001, t);
+    toneGain.gain.linearRampToValueAtTime(tonePeak, t + 0.01);
+    toneGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.085);
+
+    const noisePeak = capGain(0.008);
+    noiseGain.gain.setValueAtTime(0.0001, t);
+    noiseGain.gain.linearRampToValueAtTime(noisePeak, t + 0.004);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+
+    osc.connect(toneGain);
+    clickNoise.connect(noiseGain);
+    toneGain.connect(lp);
+    noiseGain.connect(lp);
+    lp.connect(ambienceBus);
+
+    osc.start(t);
+    osc.stop(t + 0.09);
+    clickNoise.start(t);
+    clickNoise.stop(t + 0.08);
   }
 
   function playSoftTone(freq, dur, vol, opts = {}) {
@@ -772,7 +1000,7 @@ const AmbientMusic = (function () {
   return {
     start, stop, shutdown, setProfile, toggle, isEnabled, profileForScene, preload, unlock,
     ensureContext, getContext, getMasterGain, usesFileTracks, triggerStormThunderOnChoice,
-    playThunderIntro,
+    playThunderIntro, setSceneAmbience, playAdvanceTick,
   };
 })();
 

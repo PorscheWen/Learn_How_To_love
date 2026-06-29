@@ -1,12 +1,16 @@
 :root {
-  --warm-bg: #f5e6d3;
-  --warm-accent: #c4846c;
-  --warm-text: #3d2c29;
+  --warm-bg: #faf6f0;
+  --warm-bg-soft: #f5efe0;
+  --warm-accent: #c8912a;
+  --warm-text: #4a3728;
+  --warm-text-soft: #7a6a60;
   --cold-bg: #d4dce8;
   --cold-accent: #6b8499;
   --cold-text: #2a3540;
   --content-glow: #e8c49a;
   --hurt-dim: #8a7b78;
+  --radius-lg: 16px;
+  --radius-md: 12px;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Noto Sans TC', sans-serif;
   --hud-h: 3.1rem;
@@ -23,7 +27,7 @@
 
 body {
   font-family: var(--font-sans);
-  background: #1a1512;
+  background: linear-gradient(180deg, #efe7dc 0%, #e7dccf 100%);
   height: 100dvh;
   max-height: 100dvh;
   overflow: hidden;
@@ -34,6 +38,8 @@ body {
 }
 
 #app {
+  position: relative;
+  isolation: isolate;
   width: min(720px, 100vw);
   height: 100dvh;
   max-height: 100dvh;
@@ -42,6 +48,20 @@ body {
   flex-direction: column;
   background: var(--warm-bg);
   transition: background 1.2s ease, color 0.8s ease;
+}
+
+#app::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(92, 72, 56, 0.08) 0 0.8px, transparent 1px),
+    radial-gradient(circle at 82% 70%, rgba(92, 72, 56, 0.08) 0 0.8px, transparent 1px),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.36) 0%, rgba(230, 220, 206, 0.15) 100%);
+  background-size: 220px 220px, 260px 260px, 100% 100%;
 }
 
 #app.cold { background: var(--cold-bg); color: var(--cold-text); }
@@ -78,21 +98,22 @@ body {
 .location-label {
   display: block;
   font-size: 0.65rem;
-  opacity: 0.55;
+  opacity: 0.7;
+  color: var(--warm-text-soft);
   margin-top: 0.15rem;
   letter-spacing: 0.05em;
 }
 
 .icon-btn, .text-btn {
-  background: none;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 6px;
+  background: rgba(250, 246, 240, 0.78);
+  border: 1px solid rgba(74, 55, 40, 0.2);
+  border-radius: var(--radius-lg);
   padding: 0.35rem 0.6rem;
   cursor: pointer;
   font-size: 0.8rem;
   margin-left: 0.35rem;
 }
-.icon-btn:hover, .text-btn:hover { background: rgba(255,255,255,0.4); }
+.icon-btn:hover, .text-btn:hover { background: rgba(255,255,255,0.92); }
 
 .scene {
   flex: 1;
@@ -344,7 +365,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 2;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .dog-stage {
@@ -353,7 +374,7 @@ body {
   bottom: calc(var(--dialogue-share) + 2%);
   transform: translateX(-50%);
   z-index: 2;
-  pointer-events: none;
+  pointer-events: auto;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -374,6 +395,19 @@ body {
   object-position: bottom center;
   filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.38));
   transition: opacity 0.5s ease, transform 0.4s ease;
+}
+
+.dog {
+  pointer-events: auto;
+}
+
+.dog.is-pettable .dog-img {
+  cursor: pointer;
+}
+
+.dog.is-petting .dog-img {
+  transform: scale(1.02);
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.4)) saturate(1.06);
 }
 
 .scene:has(.choices:not(:empty)) .dog-img,
@@ -451,7 +485,7 @@ body {
   margin: 0;
   z-index: 3;
   padding: 0.32rem 0.7rem;
-  border-radius: 999px;
+  border-radius: var(--radius-lg);
   background: rgba(22, 18, 16, 0.5);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -569,7 +603,7 @@ body {
   flex: 0 1 auto;
   min-height: 0;
   margin-bottom: 0.45rem;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   background: rgba(0, 0, 0, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
@@ -646,6 +680,16 @@ body {
   margin: 0;
 }
 
+.narrative-text.is-revealing,
+.narrative-sub.is-revealing {
+  animation: narrativeFadeIn 360ms ease-out;
+}
+
+@keyframes narrativeFadeIn {
+  from { opacity: 0.25; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .narrative-sub {
   font-family: var(--font-serif);
   font-size: 0.98rem;
@@ -675,7 +719,7 @@ body {
   font-family: var(--font-sans);
   font-size: 0.72rem;
   padding: 0.2rem 0.35rem;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid rgba(0,0,0,0.12);
   background: rgba(255,255,255,0.5);
   color: inherit;
@@ -689,7 +733,7 @@ body {
   margin-top: 0.35rem;
   padding: 0.45rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-family: inherit;
 }
 
@@ -741,7 +785,7 @@ body {
 .choice-btn {
   background: rgba(255,255,255,0.55);
   border: 1px solid rgba(61,44,41,0.2);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 0.85rem 1rem;
   font-family: var(--font-sans);
   font-size: 0.95rem;
@@ -759,7 +803,7 @@ body {
 .minigame {
   z-index: 3;
   background: rgba(255,255,255,0.7);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 1.25rem;
   margin-bottom: 0.5rem;
 }
@@ -788,7 +832,7 @@ body {
   padding: 1rem;
   font-size: 1rem;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   background: var(--warm-accent);
   color: white;
   cursor: pointer;
@@ -923,10 +967,12 @@ body {
 
 dialog {
   border: none;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 1.5rem;
   max-width: 400px;
   font-family: var(--font-sans);
+  background: rgba(250, 246, 240, 0.96);
+  color: var(--warm-text);
 }
 dialog::backdrop { background: rgba(0,0,0,0.5); }
 dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
@@ -939,7 +985,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
   padding: 0.5rem;
   margin-top: 0.35rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-family: inherit;
 }
 .name-prompt {
@@ -951,7 +997,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
 .name-prompt-label { display: block; }
 .name-gender-field {
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 0.65rem 0.75rem;
   margin: 0;
 }
@@ -985,7 +1031,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
   flex: 1;
   padding: 0.65rem;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
   font-family: inherit;
 }
@@ -1032,7 +1078,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
   width: 100%;
   padding: 0.6rem;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: var(--warm-accent);
   color: white;
   font-family: inherit;
@@ -1066,7 +1112,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
   flex: 1;
   padding: 0.45rem 0.75rem;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.5);
   font-family: inherit;
   font-size: 0.88rem;
@@ -1119,7 +1165,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -1142,13 +1188,13 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
 .moment-view-dialog {
   max-width: min(92vw, 720px);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 1rem;
 }
 
 .moment-view-dialog img {
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   display: block;
 }
 
@@ -1167,7 +1213,7 @@ dialog h2 { font-family: var(--font-serif); margin-bottom: 0.5rem; }
 .moment-view-actions button {
   font-family: inherit;
   padding: 0.45rem 0.85rem;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
 }
 

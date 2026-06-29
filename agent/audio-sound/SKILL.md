@@ -1,9 +1,9 @@
 ---
 name: lhtl-audio-sound
 description: >-
-  設計與審查《Learn How to Love／學會去愛》Demo 音效：OGG 背景音樂、幼犬 CC0 樣本、SCENE_CUES one-shot。
-  當使用者要新增 BGM profile、幼犬 cue、調音量、部署音檔，或審查音效是否符合篇章基調時，務必使用此 skill。
-  **維持現行基線**：僅 BGM + 稀疏幼犬聲、無環境雜音、無連續 loop、關閉遊戲即停音。
+  設計與審查《Learn How to Love／學會去愛》音效：OGG 背景音樂、幼犬 CC0 樣本、SCENE_CUES one-shot、環境音分層（§6.8）、撫摸互動音效（§6.9）。
+  當使用者要新增 BGM profile、幼犬 cue、調音量、部署音檔、規劃環境音分層、設計撫摸音效，或審查音效是否符合篇章基調及 guide_line §6.8 音效設計規格時，務必使用此 skill。
+  **Demo 現行基線**：僅 BGM + 稀疏幼犬聲、無環境雜音、無連續 loop、關閉遊戲即停音（維持 Demo 不變）。**§6.8 環境音分層為正式版規劃**，Demo 尚未實作。
   完成音效修改後，除非使用者明確要求開遊戲或測試，否則不要自動啟動 Demo。
 ---
 
@@ -22,7 +22,7 @@ description: >-
 | 項目 | 現行設定 |
 |------|----------|
 | **音層** | 僅 **BGM（OGG）** + **幼犬聲（樣本 + 少量 procedural）** |
-| **禁止** | 雨聲／sunny tone 等 weather SFX；程序化 pad／旋律 fallback；連續喘息／random ambient loop。**例外**：`storm` profile（Day 6 雷雨）可有遠方轟隆，無 jump scare |
+| **禁止（Demo）** | 雨聲／sunny tone 等 weather SFX；程序化 pad／旋律 fallback；連續喘息／random ambient loop。**例外**：`storm` profile（Day 6 雷雨）可有遠方轟隆，無 jump scare。§6.8 環境音為**正式版規劃**，Demo 不提前加 |
 | **BGM** | `audio-tracks.js` → `AmbientMusic`；場景 `scene.music` 優先；`weather` **只驅動 CSS decor** |
 | **狗聲觸發** | **選項** `playChoiceReaction` + **場景** `SCENE_CUES` one-shot；無狗在場不發音 |
 | **幼犬樣本** | `dog-samples.js` + `assets/dog/sfx/puppy-*`（CC0 真實錄音，**勿改回合成 whimper**） |
@@ -161,13 +161,38 @@ powershell -File tools\deploy-audio.ps1   # BGM + 幼犬樣本
 
 ---
 
+## §6.8 正式版音效架構（規劃 · 非 Demo）
+
+> 依 `guide_line.md` §6.8；**Demo 維持現行基線，此節為正式版設計藍圖。**
+
+### 環境音分層（ASMR 等級）
+
+| 層次 | 內容 | 觸發條件 |
+|------|------|----------|
+| **底層白噪音** | 微風聲、室內空調低鳴 | 持續播放（可調音量） |
+| **場景音** | 雨聲、樹葉沙沙、街道遠景 | 依場景切換 |
+| **時間感** | 室內時鐘滴答聲 | 室內靜日場景（極低音量） |
+| **互動回饋** | 圓潤「啵」聲或木質輕敲 | 玩家點擊推進文字時 |
+
+**混音原則：** 環境音與 BGM **分軌**；點擊回饋音需極輕微圓潤，不做清脆系統提示音。
+
+### 撫摸互動音效（§6.9）
+
+- 觸發「撫摸動作」時播放狗滿足的專屬音效（輕吐氣、輕呻吟或尾巴掃地聲）。
+- 音效長度 < 1 秒；循環觸發間隔 ≥ 1.5 秒，避免重複刺耳。
+- 僅在文字靜止（非打字機播放中）且狗感受為 Content / Sleepy / Attached 時可觸發。
+
+---
+
 ## 審查清單
 
-- [ ] 是否維持「僅 BGM + 稀疏幼犬聲」？（未加 weather／loop）
+- [ ] Demo：是否維持「僅 BGM + 稀疏幼犬聲」？（未加 weather／ambient loop）
 - [ ] whimper 是否仍用 CC0 幼犬樣本？（非合成）
 - [ ] 新 scene 是否重複 whimper 過密？
 - [ ] 關閉／回主選單是否仍呼叫 `shutdown`？
 - [ ] 新音檔是否登記 CREDITS + deploy 腳本？
+- [ ] 正式版規劃：環境音層次是否符合 §6.8 四層架構？
+- [ ] 撫摸音效：長度、間隔、感受條件是否符合 §6.9？
 
 ---
 
