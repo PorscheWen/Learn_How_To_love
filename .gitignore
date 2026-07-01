@@ -29,3 +29,5 @@ Demo/assets/bg/*.png
 # Temp / scratch
 Demo/assets/dog/sfx/_*.ogg
 temp/
+Demo/.editor-save-result.json
+.editor-save-result.json
