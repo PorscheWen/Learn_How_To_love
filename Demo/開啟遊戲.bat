@@ -19,10 +19,11 @@ if errorlevel 1 (
   exit /b 0
 )
 
-echo [3/3] 啟動本機伺服器 http://localhost:8765/
-start /B cmd /c "cd /d "%~dp0" && python -m http.server 8765"
-timeout /t 2 /nobreak >nul
-start "" "http://localhost:8765/?v=%CACHE_V%"
+echo [3/3] 啟動本機伺服器 http://127.0.0.1:8765/ （含編輯器儲存 API）
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8765 ^| findstr LISTENING') do taskkill /F /PID %%a >nul 2>&1
+start "demo-server" /MIN cmd /c "cd /d ""%~dp0"" && set DEMO_PORT=8765 && set DEMO_RESULT_PORT=8769 && python tools\demo-server.py"
+ping 127.0.0.1 -n 4 >nul
+start "" "http://127.0.0.1:8765/?v=%CACHE_V%"
 
 echo.
 echo 遊戲已在瀏覽器開啟。關閉此視窗不會停止伺服器。

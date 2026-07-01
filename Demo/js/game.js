@@ -25,6 +25,7 @@
     minigame: document.getElementById('minigame'),
     bondDots: document.querySelectorAll('.bond-dots .dot'),
     bondName: document.getElementById('bond-name'),
+    interactionHint: document.getElementById('interaction-hint'),
     introDialog: document.getElementById('intro-dialog'),
     albumDialog: document.getElementById('album-dialog'),
     albumList: document.getElementById('album-list'),
@@ -45,7 +46,7 @@
   const SCENE_ART_DIR = 'assets/scene';
   const DAY2_BREATH_MS = 2600;
   const DAY2_TEXT_MULT = 1.5;
-  const PETTING_FEELINGS = new Set(['content', 'sleepy', 'attached']);
+  const PETTING_FEELINGS = ContentFlow.pettableFeelings({});
   const PETTING_MIN_DRAG = 26;
   const PETTING_TRUST_GAIN = 1;
   const PETTING_COOLDOWN_MS = 1500;
@@ -207,7 +208,7 @@
 
   const THUNDER_ROUNDS = [
     {
-      prompt: '第一下雷聲滚過來，桌底下的身子抖得更厲害……',
+      prompt: '第一下雷聲滾過來，桌底下的身子抖得更厲害……',
       options: [
         {
           label: '開小夜燈，輕聲：「我在。」',
@@ -216,7 +217,7 @@
           react: {
             feeling: 'anxious',
             cue: 'whineSoft',
-            line: (s) => `${dogLabel(s)} 的嗚聲短了一拍，像有聽見你。`,
+            line: (s) => `${dogLabel(s)} 的嗚聲短了一拍，像有聽見你的聲音。`,
           },
         },
         {
@@ -236,7 +237,7 @@
           react: {
             feeling: 'hurt',
             cue: 'whimper',
-            line: (s) => `${dogLabel(s)} 掙了一下，整個身子繃得更緊。`,
+            line: (s) => `${dogLabel(s)} 掙了一下，身子繃得更緊。`,
           },
         },
       ],
@@ -261,7 +262,7 @@
           react: {
             feeling: 'alert',
             cue: 'huff',
-            line: (s) => `${dogLabel(s)} 被光嚇到，整個縮回去。`,
+            line: (s) => `${dogLabel(s)} 被光嚇到，又縮回桌底深處。`,
           },
         },
         {
@@ -271,7 +272,7 @@
           react: {
             feeling: 'hurt',
             cue: 'whimperQuiet',
-            line: (s) => `${dogLabel(s)} 對閃光屏的亮嚇了一跳。`,
+            line: (s) => `${dogLabel(s)} 對閃亮的螢幕嚇了一跳，耳朵貼平。`,
           },
         },
       ],
@@ -286,7 +287,7 @@
           react: {
             feeling: 'content',
             cue: 'breathEase',
-            line: (s) => `${dogLabel(s)} 在毯子下呼吸慢了一點。`,
+            line: (s) => `${dogLabel(s)} 在毯子下呼吸慢了一點，顫抖也輕了些。`,
           },
         },
         {
@@ -306,7 +307,7 @@
           react: {
             feeling: 'anxious',
             cue: 'whineSoft',
-            line: (s) => `${dogLabel(s)} 聽見你離開的腳步，嗚得更急。`,
+            line: (s) => `${dogLabel(s)} 聽見你離開的腳步，嗚聲更急了。`,
           },
         },
       ],
@@ -368,6 +369,15 @@
     return '小遊戲';
   }
 
+  function buildQuizQuestionHtml(prompt, round, rounds, questionLabel = '題目') {
+    return `
+      <div class="quiz-question" aria-live="polite">
+        <p class="quiz-question-label">${questionLabel}</p>
+        <p class="quiz-doctor-prompt">${prompt}</p>
+        <p class="quiz-round-meta">第 ${round + 1} / ${rounds} 題</p>
+      </div>
+    `;
+  }
 
   function renderSmellBar(state, visibleCount, highlightLast) {
     if (!els.smellText) return;
@@ -404,6 +414,7 @@
     return new Promise((resolve) => {
       clearSkippableDelay();
       setAdvanceable(true);
+      updatePettingAvailability();
       const timerId = setTimeout(() => {
         delaySkipper = null;
         setAdvanceable(!!typingAbort);
@@ -440,22 +451,38 @@
     return !!els.choices?.childElementCount;
   }
 
+  function getFlowContext() {
+    return {
+      typing: !!typingAbort,
+      breathGap: !!delaySkipper,
+      hasChoices: hasVisibleChoices(),
+      minigameOpen: !!(els.minigame && !els.minigame.classList.contains('hidden')),
+      dogHidden: !!(els.dogStage?.classList.contains('is-hidden') || els.dogImg?.classList.contains('dog-img-hidden')),
+      nameOrGenderPrompt: false,
+    };
+  }
+
   function canPetDogNow() {
     const scene = SCENES[state.sceneId];
-    if (!scene) return false;
-    if (isTypingOrWaiting()) return false;
-    if (hasVisibleChoices()) return false;
-    if (els.minigame && !els.minigame.classList.contains('hidden')) return false;
-    if (!PETTING_FEELINGS.has(state.feeling)) return false;
-    if (scene.hideDog || !isDogAudioEnabled(scene)) return false;
-    if (els.dogStage?.classList.contains('is-hidden')) return false;
-    if (els.dogImg?.classList.contains('dog-img-hidden')) return false;
-    return true;
+    return ContentFlow.canPet(scene, state, getFlowContext());
+  }
+
+  function updateInteractionHint() {
+    if (!els.interactionHint) return;
+    const scene = SCENES[state.sceneId];
+    const ctx = getFlowContext();
+    const phase = ContentFlow.resolvePhase(ctx);
+    const petAllowed = ContentFlow.canPet(scene, state, ctx);
+    const hint = ContentFlow.interactionHint(scene, phase, petAllowed);
+    els.interactionHint.textContent = hint;
+    els.interactionHint.classList.toggle('is-visible', !!hint);
   }
 
   function updatePettingAvailability() {
     const canPet = canPetDogNow();
     els.dog?.classList.toggle('is-pettable', canPet);
+    els.scene?.classList.toggle('has-pettable-dog', canPet);
+    updateInteractionHint();
   }
 
   function endPettingGesture() {
@@ -1135,7 +1162,7 @@
     function showRoundFeedback(success) {
       const hint = document.getElementById('potty-hint');
       if (hint) {
-        hint.textContent = success ? '對上了！' : '來不及……';
+        hint.textContent = success ? '對了！' : '慢了一拍……';
         hint.className = success ? 'potty-hint ok' : 'potty-hint miss';
       }
     }
@@ -1202,19 +1229,20 @@
     function showFeedback(ok) {
       const hint = document.getElementById('shop-hint');
       if (!hint) return;
-      hint.textContent = ok ? '店員：「對啦，幼犬就是要用這個。」' : '店員：「這個不行喔——再想想？」';
+      hint.textContent = ok ? '店員：「對啦，幼犬要用這個。」' : '店員：「這個不行喔——再想想？」';
       hint.className = ok ? 'shop-hint ok' : 'shop-hint miss';
     }
 
     function renderRound() {
       const data = SHOP_ROUNDS[round];
       els.minigame.innerHTML = `
-        <h3>寵物店 · 挑選用品</h3>
-        <p class="shop-prompt">${data.prompt}（${round + 1}/${rounds}）</p>
+        <h3 class="minigame-heading">寵物店 · 挑選用品</h3>
+        ${buildQuizQuestionHtml(data.prompt, round, rounds, '店員問你')}
         <p id="shop-hint" class="shop-hint"></p>
         <div class="meter"><div class="meter-fill" id="shop-meter" style="width:${(score / rounds) * 100}%"></div></div>
         <div class="shop-grid" id="shop-grid"></div>
       `;
+      els.minigame.scrollTop = 0;
       const grid = document.getElementById('shop-grid');
       let locked = false;
 
@@ -1254,7 +1282,9 @@
   }
 
   function runQuizMinigame(config, onComplete) {
-    const { title, rounds: roundData, hintOk, hintMiss, computeTier, type } = config;
+    const {
+      title, rounds: roundData, hintOk, hintMiss, computeTier, type, questionLabel = '題目',
+    } = config;
     els.minigame.classList.remove('hidden');
     let score = 0;
     let round = 0;
@@ -1270,12 +1300,13 @@
     function renderRound() {
       const data = roundData[round];
       els.minigame.innerHTML = `
-        <h3>${title}</h3>
-        <p class="shop-prompt">${data.prompt}（${round + 1}/${rounds}）</p>
+        <h3 class="minigame-heading">${title}</h3>
+        ${buildQuizQuestionHtml(data.prompt, round, rounds, questionLabel)}
         <p id="shop-hint" class="shop-hint"></p>
         <div class="meter"><div class="meter-fill" id="shop-meter" style="width:${(score / rounds) * 100}%"></div></div>
         <div class="shop-grid" id="shop-grid"></div>
       `;
+      els.minigame.scrollTop = 0;
       const grid = document.getElementById('shop-grid');
       let locked = false;
 
@@ -1319,7 +1350,8 @@
       title: '醫師問診 · 配合回答',
       rounds: VET_ROUNDS,
       type: 'vet',
-      hintOk: '醫師：「好，這樣我比較掌握狀況。」',
+      questionLabel: '醫師提問',
+      hintOk: '醫師：「好，這樣我比較清楚狀況。」',
       hintMiss: '醫師：「這部分很重要——再想想？」',
       computeTier: computeVetTier,
     }, onComplete);
@@ -1330,8 +1362,9 @@
       title: '認識家 · 氣味地圖',
       rounds: HOME_ROUNDS,
       type: 'home',
-      hintOk: '「對，這裡有你的味道。」',
-      hintMiss: '這裡還太陌生——換一個牠能安心的角落？',
+      questionLabel: '帶牠認哪裡',
+      hintOk: '「對，這裡會有你的味道。」',
+      hintMiss: '還太陌生——換一個牠能安心的角落？',
       computeTier: computeHomeTier,
     }, onComplete);
   }
@@ -1364,7 +1397,7 @@
     function showFeedback(ok) {
       const hint = document.getElementById('thunder-hint');
       if (!hint) return;
-      hint.textContent = ok ? '牠的呼吸慢了一點。' : '這樣只會更怕——試試別的方式？';
+      hint.textContent = ok ? '呼吸慢了一點。' : '這樣會更怕——換一種方式？';
       hint.className = ok ? 'shop-hint ok' : 'shop-hint miss';
     }
 
@@ -1750,13 +1783,31 @@
   function renderAlbum() {
     setAlbumTab('memories');
     els.albumList.innerHTML = '';
-    Object.entries(ALBUM_ENTRIES).forEach(([id, entry]) => {
-      const li = document.createElement('li');
-      const unlocked = state.memories.includes(id);
-      li.className = unlocked ? '' : 'locked';
-      li.textContent = unlocked ? `${entry.title} — ${entry.desc}` : `${entry.title} — 尚未解鎖`;
-      els.albumList.appendChild(li);
+    const groups = ContentFlow.groupAlbumByDay(ALBUM_ENTRIES, state.memories);
+    groups.forEach(({ day, items }) => {
+      const section = document.createElement('li');
+      section.className = 'album-day-section';
+      const dayLabel = day === 0 ? '序章' : `Day ${day}`;
+      section.innerHTML = `<h3 class="album-day-title">${dayLabel}</h3>`;
+      const ul = document.createElement('ul');
+      ul.className = 'album-day-entries';
+      items.forEach((item) => {
+        const li = document.createElement('li');
+        li.className = item.unlocked ? 'album-entry' : 'album-entry locked';
+        li.textContent = item.unlocked
+          ? `${item.title} — ${item.desc}`
+          : `${item.title} — 尚未翻開這一頁`;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      els.albumList.appendChild(section);
     });
+    if (!els.albumList.childElementCount) {
+      const empty = document.createElement('li');
+      empty.className = 'album-moments-empty';
+      empty.textContent = '日記還是空的。繼續旅程，里程碑會自動記在這裡。';
+      els.albumList.appendChild(empty);
+    }
     renderAlbumMoments();
     els.albumDialog.showModal();
   }

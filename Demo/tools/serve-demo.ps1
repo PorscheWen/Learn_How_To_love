@@ -8,7 +8,11 @@ Set-Location $demo
 
 & (Join-Path $root 'deploy-audio.ps1')
 
-Write-Host "Starting http://localhost:$port/ ..." -ForegroundColor Cyan
-Start-Process "http://localhost:$port/"
+Write-Host "Starting http://localhost:$port/ (editor save API enabled) ..." -ForegroundColor Cyan
+Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue |
+  ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
+$env:DEMO_PORT = "$port"
+$env:DEMO_RESULT_PORT = "8769"
+Start-Process "http://127.0.0.1:$port/game_editor.html"
 
-python -m http.server $port
+python (Join-Path $root 'demo-server.py')

@@ -45,11 +45,11 @@ const CHOICE_REACTIONS = {
   },
 
   'day2_leave::回覆主管：「謝謝，明天會補上進度。」': {
-    text: (s) => `${dogLabel(s)} 不知道你在忙什麼，只是安靜地待著。`,
+    text: (s) => `${dogLabel(s)} 不知道你在忙什麼，只是安靜地待在紙箱邊。`,
     feeling: 'anxious', cue: 'breathEase',
   },
   'day2_leave::打電話跟主管說：昨天帶回一隻狗，今天需要在家安頓一下': {
-    text: (s) => `${dogLabel(s)} 的耳朵動了一下，像聽見你聲音裡的緊張。`,
+    text: (s) => `${dogLabel(s)} 的耳朵動了一下，像聽見你聲音裡的緊。`,
     feeling: 'curious', cue: 'huffSoft',
   },
 
@@ -210,9 +210,9 @@ const CHOICE_REACTIONS = {
     feeling: 'anxious', cue: 'whineSoft',
   },
 
-  'day6_check::雲層壓下來了……': {
-    text: (s) => `${dogLabel(s)} 豎起耳朵，視線移向窗外。`,
-    feeling: 'alert', cue: 'huff', pose: 'window',
+  'day6_check::……': {
+    text: (s) => `${dogLabel(s)} 在窗邊打盹，耳朵隨遠處的風聲輕輕動。`,
+    feeling: 'content', cue: 'sleepSnore', holdMs: 2000,
   },
 
   'day6_quiet::Day 7……': {
@@ -283,7 +283,7 @@ const CHOICE_REACTIONS = {
   },
 
   'day3_hurt::深呼吸，先去拿水盆和毛巾': {
-    text: (s) => `${dogLabel(s)} 仍縮在角落，不敢靠近。`,
+    text: (s) => `${dogLabel(s)} 仍縮在角落，耳朵卻朝你的方向動了一下。`,
     feeling: 'anxious', cue: 'murmurUneasy',
   },
 
@@ -338,7 +338,7 @@ const CHOICE_REACTIONS = {
   },
 
   'day3_night::吼了出來，把牠關進浴室': {
-    text: (s) => `${dogLabel(s)} 在門後發抖，整個身子都蜷起來。`,
+    text: (s) => `${dogLabel(s)} 在門後發抖，身子蜷成一團。`,
     feeling: 'angry', cue: 'whimperScared',
   },
 
@@ -347,13 +347,8 @@ const CHOICE_REACTIONS = {
     feeling: 'anxious', cue: 'sniffQuick', pose: 'vet-carry',
   },
 
-  'day6_check::……': {
-    text: (s) => `${dogLabel(s)} 在窗邊打盹，耳朵隨遠處的風聲輕輕動。`,
-    feeling: 'content', cue: 'sleepSnore', holdMs: 2000,
-  },
-
   'day7_moment::……': {
-    text: (s) => `${dogLabel(s)} 呼吸和你同步，像 Day 3 那夜一樣輕。`,
+    text: (s) => `${dogLabel(s)} 呼吸和你同步，像第三夜一樣輕。`,
     feeling: 'attached', cue: 'sleepBreath', pose: 'knee', holdMs: 2000,
   },
   'day4_vet_reception::照實填：剛帶回家幾天，還在適應、偶爾會叫': {

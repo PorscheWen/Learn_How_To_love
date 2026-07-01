@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Learn How to Love — Demo: First Steps</title>
-  <link rel="stylesheet" href="css/style.css?v=20260629231320">
+  <link rel="stylesheet" href="css/style.css?v=20260701180217">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -95,6 +95,7 @@
         </div>
         <span id="bond-name" class="bond-name">陌生</span>
       </div>
+      <p id="interaction-hint" class="interaction-hint" aria-live="polite"></p>
     </footer>
   </div>
 
@@ -123,7 +124,7 @@
     <h2>Learn How to Love</h2>
     <p class="intro-sub">Demo — Chapter 1: First Steps</p>
     <p>接回家第 1–7 天。約 40–50 分鐘，適合慢慢讀。</p>
-    <p class="intro-note"><strong class="day-tag">Day 1</strong>：帶回家 → 手忙腳亂吹乾 → 夜裡輕輕哀鳴。<br><strong class="day-tag">Day 2</strong>：發現沒飼料 → 請假 → 寵物店挑用品（小遊戲）→ 取名。<br><strong class="day-tag">Day 4–5</strong>：週末不用上班 → 週六寵物醫院（小遊戲）→ 週日懷裡認家（小遊戲）。<br>文字預設「緩」——慢慢讀，留一點空白給呼吸，也留一點給心裡的感覺。</p>
+    <p class="intro-note">這不是純閱讀小說——文字停下的空白裡，可以<strong>輕撫小狗</strong>；里程碑會寫進<strong>手繪日記</strong>，每個場景也會留下快照。<br><strong class="day-tag">Day 1</strong>：帶回家 → 吹乾 → 夜裡輕輕哀鳴。<br><strong class="day-tag">Day 2</strong>：沒飼料 → 請假 → 寵物店（小遊戲）→ 取名。<br><strong class="day-tag">Day 3</strong>：上班擔心 → 門口重逢 → 尿墊之夜。<br><strong class="day-tag">Day 4–5</strong>：週末醫院（小遊戲）→ 週日認家（小遊戲）。<br>文字預設「緩」——留白給呼吸，也留給心裡的感覺。</p>
     <label class="speed-input">文字速度：
       <select id="intro-text-speed">
         <option value="slow">緩 — 適合慢慢讀（推薦）</option>
@@ -167,19 +168,20 @@
     <form method="dialog"><button type="submit" class="credits-close">關閉</button></form>
   </dialog>
 
-  <script src="js/systems.js?v=20260629231320"></script>
-  <script src="js/text.js?v=20260629231320"></script>
-  <script src="js/locations.js?v=20260629231320"></script>
-  <script src="js/audio-tracks.js?v=20260629231320"></script>
-  <script src="js/audio.js?v=20260629231320"></script>
-  <script src="js/dog-samples.js?v=20260629231320"></script>
-  <script src="js/dog-audio.js?v=20260629231320"></script>
-  <script src="js/credits.js?v=20260629231320"></script>
-  <script src="js/scenes.js?v=20260629231320"></script>
-  <script src="js/choice-reactions.js?v=20260629231320"></script>
-  <script src="js/minigame-reactions.js?v=20260629231320"></script>
-  <script src="js/story-agent.js?v=20260629231320"></script>
-  <script src="js/moment-gallery.js?v=20260629231320"></script>
-  <script src="js/game.js?v=20260629231320"></script>
+  <script src="js/systems.js?v=20260701180217"></script>
+  <script src="js/text.js?v=20260701180217"></script>
+  <script src="js/locations.js?v=20260701180217"></script>
+  <script src="js/audio-tracks.js?v=20260701180217"></script>
+  <script src="js/audio.js?v=20260701180217"></script>
+  <script src="js/dog-samples.js?v=20260701180217"></script>
+  <script src="js/dog-audio.js?v=20260701180217"></script>
+  <script src="js/credits.js?v=20260701180217"></script>
+  <script src="js/content-flow.js?v=20260701180217"></script>
+  <script src="js/scenes.js?v=20260701180217"></script>
+  <script src="js/choice-reactions.js?v=20260701180217"></script>
+  <script src="js/minigame-reactions.js?v=20260701180217"></script>
+  <script src="js/story-agent.js?v=20260701180217"></script>
+  <script src="js/moment-gallery.js?v=20260701180217"></script>
+  <script src="js/game.js?v=20260701180217"></script>
 </body>
 </html>

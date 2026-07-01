@@ -22,8 +22,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'sniff',
       pose: 'potty',
       holdMs: 1600,
-      resultLine: (s) => `有兩次對了。${dogLabel(s)} 開始把尿墊和「安心」連在一起。`,
-      reactionLine: (s) => `${dogLabel(s)} 在尿墊邊嗅了嗅，沒有再躲。`,
+      resultLine: (s) => `對了兩次。${dogLabel(s)} 在尿墊邊多停了一會，沒有再躲開。`,
+      reactionLine: (s) => `${dogLabel(s)} 在尿墊邊嗅了嗅，鼻子朝你的方向動了動。`,
     },
     partial: {
       trust: 5,
@@ -33,7 +33,7 @@ const MINIGAME_OUTCOMES = {
       pose: 'potty',
       holdMs: 1400,
       resultLine: (s) => `只對了一次。${dogLabel(s)} 還在試，你也還在找時機。`,
-      reactionLine: (s) => `${dogLabel(s)} 在客廳和尿墊之間來回踱步，拿不定主意。`,
+      reactionLine: (s) => `${dogLabel(s)} 在客廳和尿墊之間來回走，拿不定主意。`,
     },
     miss: {
       trust: 2,
@@ -86,8 +86,8 @@ const MINIGAME_OUTCOMES = {
       feeling: 'curious',
       cue: null,
       holdMs: 2000,
-      resultLine: () => '店員點點頭：「全對耶。幼犬第一天就能吃到該吃的。」',
-      reactionLine: () => '（你心裡鬆了一點——至少沒買錯。）',
+      resultLine: () => '店員點點頭：「全對耶。幼犬第一天，該有的都有了。」',
+      reactionLine: () => '你心裡鬆了一點——至少沒有買錯。',
       memory: 'shop_perfect',
     },
     good: {
@@ -96,8 +96,8 @@ const MINIGAME_OUTCOMES = {
       feeling: 'curious',
       cue: null,
       holdMs: 1800,
-      resultLine: () => '店員幫你把購物袋整理好了：「差不多齊了，差一點我幫你補。」',
-      reactionLine: () => '（紙箱漸漸沉下來，像終於接住了這份責任。）',
+      resultLine: () => '店員把購物袋理好：「差不多齊了，差的我幫你補。」',
+      reactionLine: () => '紙箱慢慢沉下來，裡面終於有了「家」該有的味道。',
     },
     partial: {
       trust: 4,
@@ -105,8 +105,8 @@ const MINIGAME_OUTCOMES = {
       feeling: 'anxious',
       cue: null,
       holdMs: 1600,
-      resultLine: () => '店員替你換了兩樣：「這個幼犬不能吃——還好問了我。」',
-      reactionLine: () => '（你臉有點熱，但心裡還是慶幸：總算沒白跑一趟。）',
+      resultLine: () => '店員替你換了兩樣：「這個幼犬不能吃——還好你問了我。」',
+      reactionLine: () => '你臉有點熱，但心裡還是慶幸：總算沒白跑。',
     },
     miss: {
       trust: 2,
@@ -115,7 +115,7 @@ const MINIGAME_OUTCOMES = {
       cue: null,
       holdMs: 1500,
       resultLine: () => '店員嘆口氣，重新幫你拿：「別急，第一次都會亂。交給阿姨。」',
-      reactionLine: () => '（你點點頭，記住：下次不能光靠運氣。）',
+      reactionLine: () => '你點點頭，把每一項都記進手機備忘錄。',
     },
   },
   vet: {
@@ -126,8 +126,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'breathEase',
       pose: 'knee',
       holdMs: 1800,
-      resultLine: (s) => `問診與檢查都順利結束。${dogLabel(s)} 在你懷裡打了個小哈欠，像終於相信這裡不會傷害 ${dogPronoun(s)}。`,
-      reactionLine: (s) => `${dogLabel(s)} 輕輕舔了舔你的袖口——很小的一下，但你知道那是感謝。`,
+      resultLine: (s) => `問診和檢查都順利結束。${dogLabel(s)} 在你懷裡打了個小哈欠，身子慢慢鬆下來。`,
+      reactionLine: (s) => `${dogLabel(s)} 輕輕舔了舔你的袖口——濕濕的，很小的一下。`,
     },
     good: {
       trust: 10,
@@ -136,8 +136,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'sniff',
       pose: 'shy',
       holdMs: 1600,
-      resultLine: (s) => `大部分問診你都答對了。${dogLabel(s)} 還有些緊，但沒有掙開你的懷抱。`,
-      reactionLine: (s) => `${dogLabel(s)} 把鼻子埋在你肩窩，呼吸漸漸平穩。`,
+      resultLine: (s) => `大部分你都答對了。${dogLabel(s)} 還有些緊，但沒有掙開你的懷抱。`,
+      reactionLine: (s) => `${dogLabel(s)} 把鼻子埋在你肩窩，呼吸一聲比一聲慢。`,
     },
     partial: {
       trust: 6,
@@ -146,8 +146,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'softWhimper',
       pose: 'shy',
       holdMs: 1500,
-      resultLine: (s) => `有些問題還答不完整。${dogLabel(s)} 在量體重時抖了一下，你抱得更緊。`,
-      reactionLine: (s) => `${dogLabel(s)} 的耳朵還貼著，但尾巴慢慢垂下來——至少你在這裡。`,
+      resultLine: (s) => `有些問題還答不完整。量體重時 ${dogLabel(s)} 抖了一下，你抱得更穩。`,
+      reactionLine: (s) => `${dogLabel(s)} 耳朵還貼著，尾巴慢慢垂下來——至少你在這裡。`,
     },
     miss: {
       trust: 4,
@@ -156,8 +156,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'whimper',
       pose: 'corner',
       holdMs: 1400,
-      resultLine: (s) => `檢查過程有些手忙腳亂。${dogLabel(s)} 縮成一團，像怕做錯什麼。`,
-      reactionLine: (s) => `${dogLabel(s)} 只敢從你的袖子後面探出半雙眼睛。`,
+      resultLine: (s) => `檢查時有些手忙腳亂。${dogLabel(s)} 縮成一團，整個身子都繃著。`,
+      reactionLine: (s) => `${dogLabel(s)} 只從你的袖子後面探出半雙眼睛。`,
     },
   },
   home: {
@@ -168,7 +168,7 @@ const MINIGAME_OUTCOMES = {
       cue: 'sigh',
       pose: 'attached',
       holdMs: 2000,
-      resultLine: (s) => `一圈走下來，${dogLabel(s)} 在你懷裡完全鬆了。\n沙發、食盆、床邊、陽台——${dogPronoun(s)} 記住了「家」的氣味地圖。`,
+      resultLine: (s) => `一圈走下來，${dogLabel(s)} 在你懷裡完全鬆了。\n沙發、食盆、床邊、陽台——${dogPronoun(s)} 各記下一種屬於這裡的味道。`,
       reactionLine: (s) => `${dogLabel(s)} 把下巴擱在你膝上，像說：這裡，好像真的可以。`,
       memory: 'home_scent',
     },
@@ -179,8 +179,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'sniffDeep',
       pose: 'home',
       holdMs: 1800,
-      resultLine: (s) => `大部分角落都認過了。${dogLabel(s)} 開始把某些味道和「安心」連在一起。`,
-      reactionLine: (s) => `${dogLabel(s)} 經過食盆時會停一下——像在確認，飯會在這裡。`,
+      resultLine: (s) => `大部分角落都認過了。${dogLabel(s)} 經過食盆時會停一下，像在確認飯會在這裡。`,
+      reactionLine: (s) => `${dogLabel(s)} 鼻子在你頸邊輕輕嗅，沒有再掙開。`,
     },
     partial: {
       trust: 8,
@@ -189,7 +189,7 @@ const MINIGAME_OUTCOMES = {
       cue: 'huff',
       pose: 'corner',
       holdMs: 1600,
-      resultLine: (s) => `只認了幾個地方，${dogLabel(s)} 還有些緊。\n但 ${dogPronoun(s)} 願意靠著你，這本身就算進步。`,
+      resultLine: (s) => `只認了幾個地方，${dogLabel(s)} 還有些緊。\n但 ${dogPronoun(s)} 願意靠著你，沒有躲回紙箱。`,
       reactionLine: (s) => `${dogLabel(s)} 把臉藏在你臂彎，只露出鼻尖。`,
     },
     miss: {
@@ -199,8 +199,8 @@ const MINIGAME_OUTCOMES = {
       cue: 'softWhimper',
       pose: 'corner',
       holdMs: 1500,
-      resultLine: (s) => `有些角落太陌生，${dogLabel(s)} 整路繃著。\n你沒有催，只是抱緊一點。`,
-      reactionLine: (s) => `${dogLabel(s)} 的身子還是僵的，但沒有掙開。`,
+      resultLine: (s) => `有些角落太陌生，${dogLabel(s)} 整路繃著。\n你沒有催，只是抱緊一點，讓 ${dogPronoun(s)} 聽見你的心跳。`,
+      reactionLine: (s) => `${dogLabel(s)} 身子還是僵的，但沒有掙開。`,
     },
   },
   thunder: {
@@ -211,7 +211,7 @@ const MINIGAME_OUTCOMES = {
       cue: 'breathEase',
       pose: 'knee',
       holdMs: 2000,
-      resultLine: (s) => `雷聲還在遠處滚，但桌底的顫抖漸漸停了。\n${dogLabel(s)} 把鼻子貼向你的手心——像終於不怕了。`,
+      resultLine: (s) => `雷聲還在遠處滾，但桌底的顫抖漸漸停了。\n${dogLabel(s)} 把鼻子貼向你的手心，呼吸一聲比一聲慢。`,
       reactionLine: (s) => `${dogLabel(s)} 從桌底探出半張臉，呼吸和你同步。`,
     },
     good: {
@@ -221,7 +221,7 @@ const MINIGAME_OUTCOMES = {
       cue: 'whineSoft',
       pose: 'knee',
       holdMs: 1800,
-      resultLine: (s) => `大部分時刻你都選對了。\n${dogLabel(s)} 還縮著，但嗚聲一聲比一聲輕——怕還在，但沒有剛才那麼絕望。`,
+      resultLine: (s) => `大部分時刻你都選對了。\n${dogLabel(s)} 還縮著，但嗚聲一聲比一聲輕——怕還在，沒有剛才那麼急。`,
       reactionLine: (s) => `${dogLabel(s)} 用鼻尖碰了碰你的指節，很小的一下。`,
     },
     partial: {
@@ -321,18 +321,18 @@ function resolvePottyAfternoonCopy(state) {
   const tier = state.flags.pottyGuideTier;
   const name = dogLabel(state);
   if (!tier) {
-    return `午後很長，也很安靜。\n光從百葉窗漏進來，在地磚上畫出慢慢移動的條紋。\n\n${name} 在客廳來回嗅聞，\n開始記得：哪裡是門、哪裡是窩、\n哪裡是你常坐、會發出溫柔聲音的位置。`;
+    return `午後很長，也很安靜。\n光從百葉窗漏進來，在地磚上畫出慢慢移動的條紋。\n\n${name} 在客廳來回嗅聞，\n開始記得：哪裡是門、哪裡是窩、\n哪裡是你常坐、會發出輕聲的位置。`;
   }
   if (tier === 'miss') {
-    return `午後很長。\n${name} 大多縮在角落，對尿墊仍有些猶豫。\n\n你沒有嘆氣，只是把墊子再鋪平一點。\n你們都還在試——\n找對的時機，找對的方式，\n找一種不互相嚇到的温柔。`;
+    return `午後很長。\n${name} 大多縮在角落，對尿墊仍有些猶豫。\n\n你沒有嘆氣，只是把墊子再鋪平一點。\n還在試——\n找對的時機，找對的方式，\n找一種不會把彼此嚇到的距離。`;
   }
   if (tier === 'partial') {
-    return `午後很長，也很安靜。\n${name} 在客廳和尿墊之間來回，\n像還在確認規則。\n\n有一點進步，但還沒完全放心。\n你坐在不遠處，\n讓牠知道：著急沒關係，\n我們可以慢慢來。`;
+    return `午後很長，也很安靜。\n${name} 在客廳和尿墊之間來回，\n像還在確認規則。\n\n有一點進步，但還沒完全放心。\n你坐在不遠處，\n讓牠知道：著急沒關係，可以慢慢來。`;
   }
   if (tier === 'good') {
-    return `午後很長，也很安靜。\n${name} 在客廳來回嗅聞，\n經過尿墊時會停一下。\n\n開始記得：哪裡是門、哪裡是窩、\n哪裡是你常坐的位置。\n\n這些小事堆起來，\n就是「家」開始長大的聲音。`;
+    return `午後很長，也很安靜。\n${name} 在客廳來回嗅聞，\n經過尿墊時會停一下。\n\n開始記得：哪裡是門、哪裡是窩、\n哪裡是你常坐的位置。`;
   }
-  return `午後很長，也很安靜。\n${name} 在客廳來回嗅聞，\n經過尿墊時會停一下——\n像終於把「對的地方」記進身體裡。\n\n你沒有說「做得好」，\n只是輕輕摸了摸牠的背。\n有些驕傲，適合小聲一點。`;
+  return `午後很長，也很安靜。\n${name} 在客廳來回嗅聞，\n經過尿墊時會停一下——\n像終於把「對的地方」記進身體裡。\n\n你沒有說「做得好」，\n只是輕輕摸了摸牠的背。\n有些進步，適合小聲一點。`;
 }
 
 function resolveWalkParkCopy(state) {

@@ -562,6 +562,70 @@ Emotional、Story Rich、Singleplayer、Atmospheric、Indie、Dogs、Life Sim（
 
 **驗證目標：** Steam Next Fest 或 itch.io 測試玩家是否願意為中年、老年後續付費。
 
+### Agent Skills 與 Cursor 協作
+
+`agent/` 資料夾收錄**職責分離**的 Cursor Agent Skill，協作開發三部曲。詳細規格見各資料夾的 `SKILL.md` 與 `reference.md`；**本文件為最高準則**，與 skill 衝突時以本文件為準，敘事細節其次依 `story-narrative`。
+
+#### 一覽
+
+| Skill | 路徑 | 職責 |
+|-------|------|------|
+| **故事架構** | `agent/story-narrative/` | 主線／支線、場景節點、Landmark、跨作存檔敘事 |
+| **繁體敘事語氣** | `agent/tw-narrative-voice/` | 繁體、台灣用語、親切溫柔語氣（**所有玩家可見文案**） |
+| **美術風格** | `agent/visual-art/` | 水彩狗 PNG、背景、色溫 UI、版面與 aging 變體 |
+| **聲音設計** | `agent/audio-sound/` | OGG BGM、幼犬 CC0 樣本、`SCENE_CUES` one-shot |
+
+#### 檔案分開 vs 使用統合
+
+| 做法 | 建議 |
+|------|------|
+| **檔案結構** | ✅ **維持分開**——觸發準、邊界清、`reference.md` 不互相干擾 |
+| **Cursor 對話** | ✅ **按需組合**——同一對話可 @ 多個 skill，**不必**開多個 agent 視窗 |
+| **合併成一個 mega skill** | ❌ 不建議——規則過長、易越界改錯檔、自動觸發變不準 |
+
+**實務原則：** 檔案分開維護，使用時依任務選 1～2 個 skill 即可；與「全部併成單一 agent」效果相近，但較不易改錯模組。
+
+#### 建議工作流
+
+```
+guide_line.md（本文件）
+       ↓
+story-narrative  → 場景大綱、分支、跨作標記（文案須符合 tw-narrative-voice）
+       ↓
+visual-art       → dogPose、背景、色溫、§6.6／§6.7 規格
+       ↓
+audio-sound      → BGM profile、DOG_SAMPLES、SCENE_CUES（維持 Demo 音效基線）
+       ↓
+Demo/js/scenes.js、choice-reactions.js、systems.js、audio-tracks.js、dog-samples.js …
+```
+
+僅改對白、選項、語氣時：用 **`tw-narrative-voice`**（必要時加 **`story-narrative`** 審劇情），不必走完整三階流程。
+
+#### 任務對照
+
+| 要做的事 | 建議 Skill |
+|----------|------------|
+| 改對白、選項、副標、相簿描述 | `tw-narrative-voice`（＋必要時 `story-narrative`） |
+| 新增整場景（劇情＋分支） | `story-narrative` → `visual-art` → `audio-sound` |
+| 換狗圖、背景、CSS、版面 | `visual-art` |
+| 調 BGM、狗叫、音量與 cue | `audio-sound` |
+| 微調既有場景文字（已進遊戲） | `Demo/game_editor.html`（本機 HTTP + `啟動編輯器.bat`） |
+
+#### 權責邊界（避免越界）
+
+- **story-narrative**：不決定 PNG 色票或 Web Audio 參數；改完劇情後**不自動啟動 Demo**（除非使用者明確要求）。
+- **tw-narrative-voice**：不新增主線分支、不改 Trust／Bond 數值；專注字詞與語氣。
+- **visual-art**：不寫對白、不改數值系統。
+- **audio-sound**：不新增主線分支；依 story／visual 的 mood／location 配聲。
+
+三者（加語氣）衝突時：**`guide_line.md` > `story-narrative` > 其餘 skill**。
+
+#### 在 Cursor 中呼叫
+
+1. **@ 提及 skill 名稱**（若已同步至 `.cursor/skills/`）：`lhtl-story-narrative`、`lhtl-tw-narrative-voice`、`lhtl-visual-art`、`lhtl-audio-sound`
+2. **直接指定路徑**：例——「請依照 `agent/story-narrative/SKILL.md` 撰寫 Day 8 場景大綱」
+3. **組合使用**：例——「依 `story-narrative` + `tw-narrative-voice` 改寫 `prologue_night`」
+
 ---
 
 ## 十、後續待辦（文件外）
@@ -585,4 +649,4 @@ Emotional、Story Rich、Singleplayer、Atmospheric、Indie、Dogs、Life Sim（
 
 ---
 
-*最後更新：2026-06-29（根據 Other_games.md 新增 §6.5 打字機／日記、§6.6 動態動畫、§6.7 UI 規格、§6.8 音效設計、§6.9 撫摸互動、§九技術平台目標）。*
+*最後更新：2026-07-01（新增 §九 Agent Skills 與 Cursor 協作；先前 §6.5–§6.9、§九技術平台目標見 2026-06-29）。*
