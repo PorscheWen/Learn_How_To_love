@@ -1,0 +1,251 @@
+{
+  "defaultTests": [
+    "tools/validate-choice-reactions.js",
+    "tools/validate-work-schedule.js"
+  ],
+  "jobs": {
+    "lhtl-validate-fix": {
+      "description": "修復 choice-reactions 與 scenes 不一致後跑驗證",
+      "prompt": "依 @lhtl-branch-engine 與 Learn_How_To_Love/agent/branch-engine/SKILL.md：檢查 Ch1_Trust/game/js/choice-reactions.js 與 scenes.js 的 choices 鍵是否一致，修正所有不一致處。只改必要檔案，不要自動啟動遊戲。",
+      "tests": [
+        "tools/validate-choice-reactions.js"
+      ]
+    },
+    "lhtl-week3-voice": {
+      "description": "Week3 對白語氣調整（需人工審稿）",
+      "prompt": "依 @lhtl-tw-narrative-voice：審查 Ch1_Trust/game/js/scenes.js 中 Week3（Day 15+）場景對白，語氣略偏悲傷但仍符合 Ch1 暖基調。先列出將改的 scene_id，再落地修改。不要自動啟動遊戲。",
+      "tests": [
+        "tools/validate-choice-reactions.js",
+        "tools/validate-week3-chronology.js"
+      ]
+    },
+    "lhtl-test-only": {
+      "description": "僅跑測試（cron 用）",
+      "prompt": null,
+      "tests": [
+        "tools/validate-choice-reactions.js",
+        "tools/validate-work-schedule.js",
+        "tools/validate-week2-chronology.js"
+      ]
+    },
+    "lhtl-flux-bathroom-night": {
+      "kind": "agent",
+      "description": "FLUX 2 Pro：浴室夜景背景（prologue_dry／day2_bath／week2_dryer）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 MEMORY.md 與 agent/visual-art/SKILL.md、agent/visual-art/reference.md §角色外型。\n\n用 image_generate，模型必須選 fal-ai/flux-2-pro（FLUX 2 Pro）。風格對齊現有 bg-kitchen.png／bg-bedroom-night.png：水彩／gouache、柔和筆觸、暖色台灣小公寓、無硬黑描邊。\n\n產生浴室背景——不含狗、不含人物：\n- 夜景浴室，霧面鏡子、洗手台、毛巾、暖黃小燈；可有吹風機在台邊\n- 橫向 16:9\n- 存檔：Ch1_Trust/Renpy_game/game/assets/bg/bg-bathroom-night.png（可覆寫）\n\n只回報路徑與 prompt 摘要。不要改 JS。不要開遊戲。"
+    },
+    "lhtl-flux-dog-dryer": {
+      "kind": "agent",
+      "description": "FLUX 2 Pro：狗 pose dog-dryer（吹風機）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 agent/visual-art/SKILL.md 與 reference.md §角色外型聖經。\n\n用 image_generate，模型必須選 fal-ai/flux-2-pro（FLUX 2 Pro）。\n風格必須對齊現有 Ch1_Trust/Renpy_game/game/assets/dog/Week0/dog-anxious.png：\n- 數位水彩／gouache，柔和筆觸，無硬黑描邊\n- 同一隻混種幼犬：golden-tan／honey ochre，耳尖背脊略深褐，胸口吻部奶油色\n- exactly 3 months old，短腿圓肚，半垂耳，深褐暖眼\n- 純黑或純白乾淨背景（方便去背），單隻狗置中全身\n- 禁止：寫實照片、Q版、純種可辨、多狗、文字 logo\n\nPose dryer：\n- 坐在小浴墊上，毛還濕成一縷縷\n- 旁有奶油色／淺色手持吹風機（無人手／無人臂），風口朝狗\n- 耳朵半貼，小心聞風，又怕又好奇\n\n存檔：Ch1_Trust/Renpy_game/game/assets/dog/Week0/dog-dryer.png\n若目錄不存在請建立。完成後可用 terminal 跑：\ncd Ch1_Trust/Renpy_game/game/assets/dog/Week0 assets/dog/Week0/dog-dryer.png\n（若腳本支援路徑參數；否則依 remove_dog_bg.py 用法處理）\n\n只回報路徑。不要改 JS。不要開遊戲。"
+    },
+    "lhtl-flux-dog-wet": {
+      "kind": "agent",
+      "description": "FLUX 2 Pro：狗 pose dog-wet（毛巾裹）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 agent/visual-art/SKILL.md 與 reference.md §角色外型聖經。\n\n用 image_generate，模型必須選 fal-ai/flux-2-pro（FLUX 2 Pro）。\n風格必須對齊現有 Ch1_Trust/Renpy_game/game/assets/dog/Week0/dog-anxious.png：\n- 數位水彩／gouache，柔和筆觸，無硬黑描邊\n- 同一隻混種幼犬：golden-tan／honey ochre，耳尖背脊略深褐，胸口吻部奶油色\n- exactly 3 months old，短腿圓肚，半垂耳，深褐暖眼\n- 純黑或純白乾淨背景，單隻狗置中\n- 禁止：寫實、Q版、純種、多狗、文字\n\nPose wet：\n- 被奶油色厚毛巾緊緊裹成 burrito，只露出眼睛與鼻尖\n- 毛還濕，小小發抖但安全的表情\n\n存檔：Ch1_Trust/Renpy_game/game/assets/dog/Week0/dog-wet.png\n完成後去背（remove_dog_bg.py）。\n\n只回報路徑。不要改 JS。不要開遊戲。"
+    },
+    "lhtl-flux-week4-kitchen": {
+      "kind": "agent",
+      "description": "FLUX 2 Pro：Week4 廚房清晨背景（week4_intro）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 MEMORY.md 與 agent/visual-art/SKILL.md。\n\n用 image_generate，模型選 fal-ai/flux-2-pro（FLUX 2 Pro）。\n產生 Ch1 Week4 場景 week4_intro 的「背景圖」——不含狗、不含人物：\n- 小公寓廚房清晨，台灣租屋感，水彩插畫、柔和暖色\n- 橫向 16:9，適合 CSS background-size: cover\n- 若目錄不存在請建立\n- 存檔：Ch1_Trust/Renpy_game/game/assets/bg/bg-kitchen-morning-week4.png\n\n完成後只回報：檔案路徑、模型、prompt 摘要。不要改 scenes.js 或其它 JS。不要自動啟動遊戲或開瀏覽器。"
+    },
+    "lhtl-flux-week4-home": {
+      "kind": "agent",
+      "description": "FLUX 2 Pro：Week4 客廳傍晚背景（week4_landlord_call）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 MEMORY.md 與 agent/visual-art/SKILL.md。\n\n用 image_generate，模型選 fal-ai/flux-2-pro。\n產生 Ch1 Week4 場景 week4_landlord_call 的「背景圖」——不含狗、不含人物：\n- 小公寓客廳／電話角落傍晚，略緊繃但不陰暗，水彩插畫\n- 橫向 16:9\n- 存檔：Ch1_Trust/Renpy_game/game/assets/bg/bg-home-evening-week4.png\n\n完成後只回報檔案路徑與 prompt 摘要。不要改 JS。不要自動啟動遊戲或開瀏覽器。"
+    },
+    "lhtl-tts-week4-intro": {
+      "kind": "agent",
+      "description": "TTS：week4_intro 對白「今天也一起喔。」",
+      "toolsets": [
+        "tts",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-audio-sound"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 agent/audio-sound/SKILL.md。\n\n用 text_to_speech（OpenAI TTS，Portal Tool Gateway）。\n繁體中文、溫柔自然旁白（對狗說話，非播音腔）。\n文本：「今天也一起喔。」\n語境：Ch1 Week4 week4_intro 早起廚房。\n\n若目錄不存在請建立。\n存檔：Ch1_Trust/Renpy_game/game/assets/audio/voice/week4-intro-today.mp3\n\n完成後只回報檔案路徑。不要改遊戲 JS。不要自動啟動遊戲或開瀏覽器。"
+    },
+    "lhtl-tts-week4-landlord": {
+      "kind": "agent",
+      "description": "TTS：week4_landlord_call 對白「沒事，我們會處理」",
+      "toolsets": [
+        "tts",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-audio-sound"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 agent/audio-sound/SKILL.md。\n\n用 text_to_speech（OpenAI TTS，Portal Tool Gateway）。\n繁體中文、壓低聲音、安撫語氣（對狗說，房東電話後）。\n文本：「沒事，我們會處理。」\n\n存檔：Ch1_Trust/Renpy_game/game/assets/audio/voice/week4-landlord-reassure.mp3\n\n完成後只回報檔案路徑。不要改 JS。不要自動啟動遊戲或開瀏覽器。"
+    },
+    "lhtl-renpy-week1": {
+      "description": "Ren'Py 並行試作：依 Ch1_week1_architecture 用 Nous 重產 Week1 全日 JSON（不寫入 Web scenes.js）",
+      "prompt": "不要改 Ch1_Trust/game/（Web）。在 Ch1_Trust/renpy_week1/ 執行：python tools/generate_week1_nous.py；通過後 python tools/validate_week1_json.py 與 python tools/json_to_rpy.py。規格見 content/schema.md 與 Ch1_week1_architecture.md。",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day1": {
+      "description": "Ren'Py：Nous 只產 Day1 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 1",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day2": {
+      "description": "Ren'Py：Nous 只產 Day2 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 2",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day3": {
+      "description": "Ren'Py：Nous 只產 Day3 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 3",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day4": {
+      "description": "Ren'Py：Nous 只產 Day4 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 4",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day5": {
+      "description": "Ren'Py：Nous 只產 Day5 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 5",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day6": {
+      "description": "Ren'Py：Nous 只產 Day6 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 6",
+      "tests": []
+    },
+    "lhtl-renpy-week1-day7": {
+      "description": "Ren'Py：Nous 只產 Day7 JSON",
+      "prompt": "不要改 Ch1_Trust/game/。執行：python Ch1_Trust/renpy_week1/tools/generate_week1_nous.py --day 7",
+      "tests": []
+    },
+    "lhtl-flux-v2-day1-bgs": {
+      "kind": "agent",
+      "description": "Version2 Day1：純背景 3 張（無人無狗）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 Ch1_Trust_Version2/agents/image.md。\n用 image_generate，模型必須選 fal-ai/flux-2-pro（FLUX 2 Pro）。\n每張都是全新生成，禁止複製或沿用任何舊檔／backup。\n風格鎖定：Watercolor painting style. Soft washes of transparent indigo, warm burnt sienna, and sap green on textured paper. Character, puppy, and environment rendered with consistent wet-on-wet technique, delicate brushwork, and gentle bleeding at the edges. Indie visual novel illustration, soft gouache feel, visible paper tooth, no hard black outlines, no flat cel shading, no photorealism, no 3D render, no chibi exaggeration.\n\n依序產生 3 張「空環境背景」——嚴格禁止人物、狗、動物、文字、logo：\n\n1) Ch1_Trust_Version2/assets/bg/bg-street-rain-night.png\nEmpty environment. Rainy Taiwanese alley at dusk/night, wet asphalt soft reflections, damp cardboard box alone at curb (empty box prop only, NO puppy inside), distant scooter and low buildings soft focus, indigo-dominant cool wash, single warm street-lamp burnt sienna accent, sap green moss on wall. Wide 16:9.\n\n2) Ch1_Trust_Version2/assets/bg/bg-apartment-living-floor.png\nEmpty Taiwanese rental living room, floor-level view, thin rug, empty cardboard box corner as prop, warm burnt sienna lamp light, sap green plant hint, no people no dogs. Wide 16:9.\n\n3) Ch1_Trust_Version2/assets/bg/bg-apartment-night-living.png\nSame small living room at night, dim lamp, quiet cozy empty nest area with towels (no dog), indigo shadows + warm ochre. Wide 16:9.\n\n每張都呼叫 image_generate 一次並存檔。若目錄不存在請建立。完成後只回報三個路徑與模型名。不要開遊戲。不要改劇本。"
+    },
+    "lhtl-flux-v2-day1-dogs": {
+      "kind": "agent",
+      "description": "V2 Day1：狗 6 張（溫和寫實水彩、扁平 dog/、表情動作必變、禁鳥巢）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 Ch1_Trust_Version2/agents/image.md。\n用 image_generate，模型必須選 fal-ai/flux-2-pro。全新生成，禁止複製舊圖／Week0／backup。\n風格：Gentle realistic watercolor illustration. Soft natural lighting, calm warm mood, subtly textured cream paper. Soft washes of transparent indigo, warm burnt sienna, and muted sap green. Believable real-world proportions, delicate wet-on-wet brushwork, gentle bleeding at edges, soft atmospheric depth. Not a photograph, not DSLR realism, not anime cel shading, not hard black outlines, not chibi.\n角色：Single scruffy golden-tan mixed breed puppy, exactly 2 months old, short stubby legs, round soft belly, honey ochre fur with slightly darker brown ears and back, lighter cream chest and muzzle, semi-floppy ears, warm dark brown eyes. Each image must show a DISTINCT facial expression AND a DISTINCT body action. Centered full body, clean soft cream paper background for cutout. NO bird nest, NO straw nest, NO hay nest, NO twig nest. No text, no logo, no chibi, no purebred markers.\n存檔目錄必須是 Ch1_Trust_Version2/assets/dog/（扁平，不要 Week0 資料夾）。\n\n依序各呼叫一次 image_generate：\n1) dog-anxious.png — Expression: worried glistening eyes looking up. Action: low belly crouch, ears flat, tail tucked, tiny shiver.\n2) dog-box.png — Expression: helpless pleading eyes. Action: inside EMPTY damp cardboard shipping box, head and front paws over rim; box may have one plain cream towel only — NEVER bird nest/straw/hay/twigs.\n3) dog-wet.png — Expression: scared but safer. Action: wrapped in cream towel burrito, only eyes and nose peeking, damp fur clumps.\n4) dog-hungry.png — Expression: hesitant craving. Action: body recoiling while nose stretches toward empty shallow bowl.\n5) dog-shy.png — Expression: timid relief. Action: half-turned, peeking one eye, ears half-pinned.\n6) dog-sleepy.png — Expression: exhausted soft calm. Action: melting drowsy curl, heavy lids, slow breath. Empty box edge optional, no nest.\n\n完成後去背：\npython Ch1_Trust_Version2/tools/remove_sprite_bg.py anxious box wet hungry shy sleepy\n只回報路徑。不要開遊戲。"
+    },
+    "lhtl-flux-v2-day1-chars": {
+      "kind": "agent",
+      "description": "V2 Day1：小晴 3 張（可含臉、溫和寫實、禁鳥巢）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 Ch1_Trust_Version2/agents/image.md 與 03_character_bible.md。\n用 image_generate，模型必須選 fal-ai/flux-2-pro。全新生成。\n風格：Gentle realistic watercolor illustration. Soft natural lighting, calm warm mood, subtly textured cream paper. Soft washes of transparent indigo, warm burnt sienna, and muted sap green. Believable real-world proportions, delicate wet-on-wet brushwork, gentle bleeding at edges, soft atmospheric depth. Not a photograph, not DSLR realism, not anime cel shading, not hard black outlines, not chibi.\n\n26-year-old Taiwanese office worker woman Xiaoqing, long natural dark hair, warm skin, simple oatmeal/gray-brown clothes, tired gentle caring expression, FACE VISIBLE OK, soft realistic watercolor features (not idol/anime face). Clean soft cream cutout background. NO bird nest, NO straw nest.\n\n依序產生：\n1) Ch1_Trust_Version2/assets/char/char-hand-reach.png — leaning down, face softly visible looking at damp empty cardboard box, one hand carefully touching box edge, rain-damp sleeve.\n2) Ch1_Trust_Version2/assets/char/char-carry-box.png — carrying/wrapping coat over empty cardboard box in arms, face visible, tired concerned expression, walking home in rain mood, three-quarter portrait.\n3) Ch1_Trust_Version2/assets/char/char-sit-floor.png — sitting on apartment floor beside empty cardboard box with only a plain towel inside (NO nest/straw/hay), face visible, gentle exhausted look, oatmeal sweater.\n\n去背：\npython Ch1_Trust_Version2/tools/remove_sprite_bg.py Ch1_Trust_Version2/assets/char/char-hand-reach.png Ch1_Trust_Version2/assets/char/char-carry-box.png Ch1_Trust_Version2/assets/char/char-sit-floor.png\n只回報路徑。不要開遊戲。"
+    },
+    "lhtl-flux-v2-fix-hungry-shy": {
+      "kind": "agent",
+      "description": "重產 dog-hungry（露腳）＋ dog-shy（躲避眼神動作）",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 Ch1_Trust_Version2/agents/image.md。\n用 image_generate，模型必須選 fal-ai/flux-2-pro。覆寫既有檔，全新生成。\n風格：Gentle realistic watercolor illustration. Soft natural lighting, calm warm mood, subtly textured cream paper. Soft washes of transparent indigo, warm burnt sienna, and muted sap green. Believable real-world proportions, delicate wet-on-wet brushwork, gentle bleeding at edges. Not a photograph, not anime cel, not chibi, not hard black outlines.\n角色：Single scruffy golden-tan mixed breed puppy, exactly 2 months old, short stubby legs, round soft belly, honey ochre fur with slightly darker brown ears and back, lighter cream chest and muzzle, semi-floppy ears, warm dark brown eyes. FULL BODY including ALL four paws clearly visible — never crop or cover feet. Clean soft cream paper background for cutout. No bird nest. No text, no logo.\n\n1) Ch1_Trust_Version2/assets/dog/dog-hungry.png\nExpression: hesitant craving, slightly open mouth or licking lips softly, eyes flick toward food then away.\nAction: FULL BODY standing/crouching with ALL paws visible on the cream ground — front paws planted clearly, NO cropping of legs, NO black cutout covering feet. Body leans back shyly while nose stretches forward toward a small empty shallow bowl placed to the side (bowl must not cover paws). Weight on hind legs, tentative step.\n\n2) Ch1_Trust_Version2/assets/dog/dog-shy.png\nExpression: AVOIDANT gaze — eyes looking away/down to the side, NOT looking at camera; eyelids soft, uneasy.\nAction: half-turned body angled away as if dodging contact, head ducked slightly, ears pinned half-flat, one front paw lifted or stepping aside, tail tucked close, shrinking posture — clearly shy/avoiding, not upright facing forward.\n\n完成後去背：\npython Ch1_Trust_Version2/tools/remove_sprite_bg.py hungry shy\n只回報路徑。不要開遊戲。"
+    },
+    "lhtl-flux-v2-dog-shy-scare": {
+      "kind": "agent",
+      "description": "dog-shy 單爪遮眼＋新增 dog-scare 趴地慌亂",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 Ch1_Trust_Version2/agents/image.md。\n用 image_generate，模型必須選 fal-ai/flux-2-pro。全新生成並覆寫。\n風格：Gentle realistic watercolor illustration. Soft natural lighting, calm warm mood, subtly textured cream paper. Soft washes of transparent indigo, warm burnt sienna, and muted sap green. Believable real-world proportions, delicate wet-on-wet brushwork, gentle bleeding at edges. Not a photograph, not anime cel, not chibi, not hard black outlines.\n角色：Single scruffy golden-tan mixed breed puppy, exactly 2 months old, short stubby legs, round soft belly, honey ochre fur with slightly darker brown ears and back, lighter cream chest and muzzle, semi-floppy ears, warm dark brown eyes. FULL BODY with all visible paws clear. Clean soft cream paper background for cutout. No bird nest, no bowl covering feet, no text, no logo.\n存檔必須在 Ch1_Trust_Version2/assets/dog/（扁平目錄，不要 Week0，不要存到 Ch1_Trust/game）。\n\n1) Ch1_Trust_Version2/assets/dog/dog-shy.png\nExpression: shy, embarrassed, peeking.\nAction: sitting or slight crouch, ONE front paw covering ONE eye (paw over eye like peek-a-boo / covering face), the other eye peeks out nervously looking aside; ears half-flat; body slightly turned away. All other paws visible. Clear silhouette.\n\n2) Ch1_Trust_Version2/assets/dog/dog-scare.png  （新 pose）\nExpression: panicked flustered eyes, wide and unsettled, looking around anxiously.\nAction: lying flat prone on the cream ground, belly and chest pressed low, BOTH ears fully flattened down against head, front paws tucked or splayed close to floor, tail tucked, whole body hugging the floor in fear — clearly scared, not sleeping.\n\n完成後執行（完整路徑）：\npython C:/Users/BaoGo/Documents/ClaudeCode_Project/Learn_How_To_Love/Ch1_Trust_Version2/tools/remove_sprite_bg.py C:/Users/BaoGo/Documents/ClaudeCode_Project/Learn_How_To_Love/Ch1_Trust_Version2/assets/dog/dog-shy.png C:/Users/BaoGo/Documents/ClaudeCode_Project/Learn_How_To_Love/Ch1_Trust_Version2/assets/dog/dog-scare.png\n\n只回報兩個路徑。不要開遊戲。"
+    },
+    "lhtl-flux-v2-oil-bgs": {
+      "kind": "agent",
+      "description": "V2 油畫風格背景 3 張：bedroom-night／entrance-night／pet-shop",
+      "toolsets": [
+        "image_gen",
+        "file",
+        "terminal"
+      ],
+      "skills": [
+        "lhtl-visual-art"
+      ],
+      "yolo": true,
+      "prompt": "任務前請讀 Ch1_Trust_Version2/agents/image.md §1 與 §5.5。\n用 image_generate，模型必須選 fal-ai/flux-2-pro（FLUX 2 Pro）。\n每張全新生成，禁止複製 backup／舊水彩檔當定稿。\n可對照風格參考（只學筆觸與色溫，勿逐像素複製）：\n- Ch1_Trust_Version2/agents/style-refs/ref-bg-bedroom-night.png\n- Ch1_Trust_Version2/agents/style-refs/ref-bg-entrance-night.png\n- Ch1_Trust_Version2/agents/style-refs/ref-bg-pet-shop.png\n\n風格鎖定（每張 prompt 都要包含）：\nImpressionistic oil painting. Thick visible brushstrokes, painterly impasto texture, soft blended edges, subtle canvas tooth. Warm amber and golden interior light contrasting cool deep indigo navy night exterior. Complementary blue-and-gold / teal-and-orange palette. Cozy nostalgic quiet everyday Taiwanese atmosphere. Soft atmospheric depth, storybook concept-art feel. Not a photograph, not DSLR realism, not anime cel shading, not hard black outlines, not chibi, not flat vector.\n\n嚴格禁止：人物、狗、動物、文字、logo、可讀招牌、watermark。背景不去背。橫向 16:9。\n\n依序產生並存檔（覆寫可）：\n\n1) Ch1_Trust_Version2/assets/bg/bg-bedroom-night.png\nEmpty Taiwanese small apartment living room at night. Left: dark sofa with one pillow under warm classic table lamp glow, framed picture on wall, leafy potted plant. Center: large glass sliding doors open to balcony with black metal railing, distant city skyline silhouette with tiny warm window lights under textured cloudy night sky. Right: wooden bookshelf and small stool, another plant near the door. Light rug reflecting golden lamp light. Wide 16:9.\n\n2) Ch1_Trust_Version2/assets/bg/bg-entrance-night.png\nEmpty Taiwanese apartment balcony entrance at twilight. Foreground: tiled balcony floor, large leafy plant in terracotta pot on left, several pairs of shoes near entrance on right. Midground: open light wooden door pouring rich warm gold interior light; coat and tote bag hanging on pegs inside; trailing ivy. Stone railing overlooking dense apartment buildings with lit windows under deep blue dusk sky. Wide 16:9.\n\n3) Ch1_Trust_Version2/assets/bg/bg-pet-shop.png\nEmpty cozy vintage pet boutique interior, golden afternoon sunlight through large window with sheer curtains, rustic wooden counter, tall wooden shelves with colorful pet food bags (plain packaging only — NO readable brand text), glass jars, hanging leashes, bowls, wicker toy baskets, warm pendant lamp, wooden plank floor, leafy plants. NO chalkboard text, NO shop name lettering. Wide 16:9.\n\n每張呼叫 image_generate 一次。存檔後用 terminal 複製到：\nCh1_Trust_Version2/Renpy_game/game/assets/bg/（同檔名）\n若目錄不存在請建立。\n完成後只回報三個路徑與模型名。不要開遊戲。不要改劇本。"
+    }
+  }
+}

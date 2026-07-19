@@ -1,6 +1,7 @@
 # 台灣繁體敘事 — 用語對照與詞彙表
 
-> **語調金標：** `Demo/js/scenes.js` Day 1（`prologue_rain`～`prologue_dawn`）。以下摘錄自現行主線，供新章節對齊語感。
+> **語調金標：** `Demo/js/scenes.js` Day 1（`prologue_rain`～`prologue_dawn`）。以下摘錄自現行主線，供新章節對齊語感。  
+> **text／sub UI 分層與人對狗對話：** [`narrative-pacing-revision.md`](../narrative-pacing-revision.md) §二
 
 ---
 
@@ -89,7 +90,7 @@
 走到三步外，輕聲說：「我在這，別害怕。」
 開小夜燈，坐在地上，不強抱，等聲音慢下來
 困得發煩，還是壓低聲音陪在遠處
-撐到天亮……
+不知不覺，天亮了...
 ```
 
 **選項寫法要點（自 Day 1 歸納）：**
@@ -135,6 +136,8 @@
 | 够（簡體） | 夠 |
 | 这里（簡體） | 這裡 |
 | 湿（簡體） | 濕／溼（全稿統一；Day 1 現用「溼」處保留一致） |
+| Day1、Day3、Week1、Week2（字幕） | 第一天、第三天、第一週、第二週 |
+| 第一夜 callback 寫 Day1 | 第一天／第一夜 |
 
 ## 台灣口語偏好
 

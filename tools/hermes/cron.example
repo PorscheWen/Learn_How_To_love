@@ -1,0 +1,7 @@
+# Linux/macOS crontab 範例（僅測試，每日本地 02:00）
+# crontab -e 後貼上：
+#
+# 0 2 * * * cd /path/to/Learn_How_To_Love/tools/hermes && /usr/bin/python3 hermes.py test >> hermes-cron.log 2>&1
+#
+# 測試失敗時再跑 SDK 修復（需 CURSOR_API_KEY，建議謹慎使用）：
+# 0 3 * * 1 cd /path/to/Learn_How_To_Love/tools/hermes && /usr/bin/python3 hermes.py pipeline --job lhtl-validate-fix >> hermes-pipeline.log 2>&1

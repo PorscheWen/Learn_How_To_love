@@ -1,0 +1,142 @@
+# Learn How to Love｜Version3 Ren'Py
+
+目前可玩內容：**Ch1 Trust｜Section 01～10 完整章節**（含背靠／選定／送走／薄冰四結局）。
+
+篇幅契約：S01～S07 最短選項路徑皆至少 **5 分鐘**；S08／S09 各約 **8 分鐘**；S10 的 A～D 每條實際結局路線皆至少 **5 分鐘**。
+
+## 啟動
+
+執行：
+
+```powershell
+.\開啟遊戲.bat
+```
+
+啟動腳本會優先使用工作區既有 Ren'Py SDK；若不存在，首次執行會下載 Ren'Py 8.3.7，並安裝 SDK 內附的繁中字型。
+主選單可使用「章節選擇」直接從 Section 01～10 開始；跳段會建立該段的預設前置狀態，不影響既有存檔。
+
+### 章節選擇大綱
+
+- **Section 01｜螢幕光比月亮亮：** 予安習慣獨自度過加班的夜，直到店員提起後門那隻沒力氣的小狗。
+- **Section 02｜後門那一瞥：** 她終於轉進後門，看見小7，也第一次試著在害怕面前放慢腳步。
+- **Section 03｜樓梯間的臨時國界：** 一句「今晚不算數」把牠留在樓梯間；她上樓之後，卻還是回頭了。
+- **Section 04｜共享同一種安靜：** 沙發與地板隔著兩步，他們不急著靠近，只練習在同一份安靜裡留下。
+- **Section 05｜你的聲音有兩種：** 戴上耳機後，予安的聲音變得又快又尖；小7開始分辨，哪一種聲音會為牠慢下來。
+- **Section 06｜走廊上的第三者：** 當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。
+- **Section 07｜她倒下的那天：** 予安病得起不了身，小7不懂怎麼照顧人，只知道守在門口，試著等她回應。
+- **Section 08｜走到轉角就好：** 第一次出門只為抵達巷口；世界太吵時，予安得決定要拉著牠，還是一起停下。
+- **Section 09｜差點交給別人：** 同事真誠提出接手；在牽繩交出去以前，予安必須承認誰已經選過誰。
+- **Section 10｜把鑰匙分給心跳：** 鑰匙與牽繩掛在同一面牆上；夜深後，睡眠的距離替這段關係留下答案。
+
+## 已實作契約
+
+- 女主固定為「予安」。
+- 狗預設名「小7」，外型 **Option B｜wiry**（見 `../agents/image_dog.md`）；後續可由玩家改名。
+- S01 的 `trust`、`dist`、`tone`、`guard` 全程維持 `0`；唯一風味選擇寫入 `flags["peeked_backdoor"]`。
+- S02 依 `peeked_backdoor` 軟分軌開場；信任選擇組（蹲等 `+1`／硬抱 `−1`／趕走後良心回頭淨 `0`）為本段唯一動 trust 的選項組，路徑選擇寫入 `called_shelter`／`vet_first`／`stairwell_night`，溫柔路線加成後淨變動落在 `0～+2／−1`。演出採後門遠距進場、距離選擇、退一步測試與空紙箱離場四拍；蹲等路線以 `far → mid → near` 和 `melancholy → tender → warm` 回應信任。
+- S03 完整實作路徑開場、外套風味、歸來信任選擇與 G1 進門權；未通過 G1 只增加門縫對望，不阻擋 S04。
+- S04 完整實作平行安靜／硬抱合照／關浴室三種質地，以及「只到廚房門口」記憶點。
+- S05 完整實作 Tone 軸、視訊早會、耳機回授／主管點名高峰、拔插頭「喀」聲回收，以及正式改名 UI；可保留「小7」或輸入最多 12 字的新名字，空白輸入沿用原名。
+- S06 完整實作 Guard 軸、鄰居持續伸手說服、推車輪「喀、喀」壓力、選擇站位、「我們」與額頭輕碰記憶點。
+- S07 完整實作發燒守門、起身失敗／耳鳴體感高峰、Tone 延續與「我還在」，並以兩道呼吸收束；禁止把小7寫成會拿藥或預知病情的靈犬。
+- S08 完整實作胸背帶穿戴、低／中／高信任外出軟分軌、Dist 停等／硬拖／提早回家，以及鞋邊睡記憶點。機車驚嚇先以 `tense`、`far` 與停頓蓄壓，再依選項分成停等 `far → mid → near`、提早回家 `mid` 鬆弧或硬拖全程 `far`，最後用返家距離及同事提議收束四拍。
+- S09 完整實作 G2 被選中、Guard 留下／送走硬分歧；同事維持真誠，送走不責罵玩家。
+- S10 不再修改 trust，依 `gave_away`、trust 區間與 `s08_forced_walk` 分流 A～D 四結局。
+- 本版維持純敘事選項，不加入小遊戲、牽繩微互動或快問快答；S08 張力由 Dist 選項與狗姿勢表達。
+- 不顯示 trust 數字，不播放信任升級音效；狗的距離用 `dog_far`→`dog_mid` 位移表達。
+- Section 標題卡使用 `section_title` 全螢幕淡入（主標 2.6 秒、副標延遲 1.2 秒浮現）。
+- 人物立繪：S08 使用 `char-yuan-leash`；S09 使用 `char-coworker`；所有專用立繪缺檔時均有安全 fallback。
+- 狗立繪：S07～S10 依守門、牽繩、拒絕陌生人與三種睡姿切換；缺檔不阻擋遊戲。
+- BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
+- 狗 SFX：`dog_sfx()` 以低音量播放稀疏 one-shot；S02／S03／S05／S06／S07／S08／S09 使用 `soft`、`whimper`、`murmur`、`bark`、`growl`，S01 與結局 C 空屋不播放。音源授權見 `assets/audio/sfx/CREDITS.md`。
+
+### 重新取名 UI 契約
+
+- `script.rpy` 的 `dog_label` 與 `proposed_name` 必須以 `default` 宣告，讓存讀檔與 rollback 正常保留狀態。
+- `screens.rpy` 必須保留 `screen input(prompt)`，且輸入元件使用 `input id "input"`；這是 `renpy.input()` 的必要畫面，刪除會造成 S05 取名時 crash。
+- 改名後應立即在敘事使用新名字，並帶入 S06 與後續存檔；改名不影響 trust 或三軸。
+
+## 資產覆寫
+
+```text
+../assets/
+├─ bg/
+│  ├─ bg-office-night.png
+│  ├─ bg-convenience-night.png
+│  ├─ bg-street-night.png
+│  ├─ bg-living-night.png
+│  ├─ bg-living-day.png
+│  ├─ bg-backdoor-night.png
+│  ├─ bg-stairwell-night.png
+│  ├─ bg-corridor-day.png
+│  ├─ bg-alley-day.png
+│  └─ bg-cafe-day.png
+├─ char/
+│  ├─ char-yuan-headphones.png
+│  ├─ char-yuan-commute.png
+│  ├─ char-yuan-block.png
+│  ├─ char-yuan-leash.png
+│  ├─ char-clerk.png
+│  ├─ char-neighbor.png
+│  └─ char-coworker.png
+├─ dog/
+│  ├─ dog-ref-canonical.png
+│  ├─ dog-anxious.png
+│  ├─ dog-halfstep.png
+│  ├─ dog-stair-watch.png
+│  ├─ dog-door-sleep.png
+│  ├─ dog-parallel.png
+│  ├─ dog-kitchen-door.png
+│  ├─ dog-ear-flat.png
+│  ├─ dog-sniff-wire.png
+│  ├─ dog-behind-legs.png
+│  ├─ dog-forehead-nudge.png
+│  ├─ dog-guard-door.png
+│  ├─ dog-street-tense.png
+│  ├─ dog-leash-wait.png
+│  ├─ dog-shoe-sleep.png
+│  ├─ dog-refuse-stranger.png
+│  ├─ dog-back-sleep.png
+│  ├─ dog-check-sleep.png
+│  └─ dog-door-edge.png
+└─ audio/
+   ├─ calm.ogg
+   ├─ warm.ogg
+   ├─ tender.ogg
+   ├─ melancholy.ogg
+   ├─ sick-guard.ogg
+   ├─ almost-gave.ogg
+   └─ first-light.ogg
+```
+
+### 生圖政策（鎖定）
+
+1. **預設用 Cursor `GenerateImage`** 產出背景／立繪；狗圖必附 `assets/dog/dog-ref-canonical.png`。
+2. 綠幕立繪再以 `python tools/remove_ai_bg.py INPUT OUTPUT ...` 去背。
+3. `tools/flux_*.py`（FLUX 2 Pro）僅在 Cursor 不可用、或使用者明確指定時當備援。
+4. `assets/bg/`、`assets/char/`、`assets/dog/` 只放遊戲正式資產；綠幕來源放 `assets/dog_mj/`，去背完成後刪除遊戲目錄內的 `*-green.png`。
+5. 不保留未引用備援圖、`assets/dog_old/` 舊圖或 `*-regen` 中介圖。
+
+### 2026-07-19 美術更新
+
+- 狗圖：19 張來源／正式資產（18 個遊戲 pose＋`dog-ref-canonical`）；重產 6 張關鍵全身 pose，移除未引用 `dog-door-sleepy`。
+- 背景：10 張正式背景統一厚筆印象派風格；重產 S08 `alley-day`（曝光）、S06 `corridor-day`（洗白）、`street-night`（偏寫實）與 S03 `stairwell-night`（現代梯廳＋室內燈具）。
+- 清理：刪除 `assets/dog_old/`、角色／狗綠幕中介檔與測試暫存輸出。
+
+S09／S10 正式圖已用 Cursor 落地（`bg-cafe-day`、`char-coworker`、四結局／拒絕 pose）。若備援重跑 `tools/flux_*.py`，請先輸出到工作暫存目錄；去背完成後只搬入透明正式檔，不把 `*-green.png` 留在 `assets/char/` 或 `assets/dog/`。
+
+## 驗證
+
+```powershell
+python .\tools\validate-s01.py
+python .\tools\validate-reading-time.py
+```
+
+S05 另需手動測試兩條取名路徑：保留「小7」與輸入新名字；並測空白輸入、存檔後讀檔、回溯及進入 S06。完整項目見 `../agents/tester.md` §4.2。
+S09／S10 需各跑高信任留下、中信任留下、任意分數送走與低信任留下，確認 A～D 四標籤與 `s08_forced_walk` 排除 A 的規則。
+
+若本機已有 Ren'Py SDK，也可執行：
+
+```powershell
+<renpy.exe> . lint
+```

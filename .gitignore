@@ -31,3 +31,26 @@ Demo/assets/dog/sfx/_*.ogg
 temp/
 Demo/.editor-save-result.json
 .editor-save-result.json
+
+# Ren'Py SDK / runtime (download locally via 開啟遊戲.bat)
+**/renpy-sdk/
+**/renpy-*/
+**/log.txt
+**/errors.txt
+**/traceback.txt
+**/saves/
+*.rpa
+*.rpyc
+*.rpymc
+
+# AI / green-screen intermediates
+**/*-green.png
+**/dog_mj/
+**/dog_old/
+**/__pycache__/
+
+# Cursor local (keep root .cursorrules tracked)
+.cursor/
+
+**/game/cache/
+

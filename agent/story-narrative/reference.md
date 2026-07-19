@@ -1,5 +1,12 @@
 # 故事架構參考
 
+> **Steam 上架（敘事門檻）：** [`steam-release.md`](steam-release.md)（對照 `guide_line.md` §十）  
+> **Ch1 正式版全章總覽：** [`Ch1_Trust/Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md)  
+> **Ch1 第一週場景架構（57 節點）：** [`Ch1_Trust/Ch1_week1_architecture.md`](../../Ch1_Trust/Ch1_week1_architecture.md)  
+> **Ch1 第二週場景架構（16 節點）：** [`Ch1_Trust/Ch1_week2_architecture.md`](../../Ch1_Trust/Ch1_week2_architecture.md)  
+> **章節落地驗收（game-tester 反饋）：** [`chapter-landing-checklist.md`](../chapter-landing-checklist.md)  
+> **Ch1 敘事節奏修訂（2026-07）：** [`narrative-pacing-revision.md`](../narrative-pacing-revision.md)
+
 ## 主角（「你」）— Ch1 鎖定
 
 | 項目 | 規格 |
@@ -11,6 +18,60 @@
 | 性格 | **感情豐富**——易共感、內疚、對小動作敏感 |
 | 敘事 | 第二人稱「你」；固定女主 |
 | 視覺 | Demo 不露全臉；見 [`visual-art/reference.md`](../visual-art/reference.md#角色外型聖經) |
+
+## 狗狗年齡（全系列 · 時間線鎖定 — 審查必對）
+
+> 權威：`guide_line.md` §四–§六、[`Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md) §七時間線、[`time-flow-effects.md`](../game-tester/time-flow-effects.md) §二。  
+> 美術 prompt／PNG tier 細節交 [`visual-art/reference.md`](../visual-art/reference.md#角色外型聖經)；本節管**敘事合理性、文案暗示、行為可否**。
+
+### 三部曲生命階段
+
+| 篇章 | 生命階段 | 狗年齡（敘事） |
+|------|----------|----------------|
+| **Ch1 First Steps** | 幼犬（0–2 歲段） | 相遇 **2–4 個月** → 週年 **約 1 歲** |
+| **Ch2 Still Here** | 中年 | 穩重成犬（具體歲數 Ch2 大綱鎖定） |
+| **Ch3 Goodbye** | 老犬 | **9 歲+**；灰吻、動作慢、感官敘事 |
+
+**全系列同一隻混種狗**；Ch1 不得換品種、不得突然老犬化（灰吻等留 Ch3）。
+
+### Ch1 細時間軸（故事日 ↔ 狗年齡）
+
+| 故事日 | 狗年齡 | 敘事／行為合理範圍 | 視覺 tier |
+|--------|--------|-------------------|-----------|
+| **Day 1** 雨天相遇（`prologue_rain`） | **約 3 個月**（官方 2–4 月；**相遇宜偏 3 月**） | 紙箱裡細小發抖、眼神無助、控 bladder 差、易驚、不能獨太久 | Week0 |
+| **Day 1–14**（第 1–2 週） | 仍 **~3 月** | 如廁仍在學、分離焦慮、社會化皆「第一次」 | Week0 |
+| **Day 15+**（第 3 週起） | **4–5 月**（敘事「悄悄長大」） | `week3_growth_notice`：項圈多一格、膝邊略高；仍幼犬、仍衝動 | Week3 adolescent PNG |
+| **Day 16–28**（走失、房東） | 4–5 月 | 已認家、會開門縫，但非成犬穩定 | Week3 |
+| **Day 365** 相遇週年 | **~12 個月（1 歲）** | 比相遇大一圈、仍活潑；**仍屬 Ch1 幼犬段**，非 Ch2 中年 | 週年場景（若有專用 pose） |
+
+**時間壓縮備註：** Ch1 前 28 天僅曆 **4 週**，生理上狗不會長大很多；Week3「長大」以**感受＋略長高**演出，週年弧才快轉至 1 歲。撰寫時勿讓 Day 3 文案像 6 個月幼犬，亦勿讓 Day 28 像成犬。
+
+### 製作基準（與 visual-art 對齊）
+
+| 用途 | 建議鎖定 |
+|------|----------|
+| 情緒基準 `dog-anxious.png`、Week0 多數 pose | **3 個月** |
+| Day 1 序章無助／被遺棄（`box`、`anxious`） | **2.5–3 個月**（宜小、腿短、肚圓） |
+| Week3+ 成長圖（`assets/dog/Week3/`） | **4–5 個月** adolescent |
+| Day 365 週年 | **12 個月** |
+
+### 敘事審查：合理 vs 要報
+
+| 時段 | 合理 | 不合理（違規） |
+|------|------|----------------|
+| Day 1–3 | 小、易累、尿墊、蜷縮、不敢靠近 | 像成犬穩定、長時間獨處無焦慮 |
+| Week2 | 電梯／公園／鄰居是「第一次」試探 | 像社會化老手、無鋪墊就淡定 |
+| Week3 走失 | 認家、會開門縫，仍幼犬衝動 | 完全不懂家界線（若已有認家 Memory） |
+| Day 365 | 大一圈、仍 golden-tan 同一隻 | 突然灰吻、老犬步態、換品種感 |
+| Ch1 全章 | 文案用「小傢伙」「還在學」 | 寫「成年犬」「老狗」「很大隻了」（週年前） |
+
+### 場景包必填
+
+撰寫或審查場景時，在場景包標註：
+
+- **狗年齡感：** 對照上表（例：Day 1 → ~3 月；Week3 intro → 4–5 月）
+- **身體語言是否合齡：** 控尿、體力、社會化經驗
+- **dogPose tier：** Week0 或 Week3（Day 15+ 預設 Week3 成長圖）
 
 ## 主人作息（Ch1 鎖定 — 審查必對）
 
@@ -55,7 +116,7 @@
 
 ---
 
-## Demo Ch1 場景一覽
+## Ch1 第一週場景一覽
 
 | Day | scene_id | 摘要 |
 |-----|----------|------|
@@ -70,9 +131,10 @@
 | 5 | `day5_sunday`～`day5_evening` | 週日認家 |
 | 6 | `day6_morning`～`day6_thunder_after` | 週一上班、雷雨分支 |
 | 7 | `day7_morning`～`day7_moment` | 加班、難過 |
-| 7 | `epilogue` | 七天總結 |
+| 7 | `week1_epilogue` | 第一週總結 |
 
-完整 id 列表見 `Demo/js/scenes.js` 的 `SCENES` 物件。
+完整 id 列表見 `Demo/js/scenes.js` 的 `SCENES` 物件。  
+**Ch1 全章**（含 W2–週年弧）見 [`Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md) §全章總覽表。
 
 ---
 
@@ -101,7 +163,7 @@
 
 | minigame | 觸發場景 | 結果 flag | 影響敘事 |
 |----------|----------|-----------|----------|
-| `shop` | `day2_petshop` | `shopTier` | `day2_petshop_after` 店員評價句 |
+| `shop` | `day2_petshop` | `shopTier`、`shopShampooOk` | `day2_petshop_after` 店員評價句；`day2_bath` 沐浴精來源 |
 | `potty` | `day3_potty_intro` | `pottyGuideTier` | `resolvePottyAfternoonCopy`（systems 流程） |
 | `vet` | `day4_vet` | `vetTier`、`vetIntakeTier` | `day4_vet_bill`、結帳文案 |
 | `home` | `day5_home_intro` | `homeExploreTier` | `day5_home_after` 全文 |
@@ -148,7 +210,7 @@
 | `thunder` | 雷雨 |
 | `sad_day` | 難過的那一天 |
 
-新增 Memory 時：場景包標 `memory_id`，並提供相簿 `title`／`desc` 草稿。
+撰寫新章節大綱時：場景包標 `memory_id`，並提供相簿 `title`／`desc` 草稿。整章須維護全章總覽表，見 [`steam-release.md`](steam-release.md)。
 
 ---
 
@@ -170,7 +232,7 @@ Anxious、Excited、Content、Curious、Hurt、Attached、Sleepy、Playful、Ale
 
 1. Stranger → 2. Familiar → 3. Rhythm → 4. Anchor → 5. One Life
 
-Demo 結束目標：Lv2 Familiar。
+Demo 第一週結束目標：Lv2 Familiar。Ch1 全章終局：週年弧後 Bond Lv3+、Landmark `meetiversary`。
 
 ## 各章 Landmark / Memory 範例（guide_line §6.4）
 
@@ -195,8 +257,11 @@ Demo 結束目標：Lv2 Familiar。
 **Ch3 結尾：**
 > 你終於學會了。不是學會失去——是學會，愛過之後還在。
 
-**Demo Epilogue 方向：**
+**Ch1 第一週收束：**
 > 不是一次做對，而是一次次，選擇留下來。
+
+**Ch1 週年終局（範例）：**
+> 你們還在學，但這一年已經很滿了。
 
 ## 參考基調作品
 

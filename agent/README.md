@@ -1,201 +1,118 @@
 # Learn How to Love — 專用 Agent
 
-
-
-本資料夾包含四個**職責分離**的 Cursor Agent Skill，協作開發《學會去愛》三部曲。所有 agent 皆以 [`guide_line.md`](../guide_line.md) 為最高準則（含 §九 Agent Skills 使用重點）。
-
-
+本資料夾包含 **Ch1 統籌**與多個**職責分離**的 Cursor Agent Skill，協作開發《學會去愛》三部曲。所有 agent 皆以 [`guide_line.md`](../guide_line.md) 為最高準則；**Chapter 1 細節**以 [`Ch1_Trust/Ch1_guide_line.md`](../Ch1_Trust/Ch1_guide_line.md) 為準。
 
 ## Agent 一覽
 
-
-
 | Agent | 資料夾 | 職責 | 深入閱讀 |
-
 |-------|--------|------|----------|
-
-| **故事架構** | [`story-narrative/`](story-narrative/) | 主線／支線、場景節點、Landmark、跨作存檔、班表與小遊戲敘事鏈 | [`SKILL.md`](story-narrative/SKILL.md) · [`reference.md`](story-narrative/reference.md)（場景表、editor、flags） |
-
+| **Ch1 統籌** | [`Ch1_agent/`](Ch1_agent/) | 全章節奏、進度對表、調度子 agent、週產線與驗收閘門 | [`SKILL.md`](Ch1_agent/SKILL.md) · [`reference.md`](Ch1_agent/reference.md) |
+| **故事架構** | [`story-narrative/`](story-narrative/) | 主線／支線、場景節點、Landmark；**敘事 DSL** 見 `narrative-engine.md` | [`SKILL.md`](story-narrative/SKILL.md) · [`reference.md`](story-narrative/reference.md) |
+| **分支引擎** | [`branch-engine/`](branch-engine/) | flags、choice-reactions、A/B/C 分級 | [`SKILL.md`](branch-engine/SKILL.md) |
 | **繁體敘事語氣** | [`tw-narrative-voice/`](tw-narrative-voice/) | 繁體、台灣用語、親切溫柔（**Day 1 為語調金標**） | [`SKILL.md`](tw-narrative-voice/SKILL.md) · [`reference.md`](tw-narrative-voice/reference.md) |
-
-| **美術風格** | [`visual-art/`](visual-art/) | 水彩狗 PNG、背景、色溫 UI、三部曲視覺一致性 | [`SKILL.md`](visual-art/SKILL.md) |
-
-| **聲音設計** | [`audio-sound/`](audio-sound/) | OGG BGM、幼犬 CC0 樣本、SCENE_CUES one-shot | [`SKILL.md`](audio-sound/SKILL.md) |
-
-
+| **美術風格** | [`visual-art/`](visual-art/) | 水彩狗 PNG、背景、色溫 UI；**資產管線**見 `art-asset-pipeline.md` | [`SKILL.md`](visual-art/SKILL.md) |
+| **聲音設計** | [`audio-sound/`](audio-sound/) | OGG BGM、幼犬樣本、SCENE_CUES；**音訊管線**見 `audio-pipeline.md` | [`SKILL.md`](audio-sound/SKILL.md) |
+| **音樂作曲** | [`music-composition/`](music-composition/) | BGM brief、AI 作曲 prompt | [`SKILL.md`](music-composition/SKILL.md) |
+| **Steam 部署** | [`steam-deployment/`](steam-deployment/) | Electron、Steamworks、CI 上傳、成就／雲端存檔 | [`SKILL.md`](steam-deployment/SKILL.md) · [`reference.md`](steam-deployment/reference.md) |
+| **遊戲測試** | [`game-tester/`](game-tester/) | 台灣玩家視角 playtest | [`SKILL.md`](game-tester/SKILL.md) · [`reference.md`](game-tester/reference.md) |
 
 ## 任務對照（快速選 skill）
 
-
-
 | 要做的事 | 建議 |
-
 |----------|------|
-
+| **Ch1 整章推進、WeekN 落地、下一步、多 agent 協調** | [`Ch1_agent`](Ch1_agent/SKILL.md)（統籌）→ 再 @ 子 skill |
 | 章節大綱、新場景、分支、Memory／Landmark | [`story-narrative`](story-narrative/SKILL.md) |
-
-| 改對白、選項、副標、相簿、語氣潤飾 | [`tw-narrative-voice`](tw-narrative-voice/SKILL.md)（＋必要時 story-narrative 審班表） |
-
-| 微調**已進遊戲**的場景文字 | [`Demo/game_editor.html`](../Demo/game_editor.html)（`Demo/啟動編輯器.bat`） |
-
+| Ink／敘事 DSL、內容與程式分離 | [`story-narrative/narrative-engine.md`](story-narrative/narrative-engine.md) |
+| flags、choice-reactions、分支落地 | [`branch-engine`](branch-engine/SKILL.md) |
+| 改對白、選項、副標、相簿、語氣潤飾 | [`tw-narrative-voice`](tw-narrative-voice/SKILL.md) |
+| 微調**已進遊戲**的場景文字 | [`Demo/game_editor.html`](../Demo/game_editor.html) |
 | 換狗圖、背景、CSS | [`visual-art`](visual-art/SKILL.md) |
-
 | BGM、狗叫、cue | [`audio-sound`](audio-sound/SKILL.md) |
+| BGM 作曲 brief、AI 作曲 | [`music-composition`](music-composition/SKILL.md) |
+| 美術自動匯出、圖集、壓縮管線 | [`visual-art/art-asset-pipeline.md`](visual-art/art-asset-pipeline.md) |
+| Steam 建置上傳、成就、Cloud Save | [`steam-deployment`](steam-deployment/SKILL.md) |
+| 測試 Week1–3、playtest、圖文審查 | [`game-tester`](game-tester/SKILL.md) |
 
+**章節落地驗收：** [`chapter-landing-checklist.md`](chapter-landing-checklist.md)
 
-
-**組合範例：**「依 [`story-narrative`](story-narrative/SKILL.md) + [`tw-narrative-voice`](tw-narrative-voice/SKILL.md) 改寫 `day4_vet`」
-
-
+**組合範例：**「依 [`Ch1_agent`](Ch1_agent/SKILL.md) 落地 Week4，調 story + visual + game-tester」
 
 ## 使用方式
 
-
-
 ### 在 Cursor 中呼叫
 
-
-
 1. **@ 提及 skill 名稱**（若已同步至 `.cursor/skills/`）：
+   - `@lhtl-ch1-agent` — **Ch1 統籌**（節奏、進度、調度）
+   - `@lhtl-story-narrative` — 劇情與班表
+   - `@lhtl-branch-engine` — 分支與 flags
+   - `@lhtl-tw-narrative-voice` — 繁體語氣
+   - `@lhtl-visual-art` — 美術
+   - `@lhtl-audio-sound` — 音效
+   - `@lhtl-music-composition` — BGM 作曲
+   - `@lhtl-steam-deployment` — Steam 建置與部署
+   - `@lhtl-game-tester` — 測試與報告
 
-   - `@lhtl-story-narrative` — 撰寫或審查劇情（含班表、小遊戲 tier）
+2. **直接指定路徑**：例——「請依照 `agent/Ch1_agent/SKILL.md` 規劃 Week4 產線」。
 
-   - `@lhtl-tw-narrative-voice` — 繁體語氣與台灣用語
+3. **組合使用**：Ch1_agent 拆任務 → 子 skill 執行 → game-tester 驗收。
 
-   - `@lhtl-visual-art` — 產出美術規格或審查 PNG／CSS
-
-   - `@lhtl-audio-sound` — 設計 BGM profile 或狗音效
-
-
-
-2. **直接指定路徑**：例——「請依照 `agent/story-narrative/SKILL.md` 審查 Day 4 獸醫線」。
-
-
-
-3. **組合使用**：story → tw-narrative-voice（潤字）→ visual-art → audio-sound。
-
-
-
-### 建議工作流
-
-
+### 建議工作流（Ch1 新週）
 
 ```
-
-guide_line.md（準則）
-
+Ch1_guide_line.md + Ch1_agent/reference.md（進度）
        ↓
-
-story-narrative  → 場景包：分支、flags、跨作標記、班表
-
+Ch1_agent 拆週任務與閘門
        ↓
-
-tw-narrative-voice → 四層文案潤飾（text / sub / choices / smell）
-
+story-narrative  → 架構 + 場景包
        ↓
-
-visual-art       → dogPose、sceneArt、色溫
-
+tw-narrative-voice → 四層文案
        ↓
-
-audio-sound      → BGM、DOG_SAMPLES、SCENE_CUES
-
+visual-art ⫽ audio-sound
        ↓
-
-Demo/js/scenes.js、choice-reactions.js、minigame-reactions.js、systems.js …
-
+Ch1_Trust/game/js/ …
        ↓
-
-（可選）game_editor.html  → 作者微調已落地文案
-
+game-tester + chapter-landing-checklist
+       ↓
+Ch1_agent 更新 reference.md 進度
 ```
 
+僅改語氣時可跳過 visual／audio。  
+**章節落地後必跑：** `test-weekN-flow.js` + `validate-choice-reactions.js`（須 OK）。
 
-
-僅改語氣時可跳過 visual／audio，不必走完整三階流程。
-
-
-
-## Demo 程式對照（story-narrative 落地）
-
-
+## Demo／Ch1 程式對照
 
 | 檔案 | 用途 |
-
 |------|------|
-
-| [`Demo/js/scenes.js`](../Demo/js/scenes.js) | 場景圖、`text`／`sub`／`choices`／`minigame` |
-
-| [`Demo/js/choice-reactions.js`](../Demo/js/choice-reactions.js) | 選項後狗狗反應（key = `場景Id::選項原文`） |
-
-| [`Demo/js/minigame-reactions.js`](../Demo/js/minigame-reactions.js) | 小遊戲 tier 結果文案、`vetTier` 等 flags |
-
-| [`Demo/js/systems.js`](../Demo/js/systems.js) | `DEMO_DAY_CALENDAR`、`ALBUM_ENTRIES` |
-
-| [`Demo/game_editor.html`](../Demo/game_editor.html) | 可視化編輯；條件分支 `text` 見 [reference §條件分支](story-narrative/reference.md#條件分支-text-與編輯器) |
-
-
-
-Ch1 七天場景與小遊戲 flags 速查：[`story-narrative/reference.md`](story-narrative/reference.md)。
-
-
+| [`Ch1_Trust/game/js/scenes.js`](../Ch1_Trust/game/js/scenes.js) | **playable 主線**（優先） |
+| [`Demo/js/scenes.js`](../Demo/js/scenes.js) | 對照／編輯器 |
+| [`Ch1_Trust/game/tools/`](../Ch1_Trust/game/tools/) | `test-weekN-flow.js`、validate 腳本 |
 
 ## 檔案結構
 
-
-
 ```
-
 agent/
-
-├── README.md                 ← 本文件
-
+├── README.md                      ← 本文件
+├── chapter-landing-checklist.md
+├── Ch1_agent/                     ← Ch1 統籌
+│   ├── SKILL.md
+│   └── reference.md               ← 進度、節奏、調度矩陣
 ├── story-narrative/
-
-│   ├── SKILL.md              ← 場景包、審查清單、editor 分工
-
-│   └── reference.md          ← Day 1–7 場景表、班表、小遊戲 ↔ flags
-
+│   ├── narrative-engine.md          ← Ink／DSL 與內容分離
+│   └── steam-release.md
+├── branch-engine/
 ├── tw-narrative-voice/
-
-│   ├── SKILL.md
-
-│   └── reference.md
-
 ├── visual-art/
-
-│   ├── SKILL.md
-
-│   └── reference.md
-
-└── audio-sound/
-
-    ├── SKILL.md
-
-    └── reference.md
-
+│   └── art-asset-pipeline.md        ← 源檔分離、CLI 匯出
+├── audio-sound/
+│   └── audio-pipeline.md            ← 資料夾、FMOD、AI 音樂
+├── music-composition/
+├── steam-deployment/                ← Steamworks、CI 部署
+└── game-tester/
 ```
 
+## 權責邊界
 
+- **Ch1_agent**：不取代子 agent 專業產出；負責排程、對表、驗收閘門與進度文件。
+- **story-narrative**～**game-tester**：見各 `SKILL.md`；衝突時 **`guide_line.md` > `Ch1_guide_line.md` > story-narrative > 其餘**。
 
-## 權責邊界（避免越界）
-
-
-
-- **story-narrative**：不決定 PNG 色票或 Web Audio 參數；改完劇情後**不自動啟動 Demo**（除非使用者明確要求）。
-
-- **tw-narrative-voice**：不新增主線分支、不改 Trust／Bond；專注字詞與語氣。
-
-- **visual-art**：不寫對白或改 Trust／Bond 數值。
-
-- **audio-sound**：不新增主線分支；僅依 story 與 visual 的 mood／location 配樂。
-
-
-
-衝突時：**`guide_line.md` > `story-narrative` > 其餘 skill**。
-
-
-
-檔案分開維護、使用時按需組合即可；詳見 [`guide_line.md` §九 Agent Skills](../guide_line.md#agent-skills-與-cursor-協作)。
-
-
+詳見 [`guide_line.md` §九 Agent Skills](../guide_line.md#agent-skills-與-cursor-協作)。

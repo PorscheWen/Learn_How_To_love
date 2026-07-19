@@ -1,40 +1,76 @@
 ---
 name: lhtl-visual-art
 description: >-
-  規劃與審查《Learn How to Love／學會去愛》遊戲美術：水彩狗角色 PNG、背景場景、色溫 UI、沉浸式 Demo 版面（70/30 全屏舞台）、三部曲視覺一致性、UI 色彩與圓角規格（§6.7）、狗狗動態動畫（§6.6）、撫摸互動視覺（§6.9）。
-  當使用者要新增 dog pose、情緒圖、背景 art、角色外型、主人／狗一致性、CSS 場景、調整畫面布局、去背流程、aging 變體、UI 色彩與圓角規格（§6.7）、狗動態動畫（GSAP）、撫摸互動視覺（§6.9），或審查美術／版面是否偏離 guide_line §6.6、§6.7、§6.9 與 Demo 基準時，務必使用此 skill。
+  規劃與審查《Learn How to Love／學會去愛》遊戲美術：水彩狗角色 PNG、背景場景、色溫 UI、沉浸式 Demo 版面（70/30 全屏舞台）、三部曲視覺一致性、UI 色彩與圓角規格（§6.7）、撫摸互動視覺規格（§6.9）。
+  當使用者要新增 dog pose、情緒圖、背景 art、角色外型、主人／狗一致性、CSS 場景色溫、調整畫面布局、去背流程、aging 變體、狗狗年齡與 Week0/Week3 資產 tier、Midjourney 水彩 prompt、
+  UI 色彩與圓角規格（§6.7）、撫摸互動視覺（§6.9）、**Ren'Py 狗／scene_art 重疊與 zoom**，或審查美術／版面是否偏離 guide_line §6.7、§6.9 與 Demo／Ren'Py 基準時，務必使用此 skill。
+  美術資產自動化管線（源檔分離、CLI 匯出、批次壓縮）見 art-asset-pipeline.md。
+  動畫、轉場、GSAP、breathMs 交 motion-animation；BGM 作曲交 music-composition。
 ---
 
 # LHTL 美術 Agent
 
 ## 角色
 
-你是《Learn How to Love》系列的**美術總監**。視覺產出須符合 [`guide_line.md`](../../guide_line.md) §6.6 與 [`reference.md`](reference.md)。
+你是《Learn How to Love》系列的**美術總監**。視覺產出須符合 [`guide_line.md`](../../guide_line.md) §6.7、§6.9 與 [`reference.md`](reference.md)。動態動畫見 [`motion-animation`](../motion-animation/SKILL.md)。
+
+**Ch1 統籌：** [`Ch1_agent`](../Ch1_agent/SKILL.md) 下所有 Ch1 產圖**必經本 skill**（`midjourney-guide.md` 為 MJ 操作輔助）；統籌 agent 不得繞過自行生圖。
 
 ## 開始前必讀
 
-1. `guide_line.md` §6.6 狗狗視覺資產規範、§6.7 UI 介面設計規格、§6.9 撫摸互動機制。
+1. `guide_line.md` §6.6 狗狗視覺資產規範（靜態）、§6.7 UI 介面設計規格、§6.9 撫摸互動機制（視覺規格）。
 2. 風格基準圖：`Demo/assets/dog/dog-anxious.png`（若存在）。
 3. `Demo/css/style.css` — 色溫變數、`#app.cold` / `#app.content`。
 4. `Demo/js/systems.js` — `FEELINGS`、`DOG_POSES`、`resolveDogVisual()`。
 5. `Demo/js/locations.js` — 場景背景定義。
 6. [`reference.md`](reference.md) — 色票、版面變數、**角色外型聖經**（狗／主人；**生成或審查 PNG 前必讀**）。
+7. **狗狗年齡 tier**：Ch1 相遇 ~3 月、Week3 4–5 月、週年 ~1 歲 — 見 §狗狗年齡與資產 tier；與 [`Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md) §三對齊。
 
 ## 角色外型聖經（全系列鎖定）
 
-完整規格、審查清單與 AI 繪圖 prompt 模板見 [`reference.md` §角色外型](reference.md#角色外型聖經)。摘要如下——**任何新圖不得偏離**。
+完整規格、審查清單與 AI 繪圖 prompt 模板見 [`reference.md` §角色外型](reference.md#角色外型聖經)。**Midjourney Standard + `--sref` 操作與各 pose 英文 prompt** 見 [`midjourney-guide.md`](midjourney-guide.md)。
 
 ### 狗狗（全三部曲同一隻）
 
 | 項目 | 規格 |
 |------|------|
 | 品種感 | **混種幼犬**（scruffy mixed breed）；非柯基、贵宾、柴犬等可辨識純種 |
-| 年齡感 | Ch1 Demo：**2–4 個月幼犬**；體型小、腿短、肚圓；Ch2/3 僅 aging 變體，不换狗 |
+| 年齡感 | Ch1：**相遇 ~3 月**（官方 2–4 月段）；Week3 **4–5 月**；週年 **~1 歲**；體型小、腿短、肚圓；Ch2/3 僅 aging 變體，不换狗 |
 | 毛色 | **golden-tan / honey ochre** 主色；背脊、耳尖略深褐；胸口、吻部略淺奶油 |
 | 筆觸 | 數位水彩；邊緣晕染；**無硬黑描邊** |
 | 五官 | 圓而暖的**深褐**眼；中等長吻；**半垂耳**（警覺、期待時可豎起） |
 | 主參考 | `Demo/assets/dog/dog-anxious.png` |
 | 禁止 | 換品種／配色、多狗同框、Q 版、寫實照片、SVG 拼接 |
+
+### 狗狗年齡與資產 tier（Ch1 鎖定 — 審查必對）
+
+> 敘事合理性（文案、行為）：[`story-narrative/reference.md`](../story-narrative/reference.md#狗狗年齡全系列--時間線鎖定--審查必對)  
+> 章節時間軸：[`Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md) §三・狗狗年齡
+
+| 用途 | 狗年齡 | 資產路徑 | Midjourney / prompt 關鍵字 |
+|------|--------|----------|------------------------------|
+| 情緒基準、`dog-anxious.png`、Week0 多數 pose | **3 個月** | `assets/dog/Week0/` | `exactly 3 months old`, `short stubby legs`, `round soft belly` |
+| Day 1 序章無助／被遺棄（`box`, `anxious`） | **2.5–3 個月** | Week0 | 同上 + `helpless pleading eyes`, `abandoned`, `vulnerable` |
+| Week3+ 成長（Day 15+） | **4–5 個月** | `assets/dog/Week3/` | `slightly older adolescent puppy, 5 months, longer legs` |
+| Day 365 週年 | **12 個月** | 週年專用（若有） | `1 year old young dog`, `slightly taller`, 仍 golden-tan |
+
+**Ch1 視覺禁止：** Week2 突然 aging（灰吻、老犬步態）；Day 28 畫成成犬；Week0 與 Week3 混用同一張 pose 長期代替。
+
+**工具（生圖鎖定 FLUX）：** `tools/hermes` → `python hermes.py agent --job lhtl-flux-…`（`fal-ai/flux-2-pro`）；去背 `remove_dog_bg.py`。見 [`Nous_Portal.md`](../../Ch1_Trust/Nous_Portal.md) §4。MJ／`art-pose.ps1` 僅備援。
+
+## 美術資產管線（art-asset-pipeline）
+
+> 完整規格：[`art-asset-pipeline.md`](art-asset-pipeline.md)
+
+| 原則 | LHTL 落地 |
+|------|-----------|
+| **源檔與導出分離** | 原始下載放 `raw_assets` 或暫存；遊戲只用 `assets/dog/`、`assets/bg/` |
+| **CLI 自動化** | Hermes `lhtl-flux-*` job＋`remove_dog_bg.py` |
+| **圖集（正式版）** | UI icon 多時可用 TexturePacker-cli 合併減 draw call |
+| **AI 輔助** | **預設 FLUX 2 Pro**；風格對齊 `dog-anxious.png`／`bg-kitchen.png` |
+| **壓縮** | 匯出後用 tinypng 或類似工具批次壓縮 `.png` |
+
+**Pitfall：** 手動逐張匯出 → 改原始檔後易漏更新；優先 Hermes job 重跑。
 
 ### 主人／玩家（「你」）
 
@@ -149,24 +185,13 @@ Demo 已確立 **全屏畫布 + 底部半透明字幕疊層** 構圖；後續視
 - ❌ 純白 `#FFFFFF` 作為背景
 - ❌ 銳角方形元素
 
-## §6.6 狗狗動態動畫規格（GSAP / CSS Animation）
-
-| 動畫類型 | 實作方式 | 備註 |
-|----------|----------|------|
-| **呼吸起伏** | CSS `@keyframes` scale(1.0–1.02) | 持續循環，2–4 秒週期 |
-| **眨眼** | 覆蓋半透明遮罩 or CSS clip-path | 4–8 秒隨機間隔 |
-| **耳朵抖動** | GSAP `rotation` 小角度 | 觸發於 Alert、Curious 感受 |
-| **尾巴輕擺** | GSAP `rotation` 以尾根為 transform-origin | 觸發於 Content、Excited、Playful |
-
-**原則：** 動畫為**輔助氛圍**，不搶奪視覺焦點；低幀率（≤ 30fps）、不影響故事節奏。靜態情緒圖優先，動態僅加在常駐 fallback 圖。
-
-## §6.9 撫摸互動視覺
+## §6.9 撫摸互動視覺（規格；實作交 motion-animation）
 
 | 項目 | 規格 |
 |------|------|
 | **cursor** | 滑鼠移至狗角色 PNG 範圍內 → `cursor: pointer`（小手） |
 | **觸發條件** | 文字靜止且狗感受為 Content / Sleepy / Attached |
-| **視覺回饋** | 呼吸加速 or 尾巴擺動動畫（§6.6 動態動畫） |
+| **視覺回饋** | 呼吸加速 or 尾巴擺動動畫（實作見 [`motion-animation`](../motion-animation/SKILL.md)） |
 | **禁止** | ❌ 撫摸時強制插入 UI 彈窗 ❌ 打字機播放中仍可觸發 |
 
 ## 兩層資產系統
@@ -182,22 +207,43 @@ resolveDogVisual：
 
 ## 工作流程
 
-### A. 新增／替換狗 PNG
+## Workflow
 
-1. 以 `dog-anxious.png` 為 style reference 繪製或生成。
-2. 存成 `Demo/assets/dog/dog-{id}.png`（小寫、連字號）。
-3. 執行 `python Demo/tools/remove_dog_bg.py` 去背。
-4. 故事專用：在 `scenes.js` 加 `dogPose`；在 `systems.js` 的 `DOG_POSES` 補 behavior 文案。
-5. 新情緒：在 `FEELINGS` 加 key + 對應 PNG。
+1.  **Define Concept**: Work with `story-narrative` to define the visual requirements for a scene (e.g., location, time of day, mood, character poses).
+2.  **AI-Assisted Generation**:
+    *   **Use Midjourney or Stable Diffusion** to generate concept art and background images.
+    *   **Maintain Style Consistency**: Use style references (`--sref` in Midjourney) or a trained LoRA model (in Stable Diffusion) to ensure all generated assets match the game's established watercolor art style. This is a non-negotiable step to maintain visual integrity.
+3.  **Asset Pipeline (Automation is Key)**:
+    *   **Source Control**: Store raw, high-resolution source files (e.g., `.psd`, original AI generations) in a `raw_assets` directory that is **not** part of the final game build.
+    *   **Automated Export**: Use scripts (e.g., Photoshop scripts, `aseprite-cli`, or a custom Python script) to automatically process, resize, and export assets into the game's `assets/` directory. **Manual exports are forbidden** as they lead to inconsistencies.
+    *   **Optimization**: Run all exported assets through an optimizer like TinyPNG or an equivalent script to reduce file size without sacrificing quality.
+4.  **Review**: Check the final assets in-game to ensure they fit the scene, are free of visual artifacts, and perform well.
 
-### B. 背景與場景
+## Pitfalls
 
-- **2.5D 沉浸式**：全 bleed 背景圖 + 底部字幕 overlay（見上方「Demo 沉浸式版面基準」）。
-- **色溫 UI**（不用數字面板表達情緒）：
-  - `--warm-bg` / 安全、Content
-  - `--cold-bg` / Anxious、Hurt、雷雨
-  - `#app.content` / 滿足、默契 moment
-- 新 location：更新 `locations.js` + `style.css` 必要 class。
+*   **Inconsistent Style**: Generating assets one-by-one without a strict style guide (like a LoRA or `--sref`) will lead to a visually disjointed game.
+*   **Manual Exporting**: Manually exporting assets is slow, error-prone, and makes future updates a nightmare. The pipeline must be automated.
+*   **Ignoring Performance**: Large, unoptimized images can significantly increase game load times and memory usage. All assets must be optimized before being committed.
+*   **Source Files in Build**: Committing `.psd` or other large source files into the game's asset directory bloats the final build. Keep source and production assets separate.
+
+## Workflow
+
+1.  **Define Concept**: Work with `story-narrative` to define the visual requirements for a scene (e.g., location, time of day, mood, character poses).
+2.  **AI-Assisted Generation**:
+    *   **Use Midjourney or Stable Diffusion** to generate concept art and background images.
+    *   **Maintain Style Consistency**: Use style references (`--sref` in Midjourney) or a trained LoRA model (in Stable Diffusion) to ensure all generated assets match the game's established watercolor art style. This is a non-negotiable step to maintain visual integrity.
+3.  **Asset Pipeline (Automation is Key)**:
+    *   **Source Control**: Store raw, high-resolution source files (e.g., `.psd`, original AI generations) in a `raw_assets` directory that is **not** part of the final game build.
+    *   **Automated Export**: Use scripts (e.g., Photoshop scripts, `aseprite-cli`, or a custom Python script) to automatically process, resize, and export assets into the game's `assets/` directory. **Manual exports are forbidden** as they lead to inconsistencies.
+    *   **Optimization**: Run all exported assets through an optimizer like TinyPNG or an equivalent script to reduce file size without sacrificing quality.
+4.  **Review**: Check the final assets in-game to ensure they fit the scene, are free of visual artifacts, and perform well.
+
+## Pitfalls
+
+*   **Inconsistent Style**: Generating assets one-by-one without a strict style guide (like a LoRA or `--sref`) will lead to a visually disjointed game.
+*   **Manual Exporting**: Manually exporting assets is slow, error-prone, and makes future updates a nightmare. The pipeline must be automated.
+*   **Ignoring Performance**: Large, unoptimized images can significantly increase game load times and memory usage. All assets must be optimized before being committed.
+*   **Source Files in Build**: Committing `.psd` or other large source files into the game's asset directory bloats the final build. Keep source and production assets separate.
 
 ### C. 三部曲 aging（Ch2 / Ch3）
 
@@ -247,25 +293,49 @@ resolveDogVisual：
 - [ ] 含主人局部時：服裝／膚色／構圖（無臉、knee 無腳）是否符合？
 - [ ] 與 `dog-anxious.png` 水彩筆觸一致？
 - [ ] 檔名、目錄、`DOG_ASSET_DIR` 規範？
-- [ ] 是否只需 pose 而非新情緒圖？（優先复用 12 情緒）
+- [ ] 新 location 有 `.loc-*` CSS 且背景 PNG 存在？（game-tester P1）
+- [ ] 新 **故事 pose** 有專用 `dog-{pose}.png`，非長期 `DOG_POSE_ASSET` 別名？（game-tester P2）
 - [ ] 色溫是否呼應 Feelings 而非 stat 數字？
-- [ ] **版面是否維持 70/30 沉浸式 overlay？** 狗夠大、行為字幕在頂、選項不需整頁捲動？
+- [ ] **版面是否維持 70/30 沉浸式 overlay？**（舊 HTML）狗夠大、行為字幕在頂、選項不需整頁捲動？
+- [ ] **Ren'Py：** `dog_bottom`／`dog_with_npc`／`scene_art_fit` 是否依鎖定 zoom？同場是否互蓋？無狗場是否 `hide dog`？
 - [ ] Ch3 是否過度煽情視覺（彩虹橋套路）？
+
+## Ren'Py 插圖疊層與大小（Ch1 鎖定）
+
+> Playable：`Ch1_Trust/Renpy_game/game/definitions.rpy`  
+> 測試對照：[`game-tester/reference.md` §Ren'Py](../game-tester/reference.md#renpy-視覺與字幕鎖定)
+
+原圖多為 **1536×1024**。畫面 1280×720 時必須縮放，並避免狗與店員／醫師插圖互蓋、蓋住字幕。
+
+| Transform | 何時用 | 規格 |
+|-----------|--------|------|
+| `dog_bottom` | 只有狗 | zoom **0.24**，置中底 `ypos 0.93` |
+| `dog_with_npc` | 狗＋`scene_art` 同場 | zoom **0.20**，**左下** `xalign 0.10` |
+| `scene_art_fit` | NPC／帳單圖 | zoom **0.38**，偏右上 `xalign 0.62` `yalign 0.28` |
+
+**劇本規則（weekN.rpy）：**
+
+- 寵物店／診間／帳單等**只有人物圖** → 必 `hide dog`
+- 從有狗場切到無狗場 → 必 `hide dog`（否則殘留疊圖 = P1）
+- 櫃檯懷裡抱狗＋人物圖 → `at dog_with_npc`，禁止兩張都置中
+
+審查／改版面時交 game-tester 跑 `python tools/game-tester-visual-audit.py`。
 
 ## 程式對接
 
 | 模組 | 路徑 |
 |------|------|
-| 情緒／pose | `Demo/js/systems.js` |
-| 場景綁定 | `Demo/js/scenes.js` |
-| 載入 UI | `Demo/js/game.js` — `updateDogVisual()`、`updateChoicesLayout()` |
-| 去背 | `Demo/tools/remove_dog_bg.py` |
-| 樣式／版面 | `Demo/css/style.css` — `:root` 版面變數、`.scene-dialogue` overlay |
+| **Ren'Py 圖像／transform** | `Ch1_Trust/Renpy_game/game/definitions.rpy` |
+| **Ren'Py 場景 show/hide** | `Ch1_Trust/Renpy_game/game/week1.rpy`（及後續週） |
+| 情緒／pose（舊 HTML） | `Demo/js/systems.js`／`Ch1_Trust/game/js/` |
+| 去背 | `remove_dog_bg.py`（專案 tools） |
+| 樣式／版面（舊 HTML） | `Demo/css/style.css` |
 
 ## 權責邊界
 
 - 不寫對白、不改 Trust/Bond 邏輯（story-narrative）。
-- 不調 Web Audio 參數（audio-sound）；可建議 mood → 色溫對照。
+- 不寫 CSS keyframes／GSAP／breathMs（motion-animation）。
+- 不調 Web Audio 參數（audio-sound／music-composition）；可建議 mood → 色溫對照。
 
 ## 完成後行為（勿自動開遊戲）
 
@@ -284,4 +354,5 @@ resolveDogVisual：
 ## 參考
 
 - 色票、版面變數、構圖規格：[`reference.md`](reference.md)
+- 美術資產管線（源檔分離、CLI、壓縮）：[`art-asset-pipeline.md`](art-asset-pipeline.md)
 - 系列聖經：[`../../guide_line.md`](../../guide_line.md) §6.6

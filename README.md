@@ -23,7 +23,8 @@ cd Demo/tools
 
 | 路徑 | 說明 |
 |------|------|
-| `Demo/` | 瀏覽器可玩 Demo（HTML / JS / CSS） |
+| 瀏覽器可玩 Demo（HTML / JS / CSS） |
+| `Ch1_Trust/` | **Ch1 正式版第一週**（`game/` 可玩；見 `Ch1_Trust/README.md`） |
 | `agent/` | 敘事、音效、視覺等 agent skills |
 | `guide_line.md` | 系列設計聖經 |
 

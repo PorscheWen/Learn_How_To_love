@@ -11,7 +11,7 @@
 | 項目 | 規格 |
 |------|------|
 | **品種感** | 台灣常見 **混種幼犬**（scruffy mixed breed）；毛略蓬、略捲；**不可**畫成柯基、贵宾、柴犬、哈士奇等可一眼辨識的純種 |
-| **年齡感** | **Ch1 Demo：約 2–4 個月**；體型小、腿短、肚略圓、步態還在學；Ch2 略大穩重；Ch3 老犬（灰吻、動作慢）— 仍是**同一隻** |
+| **年齡感** | **Ch1：相遇 ~3 月**（官方 2–4 月段）；Day 15+ **4–5 月**；週年 **~1 歲**；體型小、腿短、肚略圓；Ch2 略大穩重；Ch3 老犬（灰吻、動作慢）— 仍是**同一隻** |
 | **毛色** | 主色 **golden-tan / honey ochre（金褐、蜂蜜 ochre）**；背脊、耳尖略深褐；胸口、吻部、尾尖略淺奶油 |
 | **筆觸** | 數位水彩／ gouache 感；邊緣晕染、筆觸可見；**無硬黑描邊、無平塗卡通** |
 | **五官** | 圓而暖的 **深褐** 眼睛（非誇張大眼）；中等長吻；**半垂耳**（好奇、期待、警戒時可豎起） |
@@ -75,7 +75,7 @@ NPC 亦：**無硬黑描邊**、單角色、白底去背、與狗 PNG 同 gouach
 
 ```
 Digital watercolor illustration, single scruffy golden-tan mixed breed puppy,
-2-4 months old, honey ochre fur with slightly darker ears and back,
+exactly 3 months old, short stubby legs, round soft belly, honey ochre fur with slightly darker ears and back,
 lighter cream chest and muzzle, semi-floppy ears, warm dark brown eyes,
 soft watercolor brushstrokes, no hard black outlines, {pose description},
 centered full body, clean white background, gentle indie game character sprite.
@@ -160,6 +160,23 @@ clean white background, digital watercolor, no hard outlines, no face.
 ## 故事動作圖（Demo · 節錄）
 
 rain, corner, kitchen, balcony, potty, home, night-accident, knee, repair, toy, doorway, doorway-wait, doorway-lie, stair, walk, park, follow-close, follow-far, thunder, window, sad-day, vet-carry, vet-walk, held, sunday-wake, home-settle, paw-smell-1/2/3
+
+**Ch1 Week2 故事 pose（須專用 PNG，勿長期別名）：**  
+`alert-ears`、`leash`、`phone-pose`、`sock`、`park-tree`、`park-play`、`bite-teach`
+
+**Ch1 Week2 新背景：**  
+`hallway_neighbor` → `bg-hallway-neighbor.png` · `elevator` → `bg-elevator.png`
+
+## 新 location CSS 範例
+
+```css
+.loc-hallway_neighbor {
+  background-image: url('../assets/bg/bg-hallway-neighbor.png');
+  background-position: center 32%;
+}
+#app.cold .loc-hallway_neighbor { filter: saturate(0.68) brightness(0.93); }
+#app.content .loc-hallway_neighbor { filter: saturate(1.05) brightness(1.01); }
+```
 
 ## 色溫 ↔ Feelings 建議
 

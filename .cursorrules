@@ -1,0 +1,189 @@
+# Learn How to Love — Cursor / Hermes 程式規範
+
+> 本檔為程式落地鎖定規範。敘事／世界觀見 `MEMORY.md`；完整設計見 `guide_line.md`。  
+> **Playable 基線目錄：** `Ch1_Trust/game/`（優先於 `Demo/`）
+
+---
+
+## 1. 專案結構
+
+```
+Learn_How_To_Love/
+├── MEMORY.md              ← 世界觀鎖定（Hermes 必讀）
+├── guide_line.md          ← 系列聖經
+├── agent/                 ← Cursor Agent Skills
+├── Ch1_Trust/game/        ← **主程式（改這裡）**
+│   ├── js/scenes.js
+│   ├── js/choice-reactions.js
+│   ├── js/systems.js
+│   ├── js/locations.js
+│   ├── assets/
+│   └── tools/validate-*.js
+├── Demo/                  ← 編輯器／對照（微調文字用 game_editor.html）
+└── tools/hermes/          ← 編排與 Nous Portal 本地門戶
+```
+
+**禁止：** 刪除或整理 `Ch1_Trust/backup/`（受保護備份區）。
+
+---
+
+## 2. 語言與文案
+
+- 玩家可見文字：**繁體中文、台灣用語**（禁簡體、禁大陸用語）
+- 執行 `node tools/tw-locale-pass.js` 掃描簡繁混用
+- 狗名：**禁止寫死** → 用 `dogLabel(s)`、`dogPronoun(s)`、`applyDogPronouns(text, s)`
+- 取名前場景（`prologue_*`～`day2_petshop`）：文案只用「牠」
+
+---
+
+## 3. scenes.js 契約
+
+```javascript
+{
+  id: 'scene_id',           // 唯一、snake_case
+  location: 'home',         // 對應 locations.js
+  text: '...',              // 主敘事（字幕區）
+  sub: '...',               // 可選，心裡話
+  smell: '...',             // 可選
+  choices: [{ text: '...', next: '...' }],
+  dogPose: 'anxious',       // 或 (s) => ...
+  music: 'warm',            // audio-tracks profile
+  dayClose: true,           // 日終
+  breathMs: 2800,           // 留白
+  minigame: 'shop',         // 可選
+}
+```
+
+**規則：**
+
+- 敘事在 `text`／`sub` — **勿**把 NPC 台詞放 `dog-behavior`
+- 條件 `next`：`(s) => s.flags.xxx ? 'a' : 'b'`
+- 新場景必對 `DEMO_DAY_CALENDAR`（`systems.js`）班表
+- 選項分級：A 續看｜B 風味｜C 分歧 — 日終禁 2+ 同 next 風味選
+
+---
+
+## 4. choice-reactions.js 契約
+
+```javascript
+'scene_id::選項原文': {
+  text: (s) => `${dogLabel(s)} …`,  // 必須函式，禁寫死狗名
+  feeling: 'curious',               // 可選
+  cue: 'sniff',                     // 可選，對應 dog-audio
+  dogPose: 'alert-ears',            // 可選
+}
+```
+
+- **每個有 `choices` 的場景** 須有一筆映射
+- 鍵與 `choices[].text` **逐字一致**（含標點）
+- 落地後必跑：`node tools/validate-choice-reactions.js`（須 OK）
+
+---
+
+## 5. flags 命名
+
+- camelCase、語意清楚：`dryGentle`、`neighborMet`、`ch1_thunderPath`
+- 禁止：`flag1`、`temp`、`x`
+- 新增 flag 須在場景包註明：誰寫入、誰讀取
+- Landmark 用 `addLandmark(state, id)` — 觸發後鎖定
+
+---
+
+## 6. 資產與路徑
+
+| 類型 | 路徑 | 規則 |
+|------|------|------|
+| 狗 pose | `assets/dog/Week0/dog-{pose}.png` | Day 15+ 用 `Week3/` |
+| 背景 | `assets/bg/bg-{slug}.png` | 新 location 登記 `locations.js` + CSS `.loc-*` |
+| BGM | `assets/audio/*.ogg` | 登記 `CREDITS.md` |
+| 狗叫 | `assets/dog/sfx/puppy-*` | CC0 幼犬錄音，禁合成 whimper |
+
+- 狗 PNG **獨立疊層**，不嵌入背景
+- 新 pose 須專用 PNG，禁止長期 `DOG_POSE_ASSET` 別名代替
+- 去背：`python tools/remove_dog_bg.py`
+
+---
+
+## 7. UI / CSS（§6.7 鎖定）
+
+- 沉浸式版面：**70/30** 全屏 overlay（`--art-share` / `--dialogue-share`）
+- 主背景米白、文字深棕 `#4A3728`、圓角 `16px+`
+- 禁止：純黑字、純白底、銳角 UI、整頁捲動
+- 行為字幕 `.dog-behavior` 在**頂部**，不擋主圖
+
+---
+
+## 8. 音效（Demo 基線 — 勿擅自改回）
+
+- 僅 **BGM（OGG）** + **稀疏幼犬 SCENE_CUES one-shot**
+- 禁止 Demo 加：weather SFX、ambient loop、合成 whimper
+- 新場景有狗在場 → 加一筆 `SCENE_CUES`（`dog-audio.js`）
+- 修改後**不要**自動啟動遊戲，除非使用者明確要求
+
+---
+
+## 9. 驗證（章節落地必跑）
+
+```powershell
+cd Ch1_Trust\game
+node tools\validate-choice-reactions.js
+node tools\validate-work-schedule.js
+# 對應週次再加：
+node tools\validate-week2-chronology.js
+node tools\validate-week3-chronology.js
+node tools\test-weekN-flow.js
+```
+
+Hermes cron／pipeline 亦應跑上述腳本。
+
+---
+
+## 10. Git 與變更紀律
+
+- **最小必要 diff** — 不順手重構無關檔案
+- **API 金鑰** — 設定與端點以 `Ch1_Trust/Nous_Portal.md` 為準；值寫入 `tools/hermes/.env`（勿提交）
+- 不提交 `.env`、API keys、`steam_appid.txt` 明文金鑰
+- 僅在使用者明確要求時 `git commit`／`git push`
+- LHTL 遊戲倉庫變更以 `Ch1_Trust/game/` 為準
+
+---
+
+## 11. Agent 分工（改什麼 @ 什麼）
+
+| 任務 | Skill / 工具 |
+|------|----------------|
+| 世界觀／場景架構 | `agent/story-narrative/` · `MEMORY.md` |
+| 對白語氣 | `agent/tw-narrative-voice/` |
+| flags／分支 | `agent/branch-engine/` |
+| 美術 PNG | `agent/visual-art/` |
+| 音效 | `agent/audio-sound/` |
+| 測試 | `agent/game-tester/` |
+| 微調已進遊戲文字 | `Demo/game_editor.html` |
+| 背景批次產劇本 | Hermes + Nous Portal（**deepseek-v4-flash**） |
+| 引擎／UI 精修 | **Cursor**（本 IDE） |
+
+---
+
+## 12. 開啟遊戲
+
+- 本機 HTTP：`Ch1_Trust/game/開啟遊戲.bat`（port **8765**）；Demo 對照用 `Demo/開啟遊戲.bat`
+- 用**系統預設瀏覽器**開啟，勿用 IDE 內嵌預覽
+- **每次修改遊戲後，Agent 預設不得自動開遊戲**（含 `Start-Process` localhost、背景 game-server）
+- 僅在使用者明確說「開遊戲」「測試」「play」時才執行啟動腳本
+
+---
+
+## 13. 衝突解決順序
+
+```
+MEMORY.md（世界觀鎖定）
+  → guide_line.md
+  → Ch1_guide_line.md
+  → agent/story-narrative
+  → 其餘 agent skills
+  → 本 .cursorrules
+```
+
+---
+
+*最後更新：2026-07-09*

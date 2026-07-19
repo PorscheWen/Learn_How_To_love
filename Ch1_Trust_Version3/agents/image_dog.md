@@ -1,0 +1,179 @@
+# Version3｜狗外型鎖定｜image_dog.md
+
+> 對齊：`game_guild.md` · `image.md` · `outline_trilogy_ch1_10sections.md`  
+> **定稿：** Option **B｜wiry**  
+> **基準參考：** `assets/dog/dog-ref-canonical.png`（之後所有 pose 必須像同一隻）  
+> 預設名：**小7**（超商暱稱）；玩家可改 → `dogLabel(s)`；圖檔**勿寫死狗名**。  
+> 落選候選 A／C／D 與暫存 `dog-option-*.png` **已刪除**，勿再引用。  
+> **生圖順序：** 先用 Cursor `GenerateImage`（必附 `dog-ref-canonical.png`）；FLUX 僅備援。
+
+---
+
+## 0. 一致性原則（必讀）
+
+| 規則 | 說明 |
+|------|------|
+| **同一隻** | 毛色區塊、耳形、眼型、體型比例跨 pose **不得漂移** |
+| **軟分軌** | 高低信任**只改 pose／距離／表情**，不換外型、不換品種感 |
+| **分層** | 狗 PNG **獨立疊層**；勿畫進背景 |
+| **禁純種** | 不得畫成柯基／貴賓／柴／哈士奇等可辨純種 |
+| **禁寫字** | 無文字、logo、信任 HUD／數字 |
+
+產新 pose 前：先對照 `dog-ref-canonical.png`，再貼下方 **IDENTITY LOCK**。
+
+---
+
+## 1. 定稿外型（Option B｜wiry）
+
+### 1.1 身分卡
+
+| 項目 | 鎖定 |
+|------|------|
+| 代號 | **B｜wiry** |
+| 品種感 | 台灣常見 **scruffy / wiry mixed breed**（略像小㹴混，但**非純種㹴**） |
+| 年齡 | **約 2 個月**（prompt：`about 2 months old`） |
+| 體型 | **短腿、偏瘦**；肋骨可**隱約**可見；脆弱、街犬幼崽感；寫實幼犬比例（非 Q 版） |
+| 頭臉 | 臉型偏**略角／精實**（相對 A 蓬毛、C 圓臉）；吻部短適中 |
+| 耳 | **半垂／軟垂耳**；耳緣與耳尖 **深褐～近黑** |
+| 眼 | **圓而暖的深褐**；眼神可警戒、好奇、疲倦——但眼型本身固定 |
+| 鼻 | 小而濕潤的 **黑鼻** |
+| 毛質 | **短～中長、硬毛／wiry、略亂**（非長毛貴賓感、非光滑短毛） |
+| 毛色 | 主色 **honey gold / golden-tan**；背脊與耳尖偏深褐；**胸口、吻周、腳掌**偏 **cream** |
+| 尾 | 中短、自然下垂或微捲；隨情緒動，勿每張換成旗尾 |
+
+### 1.2 毛色區塊（不可改）
+
+```text
+主體：honey-gold / golden-tan
+耳尖＋耳緣＋背脊：deeper brown / dark brown tips
+胸口＋吻部周圍＋腳掌前緣：cream / light tan
+鼻：black
+眼：warm dark brown
+```
+
+### 1.3 與落選方案的差別（勿混用）
+
+| 代號 | 勿做成（落選，檔案已刪） |
+|------|--------------------------|
+| A fluffy | 過蓬、過圓、貴賓感 |
+| C round | 過圓臉、過密毛、偏 Q／貼圖感 |
+| D slender | 過修長優雅、站姿模特兒感 |
+
+**B 的關鍵詞：** wiry、scruffy、slightly thin、street-puppy、honey-tan、dark-tipped ears、cream chest。
+
+---
+
+## 2. IDENTITY LOCK（每張狗圖必貼）
+
+生圖時把整段貼在 STYLE 之後、POSE 之前：
+
+```text
+SAME PUPPY IDENTITY LOCK (Option B wiry — must match reference dog-ref-canonical.png):
+One continuous character across all poses. About 2 months old Taiwanese scruffy wiry mixed-breed puppy (not purebred terrier, not corgi, not poodle, not shiba, not husky). Short stubby legs, slightly thin body, ribs may be faintly visible. Wiry short-to-medium messy coat. Honey golden-tan fur; darker brown ear tips and ear edges and back ridge; cream chest, cream muzzle area, lighter paws. Soft semi-floppy ears. Round warm dark-brown eyes. Small black nose. Slightly angular scruffy street-puppy face (NOT round plush face, NOT fluffy show-dog coat, NOT slender elegant silhouette). Impressionistic oil painting, thick visible brushstrokes, soft blended edges. Believable puppy proportions. No text, no logo, no name tag, no trust HUD.
+```
+
+### STYLE（與 image.md 一致）
+
+```text
+Impressionistic oil painting. Thick visible brushstrokes, painterly impasto texture, soft blended edges, subtle canvas tooth. Warm amber lighting. Soft atmospheric depth, storybook concept-art feel. Not a photograph, not DSLR realism, not anime cel shading, not hard black outlines, not chibi, not flat vector.
+```
+
+### 去背底板
+
+```text
+Centered full body (or clearly readable crop). Clean plain soft cream OR flat chroma green (#00FF00) background for cutout. No floor shadow required. No scenery.
+```
+
+---
+
+## 3. Pose 產出契約
+
+| 規則 | 說明 |
+|------|------|
+| 表情＋動作 | **每張**必須同時改：耳／眼／嘴／尾／身體姿勢 |
+| 信任可讀 | 低信任＝遠／貼牆／僵／耳平；高信任＝近／貼腿／背對睡 |
+| 檔名 | `dog-{pose}.png`（例：`dog-anxious.png`）；**無 Week 子資料夾** |
+| 路徑 | `Ch1_Trust_Version3/assets/dog/` |
+| 禁 | 同 pose 別名濫竽充數；禁把狗嵌進 bg |
+
+### 建議 pose 表（對齊 image.md §6.2）
+
+| 檔名 | 表情 | 動作 | 主用 |
+|------|------|------|------|
+| `dog-anxious.png` | 擔憂上望 | 低趴、耳貼、夾尾 | S02／低信任 |
+| `dog-retreat.png` | 怕 | 往後縮半步、貼紙箱／牆 | Dist− |
+| `dog-halfstep.png` | 警戒好奇 | 「既不碰你、也不放你走」的半步 | S02 記憶 |
+| `dog-eating-cautious.png` | 貪食但抬眼 | 伸鼻吃地上飯、每口看人 | S02 |
+| `dog-stair-watch.png` | 警戒 | 靠牆、面向電梯方向 | S03 |
+| `dog-door-sleep.png` | 睏但守門 | 睡在房門外墊上 | S03 鉤子 |
+| `dog-parallel.png` | 放鬆一點 | 兩步遠地板、下巴貼地 | S04 |
+| `dog-kitchen-door.png` | 跟隨觀望 | 停在廚房門檻外 | S04 記憶 |
+| `dog-ear-flat.png` | 被尖聲嚇到 | 耳平、退 | S05 Tone− |
+| `dog-sniff-wire.png` | 好奇 | 嗅耳機線 | S05 鉤子 |
+| `dog-behind-legs.png` | 求護衛 | 躲小腿後 | S06 |
+| `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 |
+| `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 |
+| `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S08 低 |
+| `dog-leash-wait.png` | 累但信任 | 停步等待後願再走 | S08 高 |
+| `dog-shoe-sleep.png` | 安心 | 喝完水靠鞋邊睡 | S08 記憶 |
+| `dog-refuse-stranger.png` | 拒絕 | 貼予安腳邊、對伸手僵／低鳴 | S09 |
+| `dog-back-sleep.png` | 信任落地 | **背對**睡在伸手可及處 | 結局 A |
+| `dog-check-sleep.png` | 選定仍學 | 睡近但睜眼確認／轉身查看 | 結局 B |
+| `dog-door-edge.png` | 薄冰 | 睡門邊、不看人 | 結局 D |
+
+**基準姿（定稿）：** Option B 趴姿側頭＝外型母版；正式遊戲可用 `dog-anxious`／`dog-halfstep` 等替換，但外型必須仍是 B。
+
+---
+
+## 4. 完整 Prompt 模板（複製）
+
+```text
+{STYLE}
+
+{IDENTITY LOCK — Option B wiry}
+
+{POSE_AND_EXPRESSION — change BOTH body action AND facial expression;
+ convey trust distance: retreat / half-step / parallel rest / back-to-back sleep}
+
+Centered, readable full body or clear crop. Clean plain soft cream (or chroma green) background for cutout.
+No bird nest, no straw nest, no cardboard nest styling on the dog itself.
+No text, no logo, no purebred markers, no trust meter UI.
+```
+
+---
+
+## 5. 一致性審查清單（定稿前打勾）
+
+- [ ] 對得上 `dog-ref-canonical.png`（同一隻 B）
+- [ ] 蜂蜜褐主體＋深耳尖＋奶油胸口／吻周仍在
+- [ ] 毛質仍是 **wiry／scruffy**，未漂成蓬毛或光滑短毛
+- [ ] 仍是短腿偏瘦幼犬，未變壯年犬／Q 版
+- [ ] 耳為半垂，非尖直立雙耳純種感
+- [ ] 表情與身體動作都有改（不是只換背景）
+- [ ] 無文字／logo／信任數字
+- [ ] 狗為獨立 PNG，未嵌進 bg
+- [ ] `assets/dog/` 只留透明正式檔；來源圖放 `assets/dog_mj/`，不留 `*-green.png` 中介檔
+- [ ] 未自動開遊戲
+
+### 不一致時怎麼辦
+
+1. 重貼 **IDENTITY LOCK**＋明確寫 `must match dog-ref-canonical.png`  
+2. 加 `--no`：`fluffy coat, round plush face, purebred, chibi, photorealistic`  
+3. 仍漂＝用基準圖做 img2img／edit，只改 pose
+
+---
+
+## 6. 與其他檔的關係
+
+| 檔案 | 職責 |
+|------|------|
+| **本檔 `image_dog.md`** | 小7 **外型鎖定＋pose 一致性** |
+| `image.md` | 總美術規範、人物／背景／STYLE |
+| `image_bg.md` | 背景 place／light；**背景無人無狗** |
+| `game_guild.md` | 信任體感用距離／睡姿表達，不顯示數字 |
+
+`image.md` 的狗章節以本檔為準；衝突時以 **本檔 Option B** 為準。
+
+---
+
+*更新：2026-07-19｜Option B wiry｜19 張正式狗資產；6 張關鍵 pose 重產並清除未引用／中介圖*

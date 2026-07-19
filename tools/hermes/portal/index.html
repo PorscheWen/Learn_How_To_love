@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nous Portal — Hermes Agent</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e8eef5;
+      --muted: #8b9cb3;
+      --accent: #5b9fd4;
+      --ok: #3d9a6a;
+      --err: #c75c5c;
+      --border: #2a3544;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+    header h1 { margin: 0; font-size: 1.35rem; font-weight: 600; }
+    header p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.9rem; }
+    main { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+    }
+    .card h2 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--accent); }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge.ok { background: rgba(61,154,106,0.2); color: var(--ok); }
+    .badge.warn { background: rgba(199,92,92,0.2); color: var(--err); }
+    .job {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-bottom: 0.6rem;
+    }
+    .job-title { font-weight: 600; margin-bottom: 0.25rem; }
+    .job-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.6rem; }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-right: 0.4rem;
+    }
+    button.secondary { background: #3a4a5c; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    textarea {
+      width: 100%;
+      min-height: 88px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+    }
+    pre#log {
+      background: #0a0e12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      max-height: 320px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #b8c5d6;
+    }
+    .job.agent .job-title::before { content: "🎨 "; }
+    .job.tts .job-title::before { content: "🔊 "; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nous Portal</h1>
+    <p>Hermes Agent 門戶 — Cursor 寫碼、驗證測試、Nous Portal 生圖／TTS</p>
+  </header>
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>系統狀態</h2>
+        <div id="status" class="meta">載入中…</div>
+      </section>
+      <section class="card">
+        <h2>快速動作</h2>
+        <button id="btnTest">跑預設測試</button>
+        <button id="btnTestJob" class="secondary">跑 lhtl-test-only</button>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:1rem">
+      <h2>素材產生（Nous Portal · 一鍵）</h2>
+      <p class="meta" style="margin:0 0 0.75rem">官方 Hermes + Tool Gateway：FLUX 2 Pro 背景圖、OpenAI TTS 旁白。會扣 Portal 點數。</p>
+      <div id="media-jobs"></div>
+    </section>
+
+    <section class="card" style="margin-top:1rem">
+      <h2>程式／驗證（jobs.json）</h2>
+      <div id="jobs"></div>
+    </section>
+
+    <section class="card" style="margin-top:1rem">
+      <h2>自訂 SDK 指令</h2>
+      <textarea id="prompt" placeholder="例：依 @lhtl-branch-engine 修復 choice-reactions…"></textarea>
+      <p style="margin:0.6rem 0 0">
+        <button id="btnCode">執行 code</button>
+      </p>
+    </section>
+
+    <section class="card" style="margin-top:1rem">
+      <h2>執行紀錄</h2>
+      <pre id="log">（尚無任務）</pre>
+    </section>
+  </main>
+  <script>
+    let pollTimer = null;
+    let activeTaskId = null;
+
+    async function api(path, opts) {
+      const res = await fetch(path, opts);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      return data;
+    }
+
+    function setLog(text) {
+      document.getElementById('log').textContent = text || '（空）';
+    }
+
+    async function refreshStatus() {
+      const s = await api('/api/status');
+      const nousBadge = s.hasNousApiKey
+        ? '<span class="badge ok">NOUS_API_KEY 已設定</span>'
+        : '<span class="badge warn">NOUS_API_KEY 未設定（見 Nous_Portal.md）</span>';
+      const apiBadge = s.hasApiKey
+        ? '<span class="badge ok">CURSOR_API_KEY 已設定</span>'
+        : '<span class="badge warn">CURSOR_API_KEY 未設定</span>';
+      const cliBadge = s.hasHermesCli
+        ? '<span class="badge ok">Hermes CLI OK</span>'
+        : '<span class="badge warn">未找到 Hermes CLI</span>';
+      const cwdBadge = s.gameCwdExists
+        ? '<span class="badge ok">game cwd OK</span>'
+        : '<span class="badge warn">game cwd 缺失</span>';
+      document.getElementById('status').innerHTML = `
+        ${nousBadge} ${apiBadge} ${cliBadge} ${cwdBadge}<br>
+        金鑰說明：<code>Ch1_Trust/Nous_Portal.md</code><br>
+        SDK 模型：${s.model} · Agent：${s.agentProvider}/${s.agentModel}<br>
+        遊戲目錄：${s.gameCwd}
+      `;
+    }
+
+    function renderJobButton(name, job, container, { agent = false } = {}) {
+      const div = document.createElement('div');
+      const isTts = (job.toolsets || []).includes('tts');
+      div.className = 'job' + (agent ? (isTts ? ' tts' : ' agent') : '');
+      const needsSdk = !!job.prompt && job.kind !== 'agent';
+      const btnLabel = agent ? '一鍵產生' : (needsSdk ? '執行 pipeline' : '執行測試');
+      div.innerHTML = `
+        <div class="job-title">${name}</div>
+        <div class="job-desc">${job.description || ''}</div>
+        <button data-job="${name}" data-agent="${agent ? '1' : '0'}">${btnLabel}</button>
+      `;
+      container.appendChild(div);
+    }
+
+    async function refreshJobs() {
+      const data = await api('/api/jobs');
+      const mediaBox = document.getElementById('media-jobs');
+      const codeBox = document.getElementById('jobs');
+      mediaBox.innerHTML = '';
+      codeBox.innerHTML = '';
+
+      for (const [name, job] of Object.entries(data.jobs || {})) {
+        if (job.kind === 'agent') {
+          renderJobButton(name, job, mediaBox, { agent: true });
+        } else {
+          renderJobButton(name, job, codeBox, { agent: false });
+        }
+      }
+
+      document.querySelectorAll('button[data-job]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const job = btn.dataset.job;
+          if (btn.dataset.agent === '1') runAgent(job);
+          else runPipeline(job);
+        });
+      });
+    }
+
+    function pollTask(taskId) {
+      activeTaskId = taskId;
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(async () => {
+        try {
+          const t = await api('/api/tasks/' + taskId);
+          const status = t.status === 'running' ? '執行中…' : (t.exitCode === 0 ? '成功' : '失敗');
+          setLog(`[${status}] ${t.label}\nexit=${t.exitCode}\n\n${t.log || ''}`);
+          if (t.status !== 'running') {
+            clearInterval(pollTimer);
+            pollTimer = null;
+            activeTaskId = null;
+          }
+        } catch (e) {
+          setLog('輪詢錯誤: ' + e.message);
+        }
+      }, 1200);
+    }
+
+    async function runTest(scripts) {
+      const body = scripts ? { scripts } : {};
+      const { taskId } = await api('/api/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      setLog('已啟動測試 task=' + taskId);
+      pollTask(taskId);
+    }
+
+    async function runAgent(job) {
+      const { taskId } = await api('/api/agent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ job }),
+      });
+      setLog('已啟動 agent task=' + taskId + ' job=' + job);
+      pollTask(taskId);
+    }
+
+    async function runPipeline(job) {
+      const { taskId } = await api('/api/pipeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ job }),
+      });
+      setLog('已啟動 pipeline task=' + taskId + ' job=' + job);
+      pollTask(taskId);
+    }
+
+    async function runCode() {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) return alert('請輸入 prompt');
+      const { taskId } = await api('/api/code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+      setLog('已啟動 code task=' + taskId);
+      pollTask(taskId);
+    }
+
+    document.getElementById('btnTest').addEventListener('click', () => runTest());
+    document.getElementById('btnTestJob').addEventListener('click', () => runPipeline('lhtl-test-only'));
+    document.getElementById('btnCode').addEventListener('click', runCode);
+
+    refreshStatus();
+    refreshJobs();
+  </script>
+</body>
+</html>

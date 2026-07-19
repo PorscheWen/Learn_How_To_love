@@ -141,7 +141,8 @@ powershell -File tools\deploy-audio.ps1
 ## 篇章方向（維持基線前提下擴充）
 
 ### Chapter 1
-- BGM major 為主；狗聲只在 SCENE_CUES 列出的 beat。
+- BGM major 為主；**有狗在場的每個 scene** 一筆 `SCENE_CUES` + 分支選項 `choice-reactions.cue`。
+- Week2 範例見 [`SKILL.md` §Ch1 Week2](SKILL.md) 或 [`chapter-landing-checklist.md`](../chapter-landing-checklist.md) §四。
 
 ### Chapter 2
 - 更多 calm、tender BGM；狗聲仍 sparse。

@@ -1,652 +1,305 @@
 # Learn How to Love — 開發指南（Guide Line）
 
-> 本文件彙整系列定位、設計原則、系統架構與命名決策，作為後續劇情、玩法、程式與 Steam 文案的統一依據。
+> **本文件範圍：** 系列大綱、架構流程、必要決策。  
+> **不含：** Demo 逐日內容、場景表、資產清單、程式細節——見各章指南與 `agent/`。  
+> **鎖定設定：** [`MEMORY.md`](MEMORY.md)（世界觀／角色）· [`.cursorrules`](.cursorrules)（程式規範）  
+> **品質防線：** [`agent/`](agent/) Skills — **Cursor 與 Hermes 產出前必讀對應 skill**，確保結果符合預期。
 
 ---
 
 ## 一、系列定位
-
-### 主標與中文名
 
 | 項目 | 內容 |
 |------|------|
 | **英文主標** | Learn How to Love |
 | **中文主標** | 學會去愛 |
 | **類型** | 情感敘事三部曲（非純寵物模擬器） |
+| **一句話** | 家庭用十幾年學會愛的故事——操作時間、默契與無法 S/L 刷掉的選擇，非刷數值通關 |
+| **Slogan** | 愛，是一起學會的事。 |
 
-### 一句話定位
+### 三部曲
 
-> 這不是寵物模擬器，而是一個家庭用十幾年學會愛的故事——玩家操作的是時間、默契，以及無法輕易刷掉的「選擇」，不是刷數值的完美通關。
+| 篇章 | 副標 | 生命階段 | 核心 | 基調 |
+|------|------|----------|------|------|
+| Ch1 | First Steps | 幼犬 | **信任** | 暖、有笑 |
+| Ch2 | Still Here | 中年 | **日常** | 靜、節奏 |
+| Ch3 | Goodbye | 老犬 | **告別** | 克制、尊嚴 |
 
-### Slogan
+**視角：** 全程狗的感官（嗅覺、聽覺、身體），非 stat 面板語言。
 
-- **英文：** Love isn't something you're born with. You learn how—together.
-- **中文：** 愛，是一起學會的事。
+### 市場差異（摘要）
 
-### 三部曲結構
-
-| 篇章 | 英文副標 | 中文 | 生命階段 | 核心 |
-|------|----------|------|----------|------|
-| Chapter 1 | **First Steps** | 初遇／第一步 | 幼犬（0–2 歲） | **信任** |
-| Chapter 2 | **Still Here** | 同行／還在 | 中年（3–8 歲） | **日常** |
-| Chapter 3 | **Goodbye** | 告別 | 老犬（9 歲+） | **告別** |
-
-**完整標題範例：**
-
-- Learn How to Love — Chapter 1: First Steps
-- Learn How to Love — Chapter 2: Still Here
-- Learn How to Love — Chapter 3: Goodbye
+三作可獨立可玩的完整人生史 · 跨作記憶個人化告別 · 中年日常深度 · 第三部才寫死亡 · 不道德綁架安樂抉擇。
 
 ---
 
-## 二、與 Steam 現有作品的差異
+## 二、核心設計原則（不可動搖）
 
-### 市場現況摘要
+1. **後果服務「學會愛」** — 疏忽改變關係與分支，非一刀 Game Over。  
+2. **無 permadeath** — 第一、二部不會養死；死亡與告別**只屬 Ch3**。  
+3. **Landmark 鎖定** — 重大選擇寫入跨作存檔，不可 S/L 刷完美。  
+4. **眼淚來自默契與告別** — 非廉價彩虹橋、非三作皆催淚。  
+5. **壞結局可重玩該章** — 不清零全系列進度。  
+6. **檔案不從 backup 來** — `Learn_How_To_Love` 所需程式、場景、圖、音等，**一律走正式產線**（`Ch1_Trust/game/`、`art-pose.ps1`、Nous Portal、下載腳本）；**禁止**從工作區 `backup/`（含 `game_version1/`、`version1/`、`Demo/`）或 `Ch1_Trust/backup/` 複製補檔。備份僅供使用者手動封存；Agent 僅在使用者**明確**說「從 backup 還原」時才可複製指定檔案。
 
-| 類型 | 代表作品 | 特點 | 缺口 |
-|------|----------|------|------|
-| 可愛經營 | *Little Friends: Puppy Island* | 島嶼、多品種、永遠幼犬感 | 無生命週期、情感淺 |
-| 搞笑沙盒 | *Domestic Dog* | 當狗 pee、挖骨頭（含 permadeath） | 基調不同，不適合本系列 |
-| 寵物店模擬 | *Pet Shop Simulator* | 幫別人配對寵物 | 主角不是「你的狗」 |
-| 一生快轉 | *The Life of One Dog* | 出生到死、無對白、線性 | 互動少、三階段未拆 |
-| 老犬催淚 | *My Little Puppy* | 收容所、彩虹橋 | 只做老年，略過幼中年 |
-| 人類告別 | *Farewell North* | 邊境牧羊犬、失喪與色彩 | 狗是媒介，重心在人 |
-
-### 本系列差異化（Pitch 用）
-
-1. **結構**：三作獨立可玩，合起來是一部完整人生史。
-2. **視角**：全程**狗的感官**（嗅覺 UI、聽覺、老後視野變窄）。
-3. **基調**：第一部暖、第二部靜、第三部克制——**不靠死亡開場騙眼淚**。
-4. **中年篇深度**：寫日常節奏、被忽略、家庭變化——Steam 上幾乎無人做滿。
-5. **跨作記憶**：第一、二部選擇延續至第三部閃回，個人化告別。
-6. **倫理**：第三部認真處理安樂、醫療、在家渡過——有社會價值但不道德綁架。
+詳細角色、年齡、班表、文案分層 → [`MEMORY.md`](MEMORY.md)。
 
 ---
 
-## 三、核心設計原則（不可動搖）
+## 三、故事架構（大綱）
 
-### 1. 後果服務「學會愛」，不服務「懲罰」
+### Chapter 1 — 信任
 
-- 疏忽 → **關係受損、信任下降、事件分支改變**，不是一刀永久 Game Over。
-- 玩家應感到「**我還來得及補**」或「**我當初若多陪一點會不一樣**」。
+意外相遇 → 教與陪、分離焦慮與修復 → 第一次默契。主人：25 歲長髮女性上班族，第一次養寵。
 
-### 2. 不做「養死永久終結、無法重來」
+### Chapter 2 — 日常
 
-- **不採用** permadeath 式「養死就全劇終」。
-- 理由：與三部曲主題打架、受眾為情感敘事玩家、跨作存檔會被毀、第三部才是有鋪墊的告別。
-- 替代：**壞結局章節**（短 epilogue + 反思）→ 可重玩該章，不刪全系列進度。
+生命快轉（結婚、孩子、父母老去）；狗從被教變成「教這個家怎麼活」；被忽略與再被看見。
 
-### 3. 死亡有鋪墊、有儀式，只屬第三部
+### Chapter 3 — 告別
 
-- 第一、二部：**不會因操作失誤養死**。
-- 第三部：老、病、終局**必然發生**；玩家選的是**怎麼陪、怎麼送**，不是「能不能避免死亡」。
+老犬照護；氣味閃回前兩作；安樂／治療／在家渡過三線完整；克制送別。
 
-### 4. 眼淚留給「好好告別」
-
-- 催淚來自默契、被忽略後再被看見、最後一次散步。
-- 不做廉價彩虹橋大冒險；記憶與氣味延續到 epilogue。
-
-### 5. 選擇有重量，但不綁架整個系列
-
-- 重大選擇（Landmark 事件）**不能 S/L 刷完美**（章節制或自動存檔）。
-- 壞結局可重玩該章；跨作存檔仍延續「這條路的記憶」。
-
-### 6. 明確不做的事
-
-- ❌ 養死永久 Game Over
-- ❌ 三作都催淚（只有第三部收淚）
-- ❌ 純寵物店／島嶼經營、永遠幼犬感
-- ❌ 用死亡開場騙眼淚
-- ❌ 替玩家決定安樂「對錯」
+章節場景數、時長、逐日大綱 → 各 `Ch?_*/Ch?_guide_line.md`。
 
 ---
 
-## 四、故事架構
+## 四、玩法與系統（概要）
 
-### Chapter 1: First Steps（信任）
-
-**主題：** 信任是如何被建立的。
-
-- **開場：** 意外相遇（雨天箱裡、棄養、收容所最後一天），非寵物店選購。
-- **主人：** **25 歲、長髮女性上班族**；人生新階段（剛搬出獨居等）——**第一次養寵物**，但**感情豐富**；人與狗都在學會不孤單。
-- **衝突：** 搞破壞、吠叫、分離焦慮 vs. 想放棄。
-- **高潮：** 走失、生病、房東威脅等危機——選擇「怎麼教、怎麼陪」。
-- **結尾：** 第一次真正默契（主人難過時狗不再鬧，只是靠過來）。
-- **基調：** 暖、有笑；催淚靠「第一次被選中、被留下」。
-
-### Chapter 2: Still Here（日常）
-
-**主題：** 日子變普通了，愛藏在日常節奏裡。**（系列最大差異化章節）**
-
-- **時間快轉：** 結婚、換工作、孩子出生、父母生病——狗是唯一不變的成員。
-- **角色轉換：** 狗從「被教」變成「教這個家怎麼活」。
-- **伏筆：** 變慢、不跳沙發、散步要休息——老化鋪墊，非 bug。
-- **危機：** 被忽略（新寶寶、加班、新寵物）——重新「看見」中年狗。
-- **結尾：** 普通傍晚全家齊聚，狗在腳邊睡著。
-- **基調：** 靜、日常、小確幸；《請回答1988》式溫度，非狗血。
-
-### Chapter 3: Goodbye（告別）
-
-**主題：** 如何好好說再見。
-
-- **開場：** 老狗狀態；**氣味記憶**閃回第一、二部場景。
-- **玩法：** 短散步、飲食、獸醫、防滑墊、夜裡確認呼吸。
-- **主線：** 安樂／繼續治療／在家渡過——**不判對錯**，每路線完整敘事。
-- **高潮：** 狗用僅剩力氣做「只有這隻狗會做的事」（如走到第一部那棵樹下）。
-- **結尾：** 現實線告別 + 記憶線（味道、歌曲、季節）延續 epilogue。
-- **基調：** 克制、尊嚴；學 *My Little Puppy* 溫度、*Farewell North* 克制，避開死後大冒險。
-
----
-
-## 五、玩法隨三部曲演進
-
-| 階段 | 操作重心 | 獨特機制 |
-|------|----------|----------|
-| 幼犬 | 教、防禍、建立規則 | **耐心／信任**：如廁訓練、防咬、社會化 |
-| 中年 | 節奏、觀察、家庭事件 | **默契系統**：不需指令，狗自動做對的事 |
-| 老犬 | 照護、取捨、時間 | **氣味記憶**：嗅聞鍵進入回憶；行動慢、敘事密度高 |
-
-### 跨作存檔（系列靈魂）
-
-以下項目寫入存檔，影響第三部閃回與 epilogue：
-
-- 狗的名字
-- 常去地點（公園、樹、廚房等）
-- 是否改掉某壞習慣
-- 是否怕雷、最愛的活動
-- 觸發過的 Landmark 事件清單
-- Bond 軌跡與 Trust 關鍵選擇
-
----
-
-## 六、核心系統
-
-### 6.1 三層長期指標
-
-| 指標 | 代表 | 低值後果 |
-|------|------|----------|
-| **Trust 信任** | 敢靠近、聽指令、難過時靠過來 | 分離焦慮、搞破壞、默契事件不觸發 |
-| **Bond 羈絆** | 長期陪伴與「被看見」 | 中年忽略線、家人事件改寫、閃回不同 |
-| **Comfort 安適** | 健康、環境、老後照護 | 第三部告別場景平靜度、結局細節 |
-
-**規則：**
-
-- 數值可低，但留**修復窗口**。
-- 極端疏忽 → 壞結局章節，可重試，不清零全系列。
-- Bond **原則不因單次失誤清零**。
-
-### 6.2 狗狗感受（Feelings）— 短期情緒
-
-| 感受 | 常見觸發 | 狗的行為 | 玩家回應 |
-|------|----------|----------|----------|
-| **Anxious 不安** | 獨處、陌生、被吼 | 踱步、低吼、不進食 | 陪伴、安撫、固定日常節奏 |
-| **Excited 興奮** | 出門、見熟人 | 跳、轉圈、拉繩 | 引導，非放任 |
-| **Content 滿足** | 吃飽、玩完、被摸對 | 側躺、sigh | 維持節奏 |
-| **Curious 好奇** | 新氣味、新成員 | 豎耳、嗅 | 一起探索 |
-| **Hurt 受傷** | 被忽略、被罵 | 夾尾、躲角落 | 修復信任 |
-| **Attached 依戀** | 高 Bond + 主人難過 | 靠過來、守門口 | 接受陪伴 |
-| **Sleepy 困倦** | 午後、安靜日常節奏 | 眼皮半闔、打盹 | 不打擾、維持節奏 |
-| **Playful 玩耍** | 玩具、互動順利 | 前腳趴低、搖尾 | 一起參與、適度引導 |
-| **Alert 警戒** | 雷聲、陌生聲響 | 豎耳、身體緊繃 | 陪伴、不強迫 |
-| **Shy 害羞** | 新環境、剛靠近 | 藏臉、只露鼻尖 | 等待、讓牠決定距離 |
-| **Hungry 飢餓** | 餵食、廚房氣味 | 鼻子貼地、循味 | 固定日常節奏、不催促 |
-| **Angry 生氣** | 被吼、被關 | 低吼、耳朵後貼 | 修復、不硬拉 |
-
-**UI 原則：**
-
-- 不用「不安 +20」數字面板。
-- 用耳型、尾型、色溫（暖＝安全，冷＝緊張）。
-- 老犬篇：聽覺模糊，靠觸摸與氣味。
-
-### 6.3 羈絆 Bond（5 階）
-
-| 階段 | 名稱 | 解鎖 |
+| 階段 | 重心 | 機制 |
 |------|------|------|
-| Lv1 | Stranger 陌生 | 基本餵食、短互動 |
-| Lv2 | Familiar 習慣 | 跟脚、等門、簡單指令 |
-| Lv3 | Rhythm 默契 | 自動小幫忙（拖鞋、守門） |
-| Lv4 | Anchor 依靠 | 危機時安撫／保護主人 |
-| Lv5 | One Life 一生 | 第三部氣味閃回、專屬告別 |
+| 幼犬 | 教、建立規則 | Trust、如廁／社會化 |
+| 中年 | 節奏、家庭事件 | Bond 默契、忽略／修復線 |
+| 老犬 | 照護、取捨 | 氣味記憶閃回、敘事密度高 |
 
-**累積：**
+**長期指標：** Trust · Bond（五階）· Comfort  
 
-- ✅ 對的感受 + 對的回應 → Bond ↑
-- ⚠️ 忽略後補上 → Bond 小加，Trust 可能先降再升
-- ❌ 長期無視 → Bond 停滯，特別事件改為「缺席版」
+**特別事件：** `章節節點 + Bond 門檻 + 感受 + flags` → Moment / Memory / **Landmark**（鎖定、跨作）
 
-### 6.4 特別事件
+**跨作存檔欄位：** 狗名、常去地點、Landmark 清單、flags、Bond／Trust 關鍵選擇等。
 
-**觸發公式：**
-
-```
-特別事件 = 章節節點 + Bond 門檻 + 當前/近期感受 + （可選）玩家選擇標記
-```
-
-**三種等級：**
-
-| 等級 | 名稱 | 頻率 | 說明 |
-|------|------|------|------|
-| Moment | 瞬間 | 多 | 第一次頭靠膝上 |
-| Memory | 記憶 | 中 | 固定地點儀式（同一棵樹） |
-| Landmark | 里程碑 | 少 | 改寫主線、寫入跨作存檔；**觸發後鎖定** |
-
-**各章事件範例：**
-
-**First Steps**
-
-| 事件 | 觸發 | 跨作標記 |
-|------|------|----------|
-| 《第一次跟回家》 | Bond Lv2 + 連續安撫 Anxious | 第三部同條路走很慢 |
-| 《尿墊之夜》 | 選「不罵、清理、陪坐」 | 解鎖「靠膝」 |
-| 《雷雨》 | Anxious 高 + Bond ≥ Lv2 | 記錄「怕雷」 |
-| 《走失與找回》 | 主線 + Bond 高/低分支 | 影響第二部信任支線 |
-
-**Still Here**
-
-| 事件 | 觸發 | 跨作標記 |
-|------|------|----------|
-| 《被忽略的一週》 | 連續忽略 Attached | 修復線 or 缺席版 |
-| 《寶寶來了》 | 主線 + Curious/Anxious | 守嬰兒房門 |
-| 《老媽的散步》 | Bond Lv4 + Content | 第三部樹下駐足 |
-| 《吵架之後》 | Attached 高 | Landmark：叼拖鞋 |
-
-**Goodbye**
-
-| 事件 | 觸發 | 跨作標記 |
-|------|------|----------|
-| 《氣味博物館》 | Bond Lv5 + Landmark ≥2 | 個人化閃回 |
-| 《最後一次最愛的事》 | Comfort 中 + Attached | epilogue 文案 |
-| 《還在的早晨》 | 終局前 + Bond Lv5 | 告別平靜度 |
-| 《你學會了》 | 通關 | 全系列存檔徽章 |
-
-### 6.5 玩家回饋（非刷分）
-
-1. **相簿／腳印集** — 事件自動存無 UI 截圖 + 極短內心獨白。
-2. **默契動作欄** — Bond 升級解鎖互動。
-3. **跨作記憶條** — 僅第三部顯示，動態生成個人化文案。
-4. **動態日記 / 手繪繪本** — 劇情推進時自動於背景記錄「玩家與小狗的里程碑」；選單提供「手繪風日記本」介面，以插畫翻頁方式呈現玩家已解鎖的故事，如一本動態電子繪本。
-5. **打字機淡入節奏** — 文字出現帶微幅 Fade-in 效果，速度宜緩，讓閱讀體驗如流水般溫柔；**不做**高速掃字或純瞬間出現。
-
-### 6.6 狗狗視覺資產 — 水彩風 PNG（Demo 已定）
-
-**結論：** 全系列狗狗角色統一使用**手繪水彩風透明 PNG**，不用向量拼接、不用程式生成的幾何剪影。Demo 已實作並作為正式版美術基準。
-
-#### 風格基準（Style Reference）
-
-| 項目 | 規格 |
-|------|------|
-| **主參考圖** | `Demo/assets/dog/dog-anxious.png` |
-| **風格** | 數位水彩／油畫筆觸；暖色金褐、蜂蜜 ochre 毛色；無硬黑描邊 |
-| **角色** | 同一隻混種幼犬（scruffy golden-tan puppy，約 2–4 個月感）；全系列**不可換品種或配色** |
-| **細規** | 完整外型（狗／主人／NPC）見 `agent/visual-art/reference.md` §角色外型聖經 |
-| **構圖** | 單角色、全身或半身、置中；**透明背景**（去背 PNG） |
-| **情緒** | 姿勢與眼神優先於文字；每張圖只表達一個清晰 moment |
-| **禁止** | ❌ SVG 幾何拼接 ❌ 多角色同框 ❌ 寫實照片 ❌ 廉價 Q 版貼圖 |
-
-#### 主人／玩家視覺（Demo 鎖定）
-
-| 項目 | 規格 |
-|------|------|
-| **身份** | **25 歲、長髮女性上班族**；Demo 為獨居、需請假／打卡；**第一次養寵物** |
-| **性格** | **感情豐富**——易共感、內心戲多；敘事仍用第二人稱「你」 |
-| **呈現** | **不露全臉、無全立繪**；第一人稱；局部可見纖細手／臂、及膝裙或寬褲 |
-| **局部** | 僅必要 pose 露手、臂、大腿；暖調膚色；服裝米白／灰褐／深棕等簡素日常 |
-| **knee pose** | 狗靠**大腿旁／膝上緣**；**禁止**畫小腿、腳踝、腳、鞋 |
-
-#### 檔案規範
-
-| 項目 | 內容 |
-|------|------|
-| **目錄** | `Learn_How_To_Love/Demo/assets/dog/` |
-| **命名** | `dog-{id}.png`（小寫、連字號） |
-| **格式** | PNG，RGBA 透明 |
-| **程式常數** | `DOG_ASSET_DIR = 'assets/dog'`、`DOG_ASSET_EXT = '.png'` |
-| **去背工具** | `Demo/tools/remove_dog_bg.py`（rembg；新增／替換 PNG 後執行） |
-
-#### 兩層資產系統
-
-```
-場景載入邏輯（resolveDogVisual）：
-  1. 若 scene.dogPose 有值 → 載入 dog-{dogPose}.png（故事動作圖）
-  2. 否則 → 載入 dog-{feeling}.png（情緒圖）
-```
-
-- **情緒圖（12）**：通用 fallback，對應 `FEELINGS` 的 `mood` key。
-- **故事動作圖（20）**：對應特定 narrative beat；在 `scenes.js` 以 `dogPose` 指定。
-
-#### 情緒圖清單（12 張）
-
-| 檔名 | Feeling | 用途 |
-|------|---------|------|
-| `dog-anxious.png` | Anxious | 不安、陌生、被吼後初期 |
-| `dog-curious.png` | Curious | 好奇、試探靠近 |
-| `dog-content.png` | Content | 滿足、放鬆 |
-| `dog-hurt.png` | Hurt | 受傷、被忽略 |
-| `dog-excited.png` | Excited | 興奮、出門前 |
-| `dog-attached.png` | Attached | 依戀、靠過來 |
-| `dog-sleepy.png` | Sleepy | 困倦、打盹 |
-| `dog-playful.png` | Playful | 玩耍邀請 |
-| `dog-alert.png` | Alert | 警戒、豎耳 |
-| `dog-shy.png` | Shy | 害羞、躲藏 |
-| `dog-hungry.png` | Hungry | 循味、餵食 |
-| `dog-angry.png` | Angry | 被吼後、尚未原諒 |
-
-#### 故事動作圖清單（20 張）
-
-| 檔名 | dogPose | 行為描述 | Demo 場景 |
-|------|---------|----------|-----------|
-| `dog-rain.png` | `rain` | 濕紙箱裡發抖 | Day 1 雨天相遇 |
-| `dog-corner.png` | `corner` | 縮在紙箱邊 | 第一夜、Day 3 早晨 |
-| `dog-kitchen.png` | `kitchen` | 碗邊嗅聞 | 廚房、餵食日常節奏 |
-| `dog-balcony.png` | `balcony` | 欄杆縫隙嗅風 | 陽台（狗圖可隱藏） |
-| `dog-potty.png` | `potty` | 低頭嗅地面 | 如廁引導小遊戲 |
-| `dog-home.png` | `home` | 沙發腳邊打盹 | 午後、靜日、Epilogue |
-| `dog-night-accident.png` | `night-accident` | 闖禍後發抖 | 尿墊之夜 |
-| `dog-knee.png` | `knee` | 頭輕靠大腿旁 | 靠膝、雷雨後、週日入夜 |
-| `dog-repair.png` | `repair` | 玄關試探 | Day 4 修復線 |
-| `dog-toy.png` | `toy` | 叼玩具回來 | Day 4 下午玩玩具 |
-| `dog-doorway.png` | `doorway` | 門口轉圈 | 第一次出門 |
-| `dog-doorway-wait.png` | `doorway-wait` | 玄關張望 | Day 7 傍晚 |
-| `dog-stair.png` | `stair` | 樓梯停步回頭 | 樓梯 |
-| `dog-walk.png` | `walk` | 散步回頭確認 | 散步小遊戲 |
-| `dog-park.png` | `park` | 聞樹根泥土 | 公園 |
-| `dog-follow-close.png` | `follow-close` | 走在你腳邊 | 回程（Trust ≥ 50） |
-| `dog-follow-far.png` | `follow-far` | 遠遠跟著 | 回程（Trust < 50） |
-| `dog-thunder.png` | `thunder` | 桌底發抖 | 雷雨 |
-| `dog-window.png` | `window` | 望窗外 | Day 6 午後 |
-| `dog-sad-day.png` | `sad-day` | 你難過時靠過來 | Day 7  moment |
-
-**分支範例：** `day5_follow` 的 `dogPose` 為函式 `(s) => s.trust >= 50 ? 'follow-close' : 'follow-far'`，同一故事節點依 Trust 切換動作圖。
-
-#### 新增／替換資產流程
-
-1. 以 `dog-anxious.png` 為風格基準繪製或生成新圖。
-2. 存成 `Demo/assets/dog/dog-{id}.png`。
-3. 執行 `python Demo/tools/remove_dog_bg.py` 去背。
-4. 若為故事專用：在 `Demo/js/scenes.js` 加 `dogPose: '{id}'`；在 `systems.js` 的 `DOG_POSES` 補 behavior 文案。
-5. 若為新情緒：在 `FEELINGS` 加 key，並提供對應 `dog-{mood}.png`。
-
-#### 程式對照
-
-| 模組 | 路徑 |
-|------|------|
-| 情緒／pose 定義 | `Demo/js/systems.js` — `FEELINGS`、`DOG_POSES`、`resolveDogVisual()` |
-| 場景綁定 | `Demo/js/scenes.js` — 各 scene 的 `dogPose` |
-| 載入 UI | `Demo/js/game.js` — `updateDogVisual()` |
-| 去背後製 | `Demo/tools/remove_dog_bg.py` |
-
-#### 三部曲擴充原則
-
-- **Chapter 2 / 3** 沿用同一隻狗的水彩風格；老犬篇可新增 `dog-slow.png`、`dog-grey-muzzle.png` 等** aging 變體**，但仍是同一角色。
-- 新章節優先新增**故事動作圖**（Memory / Landmark 專用 pose），情緒圖可複用。
-- 背景場景用 CSS／背景圖；**狗角色永遠是獨立透明 PNG 疊在場景上**，不畫進背景裡。
-
-#### 動態動畫規格（GSAP / CSS Animation）
-
-| 動畫類型 | 實作方式 | 備註 |
-|----------|----------|------|
-| **呼吸起伏** | CSS `@keyframes` scale(1.0–1.02) | 持續循環，2–4 秒週期 |
-| **眨眼** | 覆蓋半透明遮罩 or CSS clip-path | 4–8 秒隨機間隔 |
-| **耳朵抖動** | GSAP `rotation` 小角度 | 觸發於 Alert、Curious 感受 |
-| **尾巴輕擺** | GSAP `rotation` 以尾根為 transform-origin | 觸發於 Content、Excited、Playful |
-
-**原則：** 動畫為**輔助氛圍**，不搶奪視覺焦點；低幀率（≤ 30fps）、不影響故事節奏。靜態情緒圖優先，動態僅加在常駐 fallback 圖。
+系統數值表、Feelings 全表、UI／音效／美術細規 → `agent/` 各 skill · `guide_line` 舊版細節已遷至該處。
 
 ---
 
-### 6.7 UI 介面設計規格
+## 五、技術方向（概要）
 
-#### 色彩系統
+| 項目 | 方向 |
+|------|------|
+| **現行引擎** | Web（HTML/JS/CSS）→ 正式版 **Electron** 封裝 |
+| **視覺** | 2.5D 水彩背景 + 透明 PNG 狗角色（兩層疊加） |
+| **上架** | Steam；成就、Cloud Save、zh-TW／en 字串抽離 |
+| **單章規模** | 主線 3–5h；場景 ~90–110／章 |
 
-| 用途 | 顏色 | 說明 |
+技術部署細節 → [`agent/steam-deployment/`](agent/steam-deployment/SKILL.md) · 敘事門檻 → [`agent/story-narrative/steam-release.md`](agent/story-narrative/steam-release.md)
+
+---
+
+## 六、製作工作流（四層分工）
+
+本專案採 **Cursor（前端／引擎）+ Hermes（後台內容工廠）** 雙軌；設定鎖定由 `MEMORY.md` 與 `.cursorrules` 共用。
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Cursor Pro — 前端代碼與 UI 總監                              │
+│    遊戲主邏輯、UI 渲染、存檔、即時 Debug、多檔重構               │
+└─────────────────────────────────────────────────────────────┘
+                              ↑ 內容備齊、驗證通過後落地
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Hermes + Nous Portal — 後台內容與文本                       │
+│    模型：deepseek-v4-flash（經 Nous Portal）                    │
+│    異步大量產劇本、分支 JSON；吞入 MEMORY.md；跑 validate 驗邏輯 │
+└─────────────────────────────────────────────────────────────┘
+         │                                    │
+         ▼                                    ▼
+┌──────────────────────┐          ┌──────────────────────────┐
+│ 3. 場景插圖            │          │ 4. 旁白配音與環境音          │
+│ Portal Plus：FLUX 2 Pro │          │ Portal Plus：OpenAI TTS   │
+│ 背景自動落盤            │          │ 對白／旁白 → .mp3 落盤       │
+│ MJ --cref：主角立繪差分  │          │ 扣 Portal 內建點數           │
+└──────────────────────┘          └──────────────────────────┘
+```
+
+### 1. 前端代碼與 UI 總監 — **Cursor Pro**
+
+| 項目 | 說明 |
+|------|------|
+| **職責** | Unity／Godot／**Web** 遊戲主邏輯；Text 顯示、按鈕監聽；存檔／讀檔；即時 Debug |
+| **工具** | Agent 模式、Composer、多檔跨檔重構 |
+| **本專案落地** | `Ch1_Trust/game/js/`、`css/`；審稿後整合 Hermes 產出 |
+| **規範** | [`.cursorrules`](.cursorrules) · `@lhtl-*` skills |
+
+**原則：** Hermes 產草稿與素材；**Cursor 負責引擎整合、UI 手感、架構正確性。**
+
+### 2. 後台內容與文本 — **Hermes Agent + Nous Portal（deepseek-v4-flash）**
+
+| 項目 | 說明 |
+|------|------|
+| **職責** | 24h 背景異步大量產出劇情、分支 JSON；自動檢查邏輯漏洞 |
+| **模型** | `deepseek-v4-flash`（透過 [Nous Portal](https://portal.nousresearch.com)） |
+| **上下文** | 一次讀入 [`MEMORY.md`](MEMORY.md) + `agent/` 敘事規範 |
+| **輸出** | Structured JSON／場景包；須通過 `Ch1_Trust/game/tools/validate-*.js` |
+| **啟動** | `hermes setup --portal` · `hermes model deepseek-v4-flash` |
+
+**原則：** 量大在 Hermes；結構化輸出後仍須 **validate 腳本 + Cursor 審稿**，不假設 100% 免修。**
+
+### 3. 環境場景插圖 — **Nous Portal Plus × Midjourney 混合**
+
+| 類型 | 管道 | 說明 |
 |------|------|------|
-| **主背景** | 米白 `#FAF6F0` / 燕麥色 `#F5EFE0` | 溫暖底色，避免純白 |
-| **文字主色** | 深棕 `#4A3728` | 取代純黑，柔和易讀 |
-| **文字次色** | 暖灰 `#7A6A60` | 旁白、說明、時間標記 |
-| **對話框背景** | 米白半透明 `rgba(250,246,240,0.92)` | 帶微透明感 |
-| **強調 / 選項** | 蜂蜜金 `#C8912A` | 呼應狗毛色 |
+| **背景／場景** | Portal Tool Gateway · **FLUX 2 Pro** | Hermes 生劇本時背景並行生圖 → `assets/bg/` |
+| **主角立繪／表情差分** | **Midjourney** `--cref` | 角色一致性精雕；FLUX 角色鎖定較弱 |
+| **落地** | Cursor | `locations.js`、CSS `.loc-*`、動態切換 pose |
 
-#### 圓角規格
+美術規範 → [`agent/visual-art/`](agent/visual-art/SKILL.md)
 
-- 對話框、按鈕、選項框：`border-radius: 16px+`
-- 小型 tag / badge：`border-radius: 8px`
-- **全面避免**銳角邊框
+### 4. 配音 — **Nous Portal Plus（OpenAI TTS）**
 
-#### 紋理
-
-- 全局底層加入**手繪紙張紋理**（Texture PNG，低不透明度 5–10%）
-- 效果：輕微粒子感，像在紙上閱讀故事
-
-#### 禁止事項
-
-- ❌ 高飽和度純色 UI 元素
-- ❌ 純黑 `#000000` 作為文字色
-- ❌ 純白 `#FFFFFF` 作為背景
-- ❌ 銳角方形元素
-
----
-
-### 6.8 音效設計
-
-#### 環境音分層（ASMR 等級）
-
-| 層次 | 內容 | 觸發條件 |
-|------|------|----------|
-| **底層白噪音** | 微風聲、室內空調低鳴 | 持續播放（可調音量） |
-| **場景音** | 雨聲、樹葉沙沙、街道遠景 | 依場景切換 |
-| **時間感** | 室內時鐘滴答聲 | 室內靜日場景（極低音量） |
-| **互動回饋** | 圓潤「啵」聲或木質輕敲 | 玩家點擊推進文字時 |
-
-**原則：** 環境音與 BGM 分軌混音；點擊音效需**極輕微、圓潤**，不做清脆系統提示音。
-
-#### 撫摸互動音效
-
-- 觸發「撫摸動作」時：播放狗滿足的專屬音效（輕吐氣、輕呻吟或尾巴掃地聲）
-- 音效長度 < 1 秒；循環觸發間隔 ≥ 1.5 秒，避免重複刺耳
-
----
-
-### 6.9 撫摸互動機制
-
-在故事文字推進的空檔，允許玩家主動與畫面上的小狗互動：
-
-| 項目 | 規格 |
+| 項目 | 說明 |
 |------|------|
-| **觸發方式** | 滑鼠移至狗角色 PNG 範圍 → cursor 變「小手」；按住並拖曳（Mousemove drag） |
-| **判定條件** | 僅在文字靜止（非打字機播放中）且狗處於 Content / Sleepy / Attached 感受時激活 |
-| **視覺回饋** | 呼吸加速或尾巴擺動動畫（§6.6 動態動畫） |
-| **音效回饋** | 滿足音效（§6.8 撫摸互動音效） |
-| **數值影響** | Trust + 微量（防止刷分：每場景上限一次有效 reward） |
-| **禁止** | ❌ 撫摸時強制插入 UI 彈窗 ❌ 打字機播放中仍可觸發 |
+| **職責** | 狗狗聲音 `.mp3` → 專案音訊目錄 |
+| **落地** | Cursor 綁定場景 cue · `agent/audio-sound` |
 
----
-
-## 七、命名決策
-
-### 主標：Learn How to Love（已定）
-
-| 比較 | Learn How to Love ✅ | Learn to Love |
-|------|----------------------|---------------|
-| 契合三部曲 | 強調「過程、步驟」 | 較像戀愛或口號 |
-| 誤解風險 | 較低 | 較易被想成戀愛 sim |
-| Steam 撞名 | 較少 | 較多（歌曲、其他作品） |
-
-**備選：** 若將來要更短，可用 *Learn to Love* + 必帶副標 *A Three-Chapter Story*。
-
-**長期 IP tagline：** *Still here. Still learning.*
-
-### Steam 短描述（草案）
-
-> A three-part story about a dog and the family who learns to love—across puppyhood, the quiet middle years, and the last walk home.
-
-> 《學會去愛》三部曲寫的是信任、日常與告別；你的選擇會改變關係與記憶，但不會因一次失誤就永遠失去牠。
-
-### 建議 Steam 標籤
-
-Emotional、Story Rich、Singleplayer、Atmospheric、Indie、Dogs、Life Sim（次要）
-
----
-
-## 八、開場／結尾文案（草案）
-
-**第一部開場：**
-
-> 你還不知道怎麼愛一個生命。  
-> 牠也不知道怎麼相信一個人。  
-> 這沒關係。你們可以一起學。
-
-**第三部結尾：**
-
-> 你終於學會了。  
-> 不是學會失去——是學會，愛過之後還在。
-
----
-
-## 九、製作建議
-
-### 技術平台目標（Steam 正式版）
-
-#### 封裝為獨立客戶端
-
-- 使用 **Electron** 或 **NW.js** 將 HTML/JS/CSS 專案打包為 `.exe`（Windows）與 `.app`（Mac）執行檔
-- 支援全螢幕切換、自訂解析度（鎖定 **16:9**）、視窗縮放
-- 離線狀態需確保本地音訊素材可正常播放
-
-#### Steamworks SDK 接入
-
-- 使用 `greenworks` 或 `steamworks.js` 讓 JavaScript 對接 Steam 系統
-- **Steam 成就**範例：「第一次摸狗」、「解開雷雨記憶」、「完成 Chapter 1：First Steps」
-- **雲端存檔（Cloud Save）**：跨作存檔欄位（§五、跨作存檔）全上雲端
-
-#### 在地化（Localization）架構
-
-- 所有對白與 UI 字串抽離至獨立語系檔：`zh-TW.json`、`en.json`
-- HTML/JS 不硬編碼中文字串；由語系管理器在執行時注入
-- 為未來多國語言擴充預留介面
-
-### 規模（Indie 可行）
-
-- 每作 **3–5 小時**
-- **2.5D** 背景 + **水彩風透明 PNG 狗角色**（Demo 已定；見 §6.6）
-- 第一部驗證玩法與口碑，第二、三部用存檔延續
-
-### 參考基調
-
-- *Spiritfarer* — 告別的尊嚴
-- *A Short Hike* — 日常溫度
-- *To the Moon* — 記憶拼圖
-- *Farewell North* — 克制失喪
-- *My Little Puppy* — 老犬溫度（避開死後大冒險套路）
-
-### 最小 Demo（30 分鐘）
-
-**切片：** 接回家第 1–7 天（Day 1 相遇 → Day 2 試探 → Day 3–7 主線）
-
-#### 時間軸（Demo）
-
-| 遊戲日 | 性質 | 內容 | 備註 |
-|--------|------|------|------|
-| **Day 1** | 可玩 | 雨天相遇、第一夜 | prologue |
-| **Day 2** | 可玩 | 早晨→廚房→午後聲響→入夜 | `day2CalmSound` 影響 Day 6 雷雨資格 |
-| **Day 3** | 主線 | 早晨→廚房→陽台→如廁→午後→**深夜尿墊** | 可分支至 Day 4 修復 |
-| **Day 4** | 主線 | 修復（條件）→ 早晨→下午玩玩具 | |
-| **Day 5** | 主線 | 出門→樓梯→散步→公園→夕陽跟脚 | 同日内連續 |
-| **Day 6** | 主線 | 早晨→午後→雷雨或靜日 | 雷雨壞選可直跳 Day 7 早晨 |
-| **Day 7** | 主線 | 早晨→傍晚→moment | Epilogue 標「七天」= 相遇後第七天 |
-
-- 12 種 Feelings + 20 種故事動作 PNG（見 §6.6）
-- Bond Lv1 → Lv2
-- 必觸發 Moment：《第一次跟脚》
-- 條件觸發 Memory：《雷雨》或《尿墊之夜》
-- 結尾：「羈絆才剛開始寫。」
-
-**驗證目標：** Steam Next Fest 或 itch.io 測試玩家是否願意為中年、老年後續付費。
-
-### Agent Skills 與 Cursor 協作
-
-`agent/` 資料夾收錄**職責分離**的 Cursor Agent Skill，協作開發三部曲。詳細規格見各資料夾的 `SKILL.md` 與 `reference.md`；**本文件為最高準則**，與 skill 衝突時以本文件為準，敘事細節其次依 `story-narrative`。
-
-#### 一覽
-
-| Skill | 路徑 | 職責 |
-|-------|------|------|
-| **故事架構** | `agent/story-narrative/` | 主線／支線、場景節點、Landmark、跨作存檔敘事 |
-| **繁體敘事語氣** | `agent/tw-narrative-voice/` | 繁體、台灣用語、親切溫柔語氣（**所有玩家可見文案**） |
-| **美術風格** | `agent/visual-art/` | 水彩狗 PNG、背景、色溫 UI、版面與 aging 變體 |
-| **聲音設計** | `agent/audio-sound/` | OGG BGM、幼犬 CC0 樣本、`SCENE_CUES` one-shot |
-
-#### 檔案分開 vs 使用統合
-
-| 做法 | 建議 |
-|------|------|
-| **檔案結構** | ✅ **維持分開**——觸發準、邊界清、`reference.md` 不互相干擾 |
-| **Cursor 對話** | ✅ **按需組合**——同一對話可 @ 多個 skill，**不必**開多個 agent 視窗 |
-| **合併成一個 mega skill** | ❌ 不建議——規則過長、易越界改錯檔、自動觸發變不準 |
-
-**實務原則：** 檔案分開維護，使用時依任務選 1～2 個 skill 即可；與「全部併成單一 agent」效果相近，但較不易改錯模組。
-
-#### 建議工作流
+### 端到端流程
 
 ```
-guide_line.md（本文件）
-       ↓
-story-narrative  → 場景大綱、分支、跨作標記（文案須符合 tw-narrative-voice）
-       ↓
-visual-art       → dogPose、背景、色溫、§6.6／§6.7 規格
-       ↓
-audio-sound      → BGM profile、DOG_SAMPLES、SCENE_CUES（維持 Demo 音效基線）
-       ↓
-Demo/js/scenes.js、choice-reactions.js、systems.js、audio-tracks.js、dog-samples.js …
+MEMORY.md + agent/*/SKILL.md（品質防線）
+        ↓
+Hermes（deepseek-v4-flash）→ 劇本 JSON + FLUX 背景 + TTS
+        ↓
+validate-*.js（邏輯／choice-reactions／班表）
+        ↓
+Cursor Pro（@lhtl-* skills）→ 落地 scenes.js、UI、存檔、整合音圖
+        ↓
+@lhtl-game-tester playtest → 章節指南更新
 ```
 
-僅改對白、選項、語氣時：用 **`tw-narrative-voice`**（必要時加 **`story-narrative`** 審劇情），不必走完整三階流程。
+**cron／排程：** `tools/hermes/` 可定時跑測試；完整 pipeline 見 `tools/hermes/hermes.py`。
 
-#### 任務對照
+### 備份目錄（禁止當來源）
 
-| 要做的事 | 建議 Skill |
+本專案所需檔案**不得**從備份目錄取得或複製，以免繞過產線與驗證。
+
+| 項目 | 說明 |
+|------|------|
+| **現用路徑** | `Ch1_Trust/game/`（程式、`assets/`、驗證腳本） |
+| **禁止當來源** | 工作區 `ClaudeCode_Project/backup/`（`game_version1/`、`version1/`、`Demo/` 等）· `Learn_How_To_Love/Ch1_Trust/backup/`（若存在） |
+| **缺檔時** | 狗 pose → `game/tools/art-pose.ps1` + Midjourney · 背景 → Nous Portal FLUX · BGM → `download-bgm.ps1` · 劇本 → Hermes + validate |
+| **Agent 禁止** | `Copy-Item`／`xcopy`／`robocopy` 從 backup 補進 `game/`；以 backup 當 baseline 初始化 |
+| **備份定位** | 僅使用者手動封存；清理時**勿刪** backup |
+| **例外** | 使用者**明確**指示「從 backup 還原 XXX」時，才可複製**指定**檔案，且須保留 backup 原檔 |
+
+Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
+
+---
+
+## 七、Agent Skills 品質防線（必用）
+
+**路徑：** `C:\Users\BaoGo\Documents\ClaudeCode_Project\Learn_How_To_Love\agent`
+
+無論 **Cursor** 寫碼或 **Hermes** 批次產內容，**開始任務前必讀**對應 `agent/*/SKILL.md`（及該 skill 引用的 `reference.md`）。Skills 是「怎麼做才符合 LHTL」的執行規格；`MEMORY.md` 是「不能做什麼」的設定鎖定。
+
+### 為什麼必用
+
+| 若跳過 skill | 常見後果 |
+|--------------|----------|
+| 劇情不經 `story-narrative` | 班表錯、Landmark 可 S/L、基調跑掉 |
+| 對白不經 `tw-narrative-voice` | 簡繁混用、說教句、非台灣用語 |
+| 分支不經 `branch-engine` | choice-reactions 鍵不一致、假選擇 |
+| 美術不經 `visual-art` | 狗年齡 tier 錯、版面回退、硬描邊 |
+| 落地不經 `game-tester` | 流程卡住、圖文不符未發現 |
+
+### Cursor 呼叫方式
+
+1. **@ skill**（已同步至 `.cursor/skills/`）：`@lhtl-ch1-agent`、`@lhtl-story-narrative`、`@lhtl-branch-engine`、`@lhtl-tw-narrative-voice`、`@lhtl-visual-art`、`@lhtl-audio-sound`、`@lhtl-game-tester` 等  
+2. **直接路徑**：`agent/story-narrative/SKILL.md`  
+3. **Ch1 大任務**：先 `@lhtl-ch1-agent` 拆週 → 再 @ 子 skill
+
+### Hermes 呼叫方式
+
+在系統提示或任務開頭註明：
+
+> 必讀 `MEMORY.md` 與 `Learn_How_To_Love/agent/<skill>/SKILL.md`；產出須通過 `Ch1_Trust/game/tools/validate-*.js`。
+
+### 任務 → Skill 對照
+
+| 要做的事 | 必用 skill |
 |----------|------------|
-| 改對白、選項、副標、相簿描述 | `tw-narrative-voice`（＋必要時 `story-narrative`） |
-| 新增整場景（劇情＋分支） | `story-narrative` → `visual-art` → `audio-sound` |
-| 換狗圖、背景、CSS、版面 | `visual-art` |
-| 調 BGM、狗叫、音量與 cue | `audio-sound` |
-| 微調既有場景文字（已進遊戲） | `Demo/game_editor.html`（本機 HTTP + `啟動編輯器.bat`） |
+| Ch1 整章推進、WeekN 落地 | [`Ch1_agent`](agent/Ch1_agent/SKILL.md) → 子 skill |
+| 新場景、分支、Landmark | [`story-narrative`](agent/story-narrative/SKILL.md) |
+| flags、choice-reactions | [`branch-engine`](agent/branch-engine/SKILL.md) |
+| 對白、語氣潤飾 | [`tw-narrative-voice`](agent/tw-narrative-voice/SKILL.md) |
+| 角色／取名／代詞審查 | [`character-bible`](agent/character-bible/SKILL.md) |
+| 狗圖、背景、UI | [`visual-art`](agent/visual-art/SKILL.md) |
+| BGM、狗叫、cue | [`audio-sound`](agent/audio-sound/SKILL.md) |
+| playtest、驗收 | [`game-tester`](agent/game-tester/SKILL.md) |
+| Steam 建置上傳 | [`steam-deployment`](agent/steam-deployment/SKILL.md) |
 
-#### 權責邊界（避免越界）
+完整一覽與組合範例 → [`agent/README.md`](agent/README.md) · 章節落地勾選 → [`agent/chapter-landing-checklist.md`](agent/chapter-landing-checklist.md)
 
-- **story-narrative**：不決定 PNG 色票或 Web Audio 參數；改完劇情後**不自動啟動 Demo**（除非使用者明確要求）。
-- **tw-narrative-voice**：不新增主線分支、不改 Trust／Bond 數值；專注字詞與語氣。
-- **visual-art**：不寫對白、不改數值系統。
-- **audio-sound**：不新增主線分支；依 story／visual 的 mood／location 配聲。
+### 驗收閘門（產出才算完成）
 
-三者（加語氣）衝突時：**`guide_line.md` > `story-narrative` > 其餘 skill**。
+```
+對應 agent skill 產出
+        ↓
+validate-*.js 全 OK（branch／班表／時序）
+        ↓
+game-tester 審查（必要時）
+        ↓
+合併進 Ch1_Trust/game/
+```
 
-#### 在 Cursor 中呼叫
+**衝突時：** `guide_line.md` > `MEMORY.md` > `story-narrative` > 其餘 skill。
 
-1. **@ 提及 skill 名稱**（若已同步至 `.cursor/skills/`）：`lhtl-story-narrative`、`lhtl-tw-narrative-voice`、`lhtl-visual-art`、`lhtl-audio-sound`
-2. **直接指定路徑**：例——「請依照 `agent/story-narrative/SKILL.md` 撰寫 Day 8 場景大綱」
-3. **組合使用**：例——「依 `story-narrative` + `tw-narrative-voice` 改寫 `prologue_night`」
+### Skill 索引（摘要）
+
+| Skill | 職責 |
+|-------|------|
+| `Ch1_agent` | 全章節奏、調度 |
+| `story-narrative` | 場景架構、Landmark、Steam 內容量 |
+| `branch-engine` | flags、choice-reactions |
+| `tw-narrative-voice` | 繁體台灣語氣 |
+| `character-bible` | 角色一致性 |
+| `visual-art` / `audio-sound` / `music-composition` | 美術、音效、作曲 |
+| `game-tester` | playtest |
+| `steam-deployment` | Electron、Steamworks、CI |
 
 ---
 
-## 十、後續待辦（文件外）
+## 八、命名與 Steam（摘要）
 
-- [ ] First Steps 完整 10 場景腳本大綱
-- [ ] Feelings → Bond 完整數值表（含阈值）
+- **主標：** Learn How to Love（已定）  
+- **標籤：** Emotional、Story Rich、Choices Matter、Dogs、Indie  
+- **付費章：** 主線 >2h、目標 3–5h；Landmark ≥3／章  
+- **技術必備：** Electron、Steamworks、zh-TW／en、Cloud Save  
+
+商店文案草案、審查清單全文 → [`agent/story-narrative/steam-release.md`](agent/story-narrative/steam-release.md)
+
+---
+
+## 九、專案文件地圖
+
+| 文件 | 用途 |
+|------|------|
+| **`guide_line.md`** | 本文件：大綱、架構、工作流 |
+| **`MEMORY.md`** | 世界觀／角色鎖定（Hermes 必讀） |
+| **`.cursorrules`** | 程式契約（Cursor 必守） |
+| **`Ch?_*/Ch?_guide_line.md`** | 各章場景、時長、逐日 |
+| **`agent/*`** | **品質防線**：Cursor／Hermes 必用 Skills（見 §七） |
+| **`tools/hermes/`** | 本地編排、Nous Portal 門戶 |
+| **`backup/`（工作區）** | 封存參考；**勿**當 LHTL 檔案來源（見 §二·6、§六） |
+| **`Ch1_Trust/backup/`** | Ch1 封存（若存在）；同上 |
+
+---
+
+## 十、後續里程碑（文件外）
+
 - [ ] 跨作存檔欄位規格（程式用）
-- [ ] Steam 商店完整文案（中英）
-- [x] Demo 狗角色水彩 PNG 資產規範（§6.6；32 張已就位）
-- [ ] Chapter 2 / 3 老犬 aging 變體 PNG 清單
-- [ ] UI 色彩系統 CSS 變數定義（§6.7 轉程式規格）
-- [ ] 動態動畫（GSAP 呼吸 / 眨眼 / 尾擺）原型實作
-- [ ] 環境音分層混音架構設計（§6.8）
-- [ ] 撫摸互動機制 JS 原型（§6.9）
-- [ ] 打字機淡入效果實作（§6.5）
-- [ ] Electron 封裝測試（離線音訊驗證）
-- [ ] Steamworks SDK 接入計畫（成就清單 + Cloud Save 欄位）
-- [ ] 在地化字串抽離（zh-TW.json 初版）
-- [ ] 手繪紙張底層 Texture PNG 素材
-- [ ] 動態日記本 UI 設計稿
+- [ ] Electron + Steamworks 接入
+- [ ] zh-TW.json 字串抽離
+- [ ] Hermes 批次產線對接 validate 全通過
+- [ ] Ch2／Ch3 章節指南與 aging 資產規劃
 
 ---
 
-*最後更新：2026-07-01（新增 §九 Agent Skills 與 Cursor 協作；先前 §6.5–§6.9、§九技術平台目標見 2026-06-29）。*
+*最後更新：2026-07-10（§二·6、§六 備份禁止當來源）。*

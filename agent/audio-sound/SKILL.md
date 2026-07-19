@@ -1,8 +1,11 @@
 ---
 name: lhtl-audio-sound
 description: >-
-  設計與審查《Learn How to Love／學會去愛》音效：OGG 背景音樂、幼犬 CC0 樣本、SCENE_CUES one-shot、環境音分層（§6.8）、撫摸互動音效（§6.9）。
-  當使用者要新增 BGM profile、幼犬 cue、調音量、部署音檔、規劃環境音分層、設計撫摸音效，或審查音效是否符合篇章基調及 guide_line §6.8 音效設計規格時，務必使用此 skill。
+  設計與審查《Learn How to Love／學會去愛》音效整合：OGG BGM 部署、crossfade、幼犬 CC0 樣本、SCENE_CUES one-shot、
+  環境音分層（§6.8）、撫摸互動音效（§6.9）、音量與 audio-tracks.js 落地。
+  當使用者要新增 BGM profile 整合、幼犬 cue、調音量、部署音檔、規劃環境音分層、設計撫摸音效、SCENE_CUES，
+  或審查音效是否符合篇章基調及 guide_line §6.8 音效設計規格時，務必使用此 skill。
+  BGM 作曲方向、選曲 brief、AI 作曲 prompt 交 music-composition。音訊資產管線（資料夾、命名、FMOD）見 audio-pipeline.md。
   **Demo 現行基線**：僅 BGM + 稀疏幼犬聲、無環境雜音、無連續 loop、關閉遊戲即停音（維持 Demo 不變）。**§6.8 環境音分層為正式版規劃**，Demo 尚未實作。
   完成音效修改後，除非使用者明確要求開遊戲或測試，否則不要自動啟動 Demo。
 ---
@@ -11,7 +14,7 @@ description: >-
 
 ## 角色
 
-你是《Learn How to Love》系列的**聲音設計師**。須符合 [`guide_line.md`](../../Learn_How_To_Love/guide_line.md) 與 [`reference.md`](reference.md)。
+你是《Learn How to Love》系列的**聲音整合工程師**（部署、混音、cue 觸發）。須符合 [`guide_line.md`](../../Learn_How_To_Love/guide_line.md) 與 [`reference.md`](reference.md)。BGM 作曲 brief 見 [`music-composition`](../music-composition/SKILL.md)。
 
 ---
 
@@ -56,6 +59,36 @@ description: >-
 
 ---
 
+## 音訊資產管線（audio-pipeline）
+
+> 完整規格：[`audio-pipeline.md`](audio-pipeline.md)。Demo 維持現行基線；以下為正式版擴充方向。
+
+### 資料夾與命名
+
+```
+assets/audio/bgm/          # BGM .ogg
+assets/audio/sfx/ui/       # UI 短音效 .wav
+assets/audio/sfx/character/  # 狗叫等
+assets/audio/ambience/     # 環境音（§6.8 正式版）
+```
+
+| 類型 | 格式 | 命名範例 |
+|------|------|----------|
+| BGM | `.ogg` | `bgm_ch1_trust_theme.ogg` |
+| 短音效 | `.wav` | `sfx_ui_click_01.wav` |
+| 環境 loop | `.ogg` | `amb_forest_night_loop.ogg` |
+
+### 實作分級
+
+| 複雜度 | 做法 |
+|--------|------|
+| **Demo／現行** | `AmbientMusic` + `DogSounds` singleton；`audio-tracks.js` crossfade |
+| **正式版（推薦）** | **FMOD** 或 **Wwise**——設計師在圖形介面設 crossfade 層；程式只觸發事件，例：`FMODUnity.RuntimeManager.PlayOneShot("event:/Player/Footstep_Grass")` |
+
+AI 生成 placeholder 作曲流程交 [`music-composition`](../music-composition/SKILL.md)。
+
+---
+
 ## 雙模組架構
 
 ```
@@ -71,6 +104,7 @@ game.js           → ensureGameAudio、stopGameAudio、syncDogAudio
 ## BGM
 
 - Profile 定義：`audio-tracks.js` 的 `BGM_TRACKS`（非 `audio.js` PROFILES 程序化）。
+- **新曲目作曲方向**：先由 [`music-composition`](../music-composition/SKILL.md) 產 brief → 本 skill 整合 manifest、deploy、CREDITS。
 - 開場雨天：`melancholy` → `melancholy.ogg`（降速 0.90、低通 950 Hz）。
 - 雷雨：`storm` → `calm.ogg`（playbackRate 0.85）。
 - 新增曲目：更新 `CREDITS.md`、`tools/download-bgm.ps1`。
@@ -134,6 +168,19 @@ scene_id: { delay: ms, cue: 'whimper' | 'softWhimper' | 'yip' | 'sniff' | 'sigh'
 
 vet／home 小遊戲結果狗聲見 `minigame-reactions.js`。
 
+### Ch1 Week2（Day 8–14）
+
+| 場景 | cue @ delay | 敘事 beat |
+|------|-------------|-----------|
+| week2_neighbor | murmurLow @ 1100ms | 走廊警戒低哼 |
+| week2_elevator_dog | murmurAnxious @ 800ms | 電梯遇同類 |
+| week2_park_tree | sniffDeep @ 850ms | 樹下 Landmark |
+| week2_park_play | yipExcited @ 700ms | 與阿黃玩耍 |
+| week2_dryer_truce | murmurUneasy @ 1000ms | 吹風機 callback |
+| week2_epilogue | sleepSnoreDeep @ 2200ms | 兩週結語 |
+
+**原則：** 有狗在場的 **每個** 新 `scene_id` 一筆 `SCENE_CUES`；分支 beat 另在 `choice-reactions.js` 加 `cue`。
+
 ---
 
 ## 部署與驗證
@@ -153,11 +200,26 @@ powershell -File tools\deploy-audio.ps1   # BGM + 幼犬樣本
 
 ## 工作流程
 
-1. 從 story 取得 `scene_id`、是否為 narrative beat。
-2. 選 BGM profile（`scenes.js` 的 `music` 或 `profileForScene` 推論）。
-3. **僅** landmark beat 加一筆 `SCENE_CUES`；日常過場不加。
-4. 新幼犬 cue 優先接 `DOG_SAMPLE_POOLS` + 更新 `download-dog-sfx.ps1` 與 `sfx/CREDITS.md`。
-5. 調音量：先改 `volume` 常數，必要時才動 `AUDIO_GAIN`。
+## Workflow
+
+1.  **Define Audio Needs**: Work with `story-narrative` and `music-composition` to identify audio requirements for a scene (BGM, one-shot sound effects, ambient loops).
+2.  **Asset Management**:
+    *   **Source Control**: All raw audio files (`.wav`) and middleware project files (FMOD/Wwise) are stored in a `raw_assets/audio` directory, separate from the game build.
+    *   **Naming Convention**: Adhere to a strict naming convention: `bgm_ch1_theme.ogg`, `sfx_ui_click_01.wav`, `amb_forest_night_loop.ogg`.
+    *   **Format**: Use `.ogg` for BGM and ambient sounds (good compression) and `.wav` for short, frequently used sound effects (low latency).
+3.  **Middleware Integration (FMOD/Wwise Recommended)**:
+    *   Design complex audio events in the middleware's graphical interface (e.g., crossfading BGM layers based on game state).
+    *   The game engine code triggers these events with a simple API call, like `FMODUnity.RuntimeManager.PlayOneShot("event:/Player/Footstep_Grass")`.
+    *   This decouples audio design from game programming.
+4.  **Automated Deployment**:
+    *   Use a script (`deploy-audio.ps1` or similar) to automatically build audio banks from the middleware project and copy the necessary files into the game's `assets/audio` directory.
+
+## Pitfalls
+
+*   **Hardcoded Audio Triggers**: Avoid directly calling `play("sound.ogg")` in game logic. Trigger abstract events (`"PlayerAction_Success"`) and let the audio engine decide what sound to play.
+*   **Poor Asset Management**: A messy audio folder with inconsistent naming makes it impossible to manage a large project.
+*   **Ignoring Performance**: Uncompressed audio files can bloat the game's size. Use appropriate compression for each type of sound.
+*   **Mixing and Mastering**: Ensure all audio assets are mastered to a consistent volume level to avoid jarring changes for the player.
 
 ---
 
@@ -199,7 +261,8 @@ powershell -File tools\deploy-audio.ps1   # BGM + 幼犬樣本
 ## 權責邊界
 
 - 不新增主線分支（story-narrative）。
-- 不定義 PNG／CSS（visual-art）。
+- 不定義 PNG／CSS（visual-art）；不寫 keyframes（motion-animation）。
+- 不產作曲 brief、不選 Suno prompt（music-composition）。
 - 衝突時以 `guide_line.md` 為準。
 
 ---
@@ -223,5 +286,6 @@ BGM、幼犬 cue、音量、`SCENE_CUES`、deploy 腳本等音效相關修改**�
 ## 參考
 
 - 詳細對照表、SCENE_CUES 全表：[`reference.md`](reference.md)
+- 音訊管線（資料夾、FMOD、AI）：[`audio-pipeline.md`](audio-pipeline.md)
 - 系列基調：[`../../Learn_How_To_Love/guide_line.md`](../../Learn_How_To_Love/guide_line.md)
 - Agent 原始檔：`Learn_How_To_Love/agent/audio-sound/`（與本 skill 同步）
