@@ -93,7 +93,8 @@ screen quick_menu():
 screen main_menu():
     tag menu
 
-    add Solid("#17120F")
+    ## 主視覺：assets/theme/title-main.png 存在時使用（MJ 產出），否則退回純色
+    add optional_background("theme/title-main.png", "#17120F")
     add Solid("#B77A4518")
 
     frame:
@@ -135,7 +136,9 @@ screen main_menu():
 screen section_select():
     tag menu
 
-    add Solid("#17120FF4")
+    ## 選單底圖：牆鉤上的鑰匙與牽繩（theme/menu-bg.png），缺檔退回深棕
+    add optional_background("theme/menu-bg.png", "#17120F")
+    add Solid("#17120F26")
 
     default section_entries = [
         ("start_section_01", "Section 01｜螢幕光比月亮亮", "予安習慣獨自度過加班的夜，直到店員提起後門那隻沒力氣的小狗。"),
@@ -151,7 +154,7 @@ screen section_select():
     ]
 
     frame:
-        background Solid("#F3E9D9F5")
+        background Solid("#F3E9D9EE")
         padding (34, 18)
         xalign 0.5
         yalign 0.5
@@ -204,12 +207,14 @@ screen section_select():
 screen game_menu(title):
     tag menu
 
-    add Solid("#17120FF4")
+    add optional_background("theme/menu-bg.png", "#17120F")
+    add Solid("#17120F26")
 
+    ## 面板靠左，讓右側牆鉤（鑰匙＋牽繩）主題視覺露出
     frame:
-        background Solid("#F3E9D9F5")
+        background Solid("#F3E9D9EE")
         padding (46, 32)
-        xalign 0.5
+        xalign 0.06
         yalign 0.5
         xsize 1060
         ysize 610
@@ -284,25 +289,89 @@ screen preferences():
     tag menu
 
     use game_menu("設定"):
-        vbox:
-            spacing 20
+        hbox:
+            spacing 60
             xalign 0.5
-            yalign 0.42
+            yalign 0.40
 
-            text "文字速度":
-                font CJK_FONT
-                size 23
-                color LHTL_TEXT
+            ## 左欄：閱讀
+            vbox:
+                spacing 24
+                xsize 430
 
-            hbox:
-                spacing 12
-                textbutton "慢" style "menu_button" action Preference("text speed", 20)
-                textbutton "標準" style "menu_button" action Preference("text speed", 30)
-                textbutton "快" style "menu_button" action Preference("text speed", 50)
+                vbox:
+                    spacing 12
+                    text "文字速度":
+                        font CJK_FONT
+                        size 22
+                        color LHTL_TEXT
+                    hbox:
+                        spacing 10
+                        textbutton "慢" style "pref_button" action Preference("text speed", 20)
+                        textbutton "標準" style "pref_button" action Preference("text speed", 30)
+                        textbutton "快" style "pref_button" action Preference("text speed", 50)
 
-            textbutton "視窗／全螢幕" style "menu_button" action Preference("display", "toggle")
-            textbutton "音樂靜音切換" style "menu_button" action Preference("music mute", "toggle")
-            textbutton "返回主選單" style "menu_button" action MainMenu()
+                vbox:
+                    spacing 12
+                    text "自動前進等待":
+                        font CJK_FONT
+                        size 22
+                        color LHTL_TEXT
+                    bar value Preference("auto-forward time") style "lhtl_slider"
+
+                vbox:
+                    spacing 12
+                    text "顯示模式":
+                        font CJK_FONT
+                        size 22
+                        color LHTL_TEXT
+                    hbox:
+                        spacing 10
+                        textbutton "視窗" style "pref_button" action Preference("display", "window")
+                        textbutton "全螢幕" style "pref_button" action Preference("display", "fullscreen")
+
+            ## 右欄：聲音
+            vbox:
+                spacing 24
+                xsize 430
+
+                vbox:
+                    spacing 12
+                    text "音樂音量":
+                        font CJK_FONT
+                        size 22
+                        color LHTL_TEXT
+                    bar value Preference("music volume") style "lhtl_slider"
+
+                vbox:
+                    spacing 12
+                    text "音效音量":
+                        font CJK_FONT
+                        size 22
+                        color LHTL_TEXT
+                    bar value Preference("sound volume") style "lhtl_slider"
+
+                textbutton "音樂靜音切換" style "pref_button" action Preference("music mute", "toggle")
+
+                null height 6
+                textbutton "返回主選單" style "pref_button" action MainMenu()
+
+
+style lhtl_slider is slider:
+    xsize 380
+    ysize 24
+    left_bar Solid("#B77A45")
+    right_bar Solid("#E0D2BC")
+    thumb Transform(Solid("#7A4E2E"), xysize=(10, 24))
+    thumb_offset 5
+
+
+style pref_button is menu_button:
+    xminimum 120
+    padding (20, 10)
+
+style pref_button_text is menu_button_text:
+    size 19
 
 
 screen history():
