@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "game" / "script.rpy"
+SCREENS = ROOT / "game" / "screens.rpy"
 
 
 def fail(message: str) -> None:
@@ -18,11 +19,13 @@ if not SCRIPT.exists():
     fail(f"找不到 {SCRIPT}")
 
 text = SCRIPT.read_text(encoding="utf-8")
+screens_text = SCREENS.read_text(encoding="utf-8") if SCREENS.exists() else ""
+combined = text + "\n" + screens_text
 
 required = {
     "S01 label": "label section_01_fluorescent_over_moon:",
     "S02 label": "label section_02_backdoor_glance:",
-    "S03 label": "label section_03_stairwell_temp_border:",
+    "S03 label": "label section_03_gate_temp_border:",
     "S04 label": "label section_04_shared_quiet:",
     "S05 label": "label section_05_two_voices:",
     "S06 label": "label section_06_corridor_third_person:",
@@ -51,16 +54,19 @@ required = {
     "dog halfstep sprite": "show dog halfstep",
     "S02 path flag shelter": 'flags["called_shelter"] = True',
     "S02 path flag vet": 'flags["vet_first"] = True',
-    "S02 path flag stairwell": 'flags["stairwell_night"] = True',
+    "S02 path flag gate": 'flags["gate_night"] = True',
     "S02 hook line": "今晚不算數",
-    "S03 title call": 'show_section_title("Section 03", "樓梯間的臨時國界")',
-    "S03 BGM": 'play_bgm("stair_border"',
+    "S03 title call": 'show_section_title("Section 03", "大門的臨時國界")',
+    "S03 BGM": 'play_bgm("gate_border"',
     "S03 return flag": 'flags["s03_returned"] = True',
     "S03 ignore flag": 'flags["s03_ignored"] = True',
     "S03 G1 entered": 'flags["entered_home"] = True',
     "S03 G1 delayed": 'flags["delayed_entry"] = True',
     "S03 memory pose": "show dog stair_watch",
     "S03 hook pose": "show dog door_sleep",
+    "S03 entrance night": "scene bg entrance_night",
+    "S03 entrance day": "scene bg entrance_day",
+    "S03 gate bg": "scene bg gate_night",
     "S04 title call": 'show_section_title("Section 04", "共享同一種安靜")',
     "S04 BGM": 'play_bgm("shared_quiet"',
     "S04 parallel flag": 'flags["s04_parallel"] = True',
@@ -99,6 +105,8 @@ required = {
     "S08 return flag": 'flags["s08_returned_early"] = True',
     "S08 tense pose": "show dog street_tense",
     "S08 wait pose": "show dog leash_wait",
+    "S08 entrance bg": "scene bg entrance_day",
+    "S08 alley bg": "scene bg alley_day",
     "S08 memory pose": "show dog shoe_sleep",
     "S08 hook line": "如果真的顧不來，我可以養",
     "S09 title call": 'show_section_title("Section 09", "差點交給別人")',
@@ -106,6 +114,7 @@ required = {
     "S09 stay flag": 'flags["s09_stayed"] = True',
     "S09 handover flag": 'flags["gave_away"] = True',
     "S09 refuse pose": "show dog refuse_stranger",
+    "S09 entrance out": "這次開門，不是散步，是去見另一個人",
     "S10 title call": 'show_section_title("Section 10", "把鑰匙分給心跳")',
     "ending A": "label ending_ch1_back_to_back:",
     "ending B": "label ending_ch1_chosen_learning:",
@@ -114,6 +123,14 @@ required = {
     "ending A pose": "show dog back_sleep",
     "ending B pose": "show dog check_sleep",
     "ending D pose": "show dog door_edge",
+    "ending unlock A": 'unlock_ending("A")',
+    "ending unlock B": 'unlock_ending("B")',
+    "ending unlock C": 'unlock_ending("C")',
+    "ending unlock D": 'unlock_ending("D")',
+    "secret photo unlock": 'unlock_secret_photo("lap_sleep")',
+    "secret photo image": "gallery secret_lap_sleep",
+    "ending gallery screen": "screen ending_gallery():",
+    "secret photo view": "screen secret_photo_view",
     "start S07": "label start_section_07:",
     "start S08": "label start_section_08:",
     "start S09": "label start_section_09:",
@@ -122,7 +139,7 @@ required = {
 }
 
 for label, needle in required.items():
-    if needle not in text:
+    if needle not in combined:
         fail(f"缺少 {label}: {needle}")
 
 s01 = text.split(
@@ -141,7 +158,7 @@ if s01.count('flags["peeked_backdoor"] = False') != 1:
 
 s02 = text.split(
     "label section_02_backdoor_glance:", 1
-)[1].split("label section_03_stairwell_temp_border:", 1)[0]
+)[1].split("label section_03_gate_temp_border:", 1)[0]
 
 # S02 淨變動範圍 0～+2／−1：正向 trust += 1 至多三處（蹲等、良心回頭、路徑加成）
 plus = len(re.findall(r"\$\s*trust\s*\+=\s*1", s02))
@@ -163,7 +180,7 @@ if 'elif flags.get("s02_conscience_return", False):' not in s02:
     fail("S02 良心回頭必須有獨立的距離／喝水反應鏡頭")
 
 s03 = text.split(
-    "label section_03_stairwell_temp_border:", 1
+    "label section_03_gate_temp_border:", 1
 )[1].split("label section_04_shared_quiet:", 1)[0]
 
 if not re.search(r"\$\s*trust\s*\+=\s*2", s03):

@@ -3,7 +3,7 @@
 > 用途：Ren'Py **主選單／標題畫面**主視覺（Theme）。  
 > 放置路徑：`Ch1_Trust_Version3/assets/theme/title-main.png`  
 > 引擎掛載點：`screens.rpy` 的 `main_menu` 已用 `optional_background("theme/title-main.png", "#17120F")`——**檔案放進來就生效，缺檔自動退回深棕純色**。  
-> 風格對齊：`agents/image.md` STYLE LOCK；狗對齊 `agents/image_dog.md`（Option B wiry）。
+> 風格對齊：`agents/image.md` STYLE LOCK；**背景一句**見 `agents/image_bg.md` §0.5 BG ONE-LINER；狗對齊 `agents/image_dog.md`（Option B wiry）。
 
 ---
 
@@ -22,7 +22,7 @@
 ### 方案 A｜背影同框（推薦）
 
 ```text
-Impressionistic oil painting, thick visible brushstrokes, painterly impasto texture, soft blended edges, subtle canvas tooth. Warm amber and golden interior light contrasting cool deep indigo night exterior. Cozy nostalgic quiet everyday Taiwanese atmosphere, storybook concept-art feel.
+Thick-impasto impressionistic oil painting of quiet everyday Taiwanese residential spaces—warm amber lamp glow against cool indigo night sky; soft blended edges, tactile brush texture. Cozy nostalgic atmosphere, storybook concept-art feel.
 
 A young Taiwanese woman in her mid-20s seen from BEHIND, sitting on the wooden floor of a cozy apartment living room at night, leaning against a navy sofa. Two steps away, a small scruffy wiry mixed-breed puppy (2 months old, honey golden-tan fur, darker brown ear tips and back ridge, cream chest and muzzle, soft semi-floppy ears) lies on its belly facing her, not yet touching. Warm lamp glow on the left, balcony window with distant city lights behind them. The empty space BETWEEN them is the emotional subject.
 
@@ -52,20 +52,25 @@ Composition: hooks in the left third, large negative space right for title text.
 --sref https://cdn.midjourney.com/6006baad-1d97-4300-95a9-d885992b678a/0_0.png --sw 200 --stylize 180 --v 8.1 --ar 16:9
 ```
 
-## 3. 現況（2026-07-19）
+## 3. 現況（2026-07-25）
 
-- **`title-main.png` 已由 Cursor `GenerateImage` 產出落地**（方案 A 構圖：予安背影左下、小7右下、中央暖光留白），2048×1152。
-- **`menu-bg.png` 已由 Cursor 產出落地**（方案 C 意象：暗牆＋右側牆鉤掛鑰匙與牽繩、單側暖光，中央近抽象暗紋理），2048×1152；墊在存讀檔／設定／紀錄／章節選擇底下。
-- MJ prompt 保留作重產備援；換圖時直接覆蓋同名檔即可，不用改程式。
-- 資料夾只放正式檔，不留 `*-src` 中介圖。
+- **備份：** `assets/theme/_backup_20260725_132123/`（重產前 `title-main.png`／`menu-bg.png`）
+- **公式：** BG ONE-LINER ＋ `mj_theme` 方案構圖 ＋ reference（`ref-living-night`、`dog-ref-canonical`、舊檔構圖）
+- **`title-main.png` 已重產落地**（方案 A：予安背影左下、小7右下、中央留白），2048×1152
+- **`menu-bg.png` 已重產落地**（方案 C：牆鉤掛鑰匙＋牽繩、單側暖光、大面積暗紋理留白），2048×1152  
+  - 掛載：`screens.rpy` 章節選擇／結局一覽／`game_menu`（存讀檔‧設定‧紀錄）→ `add "lhtl_menu_bg"`  
+  - 並由 `script.rpy` 覆寫 `gui.game_menu_background`  
+  - **UI 嵌入**：半透明殼（`LHTL_MENU_SHELL`）靠左；選項／存檔卡用 `LHTL_MENU_ITEM` 嵌在牆面；**右側約 25% 留給牆鉤**
+- MJ prompt 保留作備援；換圖覆蓋同名檔即可，不用改程式
+- 資料夾只放正式檔與 `mj_theme.md`；備份在 `_backup_*`
 
 ## 3.1 落地流程
 
 ```powershell
 cd Ch1_Trust_Version3
-# 1) MJ 產圖後把原檔存 assets/theme/title-main-src.png
-# 2) 裁 16:9 → 2048x1152 存 assets/theme/title-main.png（可用 PIL，同 bg 流程）
-# 3) 不需改程式；main_menu 會自動載入
+# 1) Cursor GenerateImage 或 MJ 產圖
+# 2) 裁 16:9 → 2048x1152 覆蓋 assets/theme/title-main.png 或 menu-bg.png
+# 3) 不需改程式；screens.rpy 會自動載入
 ```
 
 驗收：主選單標題米白框文字清楚可讀；圖不搶字、不出現可讀文字。
@@ -75,9 +80,12 @@ cd Ch1_Trust_Version3
 | 檔名 | 用途 | 掛載點 |
 |------|------|--------|
 | `theme/title-main.png` | 主選單 | 已接（`screens.rpy` main_menu） |
-| `theme/menu-bg.png` | 存讀檔／設定／紀錄／章節選擇底圖 | 已接（`game_menu`、`section_select`） |
+| `theme/menu-bg.png` | 存讀檔／設定／紀錄／章節選擇／結局一覽底圖 | 已接 |
 | `theme/ending-card-{a,b,c,d}.png` | 四結局收尾卡 | 未接；結局 `centered` 前可加 |
+| `gallery/secret-lap-sleep.png` | 結局 A 隱藏紀念照（中型幼犬躺大腿特寫） | 已接；結局一覽 → `secret_photo_view` |
 
 ---
 
-*建立：2026-07-19｜主選單 Theme MJ prompt＋Ren'Py 掛載說明*
+*建立：2026-07-19｜主選單 Theme MJ prompt＋Ren'Py 掛載說明*  
+*更新：2026-07-25｜title-main／menu-bg 依 BG ONE-LINER 重產；原圖備份於 `_backup_20260725_132123`*  
+*更新：2026-07-25｜隱藏紀念照 `gallery/secret-lap-sleep.png`（僅結局 A）*

@@ -55,7 +55,8 @@
 |----------|---------|-----|------|
 | `blank_night` | `calm` | `calm.ogg` | S01 一個人剛剛好 |
 | `backdoor_glance` | `melancholy` | `melancholy.ogg` | S02 相遇 |
-| `stair_border` | `calm` | `calm.ogg` | S03 樓梯間 |
+| `gate_border` | `calm` | `calm.ogg` | S03 大門 |
+| `stair_border` | `calm` | `calm.ogg` | 舊別名（仍可用） |
 | `shared_quiet` | `warm` | `warm.ogg` | S04 平行安靜 |
 | `two_voices` | `calm` → `tender` | 兩曲 | S05 尖→低 |
 | `guard_corridor` | `tender`／`calm` | | S06 護衛／尷尬 |
@@ -142,15 +143,15 @@
 | 對視、蹲等、半步 | backdoor-night | `tender`（選 A）或維持 `melancholy`（B／C） |
 | 抱走上樓 | entrance／living | `warm`／`tender` |
 
-### S03｜樓梯間的臨時國界
+### S03｜大門的臨時國界
 
 弧線：`calm` →（我還在）`tender` → 清晨鉤子 `warm` 輕
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 鋪外套、上樓 | stairwell-night | `calm`（`stair_border`） |
-| 下樓輕聲／補水 | stairwell-night | `tender` |
-| 腳趕／吼 | stairwell-night | `calm`（`tense`）短 |
+| 鋪外套、進屋 | gate-night | `calm`（`gate_border`） |
+| 開門輕聲／補水 | gate-night | `tender` |
+| 腳趕／吼 | gate-night | `calm`（`tense`）短 |
 | 房門外睡 | entrance／living | `warm` 輕 |
 
 ### S04｜共享同一種安靜

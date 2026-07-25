@@ -12,16 +12,16 @@ POSE_SCALE = {
     "dog-check-sleep": 0.35, "dog-door-edge": 0.36, "dog-door-sleep": 0.37,
 }
 CHAR_T = {
-    "char_center": (0.50, 1.02, 0.52), "char_right": (0.82, 1.02, 0.50),
-    "char_left": (0.18, 1.02, 0.50), "char_right_walk": (0.90, 1.02, 0.42),
+    "char_center": (0.50, 0.85, 0.52), "char_right": (0.70, 0.85, 0.50),
+    "char_left": (0.30, 0.85, 0.50), "char_right_walk": (0.70, 0.85, 0.42),
 }
 DOG_T = {
-    "dog_far": (0.72, 1.03, 0.26), "dog_mid": (0.66, 1.04, 0.30),
-    "dog_near": (0.58, 1.05, 0.34),
-    "dog_far_pair": (0.62, 1.06, 0.22), "dog_mid_pair": (0.55, 1.07, 0.24),
-    "dog_near_pair": (0.49, 1.08, 0.26),
-    "dog_far_walk": (0.20, 1.06, 0.24), "dog_mid_walk": (0.36, 1.07, 0.27),
-    "dog_near_walk": (0.52, 1.08, 0.30),
+    "dog_far": (0.58, 0.85, 0.26), "dog_mid": (0.50, 0.85, 0.30),
+    "dog_near": (0.44, 0.85, 0.34),
+    "dog_far_pair": (0.40, 0.85, 0.22), "dog_mid_pair": (0.36, 0.85, 0.24),
+    "dog_near_pair": (0.32, 0.85, 0.26),
+    "dog_far_walk": (0.28, 0.85, 0.24), "dog_mid_walk": (0.38, 0.85, 0.27),
+    "dog_near_walk": (0.46, 0.85, 0.30),
 }
 
 

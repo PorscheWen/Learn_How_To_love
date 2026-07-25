@@ -81,20 +81,31 @@ screen quick_menu():
             style_prefix "quick"
             xalign 0.98
             yalign 0.025
-            spacing 7
+            spacing 14
 
-            textbutton "回溯" action Rollback()
-            textbutton "紀錄" action ShowMenu("history")
-            textbutton "存檔" action ShowMenu("save")
-            textbutton "讀檔" action ShowMenu("load")
-            textbutton "設定" action ShowMenu("preferences")
+            ## 閱讀
+            hbox:
+                spacing 7
+                textbutton "回溯" action Rollback()
+                textbutton "紀錄" action ShowMenu("history")
+
+            ## 進度
+            hbox:
+                spacing 7
+                textbutton "存檔" action ShowMenu("save")
+                textbutton "讀檔" action ShowMenu("load")
+
+            ## 系統
+            hbox:
+                spacing 7
+                textbutton "設定" action ShowMenu("preferences")
 
 
 screen main_menu():
     tag menu
 
-    ## 主視覺：assets/theme/title-main.png 存在時使用（MJ 產出），否則退回純色
-    add optional_background("theme/title-main.png", "#17120F")
+    ## 主視覺：theme/title-main.png；缺檔退回深棕
+    add "lhtl_title_bg"
     add Solid("#B77A4518")
 
     frame:
@@ -104,7 +115,7 @@ screen main_menu():
         yalign 0.52
 
         vbox:
-            spacing 14
+            spacing 10
             xalign 0.5
 
             text "Learn How to Love":
@@ -125,25 +136,176 @@ screen main_menu():
                 color "#806C5B"
                 xalign 0.5
 
-            null height 12
+            null height 14
+
+            ## 遊玩
             textbutton "開始" style "menu_button" action Start()
-            textbutton "章節選擇" style "menu_button" action ShowMenu("section_select")
             textbutton "讀取進度" style "menu_button" action ShowMenu("load")
+
+            null height 8
+
+            ## 章節／結局
+            textbutton "章節選擇" style "menu_button" action ShowMenu("section_select")
+            textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery")
+
+            null height 8
+
+            ## 系統
             textbutton "設定" style "menu_button" action ShowMenu("preferences")
             textbutton "離開" style "menu_button" action Quit(confirm=False)
+
+
+screen ending_gallery():
+    tag menu
+
+    ## 選單底圖：theme/menu-bg.png；項目半透明嵌在牆面，右側牆鉤露出
+    add "lhtl_menu_bg"
+
+    ## 只顯示已解鎖標題；未解鎖不劇透內容。
+    default ending_rows = [
+        ("A", "結局 A｜背靠"),
+        ("B", "結局 B｜選定但還在學"),
+        ("C", "結局 C｜送走之後"),
+        ("D", "結局 D｜薄冰同住"),
+    ]
+
+    frame:
+        background Solid(LHTL_MENU_SHELL)
+        padding (40, 28)
+        xalign 0.06
+        yalign 0.5
+        xsize 760
+        ysize 610
+
+        side "t c b":
+            xfill True
+            spacing 12
+
+            vbox:
+                spacing 8
+                xfill True
+                text "結局一覽":
+                    font CJK_FONT
+                    size gui.label_text_size
+                    color LHTL_TEXT_LIGHT
+                text "達成後解鎖標題。未解鎖不顯示內容。":
+                    font CJK_FONT
+                    size 16
+                    color LHTL_TEXT_SOFT
+
+            viewport:
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
+                xfill True
+                ymaximum 420
+
+                vbox:
+                    spacing 10
+                    xfill True
+                    for ending_id, title in ending_rows:
+                        if ending_unlocked(ending_id):
+                            frame:
+                                background Solid(LHTL_MENU_ITEM)
+                                padding (18, 12)
+                                xfill True
+                                text "✓  " + title:
+                                    font CJK_FONT
+                                    size 22
+                                    color LHTL_TEXT
+                        else:
+                            frame:
+                                background Solid(LHTL_MENU_ITEM)
+                                padding (18, 12)
+                                xfill True
+                                text "○  結局 " + ending_id + "｜尚未解鎖":
+                                    font CJK_FONT
+                                    size 22
+                                    color "#806C5B"
+
+                    text "已解鎖 " + str(len(persistent.unlocked_endings or [])) + "／4":
+                        font CJK_FONT
+                        size 16
+                        color LHTL_TEXT_SOFT
+                        xalign 1.0
+
+                    null height 8
+
+                    text "紀念照片":
+                        font CJK_FONT
+                        size 20
+                        color LHTL_TEXT_LIGHT
+
+                    if secret_photo_unlocked("lap_sleep"):
+                        textbutton "✓  背靠｜中型幼犬躺在大腿特寫" style "embed_menu_button":
+                            action Show("secret_photo_view", photo="lap_sleep")
+                            xminimum 0
+                            xfill True
+                        text "真正把背交給彼此之後才看得到。":
+                            font CJK_FONT
+                            size 15
+                            color LHTL_TEXT_SOFT
+                    else:
+                        frame:
+                            background Solid(LHTL_MENU_ITEM)
+                            padding (18, 12)
+                            xfill True
+                            text "○  ？？？｜尚未解鎖":
+                                font CJK_FONT
+                                size 22
+                                color "#806C5B"
+                        text "有一段畫面，只有真正把背交給彼此之後才看得到。":
+                            font CJK_FONT
+                            size 15
+                            color LHTL_TEXT_SOFT
+
+            textbutton "返回" style "embed_menu_button" action Return():
+                xalign 0.5
+
+
+screen secret_photo_view(photo="lap_sleep"):
+    modal True
+    zorder 200
+
+    ## 點畫面空白可關閉（底層）
+    button:
+        background None
+        xfill True
+        yfill True
+        action Hide("secret_photo_view")
+
+    if photo == "lap_sleep":
+        add "gallery secret_lap_sleep"
+    else:
+        add Solid("#17120F")
+
+    frame:
+        background Solid("#17120FCC")
+        padding (20, 12)
+        xalign 0.5
+        yalign 0.06
+        text "紀念照片｜躺在大腿":
+            font CJK_FONT
+            size 20
+            color "#F7EFE4"
+
+    textbutton "關閉":
+        style "menu_button"
+        action Hide("secret_photo_view")
+        xalign 0.5
+        yalign 0.94
 
 
 screen section_select():
     tag menu
 
-    ## 選單底圖：牆鉤上的鑰匙與牽繩（theme/menu-bg.png），缺檔退回深棕
-    add optional_background("theme/menu-bg.png", "#17120F")
-    add Solid("#17120F26")
+    ## 選單底圖：theme/menu-bg.png；章節卡半透明嵌牆，右側牆鉤露出
+    add "lhtl_menu_bg"
 
     default section_entries = [
         ("start_section_01", "Section 01｜螢幕光比月亮亮", "予安習慣獨自度過加班的夜，直到店員提起後門那隻沒力氣的小狗。"),
         ("start_section_02", "Section 02｜後門那一瞥", "她終於轉進後門，看見小7，也第一次試著在害怕面前放慢腳步。"),
-        ("start_section_03", "Section 03｜樓梯間的臨時國界", "一句「今晚不算數」把牠留在樓梯間；她上樓之後，卻還是回頭了。"),
+        ("start_section_03", "Section 03｜大門的臨時國界", "牠在大門外睡著；她不忍心，開門把牠帶回屋內直到天明。"),
         ("start_section_04", "Section 04｜共享同一種安靜", "沙發與地板隔著兩步，他們不急著靠近，只練習在同一份安靜裡留下。"),
         ("start_section_05", "Section 05｜你的聲音有兩種", "戴上耳機後，予安的聲音變得又快又尖；小7開始分辨，哪一種聲音會為牠慢下來。"),
         ("start_section_06", "Section 06｜走廊上的第三者", "當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。"),
@@ -154,85 +316,92 @@ screen section_select():
     ]
 
     frame:
-        background Solid("#F3E9D9EE")
-        padding (34, 18)
-        xalign 0.5
+        background Solid(LHTL_MENU_SHELL)
+        padding (28, 16)
+        xalign 0.04
         yalign 0.5
-        xsize 1210
+        xsize 980
+        ysize 640
 
-        vbox:
-            spacing 10
+        side "t c b":
             xfill True
+            spacing 10
 
-            hbox:
+            vbox:
+                spacing 6
                 xfill True
                 text "章節選擇":
                     font CJK_FONT
                     size gui.label_text_size
-                    color LHTL_TEXT
-                null width 1 xfill True
-                textbutton "返回" style "menu_button" action ShowMenu("main_menu")
+                    color LHTL_TEXT_LIGHT
+                text "選擇章節會以該段的預設狀態開始，不影響既有存檔。":
+                    font CJK_FONT
+                    size 16
+                    color LHTL_TEXT_SOFT
 
-            text "選擇章節會以該段的預設狀態開始，不影響既有存檔。":
-                font CJK_FONT
-                size 16
-                color "#806C5B"
-
-            # 兩欄網格一次顯示 S01～S10，不需捲動。
+            # 兩欄網格一次顯示 S01～S10；半透明卡嵌在牆面紋理上。
             grid 2 5:
                 spacing 8
-                xalign 0.5
+                xalign 0.0
 
                 for entry_label, entry_title, entry_summary in section_entries:
                     button:
-                        background Solid("#E8D9C5")
-                        hover_background Solid("#D9BE9D")
-                        padding (18, 8)
-                        xsize 560
-                        ysize 96
+                        background Solid(LHTL_MENU_ITEM)
+                        hover_background Solid(LHTL_MENU_ITEM_HOVER)
+                        padding (14, 6)
+                        xsize 450
+                        ysize 86
                         action Start(entry_label)
 
                         vbox:
-                            spacing 4
+                            spacing 3
                             text entry_title:
                                 font CJK_FONT
-                                size 19
+                                size 17
                                 color LHTL_TEXT
                             text entry_summary:
                                 font CJK_FONT
-                                size 14
+                                size 12
                                 color "#806C5B"
+
+            textbutton "返回" style "embed_menu_button" action ShowMenu("main_menu"):
+                xalign 0.5
 
 
 screen game_menu(title):
     tag menu
 
-    add optional_background("theme/menu-bg.png", "#17120F")
-    add Solid("#17120F26")
+    ## 選單底圖：theme/menu-bg.png；半透明殼＋項目嵌牆，右側牆鉤露出
+    add "lhtl_menu_bg"
 
-    ## 面板靠左，讓右側牆鉤（鑰匙＋牽繩）主題視覺露出
+    ## side t/c/b：標題／內容／返回各佔一區，避免返回被 yfill 擠出外框
     frame:
-        background Solid("#F3E9D9EE")
-        padding (46, 32)
-        xalign 0.06
+        background Solid(LHTL_MENU_SHELL)
+        padding (40, 24)
+        xalign 0.05
         yalign 0.5
-        xsize 1060
+        xsize 980
         ysize 610
 
-        vbox:
-            spacing 18
+        side "t c b":
             xfill True
+            yfill True
+            spacing 14
 
-            hbox:
+            text title:
+                font CJK_FONT
+                size gui.label_text_size
+                color LHTL_TEXT_LIGHT
+
+            frame:
+                background None
+                padding (0, 0)
                 xfill True
-                text title:
-                    font CJK_FONT
-                    size gui.label_text_size
-                    color LHTL_TEXT
-                null width 1 xfill True
-                textbutton "返回" style "menu_button" action Return()
+                yfill True
+                transclude
 
-            transclude
+            textbutton "返回" style "embed_menu_button" action Return():
+                xalign 0.5
 
 
 screen save():
@@ -249,17 +418,17 @@ screen load():
 
 screen file_slots():
     grid 3 2:
-        spacing 18
+        spacing 16
         xalign 0.5
         yalign 0.5
 
         for slot in range(1, 7):
             button:
-                background Solid("#E8D9C5")
-                hover_background Solid("#D9BE9D")
-                xsize 290
+                background Solid(LHTL_MENU_ITEM)
+                hover_background Solid(LHTL_MENU_ITEM_HOVER)
+                xsize 280
                 ysize 180
-                padding (18, 14)
+                padding (16, 12)
                 action FileAction(slot)
 
                 vbox:
@@ -289,72 +458,77 @@ screen preferences():
     tag menu
 
     use game_menu("設定"):
-        hbox:
-            spacing 60
+        vbox:
+            spacing 28
             xalign 0.5
-            yalign 0.40
+            yalign 0.35
 
-            ## 左欄：閱讀
-            vbox:
-                spacing 24
-                xsize 430
+            hbox:
+                spacing 60
+                xalign 0.5
 
+                ## 左欄：閱讀／顯示
                 vbox:
-                    spacing 12
-                    text "文字速度":
-                        font CJK_FONT
-                        size 22
-                        color LHTL_TEXT
-                    hbox:
-                        spacing 10
-                        textbutton "慢" style "pref_button" action Preference("text speed", 20)
-                        textbutton "標準" style "pref_button" action Preference("text speed", 30)
-                        textbutton "快" style "pref_button" action Preference("text speed", 50)
+                    spacing 24
+                    xsize 430
 
+                    vbox:
+                        spacing 12
+                        text "文字速度":
+                            font CJK_FONT
+                            size 22
+                            color LHTL_TEXT_LIGHT
+                        hbox:
+                            spacing 10
+                            textbutton "慢" style "embed_pref_button" action Preference("text speed", 20)
+                            textbutton "標準" style "embed_pref_button" action Preference("text speed", 30)
+                            textbutton "快" style "embed_pref_button" action Preference("text speed", 50)
+
+                    vbox:
+                        spacing 12
+                        text "自動前進等待":
+                            font CJK_FONT
+                            size 22
+                            color LHTL_TEXT_LIGHT
+                        bar value Preference("auto-forward time") style "lhtl_slider"
+
+                    vbox:
+                        spacing 12
+                        text "顯示模式":
+                            font CJK_FONT
+                            size 22
+                            color LHTL_TEXT_LIGHT
+                        hbox:
+                            spacing 10
+                            textbutton "視窗" style "embed_pref_button" action Preference("display", "window")
+                            textbutton "全螢幕" style "embed_pref_button" action Preference("display", "fullscreen")
+
+                ## 右欄：聲音
                 vbox:
-                    spacing 12
-                    text "自動前進等待":
-                        font CJK_FONT
-                        size 22
-                        color LHTL_TEXT
-                    bar value Preference("auto-forward time") style "lhtl_slider"
+                    spacing 24
+                    xsize 430
 
-                vbox:
-                    spacing 12
-                    text "顯示模式":
-                        font CJK_FONT
-                        size 22
-                        color LHTL_TEXT
-                    hbox:
-                        spacing 10
-                        textbutton "視窗" style "pref_button" action Preference("display", "window")
-                        textbutton "全螢幕" style "pref_button" action Preference("display", "fullscreen")
+                    vbox:
+                        spacing 12
+                        text "音樂音量":
+                            font CJK_FONT
+                            size 22
+                            color LHTL_TEXT_LIGHT
+                        bar value Preference("music volume") style "lhtl_slider"
 
-            ## 右欄：聲音
-            vbox:
-                spacing 24
-                xsize 430
+                    vbox:
+                        spacing 12
+                        text "音效音量":
+                            font CJK_FONT
+                            size 22
+                            color LHTL_TEXT_LIGHT
+                        bar value Preference("sound volume") style "lhtl_slider"
 
-                vbox:
-                    spacing 12
-                    text "音樂音量":
-                        font CJK_FONT
-                        size 22
-                        color LHTL_TEXT
-                    bar value Preference("music volume") style "lhtl_slider"
+                    textbutton "音樂靜音切換" style "embed_pref_button" action Preference("music mute", "toggle")
 
-                vbox:
-                    spacing 12
-                    text "音效音量":
-                        font CJK_FONT
-                        size 22
-                        color LHTL_TEXT
-                    bar value Preference("sound volume") style "lhtl_slider"
-
-                textbutton "音樂靜音切換" style "pref_button" action Preference("music mute", "toggle")
-
-                null height 6
-                textbutton "返回主選單" style "pref_button" action MainMenu()
+            ## 系統
+            textbutton "返回主選單" style "embed_pref_button" action MainMenu():
+                xalign 0.5
 
 
 style lhtl_slider is slider:
@@ -371,6 +545,13 @@ style pref_button is menu_button:
     padding (20, 10)
 
 style pref_button_text is menu_button_text:
+    size 19
+
+style embed_pref_button is embed_menu_button:
+    xminimum 120
+    padding (20, 10)
+
+style embed_pref_button_text is embed_menu_button_text:
     size 19
 
 
@@ -390,18 +571,22 @@ screen history():
                 xfill True
 
                 for h in _history_list:
-                    vbox:
-                        spacing 4
-                        if h.who:
-                            text h.who:
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (16, 10)
+                        xfill True
+                        vbox:
+                            spacing 4
+                            if h.who:
+                                text h.who:
+                                    font CJK_FONT
+                                    size 19
+                                    color LHTL_ACCENT_DARK
+                            text h.what:
                                 font CJK_FONT
-                                size 19
-                                color LHTL_ACCENT_DARK
-                        text h.what:
-                            font CJK_FONT
-                            size 20
-                            color LHTL_TEXT
-                            xmaximum 920
+                                size 20
+                                color LHTL_TEXT
+                                xmaximum 860
 
 
 screen confirm(message, yes_action, no_action):

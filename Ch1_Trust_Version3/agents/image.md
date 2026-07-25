@@ -34,6 +34,18 @@
 
 Version3 沿用印象派油畫（與 V2 視覺語言相容，劇情／角色全新）。
 
+### 1.0 背景一句鎖定（BG ONE-LINER｜未來背景必貼）
+
+> 自 `entrance-day`／`alley-day`／`corridor-day`／`living-night` 四張定稿歸納；視覺錨點見 `assets/bg/refs/`。
+
+```text
+Thick-impasto impressionistic oil painting of quiet everyday Taiwanese residential spaces—warm amber lamp glow or sunlit ochre walls against cool indigo night sky or soft daylight; soft blended edges, tactile brush texture on wood floors, plaster walls, Monstera plants and navy sofa accents indoors, metal window bars and sidewalk potted plants outdoors; empty of people and dogs, no readable text—storybook visual-novel background, not a photograph, not anime.
+```
+
+**生圖用法：** 先貼 BG ONE-LINER，再接「本場 place／light／構圖一句」；Cursor `GenerateImage` 建議附 `assets/bg/refs/ref-living-night.png`（室內）或 `ref-alley-day.png`（外景）作 reference。
+
+### 1.1 通用 STYLE LOCK（背景＋立繪＋狗）
+
 ```text
 Impressionistic oil painting. Thick visible brushstrokes, painterly impasto texture, soft blended edges, subtle canvas tooth. Warm amber and golden interior light contrasting cool deep indigo navy night exterior. Complementary blue-and-gold / teal-and-orange palette. Cozy nostalgic quiet everyday Taiwanese atmosphere. Soft atmospheric depth, storybook concept-art feel. Not a photograph, not DSLR realism, not anime cel shading, not hard black outlines, not chibi, not flat vector.
 ```
@@ -270,6 +282,16 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `scene-ending-c-handover.png` | C 送走 | 咖啡廳門口交牽繩；狗僵／低鳴 |
 | `scene-ending-d-thin-ice.png` | D 薄冰 | 牽繩掛好、狗睡門邊、不看「晚上見」 |
 
+### 6.5 隱藏紀念照（gallery／僅結局 A）
+
+| 檔名 | 解鎖 | 畫面 |
+|------|------|------|
+| `gallery/secret-lap-sleep.png` | 結局 A｜背靠 | 中型幼犬躺在予安大腿上的特寫；印象派油畫；無信任％／HUD |
+
+- 文案軟提示：「真正把背交給彼此之後才看得到」；**禁止**親密度條或 100% 字樣。
+- 掛載：`image gallery secret_lap_sleep`；`screens.rpy` 結局一覽 → `secret_photo_view`。
+- `persistent.unlocked_secret_photos`；於 `unlock_ending("A")` 旁呼叫 `unlock_secret_photo("lap_sleep")`。
+
 ---
 
 ## 7. Section × 資產對照（劇本用）
@@ -297,7 +319,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ## 8. 審查清單（定稿前）
 
-- [ ] STYLE LOCK 為印象派油畫
+- [ ] STYLE LOCK／背景 BG ONE-LINER（見 `image.md` §1.0、`image_bg.md` §0.5）
 - [ ] 預設用 Cursor `GenerateImage`；FLUX 2 Pro 僅備援
 - [ ] 路徑在 `Ch1_Trust_Version3/assets/`，**無 Week 子資料夾**
 - [ ] 女主為**予安**（非小晴）；狗預設**小7**，外型為 **Option B wiry**（見 `image_dog.md`），圖檔不寫死玩家改名
@@ -309,11 +331,11 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ---
 
-### 2026-07-19 正式資產狀態
+### 2026-07-25 正式資產狀態
 
-- 背景共 10 張；`alley-day`、`corridor-day`、`street-night` 已統一曝光／厚筆風格，`stairwell-night` 改為具室內燈具的現代公寓梯廳。
-- 狗圖共 19 張（18 pose＋基準）；`ear-flat`、`behind-legs`、`street-tense`、`anxious`、`forehead-nudge`、`refuse-stranger` 已重產全身版本。
-- `dog-retreat`、`dog-eating-cautious` 未被腳本使用，因此不列入正式資產；未引用圖、舊圖與綠幕中介檔已清除。
+- 背景 **13 張**已依 BG ONE-LINER 全量重產（含 `gate-night`）；原圖備份於 `assets/bg/_backup_20260725_125336/`。
+- 風格錨點：`assets/bg/refs/` 四張已同步本次正式構圖。
+- 狗圖狀態見前條；本輪僅背景。
 
 ---
 
@@ -325,10 +347,10 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | 女主 | **予安** | 小晴 |
 | 狗名 | 預設**小7**（可改） | 布丁等 |
 | 信任畫面 | 距離／耳尾／睡姿（guild） | 未鎖定四結局睡姿 |
-| 主場景 | backdoor／stairwell／corridor／cafe | street-rain／petshop／clinic |
+| 主場景 | backdoor／gate／entrance／corridor／cafe | street-rain／petshop／clinic |
 | 分軌 | 同 bg 換 pose | Day 劇本導向 |
 | 目錄 | `Ch1_Trust_Version3/assets/` | `Ch1_Trust_Version2/assets/` |
 
 ---
 
-*更新：2026-07-17｜對齊 game_guild.md §0～§3（節奏、軟分軌、四結局畫面）*
+*更新：2026-07-25｜背景 BG ONE-LINER 自四張定稿歸納；S03 改 gate*

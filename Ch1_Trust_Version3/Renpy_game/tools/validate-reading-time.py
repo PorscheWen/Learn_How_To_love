@@ -13,7 +13,7 @@ STRING_LINE = re.compile(r'^\s*(?:\w+\s+)?"((?:[^"\\]|\\.)*)"\s*$')
 SECTIONS = [
     ("S01", "section_01_fluorescent_over_moon"),
     ("S02", "section_02_backdoor_glance"),
-    ("S03", "section_03_stairwell_temp_border"),
+    ("S03", "section_03_gate_temp_border"),
     ("S04", "section_04_shared_quiet"),
     ("S05", "section_05_two_voices"),
     ("S06", "section_06_corridor_third_person"),

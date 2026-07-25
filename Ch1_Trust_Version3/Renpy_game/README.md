@@ -4,6 +4,13 @@
 
 篇幅契約：S01～S07 最短選項路徑皆至少 **5 分鐘**；S08／S09 各約 **8 分鐘**；S10 的 A～D 每條實際結局路線皆至少 **5 分鐘**。
 
+### 商店／預告呈現（上架前鎖定）
+
+- **類型：** 互動小說／純選擇敘事（無小遊戲、無信任數值條、無養死 Game Over）
+- **預估時長：** 約 70～85 分鐘；平日可拆三段（S01～04／S05～08／S09～10）
+- **預告片切入：** 請從 **S02 後門一瞥** 開始，15 秒內對比睡姿結局（A 背靠／B 回頭確認／D 門邊）
+- **重玩價值：** 四結局；主選單「結局一覽」顯示已解鎖 A～D（未解鎖不劇透）；結局畫面可跳 S09 再試；第一次最推結局 B〈選定但還在學〉
+
 ## 啟動
 
 執行：
@@ -19,7 +26,7 @@
 
 - **Section 01｜螢幕光比月亮亮：** 予安習慣獨自度過加班的夜，直到店員提起後門那隻沒力氣的小狗。
 - **Section 02｜後門那一瞥：** 她終於轉進後門，看見小7，也第一次試著在害怕面前放慢腳步。
-- **Section 03｜樓梯間的臨時國界：** 一句「今晚不算數」把牠留在樓梯間；她上樓之後，卻還是回頭了。
+- **Section 03｜大門的臨時國界：** 牠在大門外睡著；她不忍心，開門把牠帶回屋內直到天明。
 - **Section 04｜共享同一種安靜：** 沙發與地板隔著兩步，他們不急著靠近，只練習在同一份安靜裡留下。
 - **Section 05｜你的聲音有兩種：** 戴上耳機後，予安的聲音變得又快又尖；小7開始分辨，哪一種聲音會為牠慢下來。
 - **Section 06｜走廊上的第三者：** 當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。
@@ -33,8 +40,8 @@
 - 女主固定為「予安」。
 - 狗預設名「小7」，外型 **Option B｜wiry**（見 `../agents/image_dog.md`）；後續可由玩家改名。
 - S01 的 `trust`、`dist`、`tone`、`guard` 全程維持 `0`；唯一風味選擇寫入 `flags["peeked_backdoor"]`。
-- S02 依 `peeked_backdoor` 軟分軌開場；信任選擇組（蹲等 `+1`／硬抱 `−1`／趕走後良心回頭淨 `0`）為本段唯一動 trust 的選項組，路徑選擇寫入 `called_shelter`／`vet_first`／`stairwell_night`，溫柔路線加成後淨變動落在 `0～+2／−1`。演出採後門遠距進場、距離選擇、退一步測試與空紙箱離場四拍；蹲等路線以 `far → mid → near` 和 `melancholy → tender → warm` 回應信任。
-- S03 完整實作路徑開場、外套風味、歸來信任選擇與 G1 進門權；未通過 G1 只增加門縫對望，不阻擋 S04。
+- S02 依 `peeked_backdoor` 軟分軌開場；信任選擇組（蹲等 `+1`／硬抱 `−1`／趕走後良心回頭淨 `0`）為本段唯一動 trust 的選項組，路徑選擇寫入 `called_shelter`／`vet_first`／`gate_night`，溫柔路線加成後淨變動落在 `0～+2／−1`。演出採後門遠距進場、距離選擇、退一步測試與空紙箱離場四拍；蹲等路線以 `far → mid → near` 和 `melancholy → tender → warm` 回應信任。
+- S03 完整實作路徑開場、外套風味、歸來信任選擇；夜裡見狗在**公寓大門外**睡著後**一定帶回屋內**（`entrance` 玄關／客廳軟分軌），待到天明再進 S04。背景序列：`gate-night` → `entrance-night` → `living-night` →（清晨）`entrance-day`／`living-day`。
 - S04 完整實作平行安靜／硬抱合照／關浴室三種質地，以及「只到廚房門口」記憶點。
 - S05 完整實作 Tone 軸、視訊早會、耳機回授／主管點名高峰、拔插頭「喀」聲回收，以及正式改名 UI；可保留「小7」或輸入最多 12 字的新名字，空白輸入沿用原名。
 - S06 完整實作 Guard 軸、鄰居持續伸手說服、推車輪「喀、喀」壓力、選擇站位、「我們」與額頭輕碰記憶點。
@@ -44,7 +51,10 @@
 - S10 不再修改 trust，依 `gave_away`、trust 區間與 `s08_forced_walk` 分流 A～D 四結局。
 - 本版維持純敘事選項，不加入小遊戲、牽繩微互動或快問快答；S08 張力由 Dist 選項與狗姿勢表達。
 - 不顯示 trust 數字，不播放信任升級音效；狗的距離用 `dog_far`→`dog_mid` 位移表達。
-- Section 標題卡使用 `section_title` 全螢幕淡入（主標 2.6 秒、副標延遲 1.2 秒浮現）。
+- Section 標題卡使用 `section_title` 全螢幕淡入（主標 2.6 秒、副標延遲 1.2 秒浮現）；**重訪同一段時**副標加速、0.5 秒即提示點擊。
+- S04／S06／S08 段末收束後直接接續；四結局後進入 `ending_aftercare`（推結局 B、可跳 S09 重試、可開結局一覽）。
+- 主選單「結局一覽」：`persistent.unlocked_endings` 記錄 A～D；達成後解鎖標題，未解鎖顯示「尚未解鎖」。
+- 隱藏紀念照：達成結局 A 解鎖 `gallery/secret-lap-sleep.png`（中型幼犬躺在大腿特寫）；未解鎖顯示「？？？」與軟提示，不顯示親密％。
 - 人物立繪：S08 使用 `char-yuan-leash`；S09 使用 `char-coworker`；所有專用立繪缺檔時均有安全 fallback。
 - 狗立繪：S07～S10 依守門、牽繩、拒絕陌生人與三種睡姿切換；缺檔不阻擋遊戲。
 - BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
@@ -68,9 +78,15 @@
 │  ├─ bg-living-day.png
 │  ├─ bg-backdoor-night.png
 │  ├─ bg-stairwell-night.png
+│  ├─ bg-gate-night.png
+│  ├─ bg-entrance-night.png
+│  ├─ bg-entrance-day.png
 │  ├─ bg-corridor-day.png
 │  ├─ bg-alley-day.png
-│  └─ bg-cafe-day.png
+│  ├─ bg-alley-night.png
+│  ├─ bg-cafe-day.png
+│  ├─ bg-kitchen-day.png
+│  └─ bg-living-dusk.png
 ├─ char/
 │  ├─ char-yuan-headphones.png
 │  ├─ char-yuan-commute.png
@@ -99,6 +115,8 @@
 │  ├─ dog-back-sleep.png
 │  ├─ dog-check-sleep.png
 │  └─ dog-door-edge.png
+├─ gallery/
+│  └─ secret-lap-sleep.png   # 結局 A 隱藏紀念照（大腿特寫）
 └─ audio/
    ├─ calm.ogg
    ├─ warm.ogg
@@ -120,7 +138,7 @@
 ### 2026-07-19 美術更新
 
 - 狗圖：19 張來源／正式資產（18 個遊戲 pose＋`dog-ref-canonical`）；重產 6 張關鍵全身 pose，移除未引用 `dog-door-sleepy`。
-- 背景：10 張正式背景統一厚筆印象派風格；重產 S08 `alley-day`（曝光）、S06 `corridor-day`（洗白）、`street-night`（偏寫實）與 S03 `stairwell-night`（現代梯廳＋室內燈具）。
+- 背景：正式背景含 S03 `gate-night`（公寓大門外側）；舊 `stairwell-night` 資產保留未刪。
 - 清理：刪除 `assets/dog_old/`、角色／狗綠幕中介檔與測試暫存輸出。
 
 S09／S10 正式圖已用 Cursor 落地（`bg-cafe-day`、`char-coworker`、四結局／拒絕 pose）。若備援重跑 `tools/flux_*.py`，請先輸出到工作暫存目錄；去背完成後只搬入透明正式檔，不把 `*-green.png` 留在 `assets/char/` 或 `assets/dog/`。

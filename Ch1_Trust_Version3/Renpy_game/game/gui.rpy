@@ -8,6 +8,10 @@ define CJK_FONT = "SourceHanSansLite.ttf"
 define LHTL_BG = "#17120F"
 define LHTL_PANEL = "#F3E9D9EE"
 define LHTL_PANEL_GLASS = "#F3E9D977"
+## 選單項目嵌進 menu-bg：外框更透、項目略實，右側牆鉤可露出
+define LHTL_MENU_SHELL = "#17120F33"
+define LHTL_MENU_ITEM = "#F3E9D9B3"
+define LHTL_MENU_ITEM_HOVER = "#E2C8A7D9"
 define LHTL_PANEL_DARK = "#2E241FCC"
 define LHTL_TEXT = "#4A3728"
 define LHTL_TEXT_LIGHT = "#F7EFE4"
@@ -50,6 +54,7 @@ define gui.choice_button_text_idle_color = LHTL_TEXT
 define gui.choice_button_text_hover_color = LHTL_ACCENT_DARK
 
 define gui.main_menu_background = Solid(LHTL_BG)
+## 實際圖層由 script.rpy init 1 覆寫為 theme/title-main.png、theme/menu-bg.png
 define gui.game_menu_background = Solid(LHTL_BG)
 
 style default:
@@ -109,3 +114,10 @@ style menu_button_text:
     color LHTL_TEXT
     hover_color LHTL_ACCENT_DARK
     xalign 0.5
+
+## 嵌在 menu-bg 上的選項／卡片（半透明，牆面紋理透出）
+style embed_menu_button is menu_button:
+    background Solid(LHTL_MENU_ITEM)
+    hover_background Solid(LHTL_MENU_ITEM_HOVER)
+
+style embed_menu_button_text is menu_button_text
