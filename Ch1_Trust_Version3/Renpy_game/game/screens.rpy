@@ -147,6 +147,7 @@ screen main_menu():
             ## 章節／結局
             textbutton "章節選擇" style "menu_button" action ShowMenu("section_select")
             textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery")
+            textbutton "隱藏內容" style "menu_button" action ShowMenu("hidden_content_gallery")
 
             null height 8
 
@@ -294,6 +295,158 @@ screen secret_photo_view(photo="lap_sleep"):
         action Hide("secret_photo_view")
         xalign 0.5
         yalign 0.94
+
+
+screen hidden_content_gallery():
+    tag menu
+
+    ## 隱藏內容菜單：角色小傳、結局後故事、信任軌跡
+    add "lhtl_menu_bg"
+
+    frame:
+        background Solid(LHTL_MENU_SHELL)
+        padding (40, 28)
+        xalign 0.06
+        yalign 0.5
+        xsize 760
+        ysize 610
+
+        side "t c b":
+            area (0, 0, 700, 580)
+            spacing 8
+            scrollbars "vertical"
+            mousewheel True
+
+            vbox:
+                spacing 10
+                xfill True
+
+                text "隱藏內容｜角色小傳與結局後故事":
+                    font CJK_FONT
+                    size 22
+                    color LHTL_TEXT_LIGHT
+
+                text "完成各結局後，會解鎖該路線的角色心境回顧。":
+                    font CJK_FONT
+                    size 16
+                    color LHTL_TEXT_SOFT
+
+                null height 8
+
+                ## 結局 A 內容
+                if secret_content_unlocked("character_aftercare_a"):
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        vbox:
+                            spacing 6
+                            text "✓  結局 A｜背靠 — 角色小傳":
+                                font CJK_FONT
+                                size 19
+                                color LHTL_TEXT
+                            text "信任的完整落地。她在辦公室反覆看著那張照片，想著 Ch2 會開始的日常……":
+                                font CJK_FONT
+                                size 15
+                                color LHTL_TEXT_SOFT
+                else:
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        text "○  結局 A｜背靠 — 尚未解鎖":
+                            font CJK_FONT
+                            size 19
+                            color "#806C5B"
+
+                ## 結局 B 內容
+                if secret_content_unlocked("character_aftercare_b"):
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        vbox:
+                            spacing 6
+                            text "✓  結局 B｜選定但還在學 — 角色小傳":
+                                font CJK_FONT
+                                size 19
+                                color LHTL_TEXT
+                            text "真實好結局的樣子。每一天都在選擇相信，不是完美，而是持續……":
+                                font CJK_FONT
+                                size 15
+                                color LHTL_TEXT_SOFT
+                else:
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        text "○  結局 B｜選定但還在學 — 尚未解鎖":
+                            font CJK_FONT
+                            size 19
+                            color "#806C5B"
+
+                ## 結局 C 內容
+                if secret_content_unlocked("character_aftercare_c"):
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        vbox:
+                            spacing 6
+                            text "✓  結局 C｜送走之後 — 角色小傳":
+                                font CJK_FONT
+                                size 19
+                                color LHTL_TEXT
+                            text "放手也是愛。她沒有失敗，只是誠實地承認「我還不夠」……":
+                                font CJK_FONT
+                                size 15
+                                color LHTL_TEXT_SOFT
+                else:
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        text "○  結局 C｜送走之後 — 尚未解鎖":
+                            font CJK_FONT
+                            size 19
+                            color "#806C5B"
+
+                ## 結局 D 內容
+                if secret_content_unlocked("character_aftercare_d"):
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        vbox:
+                            spacing 6
+                            text "✓  結局 D｜薄冰同住 — 角色小傳":
+                                font CJK_FONT
+                                size 19
+                                color LHTL_TEXT
+                            text "一夜一夜地去承擔風險。因為信任不是給完美者的……":
+                                font CJK_FONT
+                                size 15
+                                color LHTL_TEXT_SOFT
+                else:
+                    frame:
+                        background Solid(LHTL_MENU_ITEM)
+                        padding (18, 12)
+                        xfill True
+                        text "○  結局 D｜薄冰同住 — 尚未解鎖":
+                            font CJK_FONT
+                            size 19
+                            color "#806C5B"
+
+                null height 8
+
+                text "已解鎖隱藏內容 " + str(len([c for c in ["character_aftercare_a", "character_aftercare_b", "character_aftercare_c", "character_aftercare_d"] if secret_content_unlocked(c)])) + "／4":
+                    font CJK_FONT
+                    size 16
+                    color LHTL_TEXT_SOFT
+                    xalign 1.0
+
+            textbutton "返回" style "embed_menu_button" action Return():
+                xalign 0.5
 
 
 screen section_select():

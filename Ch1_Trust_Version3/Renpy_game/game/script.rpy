@@ -236,6 +236,91 @@ init python:
             return "lap_sleep" in unlocked or "back_to_back" in unlocked
         return photo_id in unlocked
 
+    # ========== 彩蛋名字判定 ==========
+    PET_NAMES_EASTER_EGG = {
+        "毛毛": "fluffy_name",
+        "旺旺": "wangwang_name",
+        "小黑": "xiaohei_name",
+        "月月": "moon_name",
+        "咪咪": "meimei_name",
+        "皮皮": "pipi_name",
+        "點點": "dian_name",
+        "球球": "ball_name",
+    }
+
+    def check_easter_egg_name(name):
+        """
+        檢查取名是否觸發彩蛋。
+        回傳彩蛋 key（用於 S06 隱藏台詞），或 None（無彩蛋）。
+        """
+        if not name:
+            return None
+        normalized = str(name or "").strip()
+        return PET_NAMES_EASTER_EGG.get(normalized)
+
+    def unlock_secret_content(content_id):
+        """解鎖隱藏內容（如 Ch2 伏筆、角色小傳等）；寫入 persistent。"""
+        if not hasattr(persistent, "unlocked_secret_content"):
+            persistent.unlocked_secret_content = []
+        unlocked = list(persistent.unlocked_secret_content)
+        if content_id not in unlocked:
+            unlocked.append(content_id)
+            persistent.unlocked_secret_content = unlocked
+
+    def secret_content_unlocked(content_id):
+        """檢查隱藏內容是否已解鎖。"""
+        if not hasattr(persistent, "unlocked_secret_content"):
+            return False
+        return content_id in (persistent.unlocked_secret_content or [])
+
+    # ========== 結局後解鎖邏輯 ==========
+    def process_ending_unlock(ending_id, trust_value):
+        """
+        在結局演出後調用，自動解鎖相應的隱藏內容。
+        ending_id: A / B / C / D
+        trust_value: 當前信任數值（用於變體內容）
+        """
+        # 通用解鎖
+        unlock_ending(ending_id)
+
+        # 結局 A：解鎖隱藏照片與 Ch2 提示
+        if ending_id == "A":
+            unlock_secret_photo("lap_sleep")
+            unlock_secret_content("ch2_trust_foundation_hint")
+            unlock_secret_content("character_aftercare_a")
+        # 結局 B：解鎖角色學習小傳
+        elif ending_id == "B":
+            unlock_secret_content("character_aftercare_b")
+        # 結局 C：解鎖送走後的修復可能性
+        elif ending_id == "C":
+            unlock_secret_content("character_aftercare_c")
+        # 結局 D：解鎖薄冰之下的故事
+        elif ending_id == "D":
+            unlock_secret_content("character_aftercare_d")
+
+    # ========== 信任軌跡記錄 ==========
+    def record_trust_trajectory():
+        """
+        在結局時記錄本周目的信任走勢供後續查看。
+        存檔於 persistent 中，重新遊玩不影響既有結局解鎖。
+        """
+        if not hasattr(persistent, "playthrough_trajectories"):
+            persistent.playthrough_trajectories = []
+
+        trajectory = {
+            "ending": store.flags.get("ch1_ending", "Unknown"),
+            "final_trust": store.trust,
+            "dist_axis": store.dist,
+            "tone_axis": store.tone,
+            "guard_axis": store.guard,
+            "dog_name": store.dog_label,
+            "timestamp": renpy.get_time(),
+        }
+        
+        trajectories = list(persistent.playthrough_trajectories or [])
+        trajectories.append(trajectory)
+        persistent.playthrough_trajectories = trajectories
+
 
 image bg office_night = optional_background(
     "bg/bg-office-night.png", "#141B24"
@@ -2263,8 +2348,8 @@ label ending_ch1_back_to_back:
     $ save_name = "結局 A｜背靠"
     $ flags["ch1_ending"] = "back_to_back"
     $ flags["gave_away"] = False
-    $ unlock_ending("A")
-    $ unlock_secret_photo("lap_sleep")
+    $ process_ending_unlock("A", trust)
+    $ record_trust_trajectory()
 
     "[dog_label]在黑暗裡抬起頭，先看窗外，再看地板上的光。牠沒有衝向門，也沒有鑽進桌底，只把鼻子伸進光圈邊緣聞了一下。"
     "予安坐到地板上。手機放在膝旁，光便從下方照亮牆上的鑰匙與牽繩，兩道影子靠在一起。"
@@ -2298,7 +2383,8 @@ label ending_ch1_chosen_learning:
     $ save_name = "結局 B｜選定但還在學"
     $ flags["ch1_ending"] = "chosen_learning"
     $ flags["gave_away"] = False
-    $ unlock_ending("B")
+    $ process_ending_unlock("B", trust)
+    $ record_trust_trajectory()
 
     "黑暗裡，[dog_label]先退到沙發另一側。手機的手電筒亮起時，牠瞇了一下眼，視線緊跟著那圈移動的光。"
     "予安把手機平放到地板，不拿光追牠。她在離狗兩步的位置坐下，像他們第一次共享客廳時那樣。"
@@ -2332,7 +2418,8 @@ label ending_ch1_handed_over:
     $ save_name = "結局 C｜送走之後"
     $ flags["ch1_ending"] = "handed_over"
     $ flags["gave_away"] = True
-    $ unlock_ending("C")
+    $ process_ending_unlock("C", trust)
+    $ record_trust_trajectory()
 
     "夜裡短暫停電。冰箱的嗡嗡忽然停下，房間連原本能填空的聲音都沒有了。"
     "予安打開手機手電筒，習慣性先照地板，怕光直接落進一雙敏感的眼睛。光圈移出去半公尺，她才想起不用再避。"
@@ -2365,7 +2452,8 @@ label ending_ch1_thin_ice:
     $ save_name = "結局 D｜薄冰同住"
     $ flags["ch1_ending"] = "thin_ice"
     $ flags["gave_away"] = False
-    $ unlock_ending("D")
+    $ process_ending_unlock("D", trust)
+    $ record_trust_trajectory()
 
     "黑暗落下時，[dog_label]立刻回到門邊。背貼著牆，頭朝出口，手機的光才亮起，眼睛便跟著縮了一下。"
     "予安把光轉向自己，不照牠。她在客廳中央停住，沒有因為已經選擇留下，就把這間屋子的每一段距離都算成自己的。"
