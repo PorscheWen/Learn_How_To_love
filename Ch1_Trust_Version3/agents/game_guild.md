@@ -10,8 +10,8 @@
 
 | 角色 | 姓名 | 規則 |
 |------|------|------|
-| 女主 | **予安** | 敘事固定；對白可縮「安」。勿改回小晴。 |
-| 狗 | 預設 **小7** | 超商店員暱稱（後門那隻＝「小7」）。**玩家可改名**；程式用 `dogLabel(s)`，禁文案寫死。外型定稿：**Option B｜wiry**（見 [`image_dog.md`](image_dog.md)；基準圖 `assets/dog/dog-ref-canonical.png`）。 |
+| 女主 | **予安** | 敘事固定；對白可縮「安」。勿改回小晴。外型見 [`image_char.md`](image_char.md)。 |
+| 狗 | 預設 **小7** | 超商店員暱稱（後門那隻＝「小7」）。**玩家可改名**；程式用 `dogLabel(s)`，禁文案寫死。外型定稿：**Option B｜wiry**（見 [`image_dog.md`](image_dog.md)；基準圖 `assets/dog/dog-ref-canonical.png`＋錨點 `assets/dog/refs/`）。 |
 
 **取名時序**
 

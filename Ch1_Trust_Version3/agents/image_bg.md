@@ -4,7 +4,7 @@
 > 對齊：[`game_guild.md`](game_guild.md) · `outline_trilogy_ch1_10sections.md`  
 > **預設生圖：Cursor `GenerateImage`**；FLUX 2 Pro（`fal-ai/flux-2-pro`）僅備援  
 > 路徑：`Ch1_Trust_Version3/assets/bg/`  
-> **背景無人無狗**；狗疊層必須對齊 `dog-ref-canonical.png`。  
+> **背景無人無狗**；狗疊層必須對齊 `dog-ref-canonical.png`（錨點 `assets/dog/refs/`，2026-07-25）。  
 > **風格錨點：** `assets/bg/refs/`（四張定稿）＋下方 **BG ONE-LINER**
 
 ---
@@ -199,6 +199,8 @@ bg-{place}-{light}.png
 ### alley（S08）
 
 - 巷口轉角、樹／電杆、機車可能經過的空間感
+- **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，對「走過第一台停著的機車」）；`prop/scooter-pass.png`（轉角切進驚嚇拍短暫出現後 hide）
+- 人物／狗用 `*_walk`／`*_s08` transform（相對一般立繪 **×0.8**）；街上狗 xalign 靠近予安（約 0.56～0.68）
 - 柔和日間光、曝光平衡；禁曝白牆面、禁文字
 
 ### cafe（S09）

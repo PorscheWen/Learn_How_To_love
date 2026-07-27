@@ -84,35 +84,41 @@ Indie visual novel background art. Indoor warmth leans burnt sienna + honey ochr
 | 項目 | 規格（B 摘要） |
 |------|----------------|
 | 品種感 | 台灣常見 **scruffy / wiry mixed breed**（略亂硬毛，非純種） |
-| 年齡 | **約 2 個月**（prompt：`about 2 months old`） |
-| 體型 | **短腿、偏瘦**（肋骨可隱約）；脆弱街犬幼崽感 |
-| 毛質 | **短～中、wiry／scruffy**（禁蓬毛貴賓感、禁過圓 Q 臉） |
-| 毛色 | **honey golden-tan**；耳尖／背脊深褐；胸口／吻周／腳掌 **cream** |
-| 五官 | 略角精實臉；圓而暖的 **深褐**眼；**半垂耳**（耳緣深色） |
+| 年齡 | **約 2～3 個月**（prompt：`about 2-3 months old`） |
+| 體型 | **短腿、結實偏瘦**；脆弱街犬幼崽感 |
+| 毛質 | **短～中、wiry／scruffy＋厚 impasto 團塊**（禁蓬毛貴賓感、禁過圓 Q 臉） |
+| 毛色 | **honey golden-tan**；耳尖深褐；背脊 **grizzled saddle**；胸口／吻周／腳掌 **cream** |
+| 五官 | 略角精實臉；**大而暖深褐眼＋catchlight**；**軟垂 V 耳** |
 | 表達 | **每張 pose 必須同時有表情＋動作**（耳／眼／嘴／尾／身體） |
 | 分層 | **狗 PNG 獨立疊層**；勿畫進背景 |
+| 底板 | 生圖用 **純黑 #000** → `remove_ai_bg.py` 去背 |
 | 紙箱 | S02 為壓扁紙箱邊／臨時窩；禁鳥巢 |
+| 錨點 | `assets/dog/refs/`（2026-07-25 用戶定稿） |
 
 產狗圖必貼 `image_dog.md` 的 **IDENTITY LOCK**；審查清單見該檔 §5。
 
 ### 予安（女主）
 
+> **完整鎖定：** [`image_char.md`](image_char.md) · 錨點 `assets/char/refs/ref-yuan-*.png`
+
 | 項目 | 規格 |
 |------|------|
 | 年齡 | **26** 歲都市上班族 |
-| 外型 | 年輕長髮女性；自然深褐或黑長髮；暖調膚色；一般身形；溫和寫實五官 |
-| 服裝 | 簡素：米白／燕麥／灰褐／低飽和牛仔；無 Logo、無螢光色 |
-| 臉 | **允許入鏡**；疲憊、溫柔、笨拙關心；非名人臉 |
-| 關鍵道具 | **耳機**（S01／S05 Tone 軸）；便當袋（S02）；牽繩（S08～S10） |
-| 局部仍可用 | 手／臂特寫（蹲側身、擋陌生人、抱狗） |
+| 外型 | 長深褐～近黑髮（略亂／微波）；暖調膚色；疲憊溫柔寫實五官；一般偏瘦 |
+| 服裝 | 米白／燕麥／奶油上衣；深褐／橄欖／炭灰寬褲；平底樂福；無 Logo、無螢光 |
+| 臉 | **允許入鏡**；非名人臉、非偶像二次元臉 |
+| 關鍵道具 | **耳機**（掛脖／戴上）；便當塑膠袋；棕色皮牽繩 |
+| 畫風 | 厚 **impasto**；生圖純黑底 → `remove_ai_bg.py` |
 
 ### NPC（精簡 · 勿沿用 V2 寵物店阿姨主線）
 
-| 角色 | 檔名建議 | 出現 |
-|------|----------|------|
+| 角色 | 檔名 | 出現 |
+|------|------|------|
 | 超商店員 | `char-clerk.png` | S01／S02 |
 | 走廊第三者（鄰居／管理員） | `char-neighbor.png` | S06 |
 | 同事（接手提議） | `char-coworker.png` | S09 |
+
+詳見 [`image_char.md`](image_char.md) NPC 鎖定。
 
 ---
 
@@ -131,7 +137,7 @@ Indie visual novel background art. Indoor warmth leans burnt sienna + honey ochr
 去背（若工具已就位）：
 
 ```powershell
-python tools/remove_sprite_bg.py {pose或完整路徑}
+python tools/remove_ai_bg.py INPUT OUTPUT
 ```
 
 ---
@@ -147,13 +153,14 @@ python hermes.py agent --job lhtl-flux-…
 ### Agent job prompt 開頭（複製）
 
 ```text
-任務前請讀 Ch1_Trust_Version3/agents/image.md、image_dog.md 與 game_guild.md。
+任務前請讀 Ch1_Trust_Version3/agents/image.md、image_dog.md、image_char.md 與 game_guild.md。
 
 用 image_generate，模型必須選 fal-ai/flux-2-pro（FLUX 2 Pro）。  
 > 注意：本節僅供 **FLUX 備援**；日常定稿請先用 Cursor `GenerateImage`。
 
-風格必須包含並遵守 STYLE LOCK（印象派油畫）。
+風格必須包含並遵守 STYLE LOCK（厚 impasto 印象派油畫）。
 狗必須遵守 image_dog.md IDENTITY LOCK（Option B wiry），並對齊 dog-ref-canonical.png。
+人物必須遵守 image_char.md（予安／NPC），並對齊 assets/char/refs/。
 畫面禁止信任數字／HUD。軟分軌＝同背景換狗 pose。
 
 [下方貼對應模板]
@@ -171,12 +178,12 @@ python hermes.py agent --job lhtl-flux-…
 **必讀：** [`image_dog.md`](image_dog.md)（Option B｜完整 IDENTITY LOCK）。
 
 ```text
-Impressionistic oil painting. Thick visible brushstrokes, painterly impasto texture, soft blended edges. Warm amber lighting, cozy mood. Soft atmospheric depth. Not a photograph, not anime cel, not chibi, not hard black outlines.
+Thick-impasto impressionistic oil painting. Heavy visible brushstrokes, painterly impasto texture, soft blended edges. Warm amber key light from above-left. Soft atmospheric depth. Not a photograph, not anime cel, not chibi, not hard black outlines.
 
-SAME PUPPY IDENTITY LOCK (Option B wiry — must match dog-ref-canonical.png):
-One continuous character. About 2 months old Taiwanese scruffy wiry mixed-breed puppy (not purebred). Short stubby legs, slightly thin, ribs may be faintly visible. Wiry short-to-medium messy coat. Honey golden-tan fur; darker brown ear tips and back ridge; cream chest, cream muzzle area, lighter paws. Soft semi-floppy ears. Round warm dark-brown eyes. Small black nose. Slightly angular scruffy street-puppy face (NOT round plush face, NOT fluffy show-dog coat).
+SAME PUPPY IDENTITY LOCK (Option B wiry — MUST match dog-ref-canonical.png and assets/dog/refs/):
+One continuous character. About 2-3 months old Taiwanese scruffy wiry mixed-breed puppy (not purebred). Compact short-legged body, slightly thin street-puppy build. Wiry short-to-medium messy coat as thick impasto paint clumps. Honey golden-tan fur; darker chestnut floppy ear tips and grizzled darker saddle on back; cream-light tan muzzle and chest. Soft V-shaped floppy ears. Large round warm dark-brown eyes with catchlights. Small wet black nose. Slightly angular scruffy street-puppy face (NOT round plush face, NOT fluffy show-dog coat).
 {POSE_AND_EXPRESSION — must change both body action AND facial expression; convey trust distance: retreat / half-step / parallel rest / back-to-back sleep}
-Centered full body, clean plain soft cream paper background for cutout.
+Centered full body. SOLID FLAT BLACK (#000000) background for cutout.
 No bird nest, no straw nest. No text, no logo, no purebred markers, no trust meter UI.
 ```
 
@@ -193,15 +200,21 @@ If cardboard appears: empty damp shipping box or flattened carton + plain towel 
 Wide 16:9.
 ```
 
-### 5.3 予安（可含臉 · 去背用）
+### 5.3 予安／人物（可含臉 · 去背用）
+
+**必讀：** [`image_char.md`](image_char.md)。比例建議直式 3:4。
 
 ```text
-Impressionistic oil painting. Thick visible brushstrokes, soft blended edges, warm amber lighting. Believable proportions, soft facial features. Not a photograph, not anime idol face, not chibi.
+Thick-impasto impressionistic oil painting. Heavy visible brushstrokes, painterly impasto texture, soft blended edges. Soft warm key light. Soft atmospheric depth. Not a photograph, not anime idol face, not chibi, not hard black outlines.
 
-26-year-old Taiwanese office worker woman Yuan (予安), long natural dark hair, warm skin, simple oatmeal or gray-brown clothes, tired gentle expression, face visible OK.
-{ACTION / CROP — headphones on/off, squat side-on, blocking stranger, holding leash}
-Clean soft cream cutout background. No text, no logo, no trust HUD.
+SAME WOMAN IDENTITY LOCK (Yuan / 予安 — MUST match assets/char/refs/ref-yuan-*.png):
+26-year-old Taiwanese office worker woman. Long natural dark brown-black hair slightly messy past shoulders. Warm East-Asian skin, soft realistic tired gentle features, not celebrity face. Slender everyday build. Muted wardrobe: cream/oatmeal/beige tops, dark brown/taupe/charcoal trousers, flat loafers.
+{POSE_AND_EXPRESSION / props: headphones on|around neck, bento bag, blocking palm, squat with leash}
+Centered full body. SOLID FLAT BLACK (#000000) background for cutout.
+No text, no logo, no trust HUD, no scenery.
 ```
+
+NPC 用 `image_char.md` §3 對應段落；同事臉必須 ≠ 予安。
 
 ### 5.4 全景 CG（人＋狗＋環境 · 少用）
 
@@ -248,7 +261,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `dog-kitchen-door.png` | 跟隨觀望 | 停在廚房門檻外 | S04 記憶 |
 | `dog-ear-flat.png` | 被尖聲嚇到 | 耳平、退 | S05 Tone− |
 | `dog-sniff-wire.png` | 好奇 | 嗅耳機線 | S05 鉤子 |
-| `dog-behind-legs.png` | 求護衛 | 躲小腿後 | S06 Guard＋ |
+| `dog-behind-legs.png` | 求護衛 | 躲小腿後（S06 用 `dog_behind_pair`，疊在予安下方） | S06 Guard＋ |
 | `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 |
 | `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 |
 | `dog-street-tense.png` | 繃緊 | 貼牆／僵住（低信任 S08） | S08 |
@@ -267,7 +280,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `char-yuan-squat-side.png` | 側身蹲下等待（S02 A） |
 | `char-yuan-carry-pup.png` | 側抱幼犬上樓 |
 | `char-yuan-headphones.png` | 戴耳機開會（S05 尖） |
-| `char-yuan-block.png` | 走廊擋在狗與陌生人中間（S06） |
+| `char-yuan-block.png` | 走廊擋在狗與陌生人中間（S06）；**面向左**擋左側鄰居 |
 | `char-yuan-leash.png` | 牽繩、蹲等（S08） |
 | `char-clerk.png` | 超商店員 |
 | `char-neighbor.png` | 走廊第三者 |
@@ -335,7 +348,8 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 - 背景 **13 張**已依 BG ONE-LINER 全量重產（含 `gate-night`）；原圖備份於 `assets/bg/_backup_20260725_125336/`。
 - 風格錨點：`assets/bg/refs/` 四張已同步本次正式構圖。
-- 狗圖狀態見前條；本輪僅背景。
+- **狗圖（同日晚）：** 以用戶 5 張錨點重鎖 Option B；原圖備份於 `assets/dog/_backup_20260725_183542/`；`canonical`／`anxious`／`behind-legs`／`refuse-stranger` 直接落地錨點去背版；其餘 15 pose 依新 IDENTITY LOCK 全量重產（黑底＋`remove_ai_bg.py`）。詳見 `image_dog.md`。
+- **人物（同日）：** 7 張 `assets/char/` 全量重產；備份 `assets/char/_backup_20260725_193450/`；新建 [`image_char.md`](image_char.md)（予安 IDENTITY＋NPC）；錨點 `assets/char/refs/`。
 
 ---
 
@@ -353,4 +367,4 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ---
 
-*更新：2026-07-25｜背景 BG ONE-LINER 自四張定稿歸納；S03 改 gate*
+*更新：2026-07-25｜背景 BG ONE-LINER；S03 改 gate；狗圖／人物圖依錨點全量重產（見 `image_dog.md`／`image_char.md`）*

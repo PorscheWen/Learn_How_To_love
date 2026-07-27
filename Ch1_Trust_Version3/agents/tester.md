@@ -294,7 +294,7 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 | 客廳／沙發與地板 | S04、S05、S07、S10 | day／night |
 | 走廊 | S06 | 日 |
 | 巷口轉角 | S08 | 日 |
-| 巷口轉角／牽繩 | S08 | day／dusk |
+| 巷口轉角／牽繩 | S08 | day／dusk；機車 `prop/scooter-*.png` 疊層 |
 | 咖啡廳門口 | S09／結局 C | — |
 
 ### 6.3 重疊（插圖／UI）
@@ -303,6 +303,9 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 - [ ] 換 pose 無殘影雙狗
 - [ ] zorder：背景 ＜ 立繪 ＜ 字幕／選項 ＜ modal
 - [ ] 選項不永久擋關鍵插圖
+- [ ] **重產資產後**先跑 `python tools/recalibrate_sprites.py` 與 `python tools/check_overlap.py`；報告見 `tester_overlap_report.md`
+- [ ] S06 頂額：`forehead_nudge` 期間不應同時顯示予安全身立繪（圖含小腿裁切）
+- [ ] S06 擋人：`char-yuan-block` 朝左對鄰居；狗在 `dog_behind_pair`、疊在予安身後（勿蓋在鄰居身上）
 
 發現重疊時寫：
 
@@ -316,6 +319,8 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 - [ ] S02 三個距離選項各自只觸發一個對應 cue：靠近 `soft`／硬抓 `whimper`／趕開 `murmur`
 - [ ] S03 大門外不安使用一次 `murmur`；S04 平行安靜保持無狗聲
 - [ ] S05 只有尖銳聲分支播放 `whimper`；S06 額頭輕碰使用 `soft`
+- [ ] **S06 走廊開場停樂（無 BGM）**；進門玄關 `entrance_day` 後才起 `tender`
+- [ ] **S07 全段維持開場 `sick_guard`**，選擇後不切 `tender`／`tense`
 - [ ] S07 守門確認只播放一次短 `bark`
 - [ ] S08 機車驚嚇使用一次 `whimper`，不循環、不連續哀鳴
 - [ ] S09 高信任拒絕接牽繩使用一次低音量 `growl`；結局 C 空屋完全不播放狗聲
@@ -338,7 +343,7 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 | 3 | S03 多次下樓、輕聲 | trust＋；G1 較易過 |
 | 4 | S04 平行安靜、縮手 | 狗跟到廚房門口 |
 | 5 | S05 脫耳機放慢、輕抱開 | Tone＋ |
-| 6 | S06 擋在中間 | Guard＋；額頭頂腿 |
+| 6 | S06 擋在中間 | Guard＋；額頭頂腿；擋人圖朝左；狗 `dog_behind_pair` 躲身後 |
 | 7 | S07 「我還在」 | 依賴對調可感 |
 | 8 | S08 停等／可提早回家 | 高信任走到轉角 |
 | 9 | S09 留下 | 進 A 或 B 閘 |

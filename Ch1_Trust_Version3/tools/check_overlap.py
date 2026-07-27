@@ -1,4 +1,8 @@
-"""靜態重疊檢查：立繪橫向重疊與字幕框遮蓋比例（tester §6.3）。"""
+"""靜態重疊檢查：立繪橫向重疊與字幕框遮蓋比例（tester §6.3）。
+
+與 script.rpy transforms／DOG_POSE_SCALE 同步；重產資產後請先跑
+`python tools/recalibrate_sprites.py` 再視需要微調本檔。
+"""
 from PIL import Image
 
 SCREEN_W, SCREEN_H = 1280, 720
@@ -6,22 +10,44 @@ TEXTBOX = 108  # gui.textbox_height, yalign 1.0
 CHAR_REF, DOG_REF = 1280.0, 1536.0
 
 POSE_SCALE = {
-    "dog-halfstep": 0.46, "dog-stair-watch": 0.46, "dog-leash-wait": 0.49,
-    "dog-kitchen-door": 0.49, "dog-guard-door": 0.52, "dog-sniff-wire": 0.52,
-    "dog-parallel": 0.40, "dog-shoe-sleep": 0.41, "dog-back-sleep": 0.39,
-    "dog-check-sleep": 0.35, "dog-door-edge": 0.36, "dog-door-sleep": 0.37,
+    "dog-anxious": 0.786,
+    "dog-back-sleep": 0.427,
+    "dog-behind-legs": 0.535,
+    "dog-check-sleep": 0.452,
+    "dog-door-edge": 0.434,
+    "dog-door-sleep": 0.42,
+    "dog-ear-flat": 0.695,
+    "dog-forehead-nudge": 0.543,
+    "dog-guard-door": 0.438,
+    "dog-halfstep": 0.687,
+    "dog-kitchen-door": 0.577,
+    "dog-leash-wait": 0.556,
+    "dog-parallel": 0.524,
+    "dog-refuse-stranger": 0.656,
+    "dog-shoe-sleep": 0.414,
+    "dog-sniff-wire": 0.71,
+    "dog-stair-watch": 0.615,
+    "dog-street-tense": 0.808,
 }
 CHAR_T = {
-    "char_center": (0.50, 0.85, 0.52), "char_right": (0.70, 0.85, 0.50),
-    "char_left": (0.30, 0.85, 0.50), "char_right_walk": (0.70, 0.85, 0.42),
+    "char_center": (0.50, 0.86, 0.48),
+    "char_right": (0.74, 0.86, 0.45),
+    "char_left": (0.26, 0.86, 0.45),
+    "char_right_walk": (0.74, 0.86, 0.40),
 }
 DOG_T = {
-    "dog_far": (0.58, 0.85, 0.26), "dog_mid": (0.50, 0.85, 0.30),
-    "dog_near": (0.44, 0.85, 0.34),
-    "dog_far_pair": (0.40, 0.85, 0.22), "dog_mid_pair": (0.36, 0.85, 0.24),
-    "dog_near_pair": (0.32, 0.85, 0.26),
-    "dog_far_walk": (0.28, 0.85, 0.24), "dog_mid_walk": (0.38, 0.85, 0.27),
-    "dog_near_walk": (0.46, 0.85, 0.30),
+    "dog_far": (0.58, 0.86, 0.26),
+    "dog_mid": (0.50, 0.86, 0.30),
+    "dog_near": (0.42, 0.86, 0.34),
+    "dog_far_pair": (0.50, 0.86, 0.22),
+    "dog_mid_pair": (0.56, 0.86, 0.23),
+    "dog_near_pair": (0.60, 0.86, 0.24),
+    "dog_nudge": (0.68, 0.86, 0.28),
+    "dog_entrance_far": (0.50, 0.87, 0.24),
+    "dog_entrance_mid": (0.54, 0.87, 0.27),
+    "dog_far_walk": (0.30, 0.86, 0.24),
+    "dog_mid_walk": (0.40, 0.86, 0.27),
+    "dog_near_walk": (0.50, 0.86, 0.30),
 }
 
 
@@ -34,7 +60,8 @@ def rect(name, transform, is_dog):
     ref = DOG_REF * POSE_SCALE.get(name, 1.0) if is_dog else CHAR_REF
     total = (ref / h) * zoom
     dw, dh = w * total, h * total
-    x0 = xa * (SCREEN_W - dw)
+    # Ren'Py xalign：displayable 中心對齊螢幕 xalign
+    x0 = xa * SCREEN_W - dw / 2
     y0 = ypos * SCREEN_H - dh
     ox0, oy0 = x0 + ab[0] * total, y0 + ab[1] * total
     ow, oh = (ab[2] - ab[0]) * total, (ab[3] - ab[1]) * total
@@ -45,7 +72,7 @@ def report(label, a, b):
     ax0, _, aw, _ = a[2:]
     bx0, _, bw, _ = b[2:]
     ox = max(0.0, min(ax0 + aw, bx0 + bw) - max(ax0, bx0))
-    pct = ox / min(aw, bw) * 100
+    pct = ox / min(aw, bw) * 100 if min(aw, bw) else 0
     print(
         f"{label}: {a[0]}({a[1]}) x=[{ax0:.0f},{ax0 + aw:.0f}] vs "
         f"{b[0]}({b[1]}) x=[{bx0:.0f},{bx0 + bw:.0f}] "
@@ -56,7 +83,7 @@ def report(label, a, b):
 def textbox_cover(r):
     _, _, _, y0, _, h = r
     top = SCREEN_H - TEXTBOX
-    cover = max(0.0, (y0 + h) - top) / h * 100
+    cover = max(0.0, (y0 + h) - top) / h * 100 if h else 0
     print(
         f"textbox: {r[0]}({r[1]}) height={h:.0f}px "
         f"y=[{y0:.0f},{y0 + h:.0f}] covered={cover:.0f}%"
@@ -67,14 +94,17 @@ PAIRS = [
     ("S02 相遇", ("char-yuan-commute", "char_right", 0), ("dog-anxious", "dog_far", 1)),
     ("S02 靠近", ("char-yuan-commute", "char_right", 0), ("dog-halfstep", "dog_mid", 1)),
     ("S06 躲腿後", ("char-yuan-commute", "char_right", 0), ("dog-behind-legs", "dog_near_pair", 1)),
-    ("S06 頂額", ("char-yuan-commute", "char_right", 0), ("dog-forehead-nudge", "dog_near_pair", 1)),
+    ("S06 頂額單圖", ("dog-forehead-nudge", "dog_nudge", 1), ("dog-forehead-nudge", "dog_nudge", 1)),
     ("S08 出發", ("char-yuan-leash", "char_right_walk", 0), ("dog-leash-wait", "dog_far_walk", 1)),
     ("S08 高信任", ("char-yuan-leash", "char_right_walk", 0), ("dog-leash-wait", "dog_near_walk", 1)),
-    ("S09 拒絕", ("char-yuan-leash", "char_right", 0), ("dog-refuse-stranger", "dog_near", 1)),
-    ("S09 交接遠", ("char-yuan-leash", "char_right", 0), ("dog-street-tense", "dog_far", 1)),
-    ("S09 玄關", ("char-yuan-leash", "char_right", 0), ("dog-leash-wait", "dog_far", 1)),
+    ("S09 拒絕", ("char-yuan-leash", "char_right", 0), ("dog-refuse-stranger", "dog_near_pair", 1)),
+    ("S09 交接遠", ("char-yuan-leash", "char_right", 0), ("dog-street-tense", "dog_mid_pair", 1)),
+    ("S09 玄關", ("char-yuan-leash", "char_right", 0), ("dog-leash-wait", "dog_entrance_far", 1)),
     ("S06 兩人", ("char-neighbor", "char_left", 0), ("char-yuan-commute", "char_right", 0)),
     ("S09 兩人", ("char-coworker", "char_left", 0), ("char-yuan-leash", "char_right", 0)),
+    ("S01 店員", ("char-clerk", "char_left", 0), ("char-yuan-commute", "char_right", 0)),
+    ("S05 耳機", ("char-yuan-headphones", "char_right", 0), ("dog-sniff-wire", "dog_mid", 1)),
+    ("S06 擋人", ("char-yuan-block", "char_right", 0), ("dog-behind-legs", "dog_near_pair", 1)),
 ]
 
 DOG_SOLO = [
@@ -86,9 +116,15 @@ DOG_SOLO = [
     ("dog-leash-wait", "dog_far_walk"), ("dog-behind-legs", "dog_near_pair"),
     ("dog-sniff-wire", "dog_mid"), ("dog-stair-watch", "dog_far"),
     ("dog-street-tense", "dog_far_walk"), ("dog-ear-flat", "dog_far"),
+    ("dog-refuse-stranger", "dog_near_pair"), ("dog-forehead-nudge", "dog_nudge"),
 ]
 
 for label, a_spec, b_spec in PAIRS:
+    if a_spec == b_spec:
+        r = rect(*a_spec)
+        print(f"{label}: solo {r[0]}({r[1]}) x=[{r[2]:.0f},{r[2]+r[4]:.0f}]")
+        textbox_cover(r)
+        continue
     report(label, rect(*a_spec), rect(*b_spec))
 print()
 for name, transform in DOG_SOLO:

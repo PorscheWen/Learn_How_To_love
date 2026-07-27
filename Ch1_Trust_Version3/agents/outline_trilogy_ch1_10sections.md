@@ -17,7 +17,7 @@
 **不變原則：** Ch1／Ch2 不因失誤養死；死亡只在 Ch3。狗不擬人說話。女主第一次養犬、會內疚、會學。
 
 **姓名鎖定：** 女主 **予安**；狗預設 **小7**（便利商店暱稱），玩家可改名（`dogLabel`）。  
-**外型鎖定：** 小7＝**Option B｜wiry**（短腿偏瘦、scruffy／wiry 硬毛、蜂蜜褐＋深耳尖＋奶油胸口；基準圖 `assets/dog/dog-ref-canonical.png`；見 `agents/image_dog.md`）。
+**外型鎖定：** 小7＝**Option B｜wiry**（短腿偏瘦、scruffy／wiry 硬毛＋厚 impasto、蜂蜜褐＋深垂耳＋背脊 grizzle＋奶油吻周；大深褐眼＋catchlight；基準圖 `assets/dog/dog-ref-canonical.png`＋`assets/dog/refs/`；見 `agents/image_dog.md`）。
 
 ---
 

@@ -178,26 +178,25 @@
 
 ### S06｜走廊上的第三者
 
-弧線：`calm` → `tender`（擋下）
+弧線：**靜音（走廊）** → `tender`（進門玄關）
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 被搭話／伸手摸 | corridor-day | `calm` |
-| 推車輪卡縫「喀、喀」 | corridor-day | 維持 `calm`；文字記憶點，不新增環境 SFX |
-| 擋在中間、婉拒 | corridor-day | `tender` |
-| 塞回屋／給摸 | corridor-day | `calm`（`tense`） |
-| 額頭頂腿 | corridor-day | `tender` |
+| 被搭話／伸手摸 | corridor-day | **無 BGM**（停樂） |
+| 推車輪卡縫「喀、喀」 | corridor-day | 維持靜音；文字記憶點，不新增環境 SFX |
+| 擋在中間、婉拒 | corridor-day | 維持靜音 |
+| 塞回屋／給摸 | corridor-day | 維持靜音 |
+| 進門後、額頭頂腿 | entrance-day | `tender` |
 
 ### S07｜她倒下的那天
 
-弧線：`calm` → `tender`（我還在）
+弧線：開場 `sick_guard`，**全段不切換**
 
 | 節點 | Profile |
 |------|---------|
-| 發燒／狗守門 | `calm`（`sick_guard`） |
+| 發燒／狗守門 | `sick_guard` |
 | 耳鳴／狗叫穿進來 | 維持 `sick_guard`；耳鳴只寫體感，不加高頻音效 |
-| 「吵死了」關客廳 | `calm`（`tense`） |
-| 「我還在」 | `tender` |
+| 「吵死了」／「我還在」／門縫 | 維持 `sick_guard`（不切 `tender`／`tense`） |
 
 ### S08｜走到轉角就好
 

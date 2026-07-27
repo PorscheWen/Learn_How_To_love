@@ -13,6 +13,7 @@
 | A | 留下、`trust 10～12`、`s08_forced_walk != true` |
 | B | 留下、`trust ≥ 4`；也承接高信任但 S08 硬拖而被 A 排除的路徑 |
 | D | 留下、`trust ≤ 3` |
+| **回聲** | `s08_forced_walk`：S10 掛勾段＋結局 B 睡姿明確回扣「那天走太快」 |
 | 禁止 | 不出現衰老、安樂、離別預告；不顯示 trust 數字 |
 | 共通句 | 「我們再試一年」與「晚上見」；不同結局改變狗是否相信 |
 
@@ -40,6 +41,7 @@
 
 - Label：`ending_ch1_chosen_learning`
 - 狗敢睡近，仍睜眼回頭確認；予安回答「我在」。
+- 若 `s08_forced_walk`：睡姿保留半步＋明確回扣巷口硬拖（「把身體學回來」）。
 - 隔天會看她，但不追出門。
 - BGM：`ending_learning`。
 
@@ -56,6 +58,7 @@
 - Label：`ending_ch1_handed_over`
 - 公寓重新只剩冰箱嗡嗡；同事傳來安全抵達的照片。
 - 「晚上見」出口後房間無人回頭；不宣判選擇對錯。
+- 高信任送走（`landmark_chose_reason_over_bond`）：強調「關係最好時放手」的酸，非失敗宣判。
 - 保留日後探視與修復可能。
 - BGM：`ending_handover`。
 
