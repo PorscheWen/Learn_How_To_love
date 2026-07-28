@@ -116,7 +116,8 @@ Indie visual novel background art. Indoor warmth leans burnt sienna + honey ochr
 |------|------|------|
 | 超商店員 | `char-clerk.png` | S01／S02 |
 | 走廊第三者（鄰居／管理員） | `char-neighbor.png` | S06 |
-| 同事（接手提議） | `char-coworker.png` | S09 |
+| 同事（接手提議） | `char-coworker.png` | S09 茶水間 |
+| 同事（咖啡廳蹲等） | `char-coworker-cafe.png` | S09 咖啡廳 |
 
 詳見 [`image_char.md`](image_char.md) NPC 鎖定。
 
@@ -265,9 +266,12 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 |
 | `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 |
 | `dog-street-tense.png` | 繃緊 | 貼牆／僵住（低信任 S08） | S08 |
-| `dog-leash-wait.png` | 累但信任 | 停步等待後願再走 | S08 高 |
+| `dog-leash-wait.png` | 累但信任 | 停步等待後願再走 | S08 高；S09 玄關 |
 | `dog-shoe-sleep.png` | 安心 | 喝完水靠鞋邊睡 | S08 記憶 |
-| `dog-refuse-stranger.png` | 拒絕 | 貼予安腳邊、對伸手僵／低鳴 | S09 |
+| `dog-farewell.png` | 告別上望 | 坐姿抬頭看予安（無牽繩） | S09 客廳 |
+| `dog-cafe-refuse.png` | 拒絕警告 | 胸背帶＋牽繩、貼腳對同事僵／低鳴 | S09 咖啡廳 |
+| `dog-cafe-tense.png` | 兩人中間僵 | 僵住、面向予安（找妳） | S09 咖啡廳低信任 |
+| `dog-refuse-stranger.png` | 拒絕 | 貼予安腳邊、對伸手僵／低鳴 | S09 fallback／舊 |
 | `dog-back-sleep.png` | 信任落地 | **背對**睡在伸手可及處 | 結局 A |
 | `dog-check-sleep.png` | 選定仍學 | 睡近但睜眼確認／轉身查看 | 結局 B |
 | `dog-door-edge.png` | 薄冰 | 牽繩掛好、狗睡門邊、不看人 | 結局 D |
@@ -279,31 +283,38 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `char-yuan-commute.png` | 予安夜歸／超商；可戴耳機 |
 | `char-yuan-squat-side.png` | 側身蹲下等待（S02 A） |
 | `char-yuan-carry-pup.png` | 側抱幼犬上樓 |
-| `char-yuan-headphones.png` | 戴耳機開會（S05 尖） |
+| `char-yuan-headphones.png` | 戴耳機開會（S05 尖）；S09 茶水間 |
 | `char-yuan-block.png` | 走廊擋在狗與陌生人中間（S06）；**面向左**擋左側鄰居 |
-| `char-yuan-leash.png` | 牽繩、蹲等（S08） |
+| `char-yuan-leash.png` | 牽繩、蹲等（S08）；S09 **玄關**（×0.8） |
+| `char-yuan-farewell.png` | 單膝下跪攤手告別（無牽繩）｜S09 客廳 |
+| `char-yuan-cafe.png` | 站姿握牽繩、衝突表情｜S09 咖啡廳 |
 | `char-clerk.png` | 超商店員 |
 | `char-neighbor.png` | 走廊第三者 |
-| `char-coworker.png` | S09 同事 |
+| `char-coworker.png` | S09 茶水間同事（站姿提議） |
+| `char-coworker-cafe.png` | S09 咖啡廳同事（蹲姿側身、面向女主／狗） |
 
-### 6.4 結局 CG（可選 · scene/）
+### 6.4 結局靜幀（gallery／結局一覽解鎖）
 
-| 檔名 | 結局 | 畫面（guild §3） |
-|------|------|------------------|
-| `scene-ending-a-back.png` | A 背靠 | 停電／颱風夜；背對睡；牆上鑰匙＋牽繩 |
-| `scene-ending-b-learning.png` | B 選定 | 睡近仍確認；或背對一下又轉身 |
-| `scene-ending-c-handover.png` | C 送走 | 咖啡廳門口交牽繩；狗僵／低鳴 |
-| `scene-ending-d-thin-ice.png` | D 薄冰 | 牽繩掛好、狗睡門邊、不看「晚上見」 |
+| 檔名 | 結局 | 畫面 |
+|------|------|------|
+| `gallery/ending-a-back.png` | A 背靠 | 停電夜沙發前同睡／背靠 |
+| `gallery/ending-b-learning.png` | B 選定 | 近睡仍抬頭確認 |
+| `gallery/ending-c-handover.png` | C 送走 | 空屋；空掛勾／鑰匙獨掛 |
+| `gallery/ending-d-thin-ice.png` | D 薄冰 | 門邊睡、人狗隔一段距離 |
+
+達成對應結局後，主選單「結局一覽」可點開靜幀。
 
 ### 6.5 隱藏紀念照（gallery／僅結局 A）
 
 | 檔名 | 解鎖 | 畫面 |
 |------|------|------|
 | `gallery/secret-lap-sleep.png` | 結局 A｜背靠 | 中型幼犬躺在予安大腿上的特寫；印象派油畫；無信任％／HUD |
+| `gallery/secret-back-to-back.png` | 結局 A｜背靠 | 停電夜背靠同睡全景 |
 
 - 文案軟提示：「真正把背交給彼此之後才看得到」；**禁止**親密度條或 100% 字樣。
-- 掛載：`image gallery secret_lap_sleep`；`screens.rpy` 結局一覽 → `secret_photo_view`。
-- `persistent.unlocked_secret_photos`；於 `unlock_ending("A")` 旁呼叫 `unlock_secret_photo("lap_sleep")`。
+- 掛載：`image gallery secret_*`／`ending_*`；`screens.rpy` → `ending_still_view`／`secret_photo_view`。
+- `persistent.unlocked_secret_photos`；`process_ending_unlock("A")` 解鎖 `lap_sleep` 與 `back_to_back`。
+- 隱藏文章（狗日記／予安心境／朋友視角）見 `Renpy_game/game/hidden_content.rpy`。
 
 ---
 
@@ -320,7 +331,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | 06 | corridor-day | behind-legs / forehead-nudge | Guard 擋人 |
 | 07 | living-night | guard-door | 依賴對調 |
 | 08 | alley-day → living | street-tense / leash-wait / shoe-sleep | Dist 停等 |
-| 09 | cafe-day | refuse-stranger | G2 留下／送走 |
+| 09 | living-day → entrance-day → cafe-day | farewell → leash-wait → cafe-refuse／cafe-tense | 告別→扣帶→G2 留下／送走 |
 | 10 | living-night | back-sleep / check-sleep / door-edge | 結局睡姿 |
 ```
 
@@ -351,6 +362,12 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 - **狗圖（同日晚）：** 以用戶 5 張錨點重鎖 Option B；原圖備份於 `assets/dog/_backup_20260725_183542/`；`canonical`／`anxious`／`behind-legs`／`refuse-stranger` 直接落地錨點去背版；其餘 15 pose 依新 IDENTITY LOCK 全量重產（黑底＋`remove_ai_bg.py`）。詳見 `image_dog.md`。
 - **人物（同日）：** 7 張 `assets/char/` 全量重產；備份 `assets/char/_backup_20260725_193450/`；新建 [`image_char.md`](image_char.md)（予安 IDENTITY＋NPC）；錨點 `assets/char/refs/`。
 
+### 2026-07-28｜S09 專用立繪與劇情朝向
+
+- 新增：`char-yuan-farewell`、`char-yuan-cafe`、`char-coworker-cafe`、`dog-farewell`、`dog-cafe-refuse`、`dog-cafe-tense`（Cursor 生圖＋`remove_ai_bg.py`）。
+- 客廳開頭用**告別圖**（無牽繩）；玄關牽繩立繪 **×0.8**；咖啡廳**不沿用** S08 蹲牽繩／舊同事站姿。
+- 朝向以劇情為準：拒絕時狗面向同事；僵住／留下時面向予安。詳見 [`section_09_almost_handoff.md`](section_09_almost_handoff.md)。
+
 ---
 
 ## 9. 與 Version2 切割
@@ -367,4 +384,4 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ---
 
-*更新：2026-07-25｜背景 BG ONE-LINER；S03 改 gate；狗圖／人物圖依錨點全量重產（見 `image_dog.md`／`image_char.md`）*
+*更新：2026-07-28｜S09 告別／咖啡廳專用立繪與劇情朝向；此前 2026-07-25 全量重產見上*

@@ -126,9 +126,12 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 | 生成 |
 | `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 | 生成 |
 | `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S08 低 | 生成 |
-| `dog-leash-wait.png` | 累但信任 | 胸背帶、停步等待 | S08 高 | 生成 |
+| `dog-leash-wait.png` | 累但信任 | 胸背帶、停步等待 | S08 高；S09 玄關 | 生成 |
 | `dog-shoe-sleep.png` | 安心 | 靠燕麥灰平底鞋邊睡 | S08 記憶 | 生成 |
-| `dog-refuse-stranger.png` | 拒絕 | 胸背帶＋牽繩、低蹲對伸手僵 | S09 | `refs/ref-refuse-stranger` |
+| `dog-farewell.png` | 告別上望 | 坐姿抬頭（無牽繩／無胸背帶） | S09 客廳 | 生成 |
+| `dog-cafe-refuse.png` | 拒絕警告 | 胸背帶＋牽繩、貼腳對伸手僵 | S09 咖啡廳 | 生成 |
+| `dog-cafe-tense.png` | 兩人中間僵 | 僵住、面向認得的人 | S09 咖啡廳低信任 | 生成 |
+| `dog-refuse-stranger.png` | 拒絕 | 胸背帶＋牽繩、低蹲對伸手僵 | S09 fallback | `refs/ref-refuse-stranger` |
 | `dog-back-sleep.png` | 信任落地 | **背對**睡在伸手可及處 | 結局 A | 生成 |
 | `dog-check-sleep.png` | 選定仍學 | 睡近但睜眼確認 | 結局 B | 生成 |
 | `dog-door-edge.png` | 薄冰 | 睡門邊、不看人 | 結局 D | 生成 |
@@ -198,7 +201,8 @@ No text, no logo, no purebred markers, no trust meter UI.
 |------|------|
 | 2026-07-19 | Option B wiry 定稿；正式狗資產 |
 | 2026-07-25 | 用戶提供 5 張錨點圖 → 備份至 `assets/dog/_backup_20260725_183542/`；重寫 IDENTITY／STYLE；落地 canonical／anxious／behind-legs／refuse-stranger；其餘 pose 依新鎖全量重產 |
+| 2026-07-28 | 新增 `dog-farewell`／`dog-cafe-refuse`／`dog-cafe-tense`；S09 朝向見 `section_09_almost_handoff.md` |
 
 ---
 
-*更新：2026-07-25｜用戶錨點圖鎖定外型與 impasto＋黑底去背流程*
+*更新：2026-07-28｜S09 告別／咖啡廳狗姿；Option B 錨點鎖定見 2026-07-25*

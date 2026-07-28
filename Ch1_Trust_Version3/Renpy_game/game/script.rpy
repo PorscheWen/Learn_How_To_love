@@ -24,6 +24,8 @@ default _current_bgm = None
 default seen_section_titles = {}
 default persistent.unlocked_endings = []
 default persistent.unlocked_secret_photos = []
+default persistent.unlocked_secret_content = []
+default persistent.playthrough_trajectories = []
 
 
 init python:
@@ -70,6 +72,9 @@ init python:
         "dog/dog-sniff-wire.png": 0.71,
         "dog/dog-stair-watch.png": 0.615,
         "dog/dog-street-tense.png": 0.808,
+        "dog/dog-farewell.png": 0.468,
+        "dog/dog-cafe-refuse.png": 0.715,
+        "dog/dog-cafe-tense.png": 0.733,
     }
 
     def dog_sprite(path, fallback=Solid("#00000000")):
@@ -233,11 +238,10 @@ init python:
     def secret_photo_unlocked(photo_id):
         ## 結局 A 已解鎖者一併可見（含舊存檔），不強制重打。
         unlocked = persistent.unlocked_secret_photos or []
-        if photo_id == "lap_sleep":
+        if photo_id in ("lap_sleep", "back_to_back"):
             if ending_unlocked("A"):
                 return True
-            ## 相容舊 id back_to_back
-            return "lap_sleep" in unlocked or "back_to_back" in unlocked
+            return photo_id in unlocked or "lap_sleep" in unlocked or "back_to_back" in unlocked
         return photo_id in unlocked
 
     # ========== 彩蛋名字判定 ==========
@@ -264,43 +268,53 @@ init python:
 
     def unlock_secret_content(content_id):
         """解鎖隱藏內容（如 Ch2 伏筆、角色小傳等）；寫入 persistent。"""
-        if not hasattr(persistent, "unlocked_secret_content"):
-            persistent.unlocked_secret_content = []
-        unlocked = list(persistent.unlocked_secret_content)
+        unlocked = list(persistent.unlocked_secret_content or [])
         if content_id not in unlocked:
             unlocked.append(content_id)
             persistent.unlocked_secret_content = unlocked
 
     def secret_content_unlocked(content_id):
         """檢查隱藏內容是否已解鎖。"""
-        if not hasattr(persistent, "unlocked_secret_content"):
-            return False
         return content_id in (persistent.unlocked_secret_content or [])
 
     # ========== 結局後解鎖邏輯 ==========
     def process_ending_unlock(ending_id, trust_value):
         """
-        在結局演出後調用，自動解鎖相應的隱藏內容。
+        在結局演出後調用，自動解鎖相應的隱藏內容與結局圖。
         ending_id: A / B / C / D
         trust_value: 當前信任數值（用於變體內容）
         """
-        # 通用解鎖
-        unlock_ending(ending_id)
+        eid = str(ending_id or "").upper()
+        unlock_ending(eid)
 
-        # 結局 A：解鎖隱藏照片與 Ch2 提示
-        if ending_id == "A":
+        # 各結局共通：狗日記／予安心境／朋友視角
+        unlock_secret_content("dog_diary_" + eid.lower())
+        unlock_secret_content("character_aftercare_" + eid.lower())
+        unlock_secret_content("friend_perspective_" + eid.lower())
+
+        # 結局 A：兩張紀念照＋Ch2 提示
+        if eid == "A":
             unlock_secret_photo("lap_sleep")
+            unlock_secret_photo("back_to_back")
             unlock_secret_content("ch2_trust_foundation_hint")
-            unlock_secret_content("character_aftercare_a")
-        # 結局 B：解鎖角色學習小傳
-        elif ending_id == "B":
-            unlock_secret_content("character_aftercare_b")
-        # 結局 C：解鎖送走後的修復可能性
-        elif ending_id == "C":
-            unlock_secret_content("character_aftercare_c")
-        # 結局 D：解鎖薄冰之下的故事
-        elif ending_id == "D":
-            unlock_secret_content("character_aftercare_d")
+
+        renpy.save_persistent()
+        """舊存檔／已解鎖結局：補齊靜幀相關隱藏內容與紀念照（可安全重入）。"""
+        changed = False
+        for eid in ("A", "B", "C", "D"):
+            if not ending_unlocked(eid):
+                continue
+            before_photos = list(persistent.unlocked_secret_photos or [])
+            before_content = list(persistent.unlocked_secret_content or [])
+            process_ending_unlock(eid, getattr(store, "trust", 0))
+            if (
+                list(persistent.unlocked_secret_photos or []) != before_photos
+                or list(persistent.unlocked_secret_content or []) != before_content
+            ):
+                changed = True
+        if changed:
+            renpy.save_persistent()
+        return True
 
     # ========== 信任軌跡記錄 ==========
     def record_trust_trajectory():
@@ -308,21 +322,18 @@ init python:
         在結局時記錄本周目的信任走勢供後續查看。
         存檔於 persistent 中，重新遊玩不影響既有結局解鎖。
         """
-        if not hasattr(persistent, "playthrough_trajectories"):
-            persistent.playthrough_trajectories = []
+        import time
 
-        trajectory = {
+        trajectories = list(persistent.playthrough_trajectories or [])
+        trajectories.append({
             "ending": store.flags.get("ch1_ending", "Unknown"),
             "final_trust": store.trust,
             "dist_axis": store.dist,
             "tone_axis": store.tone,
             "guard_axis": store.guard,
             "dog_name": store.dog_label,
-            "timestamp": renpy.get_time(),
-        }
-        
-        trajectories = list(persistent.playthrough_trajectories or [])
-        trajectories.append(trajectory)
+            "timestamp": time.time(),
+        })
         persistent.playthrough_trajectories = trajectories
 
 
@@ -338,9 +349,24 @@ image bg street_night = optional_background(
 image bg living_night = optional_background(
     "bg/bg-living-night.png", "#211913"
 )
-## 結局 A 隱藏紀念照（中型幼犬躺大腿特寫）；僅 gallery／aftercare 顯示
+## 結局一覽／隱藏紀念照（gallery／）
 image gallery secret_lap_sleep = optional_background(
     "gallery/secret-lap-sleep.png", "#211913"
+)
+image gallery secret_back_to_back = optional_background(
+    "gallery/secret-back-to-back.png", "#211913"
+)
+image gallery ending_a_back = optional_background(
+    "gallery/ending-a-back.png", "#211913"
+)
+image gallery ending_b_learning = optional_background(
+    "gallery/ending-b-learning.png", "#211913"
+)
+image gallery ending_c_handover = optional_background(
+    "gallery/ending-c-handover.png", "#211913"
+)
+image gallery ending_d_thin_ice = optional_background(
+    "gallery/ending-d-thin-ice.png", "#211913"
 )
 image bg backdoor_night = optional_background(
     "bg/bg-backdoor-night.png", "#131A22"
@@ -410,8 +436,17 @@ image neighbor stand = char_sprite("char/char-neighbor.png")
 image yuan leash = char_sprite(
     "char/char-yuan-leash.png", "char/char-yuan-commute.png"
 )
+image yuan farewell = char_sprite(
+    "char/char-yuan-farewell.png", "char/char-yuan-leash.png"
+)
+image yuan cafe = char_sprite(
+    "char/char-yuan-cafe.png", "char/char-yuan-leash.png"
+)
 image coworker stand = char_sprite(
     "char/char-coworker.png", "char/char-neighbor.png"
+)
+image coworker cafe = char_sprite(
+    "char/char-coworker-cafe.png", "char/char-coworker.png"
 )
 
 ## S08 巷口機車道具（停放／轉角切過）
@@ -456,6 +491,15 @@ image dog street_tense = dog_sprite(
 )
 image dog leash_wait = dog_sprite(
     "dog/dog-leash-wait.png", "dog/dog-halfstep.png"
+)
+image dog farewell = dog_sprite(
+    "dog/dog-farewell.png", "dog/dog-halfstep.png"
+)
+image dog cafe_refuse = dog_sprite(
+    "dog/dog-cafe-refuse.png", "dog/dog-refuse-stranger.png"
+)
+image dog cafe_tense = dog_sprite(
+    "dog/dog-cafe-tense.png", "dog/dog-street-tense.png"
 )
 image dog shoe_sleep = dog_sprite(
     "dog/dog-shoe-sleep.png", "dog/dog-parallel.png"
@@ -615,6 +659,86 @@ transform scooter_pass:
     yanchor 1.0
     ypos 0.88
     zoom 0.46
+
+# ------------------------------------------------------------
+# S09 朝向／位置（劇情準則）＋全段立繪 ×0.8
+# 基線：char 0.45、dog_near 0.34、dog_mid 0.30、dog_far 0.26
+# ×0.8 → char 0.36、near 0.272、mid 0.24、far 0.208
+#
+# 客廳告別：圖檔予安面向左、狗抬頭偏左 → 予安在左、狗在右時
+#   須水平翻轉予安，兩人才對望（攤手朝狗）。
+# 玄關：予安蹲姿面向左；狗 leash-wait 面向右 → 予安右／狗左即可對望。
+# 咖啡廳：同事左→右；予安右→左；狗依劇情（拒絕對同事／其餘對予安）。
+# ------------------------------------------------------------
+
+# S09 客廳告別（×0.8）
+transform char_right_farewell:
+    xalign 0.40
+    yanchor 1.0
+    ypos 0.86
+    ## 圖檔面左；翻轉後面右對狗（x／y 同量避免拉寬）
+    xzoom -0.36
+    yzoom 0.36
+
+transform dog_farewell_near:
+    xalign 0.62
+    yanchor 1.0
+    ypos 0.87
+    zoom 0.272
+
+# S09 玄關牽繩 ×0.8（對齊 S08 entrance 比例）
+transform char_right_s09:
+    xalign 0.74
+    yanchor 1.0
+    ypos 0.86
+    zoom 0.36
+
+transform dog_entrance_far_s09:
+    xalign 0.50
+    yanchor 1.0
+    ypos 0.87
+    zoom 0.208
+
+transform dog_entrance_mid_s09:
+    xalign 0.62
+    yanchor 1.0
+    ypos 0.87
+    zoom 0.272
+
+# S09 咖啡廳人物 ×0.8
+transform char_left_cafe:
+    xalign 0.22
+    yanchor 1.0
+    ypos 0.86
+    zoom 0.36
+
+transform char_right_cafe:
+    xalign 0.78
+    yanchor 1.0
+    ypos 0.86
+    zoom 0.36
+
+# 拒絕：貼予安腳邊，面向左側同事（圖檔面右 → 翻轉）
+transform dog_cafe_near_guard:
+    xalign 0.64
+    yanchor 1.0
+    ypos 0.86
+    xzoom -0.272
+    yzoom 0.272
+
+# 留下：貼鞋側，面向右側予安（圖檔面右，不翻）
+transform dog_cafe_near_home:
+    xalign 0.66
+    yanchor 1.0
+    ypos 0.86
+    zoom 0.272
+
+# 僵住／交繩拉扯：兩人中間，面向予安（圖檔面右）
+transform dog_cafe_mid:
+    xalign 0.48
+    yanchor 1.0
+    ypos 0.86
+    zoom 0.24
 
 
 define narrator = Character(
@@ -2236,8 +2360,9 @@ label section_09_almost_handoff:
     scene bg living_day
     with Dissolve(1.2)
     hide coworker
-    show yuan leash at char_right
-    show dog leash_wait at dog_mid
+    ## 狗先、人後；transform 已翻轉予安，與狗對望（×0.8）
+    show dog farewell at dog_farewell_near
+    show yuan farewell at char_right_farewell
     with dissolve
 
     "週六出門前，她把水碗洗了兩次。牽繩捲好，疫苗資料放進紙袋，連平常忘記補的濕紙巾都塞進去。"
@@ -2245,17 +2370,18 @@ label section_09_almost_handoff:
     "她把飼料分裝成七小袋，在每袋寫上日期。寫到第四袋時，筆尖停住，墨水在塑膠袋上暈成一小點。"
     "舊外套也被折進提袋。那件衣服早該送洗，袖口還留著第一次抱牠時抓出的淺痕。"
     "予安用拇指摸過那幾道線，最後沒有把外套拿出來。知道牠習慣什麼，也是交接資料的一部分。"
+    "臨走前，她在客廳地板蹲下來。沒有先拿牽繩，只把手掌攤開，像在跟一段還沒說完的生活打招呼，也像在告別。"
 
     scene bg entrance_day
     with Dissolve(1.0)
-    show yuan leash at char_right
-    show dog leash_wait at dog_entrance_far
+    show yuan leash at char_right_s09
+    show dog leash_wait at dog_entrance_far_s09
     with Dissolve(0.6)
 
     if trust >= 5:
         "[dog_label]跟著她走到玄關，鼻尖碰了碰紙袋，又靠回她腳邊。"
         "她移動紙袋，狗也跟著換位置。不是阻擋，只是讓自己的肩膀一直貼在她和袋子之間。"
-        show dog leash_wait at dog_entrance_mid
+        show dog leash_wait at dog_entrance_mid_s09
         with Dissolve(0.6)
         "予安蹲下，把胸背帶放到地墊上。牠聞了兩次，自己把前腳踏進去；扣環合上時，兩人都停了一秒。"
         "門把在掌心發涼——這次開門，不是散步，是去見另一個人。"
@@ -2266,8 +2392,13 @@ label section_09_almost_handoff:
 
     scene bg cafe_day
     with Dissolve(1.5)
-    show coworker stand at char_left
-    show yuan leash at char_right
+    show coworker cafe at char_left_cafe
+    show yuan cafe at char_right_cafe
+    ## scene 會清掉玄關的狗；門口三人同框時狗必須一開始就在場
+    if trust >= 5 or flags.get("s06_protected", False):
+        show dog cafe_refuse at dog_cafe_near_guard
+    else:
+        show dog cafe_tense at dog_cafe_mid
     with dissolve
 
     "咖啡廳門口比照片裡窄。玻璃門每開一次，磨豆聲和陌生人的氣味便一起湧出來。"
@@ -2278,13 +2409,13 @@ label section_09_almost_handoff:
     "同事蹲下，側過身，把手留在膝上。動作沒有錯，語氣也很輕。"
 
     if trust >= 5 or flags.get("s06_protected", False):
-        show dog refuse_stranger at dog_near_pair
+        show dog cafe_refuse at dog_cafe_near_guard
         with Dissolve(0.8)
         $ dog_sfx("growl")
         "[dog_label]卻貼住予安的鞋，肩膀繃緊。牠沒有撲咬，只在同事伸手想接牽繩時，喉嚨裡滾出一聲很低、很短的警告。"
         "牠拒絕的不是那個人。牠只是把已經認得的外圍，縮回予安腳邊。"
     else:
-        show dog street_tense at dog_mid_pair
+        show dog cafe_tense at dog_cafe_mid
         with Dissolve(0.8)
         "[dog_label]僵在離兩人都有一點距離的位置。沒有低鳴，也沒有躲進誰身後；牠只是再次把四隻腳準備成隨時能退的樣子。"
         "予安忽然明白，安靜不一定是同意。有時只是牠還不相信，任何一邊會替牠停下來。"
@@ -2317,7 +2448,7 @@ label section_09_almost_handoff:
             ya "我不是比較會。我只是……想繼續學。"
             coworker "那就繼續。真的需要幫忙，再找我。"
             "同事站起來，沒有生氣，也沒有替這個決定鼓掌。她只把空著的手收回外套口袋，讓門口重新寬了一點。"
-            show dog refuse_stranger at dog_near_pair
+            show dog cafe_refuse at dog_cafe_near_home
             with Dissolve(0.7)
             "[dog_label]的肩膀過了很久才鬆。牠沒有搖尾巴，只把鼻尖碰到她鞋側，像確認那雙鞋仍朝著回家的方向。"
             "予安把疫苗資料從紙袋拿回來。紙張沒有變重，握在手裡卻不像剛才那麼容易交出去。"
@@ -2346,11 +2477,11 @@ label section_09_almost_handoff:
                 "紙袋交出去的那一秒，予安忽然想起靠著鞋睡著的臉——關係最好的時候，理由也最完整。那才是最酸的地方。"
                 thought "不是因為不愛。是因為太清楚自己會累。"
             if entry_trust >= 5:
-                show dog refuse_stranger at dog_mid_pair
+                show dog cafe_refuse at dog_cafe_mid
                 with Dissolve(0.7)
                 "[dog_label]往她鞋邊靠，牽繩卻從另一隻手傳來方向。牠低低鳴了一聲，沒有被寫成挽留，也沒有被誰責怪。"
             else:
-                show dog street_tense at dog_mid_pair
+                show dog cafe_tense at dog_cafe_mid
                 with Dissolve(0.7)
                 "[dog_label]沒有跟上任何人。兩邊都等了一會兒，同事才用鬆著的牽繩，帶牠慢慢離開玻璃門。"
             "予安站在原地，把所有已經交代過的事又在心裡重複一次。這個選擇有理由，也仍然會痛；兩件事可以同時是真的。"
@@ -2395,11 +2526,13 @@ label section_10_share_the_key:
         "她走得比平常快。到家門口才發現，今天不需要先看腳邊有沒有一團蜂蜜色跟著。"
         "鑰匙插進鎖孔，門開得很順。屋裡沒有水碗被推動，也沒有爪子因為門聲從地板上站起來。"
         "予安把鞋脫好，照習慣留出靠牆那一小塊位置。做完才想起，已經沒有誰需要從那裡繞過她。"
+        "玄關的燈亮得太乾淨。以前她會先側身，讓出狗轉身的弧；今晚那道弧空著，她反而站得不自在。"
         "她先去洗水碗。水龍頭開到一半，手停在空中。碗是乾淨的，早上才洗過兩次；她只是還沒準備好把它收起來。"
         "牆上的掛勾原本預留給牽繩。現在只有鑰匙掛在左邊，右邊空著，黏膠的透明邊在燈下反光。"
         "她把鑰匙取下又掛回去，金屬碰牆的聲音比平常清楚。"
         thought "原來少一個心跳，不是完全沒有聲音。"
         "手機仍沒有訊息。她告訴自己，抵達新家需要時間；告訴第二次時，才承認自己其實在等一個不是由她拍下來的安全證明。"
+        "她把外套掛好，袖口那道舊抓痕朝外。房間沒有誰會再聞它，她卻仍把抓痕留在看得見的一面。"
         jump ending_ch1_handed_over
     else:
         "回程經過生活用品店，予安站在碗架前很久。第一個水碗其實還能用，她最後仍拿了一個同樣大小、不同顏色的。"
@@ -2457,8 +2590,9 @@ label ending_ch1_back_to_back:
     "狗抬了一下耳朵，沒有起身確認。門會關，也會再打開——此刻，牠把這件事交給她。"
     "傍晚，鑰匙聲再次落在門外。[dog_label]仍趴在原位，只用尾巴輕輕碰了一下地板。"
     "予安進門後先把鑰匙掛好。她沒有叫牠迎接；被相信回得來，已經是今天最安靜的歡迎。"
-    centered "{size=31}{color=#F7EFE4}結局 A｜背靠{/color}{/size}"
-    jump ending_aftercare
+    ## 節拍動畫 → 標題卡 → 解鎖提示 → aftercare
+    call ending_coda_finish("A", "結局 A｜背靠", "背靠很暖。門會關，也會再打開。")
+    return
 
 
 label ending_ch1_chosen_learning:
@@ -2496,8 +2630,8 @@ label ending_ch1_chosen_learning:
     "狗看著她，沒有跟到門外。這已經是一種選定；剩下的，他們可以慢慢學。"
     "傍晚，她開門時，[dog_label]先在原地確認兩秒，才走到玄關一半。"
     "予安蹲下但沒有伸手。那剩下的一半距離，不需要今晚就完成。"
-    centered "{size=31}{color=#F7EFE4}結局 B｜選定但還在學{/color}{/size}"
-    jump ending_aftercare
+    call ending_coda_finish("B", "結局 B｜選定但還在學", "選定了，卻還在把身體學回來。")
+    return
 
 
 label ending_ch1_handed_over:
@@ -2533,8 +2667,8 @@ label ending_ch1_handed_over:
     "這不是故事被判定失敗。只是往後的靠近，要隔著另一扇門重新學。"
     "三天後，同事又傳來照片：[dog_label]睡在離新家房門兩步遠的地方，舊外套仍墊在身下。"
     "予安回了一個「收到」。她沒有要求更多證明，只把那張照片收進一個不再由她更新的相簿。"
-    centered "{size=31}{color=#F7EFE4}結局 C｜送走之後{/color}{/size}"
-    jump ending_aftercare
+    call ending_coda_finish("C", "結局 C｜送走之後", "理由可以完整，想念也不會因此變得不合理。")
+    return
 
 
 label ending_ch1_thin_ice:
@@ -2569,8 +2703,8 @@ label ending_ch1_thin_ice:
     "狗沒有看她。耳朵卻在門闔上前動了一下。薄冰沒有忽然變厚，但他們都還站在這一邊。"
     "傍晚回家，水碗少了一點水。[dog_label]仍守在門邊，身體卻沒有因鑰匙聲立刻站起來。"
     "予安把鞋放好，退到牠看得見的位置。今天沒有靠近，只比昨天少驚動一次。"
-    centered "{size=31}{color=#F7EFE4}結局 D｜薄冰同住{/color}{/size}"
-    jump ending_aftercare
+    call ending_coda_finish("D", "結局 D｜薄冰同住", "薄冰沒有忽然變厚，但他們都還站在這一邊。")
+    return
 
 
 ## ------------------------------------------------------------
@@ -2578,6 +2712,9 @@ label ending_ch1_thin_ice:
 ## ------------------------------------------------------------
 
 label ending_aftercare:
+    $ sync_unlocked_ending_rewards()
+    $ renpy.save_persistent()
+
     if flags.get("ch1_ending") == "chosen_learning":
         if flags.get("s08_forced_walk", False):
             "那天把一圈走完，今晚仍會回頭確認——選定了，卻還在把身體學回來。"
@@ -2586,7 +2723,8 @@ label ending_aftercare:
     elif flags.get("ch1_ending") == "back_to_back":
         "背靠很暖。若想看更接近日常養寵的溫度，結局 B〈選定但還在學〉也很值得。"
         if secret_photo_unlocked("lap_sleep"):
-            "有一段畫面，只有真正把背交給彼此之後才看得到——可在「結局一覽」打開紀念照片。"
+            "有一段畫面，只有真正把背交給彼此之後才看得到——可在「結局一覽」打開紀念照片與結局靜幀。"
+            "狗的日記、予安心境與朋友視角，也已寫進主選單「隱藏內容」。"
     elif flags.get("ch1_ending") == "handed_over":
         if flags.get("landmark_chose_reason_over_bond", False):
             "最好的時候把牽繩交出去——那酸，比失敗更難跟別人說清楚。"
@@ -2598,10 +2736,17 @@ label ending_aftercare:
     "選擇會改變狗的距離與睡姿。想再試另一條路嗎？"
     menu:
         "回主選單":
+            $ renpy.save_persistent()
             return
 
         "查看已解鎖結局":
+            $ sync_unlocked_ending_rewards()
             call screen ending_gallery
+            jump ending_aftercare
+
+        "查看隱藏內容":
+            $ sync_unlocked_ending_rewards()
+            call screen hidden_content_gallery
             jump ending_aftercare
 
         "從 Section 09 再試一次（留下或送走）":

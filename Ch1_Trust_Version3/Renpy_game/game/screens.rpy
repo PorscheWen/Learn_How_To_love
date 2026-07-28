@@ -146,8 +146,14 @@ screen main_menu():
 
             ## 章節／結局
             textbutton "章節選擇" style "menu_button" action ShowMenu("section_select")
-            textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery")
-            textbutton "隱藏內容" style "menu_button" action ShowMenu("hidden_content_gallery")
+            textbutton "結局一覽" style "menu_button" action [
+                Function(sync_unlocked_ending_rewards),
+                ShowMenu("ending_gallery"),
+            ]
+            textbutton "隱藏內容" style "menu_button" action [
+                Function(sync_unlocked_ending_rewards),
+                ShowMenu("hidden_content_gallery"),
+            ]
 
             null height 8
 
@@ -162,12 +168,12 @@ screen ending_gallery():
     ## 選單底圖：theme/menu-bg.png；項目半透明嵌在牆面，右側牆鉤露出
     add "lhtl_menu_bg"
 
-    ## 只顯示已解鎖標題；未解鎖不劇透內容。
+    ## 只顯示已解鎖標題；未解鎖不劇透內容。點標題可開結局靜幀。
     default ending_rows = [
-        ("A", "結局 A｜背靠"),
-        ("B", "結局 B｜選定但還在學"),
-        ("C", "結局 C｜送走之後"),
-        ("D", "結局 D｜薄冰同住"),
+        ("A", "結局 A｜背靠", "gallery ending_a_back"),
+        ("B", "結局 B｜選定但還在學", "gallery ending_b_learning"),
+        ("C", "結局 C｜送走之後", "gallery ending_c_handover"),
+        ("D", "結局 D｜薄冰同住", "gallery ending_d_thin_ice"),
     ]
 
     frame:
@@ -189,7 +195,7 @@ screen ending_gallery():
                     font CJK_FONT
                     size gui.label_text_size
                     color LHTL_TEXT_LIGHT
-                text "達成後解鎖標題。未解鎖不顯示內容。":
+                text "達成後解鎖標題與靜幀。點已解鎖項目可查看圖片。":
                     font CJK_FONT
                     size 16
                     color LHTL_TEXT_SOFT
@@ -204,16 +210,12 @@ screen ending_gallery():
                 vbox:
                     spacing 10
                     xfill True
-                    for ending_id, title in ending_rows:
+                    for ending_id, title, img_name in ending_rows:
                         if ending_unlocked(ending_id):
-                            frame:
-                                background Solid(LHTL_MENU_ITEM)
-                                padding (18, 12)
+                            textbutton "✓  " + title style "embed_menu_button":
+                                action Show("ending_still_view", ending_id=ending_id, title=title, img_name=img_name)
+                                xminimum 0
                                 xfill True
-                                text "✓  " + title:
-                                    font CJK_FONT
-                                    size 22
-                                    color LHTL_TEXT
                         else:
                             frame:
                                 background Solid(LHTL_MENU_ITEM)
@@ -238,11 +240,11 @@ screen ending_gallery():
                         color LHTL_TEXT_LIGHT
 
                     if secret_photo_unlocked("lap_sleep"):
-                        textbutton "✓  背靠｜中型幼犬躺在大腿特寫" style "embed_menu_button":
+                        textbutton SECRET_PHOTO_META["lap_sleep"]["button"] style "embed_menu_button":
                             action Show("secret_photo_view", photo="lap_sleep")
                             xminimum 0
                             xfill True
-                        text "真正把背交給彼此之後才看得到。":
+                        text SECRET_PHOTO_META["lap_sleep"]["hint"]:
                             font CJK_FONT
                             size 15
                             color LHTL_TEXT_SOFT
@@ -260,8 +262,47 @@ screen ending_gallery():
                             size 15
                             color LHTL_TEXT_SOFT
 
+                    if secret_photo_unlocked("back_to_back"):
+                        textbutton SECRET_PHOTO_META["back_to_back"]["button"] style "embed_menu_button":
+                            action Show("secret_photo_view", photo="back_to_back")
+                            xminimum 0
+                            xfill True
+                        text SECRET_PHOTO_META["back_to_back"]["hint"]:
+                            font CJK_FONT
+                            size 15
+                            color LHTL_TEXT_SOFT
+
             textbutton "返回" style "embed_menu_button" action Return():
                 xalign 0.5
+
+
+screen ending_still_view(ending_id="A", title="", img_name="gallery ending_a_back"):
+    modal True
+    zorder 200
+
+    button:
+        background None
+        xfill True
+        yfill True
+        action Hide("ending_still_view")
+
+    add img_name
+
+    frame:
+        background Solid("#17120FCC")
+        padding (20, 12)
+        xalign 0.5
+        yalign 0.06
+        text title:
+            font CJK_FONT
+            size 20
+            color "#F7EFE4"
+
+    textbutton "關閉":
+        style "menu_button"
+        action Hide("ending_still_view")
+        xalign 0.5
+        yalign 0.94
 
 
 screen secret_photo_view(photo="lap_sleep"):
@@ -275,8 +316,9 @@ screen secret_photo_view(photo="lap_sleep"):
         yfill True
         action Hide("secret_photo_view")
 
-    if photo == "lap_sleep":
-        add "gallery secret_lap_sleep"
+    $ meta = SECRET_PHOTO_META.get(photo, {})
+    if photo in SECRET_PHOTO_META:
+        add meta.get("image", Solid("#17120F"))
     else:
         add Solid("#17120F")
 
@@ -285,7 +327,7 @@ screen secret_photo_view(photo="lap_sleep"):
         padding (20, 12)
         xalign 0.5
         yalign 0.06
-        text "紀念照片｜躺在大腿":
+        text meta.get("title", "紀念照片"):
             font CJK_FONT
             size 20
             color "#F7EFE4"
@@ -300,7 +342,7 @@ screen secret_photo_view(photo="lap_sleep"):
 screen hidden_content_gallery():
     tag menu
 
-    ## 隱藏內容菜單：角色小傳、結局後故事、信任軌跡
+    ## 隱藏內容：狗日記／予安心境／朋友視角（完成對應結局解鎖）
     add "lhtl_menu_bg"
 
     frame:
@@ -318,11 +360,11 @@ screen hidden_content_gallery():
             vbox:
                 spacing 8
                 xfill True
-                text "隱藏內容｜角色小傳與結局後故事":
+                text "隱藏內容｜日記・心境・朋友視角":
                     font CJK_FONT
                     size 22
                     color LHTL_TEXT_LIGHT
-                text "完成各結局後，會解鎖該路線的角色心境回顧。":
+                text "完成各結局後解鎖對應文章。點項目可閱讀全文。":
                     font CJK_FONT
                     size 16
                     color LHTL_TEXT_SOFT
@@ -338,113 +380,28 @@ screen hidden_content_gallery():
                     spacing 10
                     xfill True
 
-                    ## 結局 A 內容
-                    if secret_content_unlocked("character_aftercare_a"):
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            vbox:
-                                spacing 6
-                                text "✓  結局 A｜背靠 — 角色小傳":
+                    for content_id in HIDDEN_CONTENT_ORDER:
+                        $ entry = hidden_content_entry(content_id)
+                        if entry is None:
+                            pass
+                        elif secret_content_unlocked(content_id):
+                            textbutton "✓  " + entry["label"] style "embed_menu_button":
+                                action Show("hidden_content_reader", content_id=content_id)
+                                xminimum 0
+                                xfill True
+                        else:
+                            frame:
+                                background Solid(LHTL_MENU_ITEM)
+                                padding (18, 12)
+                                xfill True
+                                text "○  尚未解鎖":
                                     font CJK_FONT
                                     size 19
-                                    color LHTL_TEXT
-                                text "信任的完整落地。她在辦公室反覆看著那張照片，想著 Ch2 會開始的日常……":
-                                    font CJK_FONT
-                                    size 15
-                                    color LHTL_TEXT_SOFT
-                    else:
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            text "○  結局 A｜背靠 — 尚未解鎖":
-                                font CJK_FONT
-                                size 19
-                                color "#806C5B"
-
-                    ## 結局 B 內容
-                    if secret_content_unlocked("character_aftercare_b"):
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            vbox:
-                                spacing 6
-                                text "✓  結局 B｜選定但還在學 — 角色小傳":
-                                    font CJK_FONT
-                                    size 19
-                                    color LHTL_TEXT
-                                text "真實好結局的樣子。每一天都在選擇相信，不是完美，而是持續……":
-                                    font CJK_FONT
-                                    size 15
-                                    color LHTL_TEXT_SOFT
-                    else:
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            text "○  結局 B｜選定但還在學 — 尚未解鎖":
-                                font CJK_FONT
-                                size 19
-                                color "#806C5B"
-
-                    ## 結局 C 內容
-                    if secret_content_unlocked("character_aftercare_c"):
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            vbox:
-                                spacing 6
-                                text "✓  結局 C｜送走之後 — 角色小傳":
-                                    font CJK_FONT
-                                    size 19
-                                    color LHTL_TEXT
-                                text "放手也是愛。她沒有失敗，只是誠實地承認「我還不夠」……":
-                                    font CJK_FONT
-                                    size 15
-                                    color LHTL_TEXT_SOFT
-                    else:
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            text "○  結局 C｜送走之後 — 尚未解鎖":
-                                font CJK_FONT
-                                size 19
-                                color "#806C5B"
-
-                    ## 結局 D 內容
-                    if secret_content_unlocked("character_aftercare_d"):
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            vbox:
-                                spacing 6
-                                text "✓  結局 D｜薄冰同住 — 角色小傳":
-                                    font CJK_FONT
-                                    size 19
-                                    color LHTL_TEXT
-                                text "一夜一夜地去承擔風險。因為信任不是給完美者的……":
-                                    font CJK_FONT
-                                    size 15
-                                    color LHTL_TEXT_SOFT
-                    else:
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            text "○  結局 D｜薄冰同住 — 尚未解鎖":
-                                font CJK_FONT
-                                size 19
-                                color "#806C5B"
+                                    color "#806C5B"
 
                     null height 8
 
-                    text "已解鎖隱藏內容 " + str(len([c for c in ["character_aftercare_a", "character_aftercare_b", "character_aftercare_c", "character_aftercare_d"] if secret_content_unlocked(c)])) + "／4":
+                    text "已解鎖隱藏內容 " + str(count_unlocked_hidden_content()) + "／" + str(len(HIDDEN_CONTENT_ORDER)):
                         font CJK_FONT
                         size 16
                         color LHTL_TEXT_SOFT
@@ -453,6 +410,46 @@ screen hidden_content_gallery():
             textbutton "返回" style "embed_menu_button" action Return():
                 xalign 0.5
 
+
+screen hidden_content_reader(content_id=""):
+    modal True
+    zorder 210
+    add Solid("#17120FEE")
+
+    $ entry = hidden_content_entry(content_id) or {"label": "（空）", "body": ""}
+
+    frame:
+        background Solid("#F3E9D9F2")
+        padding (36, 28)
+        xalign 0.5
+        yalign 0.5
+        xsize 860
+        ysize 560
+
+        side "t c b":
+            xfill True
+            spacing 14
+
+            text entry["label"]:
+                font CJK_FONT
+                size 22
+                color LHTL_ACCENT_DARK
+
+            viewport:
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
+                xfill True
+                ymaximum 400
+                text entry["body"]:
+                    font CJK_FONT
+                    size 18
+                    color LHTL_TEXT
+                    line_spacing 8
+
+            textbutton "關閉" style "menu_button":
+                action Hide("hidden_content_reader")
+                xalign 0.5
 
 screen section_select():
     tag menu

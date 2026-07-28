@@ -151,7 +151,7 @@ bg-{place}-{light}.png
 | 06 | `corridor-day` | 日 |
 | 07 | `living-night` | 病中夜 |
 | 08 | **`entrance-day`**（穿帶／出門／返家解帶）→ **`alley-day`**（巷口）→（午後）`living-day` | 外出日；胸背帶與門線都在玄關 |
-| 09 | `living-day`（打包）→ **`entrance-day`**（扣帶出門）→ `cafe-day` →（留下）`living-*` | 日 |
+| 09 | `living-day`（打包／告別）→ **`entrance-day`**（扣帶出門 ×0.8）→ `cafe-day` →（留下）`living-*` | 日 |
 | 10 | `living-night` | 停電／颱風夜；結局睡姿靠疊層 |
 
 **軟分軌提醒：** S05～S08 低／中／高信任共用上表 bg，只換狗 pose（見 `image.md` §0／§6.2）。
@@ -207,11 +207,12 @@ bg-{place}-{light}.png
 
 - 咖啡廳**門口／外觀**為主（交牽繩發生在門外）
 - 禁可讀店名；留牽繩交接的站位空間
+- 疊層：同事左蹲（`char_left_cafe`）、予安右站（`char_right_cafe`）、狗依劇情 near_guard／near_home／mid（見 `section_09_almost_handoff.md`）
 
 ### entrance（S03 門檻；S08／S09 出門）
 
 - 台灣公寓**玄關內側**：門板（貓眼／門把）、地墊、鞋櫃、空牆掛勾
-- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`）
+- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`；S09 用 `*_s09` **×0.8**）
 - night：暖壁燈；day：清晨／日間門縫側光，家具不動
 - **用途：** 門內外過渡（S03）；穿胸背帶、跨門檻、返家解帶（S08）；週六扣帶出門（S09）
 - 無人無狗無字

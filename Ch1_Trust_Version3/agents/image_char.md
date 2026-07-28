@@ -64,10 +64,13 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | `char-yuan-commute.png` | 疲憊垂眼、略駝 | 奶油開襟針織＋灰 T＋深褐寬褲；**耳機掛脖**；右手提便當塑膠袋 | S01／夜歸／超商 |
 | `char-yuan-headphones.png` | 專注／疏離 | 淺灰藍長袖襯衫袖捲起＋深褐褲；**耳機戴上**；雙手插口袋 | S05 Tone 尖 |
 | `char-yuan-block.png` | 冷靜擋在中間 | 米白襯衫袖捲；**面向左**；一臂前伸開掌擋／護（對左側鄰居） | S06 |
-| `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲；側蹲；手握**棕色皮牽繩**下垂 | S08 |
+| `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲；側蹲；手握**棕色皮牽繩**下垂；**面向左** | S08；S09 玄關（×0.8） |
+| `char-yuan-farewell.png` | 告別／攤手 | 米白襯衫＋橄欖褲；單膝下跪；手掌攤開**無牽繩**；圖檔**面向左**（遊戲內 `xzoom` 翻成面右對狗） | S09 客廳（×0.8） |
+| `char-yuan-cafe.png` | 交接衝突 | 米白襯衫＋橄欖褲；**站姿**握牽繩；**面向左**（對同事／狗） | S09 咖啡廳 |
 | `char-clerk.png` | 禮貌微笑 | 年輕男店員；深藍短袖＋深色圍裙＋深褲 | S01／S02 |
 | `char-neighbor.png` | 熱心伸手 | 中年女鄰居；綠卡迪＋米上衣；**面向右**伸手（對右側予安／狗） | S06 |
-| `char-coworker.png` | 真誠提議 | 年輕女同事；淡紫開襟＋米內搭＋炭灰褲；一手前伸 | S09 |
+| `char-coworker.png` | 真誠提議 | 年輕女同事；淡紫開襟＋米內搭＋炭灰褲；一手前伸 | S09 茶水間 |
+| `char-coworker-cafe.png` | 蹲等聞狗 | 同上服裝；**蹲姿側身**；手留膝上／低伸；**面向右**（對女主／狗） | S09 咖啡廳 |
 
 **未落地但 image.md 曾列：** `char-yuan-squat-side`／`char-yuan-carry-pup` — 需要時另產，仍須貼予安 IDENTITY。
 
@@ -91,6 +94,12 @@ Middle-aged Taiwanese neighbor woman, warm kind smile, medium-length dark hair, 
 
 ```text
 Young Taiwanese office coworker woman, friendly sincere smile, dark shoulder-length bob with soft waves, lavender knit cardigan over cream tee, charcoal trousers, flat shoes. One arm gently extended open-palm (offering to take the dog). Full body. Same thick-impasto oil style. SOLID FLAT BLACK background. NOT the same face as Yuan.
+```
+
+### 同事・咖啡廳（coworker-cafe）
+
+```text
+Same coworker identity. Crouched / kneeling sideways at cafe entrance, body angled toward Yuan and the puppy on her right, one hand resting calmly on knee, other hand open low near the ground without grabbing. Empathetic patient expression. Full body. SOLID FLAT BLACK background. NOT the same face as Yuan.
 ```
 
 ---
@@ -133,7 +142,8 @@ No text, no logo, no trust meter UI, no scenery.
 | 日期 | 內容 |
 |------|------|
 | 2026-07-25 | 建立本檔；備份 `assets/char/_backup_20260725_193450/`；以現有 7 張為錨重寫 IDENTITY／STYLE；全量重產 |
+| 2026-07-28 | 新增 `char-yuan-farewell`／`char-yuan-cafe`／`char-coworker-cafe`；S09 朝向寫入 pose 表 |
 
 ---
 
-*建立：2026-07-25｜人物外型鎖定＋黑底去背流程（對齊狗圖重產）*
+*更新：2026-07-28｜S09 告別／咖啡廳人物；建立稿 2026-07-25*

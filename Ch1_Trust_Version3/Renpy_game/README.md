@@ -53,10 +53,11 @@
 - 不顯示 trust 數字，不播放信任升級音效；狗的距離用 `dog_far`→`dog_mid` 位移表達。
 - Section 標題卡使用 `section_title` 全螢幕淡入（主標 2.6 秒、副標延遲 1.2 秒浮現）；**重訪同一段時**副標加速、0.5 秒即提示點擊。
 - S04／S06／S08 段末收束後直接接續；四結局後進入 `ending_aftercare`（推結局 B、可跳 S09 重試、可開結局一覽）。
-- 主選單「結局一覽」：`persistent.unlocked_endings` 記錄 A～D；達成後解鎖標題，未解鎖顯示「尚未解鎖」。
-- 隱藏紀念照：達成結局 A 解鎖 `gallery/secret-lap-sleep.png`（中型幼犬躺在大腿特寫）；未解鎖顯示「？？？」與軟提示，不顯示親密％。
-- 人物立繪：S08 使用 `char-yuan-leash`；S09 使用 `char-coworker`；所有專用立繪缺檔時均有安全 fallback。
-- 狗立繪：S07～S10 依守門、牽繩、拒絕陌生人與三種睡姿切換；缺檔不阻擋遊戲。
+- 主選單「結局一覽」：`persistent.unlocked_endings` 記錄 A～D；達成後可點開結局靜幀（`gallery/ending-*.png`）；未解鎖顯示「尚未解鎖」。
+- 隱藏紀念照：結局 A 解鎖 `gallery/secret-lap-sleep.png` 與 `secret-back-to-back.png`；未解鎖顯示「？？？」與軟提示，不顯示親密％。
+- 隱藏內容：各結局解鎖狗日記／予安心境／朋友視角全文（`hidden_content.rpy`）；主選單「隱藏內容」可閱讀。
+- 人物立繪：S08 使用 `char-yuan-leash`；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`（×0.8）、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。
+- 狗立繪：S07～S10 依守門、牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。
 - BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
 - 狗 SFX：`dog_sfx()` 以低音量播放稀疏 one-shot；S02／S03／S05／S06／S07／S08／S09 使用 `soft`、`whimper`、`murmur`、`bark`、`growl`，S01 與結局 C 空屋不播放。音源授權見 `assets/audio/sfx/CREDITS.md`。
 
@@ -92,9 +93,12 @@
 │  ├─ char-yuan-commute.png
 │  ├─ char-yuan-block.png
 │  ├─ char-yuan-leash.png
+│  ├─ char-yuan-farewell.png
+│  ├─ char-yuan-cafe.png
 │  ├─ char-clerk.png
 │  ├─ char-neighbor.png
-│  └─ char-coworker.png
+│  ├─ char-coworker.png
+│  └─ char-coworker-cafe.png
 ├─ dog/
 │  ├─ dog-ref-canonical.png
 │  ├─ dog-anxious.png
@@ -111,12 +115,20 @@
 │  ├─ dog-street-tense.png
 │  ├─ dog-leash-wait.png
 │  ├─ dog-shoe-sleep.png
+│  ├─ dog-farewell.png
+│  ├─ dog-cafe-refuse.png
+│  ├─ dog-cafe-tense.png
 │  ├─ dog-refuse-stranger.png
 │  ├─ dog-back-sleep.png
 │  ├─ dog-check-sleep.png
 │  └─ dog-door-edge.png
 ├─ gallery/
-│  └─ secret-lap-sleep.png   # 結局 A 隱藏紀念照（大腿特寫）
+│  ├─ ending-a-back.png
+│  ├─ ending-b-learning.png
+│  ├─ ending-c-handover.png
+│  ├─ ending-d-thin-ice.png
+│  ├─ secret-lap-sleep.png
+│  └─ secret-back-to-back.png
 └─ audio/
    ├─ calm.ogg
    ├─ warm.ogg
@@ -141,7 +153,7 @@
 - 背景：正式背景含 S03 `gate-night`（公寓大門外側）；舊 `stairwell-night` 資產保留未刪。
 - 清理：刪除 `assets/dog_old/`、角色／狗綠幕中介檔與測試暫存輸出。
 
-S09／S10 正式圖已用 Cursor 落地（`bg-cafe-day`、`char-coworker`、四結局／拒絕 pose）。若備援重跑 `tools/flux_*.py`，請先輸出到工作暫存目錄；去背完成後只搬入透明正式檔，不把 `*-green.png` 留在 `assets/char/` 或 `assets/dog/`。
+S09／S10 正式圖已用 Cursor 落地（含 2026-07-28 S09：`farewell`／`cafe` 專用立繪、`bg-cafe-day`、四結局／拒絕 pose）。若備援重跑 `tools/flux_*.py`，請先輸出到工作暫存目錄；去背完成後只搬入透明正式檔，不把 `*-green.png` 留在 `assets/char/` 或 `assets/dog/`。朝向與 transform 見 `../agents/section_09_almost_handoff.md`。
 
 ## 驗證
 
