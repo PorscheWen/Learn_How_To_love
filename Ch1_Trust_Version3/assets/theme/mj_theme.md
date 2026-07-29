@@ -58,9 +58,10 @@ Composition: hooks in the left third, large negative space right for title text.
 - **公式：** BG ONE-LINER ＋ `mj_theme` 方案構圖 ＋ reference（`ref-living-night`、`dog-ref-canonical`、舊檔構圖）
 - **`title-main.png` 已重產落地**（方案 A：予安背影左下、小7右下、中央留白），2048×1152
 - **`menu-bg.png` 已重產落地**（方案 C：牆鉤掛鑰匙＋牽繩、單側暖光、大面積暗紋理留白），2048×1152  
-  - 掛載：`screens.rpy` 章節選擇／結局一覽／`game_menu`（存讀檔‧設定‧紀錄）→ `add "lhtl_menu_bg"`  
+  - 掛載：`screens.rpy` 章節選擇／結局一覽／隱藏內容／`game_menu`（存讀檔‧設定‧紀錄）→ `add "lhtl_menu_bg"`  
   - 並由 `script.rpy` 覆寫 `gui.game_menu_background`  
   - **UI 嵌入**：半透明殼（`LHTL_MENU_SHELL`）靠左；選項／存檔卡用 `LHTL_MENU_ITEM` 嵌在牆面；**右側約 25% 留給牆鉤**
+  - **版面契約（2026-07-29）**：子選單用 `side "t c b"` 分標題／內容／返回；結局／隱藏列表 viewport 用 `yfill`（勿死鎖 `ymaximum 420`）；**設定頁勿在 side 中央放 `viewport`＋`yfill`**（會整頁空白）。靜態驗收：`Renpy_game/tools/validate-menus.py`、`validate-menu-layout.py`
 - MJ prompt 保留作備援；換圖覆蓋同名檔即可，不用改程式
 - 資料夾只放正式檔與 `mj_theme.md`；備份在 `_backup_*`
 
@@ -88,4 +89,5 @@ cd Ch1_Trust_Version3
 
 *建立：2026-07-19｜主選單 Theme MJ prompt＋Ren'Py 掛載說明*  
 *更新：2026-07-25｜title-main／menu-bg 依 BG ONE-LINER 重產；原圖備份於 `_backup_20260725_132123`*  
-*更新：2026-07-25｜隱藏紀念照 `gallery/secret-lap-sleep.png`（僅結局 A）*
+*更新：2026-07-25｜隱藏紀念照 `gallery/secret-lap-sleep.png`（僅結局 A）*  
+*更新：2026-07-29｜選單版面契約（side／yfill、設定禁 nested viewport）；見 `agents/tester_menus_report.md`*

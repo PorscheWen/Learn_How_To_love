@@ -100,4 +100,5 @@
 - 四個 ending labels 均可到達並寫入 `flags["ch1_ending"]`。
 - A 必須檢查 `s08_forced_walk`；硬拖路徑不得進 A。
 - C 必須優先於所有 trust 判定。
-- 四結局皆正常結束，不顯示 Game Over。
+- 四結局皆經 `call ending_coda_finish(...)`（節拍 → 標題 → 解鎖提示 → aftercare），不顯示 Game Over。
+- 自動化：`python Renpy_game/tools/validate-s10.py`、`validate-all-endings.py`；報告見 `tester_s10_report.md`、`tester_all_endings_report.md`。

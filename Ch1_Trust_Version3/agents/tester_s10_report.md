@@ -13,6 +13,7 @@
 | `python Renpy_game/tools/validate-s01.py` | **OK**（結構／flags／trust／結局解鎖） |
 | `python Renpy_game/tools/validate-reading-time.py` | **OK**（S10-A～D 皆 ≥5；注意：此腳本會把 if/else 雙分支字數加總，偏鬆） |
 | `python Renpy_game/tools/validate-s10.py` | **OK**（單一路徑閱讀時間＋路由真值表＋coda） |
+| `python Renpy_game/tools/validate-menus.py` | **OK**（結局後 aftercare／一覽出口） |
 
 ### 單一路徑閱讀時間（`validate-s10.py`）
 

@@ -22,11 +22,25 @@
 | 存檔 | 各 Section 信任選擇前後、閘門前後、S09 留下／送走前各存一檔；讀檔確認 `trust`／三軸／flags |
 | 章節 | 若有選章：S01～S10 皆可進；跳關後信任預設須合理（勿直接滿 12） |
 
+### 自動化腳本（落地後必跑）
+
+```powershell
+cd Renpy_game
+python tools/validate-s01.py
+python tools/validate-reading-time.py
+python tools/validate-s10.py
+python tools/validate-all-endings.py
+python tools/validate-menus.py
+python tools/validate-menu-layout.py
+```
+
+選單報告：`agents/tester_menus_report.md`；結局報告：`tester_all_endings_report.md`／`tester_s10_report.md`。
+
 ### 閱讀時間與互動密度
 
 - [ ] 執行 `python Renpy_game/tools/validate-reading-time.py`，S01～S07 最短選項路徑皆須 **≥5 分鐘**
 - [ ] S08／S09 最短選項路徑皆須 **≥8 分鐘**，且增加內容集中在胸背帶與門線、巷口受驚與恢復、交接等待與決定回聲
-- [ ] S10 的 A／B／C／D **每一條實際路線皆須 ≥5 分鐘**，不可用四條結局總字數相加冒充
+- [ ] S10 的 A／B／C／D **每一條實際路線皆須 ≥5 分鐘**（以 `validate-s10.py` 為準；勿用四結局總字數相加）
 - [ ] 實機計時從 Section 標題卡開始，到下一段標題卡或結局牌為止；一般閱讀速度測一次、快速閱讀再抽測一次
 - [ ] 不以重複句、無事件日記或額外日常灌水；新增段落必須讓玩家更清楚看見「人做了什麼、狗如何回應、下一個選擇為何變重」
 
@@ -312,6 +326,17 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 ```text
 [P1] s08_corner｜狗與牽繩提示重疊｜預期狗貼牆、提示在左下｜步驟：…｜交 visual-art
 ```
+
+### 6.3.1 選單版面（主選單／子選單）
+
+- [ ] `python tools/validate-menus.py` 與 `validate-menu-layout.py` 皆 OK
+- [ ] 主選單「設定｜離開」並排可見；「離開」不被裁切
+- [ ] 結局一覽／隱藏內容／章節選擇：列表可捲、返回可見、不與標題重疊
+- [ ] 設定頁：**控制項完整顯示**（非空白殼）；有「離開遊戲」；底部「返回」不蓋住內容
+- [ ] 設定頁改版時**禁止**在 `game_menu` 的 `side` 中央放 `viewport`＋`yfill`（已知會高度歸零）
+- [ ] 存／讀檔 6 格完整；對話紀錄可捲
+- [ ] 結局靜幀／紀念照：標題頂、關閉底；點空白可關
+- [ ] 詳見 `tester_menus_report.md`
 
 ### 6.4 BGM／狗 SFX
 

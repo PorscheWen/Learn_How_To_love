@@ -46,7 +46,7 @@
 - S05 完整實作 Tone 軸、視訊早會、耳機回授／主管點名高峰、拔插頭「喀」聲回收，以及正式改名 UI；可保留「小7」或輸入最多 12 字的新名字，空白輸入沿用原名。
 - S06 完整實作 Guard 軸、鄰居持續伸手說服、推車輪「喀、喀」壓力、選擇站位、「我們」與額頭輕碰記憶點。
 - S07 完整實作發燒守門、起身失敗／耳鳴體感高峰、Tone 延續與「我還在」，並以兩道呼吸收束；禁止把小7寫成會拿藥或預知病情的靈犬。
-- S08 完整實作胸背帶穿戴、低／中／高信任外出軟分軌、Dist 停等／硬拖／提早回家，以及鞋邊睡記憶點。機車驚嚇先以 `tense`、`far` 與停頓蓄壓，再依選項分成停等 `far → mid → near`、提早回家 `mid` 鬆弧或硬拖全程 `far`，最後用返家距離及同事提議收束四拍。
+- S08 完整實作胸背帶穿戴、低／中／高信任外出軟分軌、Dist 停等／硬拖／提早回家，以及鞋邊睡記憶點。巷口狗一開始在身後不願前進，再慢慢跟上；轉角機車呼嘯嚇退回身後。停等 `behind／far → mid → near`、提早回家 `mid` 鬆弧或硬拖全程緊張距離，最後用返家距離及同事提議收束四拍。
 - S09 完整實作 G2 被選中、Guard 留下／送走硬分歧；同事維持真誠，送走不責罵玩家。
 - S10 不再修改 trust，依 `gave_away`、trust 區間與 `s08_forced_walk` 分流 A～D 四結局。
 - 本版維持純敘事選項，不加入小遊戲、牽繩微互動或快問快答；S08 張力由 Dist 選項與狗姿勢表達。
@@ -56,10 +56,18 @@
 - 主選單「結局一覽」：`persistent.unlocked_endings` 記錄 A～D；達成後可點開結局靜幀（`gallery/ending-*.png`）；未解鎖顯示「尚未解鎖」。
 - 隱藏紀念照：結局 A 解鎖 `gallery/secret-lap-sleep.png` 與 `secret-back-to-back.png`；未解鎖顯示「？？？」與軟提示，不顯示親密％。
 - 隱藏內容：各結局解鎖狗日記／予安心境／朋友視角全文（`hidden_content.rpy`）；主選單「隱藏內容」可閱讀。
-- 人物立繪：S08 使用 `char-yuan-leash`；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`（×0.8）、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。
+- 結局收束：`endings.rpy` 的 `ending_coda_finish`（安靜睡姿節拍 → 標題卡 → 解鎖提示 → `ending_aftercare`）；`process_ending_unlock` 寫入日記／心境／朋友視角（A 另含紀念照＋Ch2 提示）；`sync_unlocked_ending_rewards` **必須回傳 `None`**（禁放進主選單 `action` 清單，否則 `True` 會開新遊戲）。
+- 人物立繪：S08 玄關用 `char-yuan-leash`（蹲）、巷口用 `char-yuan-walk`（走路；樹下停等才切回蹲）；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`（×0.8）、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。
 - 狗立繪：S07～S10 依守門、牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。
 - BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
 - 狗 SFX：`dog_sfx()` 以低音量播放稀疏 one-shot；S02／S03／S05／S06／S07／S08／S09 使用 `soft`、`whimper`、`murmur`、`bark`、`growl`，S01 與結局 C 空屋不播放。音源授權見 `assets/audio/sfx/CREDITS.md`。
+
+### 選單 UI 契約（`screens.rpy`）
+
+- 主選單：標題卡 `ymaximum 660`；「設定｜離開」並排 `hbox`（避免「離開」被裁出 720p 下緣）。
+- 結局一覽／隱藏內容／章節選擇：`side "t c b"`＋viewport `yfill`；返回用 `If(main_menu, ShowMenu("main_menu"), Return())`。
+- 存讀檔／設定／對話紀錄：共用 `game_menu`（標題／內容／返回分區）；設定頁**禁止**在 `game_menu` 的 side 中央放 `viewport`＋`yfill`（高度會歸零、整頁空白）；設定內容用一般 `vbox`；「離開遊戲」為 `Quit`，**不要**用 `MainMenu()`。
+- 靜幀／紀念照：深色底＋標題置頂、關閉置底；點空白可關。
 
 ### 重新取名 UI 契約
 
@@ -93,6 +101,7 @@
 │  ├─ char-yuan-commute.png
 │  ├─ char-yuan-block.png
 │  ├─ char-yuan-leash.png
+│  ├─ char-yuan-walk.png
 │  ├─ char-yuan-farewell.png
 │  ├─ char-yuan-cafe.png
 │  ├─ char-clerk.png
@@ -158,15 +167,30 @@ S09／S10 正式圖已用 Cursor 落地（含 2026-07-28 S09：`farewell`／`caf
 ## 驗證
 
 ```powershell
+cd Renpy_game
 python .\tools\validate-s01.py
 python .\tools\validate-reading-time.py
+python .\tools\validate-s10.py
+python .\tools\validate-all-endings.py
+python .\tools\validate-menus.py
+python .\tools\validate-menu-layout.py
 ```
+
+| 腳本 | 用途 |
+|------|------|
+| `validate-s01.py` | 結構／flags／trust／簡繁／結局解鎖骨架 |
+| `validate-reading-time.py` | S01～S10 閱讀時間粗估（S10 雙分支會偏鬆） |
+| `validate-s10.py` | S10 單一路徑 ≥5 分＋結局路由真值表 |
+| `validate-all-endings.py` | 四結局 coda／解鎖／aftercare 對齊 |
+| `validate-menus.py` | 主選單出口、返回、設定無 `MainMenu`、章節 Start 標籤 |
+| `validate-menu-layout.py` | 1280×720 框高、side／yfill、設定禁 nested viewport |
 
 S05 另需手動測試兩條取名路徑：保留「小7」與輸入新名字；並測空白輸入、存檔後讀檔、回溯及進入 S06。完整項目見 `../agents/tester.md` §4.2。
 S09／S10 需各跑高信任留下、中信任留下、任意分數送走與低信任留下，確認 A～D 四標籤與 `s08_forced_walk` 排除 A 的規則。
+選單實機：主選單 → 結局／隱藏／章節／設定／存讀檔 → 各自返回；設定內容須可見（非空白）；報告見 `../agents/tester_menus_report.md`。
 
 若本機已有 Ren'Py SDK，也可執行：
 
 ```powershell
-<renpy.exe> . lint
+.\tools\renpy-sdk\renpy.exe . lint
 ```

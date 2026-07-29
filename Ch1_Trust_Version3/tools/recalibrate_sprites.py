@@ -25,6 +25,13 @@ TARGETS = {
     "dog-ear-flat": 190,
     "dog-street-tense": 185,
     "dog-sniff-wire": 180,
+    "dog-sniff-bento": 180,
+    "dog-coat-sniff": 175,
+    "dog-chin-floor": 155,
+    "dog-drink-bowl": 175,
+    "dog-nose-fingertip": 185,
+    "dog-harness-bite": 185,
+    "dog-paper-bag-sniff": 180,
     "dog-refuse-stranger": 160,
     "dog-behind-legs": 165,
     "dog-forehead-nudge": 190,
@@ -44,11 +51,16 @@ CHAR_T = {
     "char_right": (0.74, 0.86, 0.45),
     "char_left": (0.26, 0.86, 0.45),
     "char_right_walk": (0.74, 0.86, 0.40),
+    "char_sofa": (0.78, 0.86, 0.42),
 }
 DOG_T = {
     "dog_far": (0.58, 0.86, 0.26),
     "dog_mid": (0.50, 0.86, 0.30),
     "dog_near": (0.42, 0.86, 0.34),
+    "dog_sofa_mid": (0.42, 0.86, 0.28),
+    "dog_sofa_near": (0.38, 0.86, 0.30),
+    "dog_sick_mid": (0.36, 0.86, 0.28),
+    "dog_sick_far": (0.32, 0.86, 0.24),
     # Person on right (~0.74): dog between stranger (~0.26) and person
     "dog_far_pair": (0.50, 0.86, 0.22),
     "dog_mid_pair": (0.56, 0.86, 0.23),
@@ -166,7 +178,16 @@ def main() -> int:
 
     pairs = [
         ("S02_meet", ("char-yuan-commute", "char_right", False), ("dog-anxious", "dog_far", True)),
-        ("S02_close", ("char-yuan-commute", "char_right", False), ("dog-halfstep", "dog_mid", True)),
+        ("S02_close", ("char-yuan-squat-side", "char_right", False), ("dog-halfstep", "dog_mid", True)),
+        ("S02_bento", ("char-yuan-squat-side", "char_right", False), ("dog-sniff-bento", "dog_mid", True)),
+        ("S04_sofa", ("char-yuan-sofa", "char_sofa", False), ("dog-parallel", "dog_sofa_mid", True)),
+        ("S04_chin", ("char-yuan-sofa", "char_sofa", False), ("dog-chin-floor", "dog_sofa_near", True)),
+        ("S05_headphones", ("char-yuan-headphones-off", "char_right", False), ("dog-sniff-wire", "dog_mid", True)),
+        ("S07_sick", ("char-yuan-sick-bed", "char_right", False), ("dog-guard-door", "dog_sick_mid", True)),
+        ("S07_nose", ("char-yuan-sick-bed", "char_right", False), ("dog-nose-fingertip", "dog_near", True)),
+        ("S08_harness", ("char-yuan-leash", "char_right", False), ("dog-harness-bite", "dog_entrance_mid", True)),
+        ("S08_drink", ("char-yuan-leash", "char_right", False), ("dog-drink-bowl", "dog_entrance_mid", True)),
+        ("S09_bag", ("char-yuan-leash", "char_right", False), ("dog-paper-bag-sniff", "dog_entrance_far", True)),
         ("S06_pair_chars", ("char-neighbor", "char_left", False), ("char-yuan-commute", "char_right", False)),
         ("S06_behind", ("char-yuan-commute", "char_right", False), ("dog-behind-legs", "dog_near_pair", True)),
         ("S06_nudge", ("char-yuan-commute", "char_right", False), ("dog-forehead-nudge", "dog_near_pair", True)),
@@ -176,7 +197,6 @@ def main() -> int:
         ("S09_refuse", ("char-yuan-leash", "char_right", False), ("dog-refuse-stranger", "dog_near_pair", True)),
         ("S09_entrance", ("char-yuan-leash", "char_right", False), ("dog-leash-wait", "dog_entrance_far", True)),
         ("S01_clerk", ("char-clerk", "char_left", False), ("char-yuan-commute", "char_right", False)),
-        ("S05_headphones", ("char-yuan-headphones", "char_right", False), ("dog-sniff-wire", "dog_mid", True)),
         ("S06_block", ("char-yuan-block", "char_right", False), ("dog-behind-legs", "dog_near_pair", True)),
     ]
 

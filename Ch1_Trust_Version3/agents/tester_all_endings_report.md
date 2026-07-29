@@ -21,6 +21,8 @@
 | `python tools/validate-reading-time.py` | **OK**（S10-A～D ≥5） |
 | `python tools/validate-s10.py` | **OK**（單一路徑閱讀＋路由） |
 | `python tools/validate-all-endings.py` | **OK**（解鎖對齊／coda／aftercare） |
+| `python tools/validate-menus.py` | **OK**（結局一覽／隱藏／aftercare 出口） |
+| `python tools/validate-menu-layout.py` | **OK**（結局／隱藏 side／viewport 不擠返回） |
 | `renpy.exe . lint` | **OK**（無錯誤輸出；696 dialogue blocks） |
 
 ### 單一路徑閱讀時間
@@ -105,5 +107,9 @@
 cd Ch1_Trust_Version3\Renpy_game
 python tools\validate-all-endings.py
 python tools\validate-s10.py
+python tools\validate-menus.py
+python tools\validate-menu-layout.py
 .\tools\renpy-sdk\renpy.exe . lint
 ```
+
+選單細節見 `tester_menus_report.md`。

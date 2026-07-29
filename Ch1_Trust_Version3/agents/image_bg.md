@@ -199,8 +199,9 @@ bg-{place}-{light}.png
 ### alley（S08）
 
 - 巷口轉角、樹／電杆、機車可能經過的空間感
-- **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，對「走過第一台停著的機車」）；`prop/scooter-pass.png`（轉角切進驚嚇拍短暫出現後 hide）
-- 人物／狗用 `*_walk`／`*_s08` transform（相對一般立繪 **×0.8**）；街上狗 xalign 靠近予安（約 0.56～0.68）
+- **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，停放空車）；`prop/scooter-pass.png`（轉角呼嘯切過，驚嚇拍短暫出現後 hide；transform **×0.8**）
+- 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 轉角機車嚇退回身後；樹下停等才切 `yuan leash`（蹲）
+- 人物／狗用 `*_walk`／`*_s08` transform（相對一般立繪 **×0.8**）；街上狗 xalign：身後約 0.88、跟上約 0.56～0.68
 - 柔和日間光、曝光平衡；禁曝白牆面、禁文字
 
 ### cafe（S09）

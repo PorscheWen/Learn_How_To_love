@@ -116,19 +116,26 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | `dog-ref-canonical.png` | 中性側臉 | 全身側立母版 | 外型基準 | `refs/ref-side-profile` |
 | `dog-anxious.png` | 擔憂上望 | 低趴、下巴貼前爪 | S02／低信任 | `refs/ref-anxious-*` |
 | `dog-halfstep.png` | 警戒好奇 | 「既不碰你、也不放你走」的半步 | S02 記憶 | 生成 |
+| `dog-sniff-bento.png` | 小心試探 | 嗅米粒／便當味 | S02 Dist＋ | 生成 |
 | `dog-stair-watch.png` | 警戒 | 靠牆、面向門口方向 | S03 | 生成 |
 | `dog-door-sleep.png` | 睏但守門 | 睡在房門外 | S03 鉤子 | 生成 |
+| `dog-coat-sniff.png` | 借溫 | 嗅／靠外套 | S03 coat | 生成 |
 | `dog-parallel.png` | 放鬆一點 | 兩步遠地板、下巴貼地 | S04 | 生成 |
+| `dog-chin-floor.png` | 安靜成立 | 下巴完整貼地 | S04 Dist＋ | 生成 |
 | `dog-kitchen-door.png` | 跟隨觀望 | 停在廚房門檻外 | S04 記憶 | 生成 |
 | `dog-ear-flat.png` | 被尖聲嚇到 | 耳平、退 | S05 Tone− | 生成 |
 | `dog-sniff-wire.png` | 好奇 | 嗅耳機線 | S05 鉤子 | 生成 |
 | `dog-behind-legs.png` | 求護衛 | 縮身躲藏 peek | S06 | `refs/ref-behind-legs` |
 | `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 | 生成 |
 | `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 | 生成 |
+| `dog-nose-fingertip.png` | 輕觸 | 鼻尖碰指尖 | S07 記憶 | 生成 |
 | `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S08 低 | 生成 |
 | `dog-leash-wait.png` | 累但信任 | 胸背帶、停步等待 | S08 高；S09 玄關 | 生成 |
+| `dog-harness-bite.png` | 適應裝備 | 咬胸背帶布邊 | S08 穿帶 | 生成 |
+| `dog-drink-bowl.png` | 急喝水 | 低頭喝水碗 | S08 返家；結局 A | 生成 |
 | `dog-shoe-sleep.png` | 安心 | 靠燕麥灰平底鞋邊睡 | S08 記憶 | 生成 |
 | `dog-farewell.png` | 告別上望 | 坐姿抬頭（無牽繩／無胸背帶） | S09 客廳 | 生成 |
+| `dog-paper-bag-sniff.png` | 聞紙袋 | 嗅交接紙袋 | S09 玄關 | 生成 |
 | `dog-cafe-refuse.png` | 拒絕警告 | 胸背帶＋牽繩、貼腳對伸手僵 | S09 咖啡廳 | 生成 |
 | `dog-cafe-tense.png` | 兩人中間僵 | 僵住、面向認得的人 | S09 咖啡廳低信任 | 生成 |
 | `dog-refuse-stranger.png` | 拒絕 | 胸背帶＋牽繩、低蹲對伸手僵 | S09 fallback | `refs/ref-refuse-stranger` |

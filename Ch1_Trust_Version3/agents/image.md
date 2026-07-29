@@ -285,7 +285,8 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `char-yuan-carry-pup.png` | 側抱幼犬上樓 |
 | `char-yuan-headphones.png` | 戴耳機開會（S05 尖）；S09 茶水間 |
 | `char-yuan-block.png` | 走廊擋在狗與陌生人中間（S06）；**面向左**擋左側鄰居 |
-| `char-yuan-leash.png` | 牽繩、蹲等（S08）；S09 **玄關**（×0.8） |
+| `char-yuan-leash.png` | 牽繩、蹲等（S08 玄關／樹下停等）；S09 **玄關**（×0.8） |
+| `char-yuan-walk.png` | 站姿走路握牽繩｜**S08 巷口**（非蹲） |
 | `char-yuan-farewell.png` | 單膝下跪攤手告別（無牽繩）｜S09 客廳 |
 | `char-yuan-cafe.png` | 站姿握牽繩、衝突表情｜S09 咖啡廳 |
 | `char-clerk.png` | 超商店員 |
