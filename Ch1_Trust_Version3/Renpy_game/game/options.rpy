@@ -37,6 +37,11 @@ define config.autosave_on_quit = True
 define config.autosave_frequency = 20
 define config.history_length = 250
 
+## 開發用：Shift+U 全解鎖結局／隱藏內容（僅 config.developer）
+init python:
+    if "_dev_unlock_hotkey" not in config.always_shown_screens:
+        config.always_shown_screens.append("_dev_unlock_hotkey")
+
 default preferences.text_cps = 30
 default preferences.afm_time = 18
 default quick_menu = True

@@ -114,15 +114,23 @@ if 'text "文字速度"' not in pref or 'text "音樂音量"' not in pref:
     fail("設定頁缺主要控制項")
 ok("設定頁：內容可見、無推位重疊、可離開")
 
-# --- 靜幀／照片：標題頂、關閉底 ---
-for name in ("ending_still_view", "secret_photo_view"):
-    body = screen_body(name)
+# --- 靜幀／照片：標題頂、關閉底（主選單用 ShowMenu + tag menu）---
+for name in ("gallery_image_view", "ending_still_view", "secret_photo_view"):
+    try:
+        body = screen_body(name)
+    except Exception:
+        if name == "gallery_image_view":
+            fail("缺 gallery_image_view")
+        continue
     if "yalign 0.05" not in body and "yalign 0.06" not in body:
         fail(f"{name} 標題未置頂")
     if "yalign 0.96" not in body and "yalign 0.94" not in body:
         fail(f"{name} 關閉鈕未置底")
-    if 'action Hide("' not in body:
-        fail(f"{name} 缺關閉")
+    if 'ShowMenu("ending_gallery")' not in body and 'action Hide("' not in body:
+        fail(f"{name} 缺關閉（應回 ending_gallery）")
+    head = "\n".join(body.splitlines()[:8])
+    if "tag menu" not in head:
+        fail(f"{name} 缺 tag menu（主選單 Show 會看不到圖）")
 ok("靜幀／紀念照：標題與關閉分離")
 
 # --- game_menu 結構 ---

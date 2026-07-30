@@ -309,13 +309,17 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 | 檔名 | 解鎖 | 畫面 |
 |------|------|------|
-| `gallery/secret-lap-sleep.png` | 結局 A｜背靠 | 中型幼犬躺在予安大腿上的特寫；印象派油畫；無信任％／HUD |
-| `gallery/secret-back-to-back.png` | 結局 A｜背靠 | 停電夜背靠同睡全景 |
+| `gallery/secret-lap-sleep.png` | 結局 A | 中型幼犬躺在予安大腿特寫 |
+| `gallery/secret-forehead-nudge.png` | 結局 A | 額頭輕碰 |
+| `gallery/secret-behind-legs.png` | 結局 A | 擋在身後（走廊） |
+| `gallery/secret-shoe-sleep.png` | 結局 A | 鞋邊小睡 |
+| `gallery/secret-nose-touch.png` | 結局 A | 指尖碰鼻 |
+| `gallery/secret-water-bowl.png` | 結局 A | 第一次喝新水碗 |
 
-- 文案軟提示：「真正把背交給彼此之後才看得到」；**禁止**親密度條或 100% 字樣。
-- 掛載：`image gallery secret_*`／`ending_*`；`screens.rpy` → `ending_still_view`／`secret_photo_view`。
-- `persistent.unlocked_secret_photos`；`process_ending_unlock("A")` 解鎖 `lap_sleep` 與 `back_to_back`。
-- 隱藏文章（狗日記／予安心境／朋友視角）見 `Renpy_game/game/hidden_content.rpy`。
+- **已移除**背對背／胸口同睡紀念照（結局 A 靜幀 `ending-a-back` 仍保留）。
+- 文案軟提示；**禁止**親密度條或 100% 字樣。
+- `persistent.unlocked_secret_photos`；`process_ending_unlock("A")` 解鎖 `SECRET_PHOTO_ORDER` 六張。
+- 隱藏文章見 `Renpy_game/game/hidden_content.rpy`。
 
 ---
 

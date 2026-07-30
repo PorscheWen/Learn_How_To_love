@@ -13,18 +13,58 @@ init python:
         "D": "gallery/ending-d-thin-ice.png",
     }
 
+    ## 結局 A 解鎖；順序＝結局一覽列表順序（無背對背）
+    SECRET_PHOTO_ORDER = [
+        "lap_sleep",
+        "forehead_nudge",
+        "behind_legs",
+        "shoe_sleep",
+        "nose_touch",
+        "water_bowl",
+    ]
+
     SECRET_PHOTO_META = {
         "lap_sleep": {
             "title": "紀念照片｜躺在大腿",
             "hint": "真正把背交給彼此之後才看得到。",
             "image": "gallery secret_lap_sleep",
-            "button": "✓  背靠｜中型幼犬躺在大腿特寫",
+            "path": "gallery/secret-lap-sleep.png",
+            "button": "✓  紀念照片｜躺在大腿",
         },
-        "back_to_back": {
-            "title": "紀念照片｜背靠同睡",
-            "hint": "停電夜，背靠變成房間裡最安靜的證明。",
-            "image": "gallery secret_back_to_back",
-            "button": "✓  背靠｜同睡在沙發前",
+        "forehead_nudge": {
+            "title": "紀念照片｜額頭輕碰",
+            "hint": "牠願意把額頭湊過來的那一下。",
+            "image": "gallery secret_forehead_nudge",
+            "path": "gallery/secret-forehead-nudge.png",
+            "button": "✓  紀念照片｜額頭輕碰",
+        },
+        "behind_legs": {
+            "title": "紀念照片｜擋在身後",
+            "hint": "走廊上，牠站在你腿邊。",
+            "image": "gallery secret_behind_legs",
+            "path": "gallery/secret-behind-legs.png",
+            "button": "✓  紀念照片｜擋在身後",
+        },
+        "shoe_sleep": {
+            "title": "紀念照片｜鞋邊小睡",
+            "hint": "玄關的鞋，成了牠等你回來的座標。",
+            "image": "gallery secret_shoe_sleep",
+            "path": "gallery/secret-shoe-sleep.png",
+            "button": "✓  紀念照片｜鞋邊小睡",
+        },
+        "nose_touch": {
+            "title": "紀念照片｜指尖碰鼻",
+            "hint": "伸手時，牠沒有退開。",
+            "image": "gallery secret_nose_touch",
+            "path": "gallery/secret-nose-touch.png",
+            "button": "✓  紀念照片｜指尖碰鼻",
+        },
+        "water_bowl": {
+            "title": "紀念照片｜新水碗",
+            "hint": "新的碗，第一次敢低頭喝。",
+            "image": "gallery secret_water_bowl",
+            "path": "gallery/secret-water-bowl.png",
+            "button": "✓  紀念照片｜新水碗",
         },
     }
 

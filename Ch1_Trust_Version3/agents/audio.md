@@ -125,13 +125,15 @@
 
 ### S01｜螢幕光比月亮亮
 
-弧線：`calm`（空白）→ 鉤子後仍 `calm`（勿早轉暖）
+弧線：`blank_night`／`calm`（空白）→ 巷口 `night` → 客廳回 `blank_night`（勿早轉暖；勿搶 S02 `melancholy`）
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 加班／超商 | office／convenience-night | `calm`（`blank_night`） |
-| 回家客廳 | living-night | `calm` |
-| 收束「直到明天」 | living-night | `calm` |
+| 加班 | office-night | `blank_night`（`calm.ogg`） |
+| 超商 | convenience-night | `calm` |
+| 巷口轉角 | street-night | `night`（同曲略降音量） |
+| 繞看一眼（風味） | **backdoor-night**（遠望、無狗立繪） | 維持 `night` |
+| 回家客廳／收束 | living-night | `blank_night` → 入睡 `night` |
 
 ### S02｜後門那一瞥
 

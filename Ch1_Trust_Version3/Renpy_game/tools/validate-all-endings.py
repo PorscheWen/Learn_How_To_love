@@ -103,10 +103,12 @@ if 'unlock_secret_content("character_aftercare_" + eid.lower())' not in SCRIPT:
     fail("process 未解鎖 character_aftercare_*")
 if 'unlock_secret_content("friend_perspective_" + eid.lower())' not in SCRIPT:
     fail("process 未解鎖 friend_perspective_*")
-if 'unlock_secret_photo("lap_sleep")' not in SCRIPT:
-    fail("A 未解鎖 lap_sleep")
-if 'unlock_secret_photo("back_to_back")' not in SCRIPT:
-    fail("A 未解鎖 back_to_back 照")
+if 'unlock_secret_photo("lap_sleep")' not in SCRIPT and "unlock_secret_photo(_pid)" not in SCRIPT:
+    fail("A 未解鎖紀念照")
+if 'unlock_secret_photo("back_to_back")' in SCRIPT:
+    fail("A 不應再解鎖 back_to_back 紀念照")
+if "forehead_nudge" not in SCRIPT or "water_bowl" not in SCRIPT:
+    fail("A 應解鎖新紀念照 id（forehead_nudge／water_bowl 等）")
 
 order = re.findall(r'"(dog_diary_[abcd]|character_aftercare_[abcd]|friend_perspective_[abcd])"', HIDDEN)
 need = []

@@ -6,12 +6,12 @@ init python:
 define CJK_FONT = "SourceHanSansLite.ttf"
 
 define LHTL_BG = "#17120F"
-define LHTL_PANEL = "#F3E9D9EE"
-define LHTL_PANEL_GLASS = "#F3E9D977"
-## 選單項目嵌進 menu-bg：外框更透、項目略實，右側牆鉤可露出
-define LHTL_MENU_SHELL = "#17120F33"
-define LHTL_MENU_ITEM = "#F3E9D9B3"
-define LHTL_MENU_ITEM_HOVER = "#E2C8A7D9"
+define LHTL_PANEL = "#F3E9D9AA"
+define LHTL_PANEL_GLASS = "#F3E9D966"
+## 選單外框更透、項目半透，讓 title／menu-bg 油畫透出
+define LHTL_MENU_SHELL = "#17120F22"
+define LHTL_MENU_ITEM = "#F3E9D999"
+define LHTL_MENU_ITEM_HOVER = "#E2C8A7CC"
 define LHTL_PANEL_DARK = "#2E241FCC"
 define LHTL_TEXT = "#4A3728"
 define LHTL_TEXT_LIGHT = "#F7EFE4"
@@ -103,14 +103,14 @@ style quick_button_text:
     color LHTL_TEXT_LIGHT
 
 style menu_button:
-    background Solid("#F3E9D9E8")
-    hover_background Solid("#E2C8A7F5")
-    padding (24, 12)
-    xminimum 260
+    background Solid(LHTL_MENU_ITEM)
+    hover_background Solid(LHTL_MENU_ITEM_HOVER)
+    padding (18, 8)
+    xminimum 240
 
 style menu_button_text:
     font CJK_FONT
-    size 21
+    size 19
     color LHTL_TEXT
     hover_color LHTL_ACCENT_DARK
     xalign 0.5

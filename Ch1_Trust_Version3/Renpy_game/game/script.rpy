@@ -245,10 +245,19 @@ init python:
     def secret_photo_unlocked(photo_id):
         ## 結局 A 已解鎖者一併可見（含舊存檔），不強制重打。
         unlocked = persistent.unlocked_secret_photos or []
-        if photo_id in ("lap_sleep", "back_to_back"):
+        known = (
+            "lap_sleep", "forehead_nudge", "behind_legs",
+            "shoe_sleep", "nose_touch", "water_bowl",
+        )
+        if photo_id in known:
             if ending_unlocked("A"):
                 return True
-            return photo_id in unlocked or "lap_sleep" in unlocked or "back_to_back" in unlocked
+            ## 舊存檔僅有 lap／背靠鍵時，視為整組紀念照已開
+            if photo_id in unlocked:
+                return True
+            if "lap_sleep" in unlocked or "back_to_back" in unlocked:
+                return True
+            return False
         return photo_id in unlocked
 
     # ========== 彩蛋名字判定 ==========
@@ -299,10 +308,13 @@ init python:
         unlock_secret_content("character_aftercare_" + eid.lower())
         unlock_secret_content("friend_perspective_" + eid.lower())
 
-        # 結局 A：兩張紀念照＋Ch2 提示
+        # 結局 A：六張紀念照＋Ch2 提示（無背對背）
         if eid == "A":
-            unlock_secret_photo("lap_sleep")
-            unlock_secret_photo("back_to_back")
+            for _pid in (
+                "lap_sleep", "forehead_nudge", "behind_legs",
+                "shoe_sleep", "nose_touch", "water_bowl",
+            ):
+                unlock_secret_photo(_pid)
             unlock_secret_content("ch2_trust_foundation_hint")
 
         # Ch2 開場溫度＋本周目種子（供後章讀取；玩家當下無感）
@@ -352,6 +364,69 @@ init python:
             renpy.save_persistent()
         return None
 
+    def dev_unlock_all_gallery():
+        """開發用：一鍵解鎖結局 A～D、紀念照與隱藏文章。必須回傳 None。
+
+        禁止在此呼叫 renpy.restart_interaction()：會沖掉選單按鈕。
+        任何例外都吞掉，避免擋住 ShowMenu。
+        """
+        try:
+            before = (
+                tuple(persistent.unlocked_endings or []),
+                tuple(persistent.unlocked_secret_photos or []),
+                tuple(persistent.unlocked_secret_content or []),
+            )
+            for eid in ("A", "B", "C", "D"):
+                process_ending_unlock(eid, 10)
+            persistent.unlocked_endings = ["A", "B", "C", "D"]
+            photos = list(persistent.unlocked_secret_photos or [])
+            for pid in (
+                "lap_sleep", "forehead_nudge", "behind_legs",
+                "shoe_sleep", "nose_touch", "water_bowl",
+            ):
+                if pid not in photos:
+                    photos.append(pid)
+            persistent.unlocked_secret_photos = photos
+            contents = list(persistent.unlocked_secret_content or [])
+            for cid in (
+                "dog_diary_a", "dog_diary_b", "dog_diary_c", "dog_diary_d",
+                "character_aftercare_a", "character_aftercare_b",
+                "character_aftercare_c", "character_aftercare_d",
+                "friend_perspective_a", "friend_perspective_b",
+                "friend_perspective_c", "friend_perspective_d",
+                "ch2_trust_foundation_hint",
+            ):
+                if cid not in contents:
+                    contents.append(cid)
+            persistent.unlocked_secret_content = contents
+            after = (
+                tuple(persistent.unlocked_endings or []),
+                tuple(persistent.unlocked_secret_photos or []),
+                tuple(persistent.unlocked_secret_content or []),
+            )
+            if before != after:
+                renpy.save_persistent()
+                renpy.notify("已全解鎖：結局 4／4｜隱藏內容可讀")
+        except Exception:
+            pass
+        return None
+
+    def open_gallery_image(path, title=""):
+        """主選單開大圖：用 new context + scene，避開 Show／ShowMenu 疊層不畫圖。"""
+        if not renpy.loadable(path):
+            renpy.notify("找不到圖檔：" + path)
+            return None
+        renpy.call_in_new_context("gallery_pic_label", path, title)
+        return None
+
+    def open_secret_photo(photo_id):
+        """隱藏紀念照：與結局靜幀走同一條 gallery_pic_label。"""
+        meta = SECRET_PHOTO_META.get(photo_id)
+        if not meta:
+            renpy.notify("找不到紀念照：" + str(photo_id))
+            return None
+        return open_gallery_image(meta["path"], meta["title"])
+
     # ========== 信任軌跡記錄 ==========
     def record_trust_trajectory():
         """
@@ -386,24 +461,16 @@ image bg living_night = optional_background(
     "bg/bg-living-night.png", "#211913"
 )
 ## 結局一覽／隱藏紀念照（gallery／）
-image gallery secret_lap_sleep = optional_background(
-    "gallery/secret-lap-sleep.png", "#211913"
-)
-image gallery secret_back_to_back = optional_background(
-    "gallery/secret-back-to-back.png", "#211913"
-)
-image gallery ending_a_back = optional_background(
-    "gallery/ending-a-back.png", "#211913"
-)
-image gallery ending_b_learning = optional_background(
-    "gallery/ending-b-learning.png", "#211913"
-)
-image gallery ending_c_handover = optional_background(
-    "gallery/ending-c-handover.png", "#211913"
-)
-image gallery ending_d_thin_ice = optional_background(
-    "gallery/ending-d-thin-ice.png", "#211913"
-)
+image gallery secret_lap_sleep = "gallery/secret-lap-sleep.png"
+image gallery secret_forehead_nudge = "gallery/secret-forehead-nudge.png"
+image gallery secret_behind_legs = "gallery/secret-behind-legs.png"
+image gallery secret_shoe_sleep = "gallery/secret-shoe-sleep.png"
+image gallery secret_nose_touch = "gallery/secret-nose-touch.png"
+image gallery secret_water_bowl = "gallery/secret-water-bowl.png"
+image gallery ending_a_back = "gallery/ending-a-back.png"
+image gallery ending_b_learning = "gallery/ending-b-learning.png"
+image gallery ending_c_handover = "gallery/ending-c-handover.png"
+image gallery ending_d_thin_ice = "gallery/ending-d-thin-ice.png"
 image bg backdoor_night = optional_background(
     "bg/bg-backdoor-night.png", "#131A22"
 )
@@ -949,6 +1016,20 @@ label reset_story_state:
     return
 
 
+## 結局／隱藏紀念照大圖（從主選單 call_in_new_context 進來）
+label gallery_pic_label(path="gallery/ending-a-back.png", title=""):
+    scene expression Solid("#17120F")
+    ## 用 Transform 一次定好尺寸，避免 show expression 字串 path 偶發不畫
+    show expression Transform(path, fit="contain", xysize=(1200, 640)) as gallery_pic zorder 10:
+        xalign 0.5
+        yalign 0.52
+    show screen gallery_pic_chrome(title)
+    pause
+    hide screen gallery_pic_chrome
+    hide gallery_pic
+    return
+
+
 label start:
     call reset_story_state
     $ current_section = "s01"
@@ -1087,6 +1168,7 @@ label section_01_fluorescent_over_moon:
     "電梯往下跳，她數：十四、十三、十二。"
     thought "數字比想明天的會議安全。"
 
+    $ play_bgm("calm", fade=2.0)
     scene bg convenience_night
     with dissolve
 
@@ -1117,6 +1199,7 @@ label section_01_fluorescent_over_moon:
     hide clerk
     with dissolve
 
+    $ play_bgm("night", fade=2.0)
     scene bg street_night
     with dissolve
 
@@ -1132,9 +1215,18 @@ label section_01_fluorescent_over_moon:
         "繞去看一眼":
             $ flags["peeked_backdoor"] = True
             "她告訴自己，只看一眼，不算答應什麼。"
+            ## 場景切到後門：只遠望，不放狗立繪（留給 S02 正式相遇）；BGM 維持 night，勿搶 S02 melancholy。
+            scene bg backdoor_night
+            with Dissolve(1.0)
+            show yuan commute at char_right
+            with Dissolve(0.5)
             "她繞到轉角邊。卸貨區的燈壞了一盞，紙箱在陰影裡疊成模糊的形狀。深處像有什麼動了一下，也可能只是塑膠袋被風吹過。"
             "她沒有走近。站了兩秒，便轉回原路。"
             thought "便當會涼。"
+            scene bg street_night
+            with Dissolve(0.8)
+            show yuan commute at char_center
+            with Dissolve(0.4)
 
         "照原路回家":
             $ flags["peeked_backdoor"] = False
@@ -1144,6 +1236,7 @@ label section_01_fluorescent_over_moon:
     "耳機裡的雨還在下，她忽然覺得吵，把音量轉小。"
     "世界變大：遠處的狗叫、樓上電視、自己的呼吸。"
 
+    $ play_bgm("blank_night", fade=2.5)
     scene bg living_night
     with dissolve
 
@@ -1181,9 +1274,15 @@ label section_01_fluorescent_over_moon:
     hide yuan
     with dissolve
 
-    "意識往下沉。腳步聲在想像裡又走一遍：便利商店、微波的叮、那個「喔」、沒有走近的轉角。"
-    "予安睡著了。窗外月亮大概還在，只是今晚螢幕光先贏了。"
-    "而那隻她沒有去看的狗，是否還趴在後門陰影裡——這個問題，被她很成功、也很短暫地，留在了夢的外面。"
+    $ play_bgm("night", fade=2.5)
+    if flags["peeked_backdoor"]:
+        "意識往下沉。腳步聲在想像裡又走一遍：便利商店、微波的叮、那個「喔」、只站了兩秒的後門轉角。"
+        "予安睡著了。窗外月亮大概還在，只是今晚螢幕光先贏了。"
+        "而那隻她遠遠看過一眼、卻沒走近的狗，是否還趴在後門陰影裡——這個問題，被她很成功、也很短暫地，留在了夢的外面。"
+    else:
+        "意識往下沉。腳步聲在想像裡又走一遍：便利商店、微波的叮、那個「喔」、沒有走近的轉角。"
+        "予安睡著了。窗外月亮大概還在，只是今晚螢幕光先贏了。"
+        "而那隻她沒有去看的狗，是否還趴在後門陰影裡——這個問題，被她很成功、也很短暫地，留在了夢的外面。"
 
     centered "{size=30}{color=#F7EFE4}直到明天。{/color}{/size}"
 

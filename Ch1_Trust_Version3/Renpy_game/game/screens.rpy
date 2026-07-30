@@ -109,241 +109,198 @@ screen main_menu():
     add Solid("#B77A4518")
 
     frame:
-        background Solid("#F3E9D9EE")
-        padding (48, 28)
+        background Solid(LHTL_PANEL_GLASS)
+        padding (36, 18)
         xalign 0.5
-        yalign 0.48
-        ## 避免按鈕被裁出 720p 下緣（「離開」消失）
-        ymaximum 660
+        yalign 0.5
+        xsize 520
 
+        ## 勿用 ymaximum 裁切：會把「結局一覽／隱藏內容」裁掉
         vbox:
-            spacing 6
+            spacing 3
             xalign 0.5
+            xfill True
 
             text "Learn How to Love":
                 font CJK_FONT
-                size 40
+                size 32
                 color LHTL_TEXT
                 xalign 0.5
 
             text "Ch1 Trust｜學會靠近":
                 font CJK_FONT
-                size 20
+                size 16
                 color LHTL_ACCENT_DARK
                 xalign 0.5
 
-            text "Section 01–10｜從相遇到把背交給彼此":
-                font CJK_FONT
-                size 15
-                color "#806C5B"
-                xalign 0.5
-
-            null height 8
-
-            ## 遊玩
-            textbutton "開始" style "menu_button" action Start()
-            textbutton "讀取進度" style "menu_button" action ShowMenu("load")
-
             null height 4
 
-            ## 章節／結局（勿把 Function 回傳值放進 action 清單：True 會開新遊戲）
-            textbutton "章節選擇" style "menu_button" action ShowMenu("section_select")
-            textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery")
-            textbutton "隱藏內容" style "menu_button" action ShowMenu("hidden_content_gallery")
+            textbutton "開始" style "menu_button" action Start():
+                xfill True
+            textbutton "讀取進度" style "menu_button" action ShowMenu("load"):
+                xfill True
+            textbutton "章節選擇" style "menu_button" action ShowMenu("section_select"):
+                xfill True
+            ## 先開選單；解鎖另鍵／進畫面後手動，避免 Function 失敗擋住 ShowMenu
+            textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery"):
+                xfill True
+            textbutton "隱藏內容" style "menu_button" action ShowMenu("hidden_content_gallery"):
+                xfill True
+            textbutton "設定" style "menu_button" action ShowMenu("preferences"):
+                xfill True
+            textbutton "離開" style "menu_button" action Quit(confirm=False):
+                xfill True
 
-            null height 4
-
-            ## 系統：設定／離開並排，確保「離開」不被裁切
-            hbox:
-                spacing 14
-                xalign 0.5
-                textbutton "設定" style "menu_button" action ShowMenu("preferences"):
-                    xminimum 160
-                textbutton "離開" style "menu_button" action Quit(confirm=False):
-                    xminimum 160
+    key "K_F8" action Function(dev_unlock_all_gallery)
+    key "shift_K_u" action Function(dev_unlock_all_gallery)
 
 
 screen ending_gallery():
     tag menu
 
-    ## 進入時補齊舊存檔解鎖（回傳 None，不干擾選單）
-    on "show" action Function(sync_unlocked_ending_rewards)
+    key "K_F8" action Function(dev_unlock_all_gallery)
+    key "shift_K_u" action Function(dev_unlock_all_gallery)
 
-    ## 選單底圖：theme/menu-bg.png；項目半透明嵌在牆面，右側牆鉤露出
+    add Solid("#17120F88")
     add "lhtl_menu_bg"
 
-    ## 只顯示已解鎖標題；未解鎖不劇透內容。點標題可開結局靜幀。
-    default ending_rows = [
-        ("A", "結局 A｜背靠", "gallery ending_a_back"),
-        ("B", "結局 B｜選定但還在學", "gallery ending_b_learning"),
-        ("C", "結局 C｜送走之後", "gallery ending_c_handover"),
-        ("D", "結局 D｜薄冰同住", "gallery ending_d_thin_ice"),
-    ]
-
     frame:
-        background Solid(LHTL_MENU_SHELL)
-        padding (40, 24)
-        xalign 0.06
+        background Solid(LHTL_PANEL_GLASS)
+        padding (22, 14)
+        xalign 0.5
         yalign 0.5
-        xsize 760
-        ysize 610
+        xsize 860
+        ysize 640
 
-        side "t c b":
+        vbox:
+            spacing 3
             xfill True
-            yfill True
-            spacing 10
 
-            vbox:
-                spacing 6
+            text "結局一覽（點項目看大圖）":
+                font CJK_FONT
+                size 22
+                color "#7A4E2E"
+                xalign 0.5
+
+            textbutton "結局 A｜背靠" style "menu_button" action Function(open_gallery_image, "gallery/ending-a-back.png", "結局 A｜背靠"):
                 xfill True
-                text "結局一覽":
-                    font CJK_FONT
-                    size gui.label_text_size
-                    color LHTL_TEXT_LIGHT
-                text "達成後解鎖標題與靜幀。點已解鎖項目可查看圖片。":
-                    font CJK_FONT
-                    size 16
-                    color LHTL_TEXT_SOFT
-
-            viewport:
-                scrollbars "vertical"
-                mousewheel True
-                draggable True
+            textbutton "結局 B｜選定但還在學" style "menu_button" action Function(open_gallery_image, "gallery/ending-b-learning.png", "結局 B｜選定但還在學"):
                 xfill True
-                yfill True
+            textbutton "結局 C｜送走之後" style "menu_button" action Function(open_gallery_image, "gallery/ending-c-handover.png", "結局 C｜送走之後"):
+                xfill True
+            textbutton "結局 D｜薄冰同住" style "menu_button" action Function(open_gallery_image, "gallery/ending-d-thin-ice.png", "結局 D｜薄冰同住"):
+                xfill True
 
-                vbox:
-                    spacing 10
-                    xfill True
-                    for ending_id, title, img_name in ending_rows:
-                        if ending_unlocked(ending_id):
-                            textbutton "✓  " + title style "embed_menu_button":
-                                action Show("ending_still_view", ending_id=ending_id, title=title, img_name=img_name)
-                                xminimum 0
-                                xfill True
-                        else:
-                            frame:
-                                background Solid(LHTL_MENU_ITEM)
-                                padding (18, 12)
-                                xfill True
-                                text "○  結局 " + ending_id + "｜尚未解鎖":
-                                    font CJK_FONT
-                                    size 22
-                                    color "#806C5B"
+            text "隱藏紀念照片":
+                font CJK_FONT
+                size 16
+                color "#7A4E2E"
 
-                    text "已解鎖 " + str(len(persistent.unlocked_endings or [])) + "／4":
-                        font CJK_FONT
-                        size 16
-                        color LHTL_TEXT_SOFT
-                        xalign 1.0
+            textbutton "紀念｜躺在大腿" style "menu_button" action Function(open_gallery_image, "gallery/secret-lap-sleep.png", "紀念照片｜躺在大腿"):
+                xfill True
+            textbutton "紀念｜額頭輕碰" style "menu_button" action Function(open_gallery_image, "gallery/secret-forehead-nudge.png", "紀念照片｜額頭輕碰"):
+                xfill True
+            textbutton "紀念｜擋在身後" style "menu_button" action Function(open_gallery_image, "gallery/secret-behind-legs.png", "紀念照片｜擋在身後"):
+                xfill True
+            textbutton "紀念｜鞋邊小睡" style "menu_button" action Function(open_gallery_image, "gallery/secret-shoe-sleep.png", "紀念照片｜鞋邊小睡"):
+                xfill True
+            textbutton "紀念｜指尖碰鼻" style "menu_button" action Function(open_gallery_image, "gallery/secret-nose-touch.png", "紀念照片｜指尖碰鼻"):
+                xfill True
+            textbutton "紀念｜新水碗" style "menu_button" action Function(open_gallery_image, "gallery/secret-water-bowl.png", "紀念照片｜新水碗"):
+                xfill True
 
-                    null height 8
-
-                    text "紀念照片":
-                        font CJK_FONT
-                        size 20
-                        color LHTL_TEXT_LIGHT
-
-                    if secret_photo_unlocked("lap_sleep"):
-                        textbutton SECRET_PHOTO_META["lap_sleep"]["button"] style "embed_menu_button":
-                            action Show("secret_photo_view", photo="lap_sleep")
-                            xminimum 0
-                            xfill True
-                        text SECRET_PHOTO_META["lap_sleep"]["hint"]:
-                            font CJK_FONT
-                            size 15
-                            color LHTL_TEXT_SOFT
-                    else:
-                        frame:
-                            background Solid(LHTL_MENU_ITEM)
-                            padding (18, 12)
-                            xfill True
-                            text "○  ？？？｜尚未解鎖":
-                                font CJK_FONT
-                                size 22
-                                color "#806C5B"
-                        text "有一段畫面，只有真正把背交給彼此之後才看得到。":
-                            font CJK_FONT
-                            size 15
-                            color LHTL_TEXT_SOFT
-
-                    if secret_photo_unlocked("back_to_back"):
-                        textbutton SECRET_PHOTO_META["back_to_back"]["button"] style "embed_menu_button":
-                            action Show("secret_photo_view", photo="back_to_back")
-                            xminimum 0
-                            xfill True
-                        text SECRET_PHOTO_META["back_to_back"]["hint"]:
-                            font CJK_FONT
-                            size 15
-                            color LHTL_TEXT_SOFT
-
-            textbutton "返回" style "embed_menu_button" action If(main_menu, true=ShowMenu("main_menu"), false=Return()):
+            textbutton "返回主選單" style "menu_button" action Return():
                 xalign 0.5
 
 
-screen ending_still_view(ending_id="A", title="", img_name="gallery ending_a_back"):
-    modal True
-    zorder 200
-
-    ## 底層點空白關閉（勿蓋住標題／關閉鈕）
-    button:
-        background Solid("#17120FEE")
-        xfill True
-        yfill True
-        action Hide("ending_still_view")
-
-    add img_name:
-        xalign 0.5
-        yalign 0.5
-
+## scene 預覽時的標題列（配合 gallery_pic_label）
+screen gallery_pic_chrome(title=""):
     frame:
-        background Solid("#17120FCC")
-        padding (20, 12)
+        background Solid(LHTL_PANEL_GLASS)
+        padding (18, 10)
         xalign 0.5
         yalign 0.05
         text title:
             font CJK_FONT
-            size 20
-            color "#F7EFE4"
+            size 22
+            color "#7A4E2E"
 
-    textbutton "關閉":
-        style "menu_button"
-        action Hide("ending_still_view")
+    text "點一下關閉":
+        font CJK_FONT
+        size 16
+        color "#F3E9D9"
+        xalign 0.5
+        yalign 0.96
+
+
+## 備援選單預覽（主路徑已改 open_gallery_image）
+screen gallery_image_view(title="紀念照片", img_path="gallery/secret-lap-sleep.png"):
+    tag menu
+
+    add Solid("#17120F")
+
+    add img_path:
+        xalign 0.5
+        yalign 0.52
+        zoom 0.72
+
+    frame:
+        background Solid(LHTL_PANEL_GLASS)
+        padding (18, 10)
+        xalign 0.5
+        yalign 0.05
+        text title:
+            font CJK_FONT
+            size 22
+            color "#7A4E2E"
+
+    textbutton "關閉" style "menu_button" action ShowMenu("ending_gallery"):
+        xalign 0.5
+        yalign 0.96
+
+
+## 舊名稱保留（轉到統一預覽參數）
+screen ending_still_view(ending_id="A", title="", img_path="gallery/ending-a-back.png", img_name=None):
+    tag menu
+    add Solid("#17120F")
+    add img_path:
+        xalign 0.5
+        yalign 0.52
+        zoom 0.72
+    frame:
+        background Solid(LHTL_PANEL_GLASS)
+        padding (18, 10)
+        xalign 0.5
+        yalign 0.05
+        text (title or "結局靜幀"):
+            font CJK_FONT
+            size 22
+            color "#7A4E2E"
+    textbutton "關閉" style "menu_button" action ShowMenu("ending_gallery"):
         xalign 0.5
         yalign 0.96
 
 
 screen secret_photo_view(photo="lap_sleep"):
-    modal True
-    zorder 200
-
-    button:
-        background Solid("#17120FEE")
-        xfill True
-        yfill True
-        action Hide("secret_photo_view")
-
-    $ meta = SECRET_PHOTO_META.get(photo, {})
-    if photo in SECRET_PHOTO_META:
-        add meta.get("image", Solid("#17120F")):
-            xalign 0.5
-            yalign 0.5
-    else:
-        add Solid("#17120F")
-
+    tag menu
+    $ _meta = SECRET_PHOTO_META.get(photo) or SECRET_PHOTO_META["lap_sleep"]
+    $ _title = _meta["title"]
+    $ _path = _meta["path"]
+    add Solid("#17120F")
+    add _path:
+        xalign 0.5
+        yalign 0.52
+        zoom 0.72
     frame:
-        background Solid("#17120FCC")
-        padding (20, 12)
+        background Solid(LHTL_PANEL_GLASS)
+        padding (18, 10)
         xalign 0.5
         yalign 0.05
-        text meta.get("title", "紀念照片"):
+        text _title:
             font CJK_FONT
-            size 20
-            color "#F7EFE4"
-
-    textbutton "關閉":
-        style "menu_button"
-        action Hide("secret_photo_view")
+            size 22
+            color "#7A4E2E"
+    textbutton "關閉" style "menu_button" action ShowMenu("ending_gallery"):
         xalign 0.5
         yalign 0.96
 
@@ -351,75 +308,46 @@ screen secret_photo_view(photo="lap_sleep"):
 screen hidden_content_gallery():
     tag menu
 
-    on "show" action Function(sync_unlocked_ending_rewards)
+    key "K_F8" action Function(dev_unlock_all_gallery)
+    key "shift_K_u" action Function(dev_unlock_all_gallery)
 
-    ## 隱藏內容：狗日記／予安心境／朋友視角（完成對應結局解鎖）
+    add Solid("#17120F88")
     add "lhtl_menu_bg"
 
     frame:
-        background Solid(LHTL_MENU_SHELL)
-        padding (40, 24)
-        xalign 0.06
+        background Solid(LHTL_PANEL_GLASS)
+        padding (22, 14)
+        xalign 0.5
         yalign 0.5
-        xsize 760
-        ysize 610
+        xsize 860
+        ysize 640
 
-        side "t c b":
+        vbox:
+            spacing 4
             xfill True
-            yfill True
-            spacing 10
 
-            vbox:
-                spacing 6
-                xfill True
-                text "隱藏內容｜日記・心境・朋友視角":
-                    font CJK_FONT
-                    size 22
-                    color LHTL_TEXT_LIGHT
-                text "完成各結局後解鎖對應文章。點項目可閱讀全文。":
-                    font CJK_FONT
-                    size 16
-                    color LHTL_TEXT_SOFT
+            text "隱藏內容（點項目讀全文）":
+                font CJK_FONT
+                size 22
+                color "#7A4E2E"
+                xalign 0.5
 
             viewport:
                 scrollbars "vertical"
                 mousewheel True
-                draggable True
                 xfill True
-                yfill True
+                ysize 520
 
                 vbox:
-                    spacing 10
+                    spacing 4
                     xfill True
-
                     for content_id in HIDDEN_CONTENT_ORDER:
                         $ entry = hidden_content_entry(content_id)
-                        if entry is None:
-                            pass
-                        elif secret_content_unlocked(content_id):
-                            textbutton "✓  " + entry["label"] style "embed_menu_button":
-                                action Show("hidden_content_reader", content_id=content_id)
-                                xminimum 0
+                        if entry is not None:
+                            textbutton entry["label"] style "menu_button" action Show("hidden_content_reader", content_id=content_id):
                                 xfill True
-                        else:
-                            frame:
-                                background Solid(LHTL_MENU_ITEM)
-                                padding (18, 12)
-                                xfill True
-                                text "○  尚未解鎖":
-                                    font CJK_FONT
-                                    size 19
-                                    color "#806C5B"
 
-                    null height 8
-
-                    text "已解鎖隱藏內容 " + str(count_unlocked_hidden_content()) + "／" + str(len(HIDDEN_CONTENT_ORDER)):
-                        font CJK_FONT
-                        size 16
-                        color LHTL_TEXT_SOFT
-                        xalign 1.0
-
-            textbutton "返回" style "embed_menu_button" action If(main_menu, true=ShowMenu("main_menu"), false=Return()):
+            textbutton "返回主選單" style "menu_button" action Return():
                 xalign 0.5
 
 
@@ -431,7 +359,7 @@ screen hidden_content_reader(content_id=""):
     $ entry = hidden_content_entry(content_id) or {"label": "（空）", "body": ""}
 
     frame:
-        background Solid("#F3E9D9F2")
+        background Solid(LHTL_PANEL_GLASS)
         padding (36, 24)
         xalign 0.5
         yalign 0.5
@@ -813,3 +741,10 @@ screen skip_indicator():
         color LHTL_TEXT_LIGHT
         xalign 0.98
         yalign 0.10
+
+
+## 開發用快捷鍵：F8／Shift+U → 全解鎖（不強制跳轉，避免沖掉目前畫面）
+screen _dev_unlock_hotkey():
+    zorder 2500
+    key "K_F8" action Function(dev_unlock_all_gallery)
+    key "shift_K_u" action Function(dev_unlock_all_gallery)

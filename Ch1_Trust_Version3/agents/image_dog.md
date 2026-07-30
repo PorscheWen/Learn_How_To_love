@@ -14,11 +14,11 @@
 
 | 規則 | 說明 |
 |------|------|
-| **同一隻** | 毛色區塊、耳形、眼型、體型比例跨 pose **不得漂移** |
+| **同一隻** | 毛色區塊、耳形、眼型、體型比例，換 pose **也不能變樣** |
 | **軟分軌** | 高低信任**只改 pose／距離／表情**，不換外型、不換品種感 |
-| **分層** | 狗 PNG **獨立疊層**；勿畫進背景 |
-| **禁純種** | 不得畫成柯基／貴賓／柴／哈士奇等可辨純種 |
-| **禁寫字** | 無文字、logo、信任 HUD／數字 |
+| **分層** | 狗 PNG **獨立一層**；不要畫進背景 |
+| **禁純種** | 不要畫成柯基／貴賓／柴犬／哈士奇等一眼認得出的純種 |
+| **禁寫字** | 圖上不能有文字、logo、信任數值／HUD |
 
 產新 pose 前：先對照 `dog-ref-canonical.png` 與 `assets/dog/refs/`，再貼下方 **IDENTITY LOCK**。
 
@@ -30,19 +30,29 @@
 
 | 項目 | 鎖定 |
 |------|------|
-| 代號 | **B｜wiry** |
-| 品種感 | 台灣常見 **scruffy / wiry mixed breed**（略像 Border／㹴混，但**非純種㹴**） |
-| 年齡 | **約 2～3 個月** 幼犬（compact puppy，非壯年） |
-| 體型 | **短腿、結實偏瘦**；街犬幼崽感；寫實幼犬比例（非 Q 版） |
-| 頭臉 | 略角／精實吻；吻周與眉際 **wiry 鬍鬚感**；表情可讀「靈魂大眼」 |
-| 耳 | **軟垂 V 耳**貼頭；耳緣與耳尖 **深褐～栗褐** |
-| 眼 | **大而暖的深褐**；明顯 catchlight；可擔憂／警戒／求護衛 |
-| 鼻 | 小而濕潤的 **黑鼻** |
-| 毛質 | **短～中、硬毛／wiry、略亂**；筆觸粗厚（impasto 團塊），非絲滑細毛 |
-| 毛色 | 主色 **honey gold / golden-tan**；背脊 **grizzled darker saddle**；耳尖深褐；吻周／胸口偏 **cream～淺蜜** |
-| 尾 | 中短、自然下垂或微捲；隨情緒動 |
+| 代號 | **B｜wiry**（硬毛、略亂的那隻） |
+| 品種感 | 台灣街上常見的 **雜毛混種**（有點像㹴／牧羊犬混出來的，但**絕對不是純種㹴**） |
+| 年齡 | **大概兩到三個月** 的小狗（身子還小、緊湊，不是成犬） |
+| 體型 | **短腿、結實偏瘦**；像路邊撿來的幼犬；寫實比例，**不要 Q 版** |
+| 頭臉 | 臉帶一點稜角、吻部精實；嘴邊跟眉際有 **硬毛鬍鬚感**；眼神要讀得出「有靈魂的大眼睛」 |
+| 耳 | **軟軟的 V 形垂耳**貼著頭；耳緣跟耳尖是 **深褐到栗褐色** |
+| 眼 | **又大又暖的深褐色**；眼睛要有明顯亮點；能做出擔憂、警戒、求護衛 |
+| 鼻 | 小小的、濕潤的 **黑鼻頭** |
+| 毛質 | **短到中長、硬毛、略亂**；筆觸要粗厚成一團一團的，不要絲滑細毛 |
+| 毛色 | 主色是 **蜜金／金棕色**；背脊有一條 **偏深、帶灰的鞍斑**；耳尖深褐；吻周跟胸口偏 **奶油到淺蜜色** |
+| 尾 | 中短、自然下垂或微微捲；會跟著情緒動 |
 
 ### 1.2 毛色區塊（不可改）
+
+> 中文說明｜生圖時仍用下方英文色名，兩邊對齊、不要各寫各的。
+
+| 部位 | 中文 | 生圖用色名 |
+|------|------|------------|
+| 主體 | 蜜金／金棕 | `honey-gold` / `golden-tan` |
+| 耳尖＋耳緣＋背脊鞍斑 | 較深的栗褐／深褐帶灰 | `deeper chestnut` / `dark brown grizzle` |
+| 胸口＋吻周＋腳掌前緣 | 奶油／淺棕 | `cream` / `light tan` |
+| 鼻 | 黑 | `black` |
+| 眼 | 暖深褐＋亮點 | `warm dark brown` + catchlight |
 
 ```text
 主體：honey-gold / golden-tan
@@ -54,6 +64,8 @@
 
 ### 1.3 畫風錨點（對齊用戶定稿圖）
 
+> 白話：厚油彩、筆觸很重、毛是一塊一塊的顏料感；左上方暖光；純黑底方便去背。下面整段直接貼給生圖用。
+
 ```text
 Thick-impasto impressionistic oil painting of ONE puppy.
 Heavy tactile brushstrokes; fur as chunky paint clumps, not fine strand realism.
@@ -64,13 +76,14 @@ Not a photograph, not anime, not chibi, not smooth 3D render.
 
 ### 1.4 與落選方案的差別（勿混用）
 
-| 代號 | 勿做成（落選，檔案已刪） |
+| 代號 | 千萬別畫成這樣（落選，檔案已刪） |
 |------|--------------------------|
-| A fluffy | 過蓬、過圓、貴賓感 |
-| C round | 過圓臉、過密毛、偏 Q／貼圖感 |
-| D slender | 過修長優雅、站姿模特兒感 |
+| A fluffy | 毛太蓬、臉太圓，貴賓感太重 |
+| C round | 圓臉、毛太密，偏 Q 版／貼圖感 |
+| D slender | 身子太修長優雅，像模特兒站姿 |
 
-**B 的關鍵詞：** wiry、scruffy、impasto、honey-tan、dark-tipped floppy ears、grizzled saddle、soulful dark-brown eyes、black studio bg。
+**B 要抓的感覺（生圖關鍵詞）：** wiry、scruffy、impasto、honey-tan、dark-tipped floppy ears、grizzled saddle、soulful dark-brown eyes、black studio bg。  
+（白話：硬毛略亂、厚筆觸、蜜金色、耳尖偏深、背脊有鞍斑、有靈魂的深褐眼、純黑棚拍底。）
 
 ---
 
@@ -103,11 +116,11 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 
 | 規則 | 說明 |
 |------|------|
-| 表情＋動作 | **每張**必須同時改：耳／眼／嘴／尾／身體姿勢 |
-| 信任可讀 | 低信任＝遠／貼牆／僵／耳平；高信任＝近／貼腿／背對睡 |
-| 檔名 | `dog-{pose}.png`（例：`dog-anxious.png`）；**無 Week 子資料夾** |
+| 表情＋動作 | **每張**都要一起改：耳／眼／嘴／尾／身體姿勢 |
+| 信任可讀 | 低信任＝離遠／貼牆／僵住／耳朵平；高信任＝靠近／貼腿／背對睡 |
+| 檔名 | `dog-{pose}.png`（例：`dog-anxious.png`）；**不要**再開 Week 子資料夾 |
 | 路徑 | `Ch1_Trust_Version3/assets/dog/` |
-| 禁 | 同 pose 別名濫竽充數；禁把狗嵌進 bg |
+| 禁 | 同 pose 拿別名湊數；不要把狗畫進背景 |
 
 ### Pose 表（對齊 image.md §6.2）
 
@@ -116,32 +129,32 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | `dog-ref-canonical.png` | 中性側臉 | 全身側立母版 | 外型基準 | `refs/ref-side-profile` |
 | `dog-anxious.png` | 擔憂上望 | 低趴、下巴貼前爪 | S02／低信任 | `refs/ref-anxious-*` |
 | `dog-halfstep.png` | 警戒好奇 | 「既不碰你、也不放你走」的半步 | S02 記憶 | 生成 |
-| `dog-sniff-bento.png` | 小心試探 | 嗅米粒／便當味 | S02 Dist＋ | 生成 |
+| `dog-sniff-bento.png` | 小心試探 | 聞米粒／便當味 | S02 距離＋ | 生成 |
 | `dog-stair-watch.png` | 警戒 | 靠牆、面向門口方向 | S03 | 生成 |
 | `dog-door-sleep.png` | 睏但守門 | 睡在房門外 | S03 鉤子 | 生成 |
-| `dog-coat-sniff.png` | 借溫 | 嗅／靠外套 | S03 coat | 生成 |
+| `dog-coat-sniff.png` | 借溫 | 聞／靠外套 | S03 外套 | 生成 |
 | `dog-parallel.png` | 放鬆一點 | 兩步遠地板、下巴貼地 | S04 | 生成 |
-| `dog-chin-floor.png` | 安靜成立 | 下巴完整貼地 | S04 Dist＋ | 生成 |
-| `dog-kitchen-door.png` | 跟隨觀望 | 停在廚房門檻外 | S04 記憶 | 生成 |
-| `dog-ear-flat.png` | 被尖聲嚇到 | 耳平、退 | S05 Tone− | 生成 |
-| `dog-sniff-wire.png` | 好奇 | 嗅耳機線 | S05 鉤子 | 生成 |
-| `dog-behind-legs.png` | 求護衛 | 縮身躲藏 peek | S06 | `refs/ref-behind-legs` |
-| `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 | 生成 |
-| `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 | 生成 |
+| `dog-chin-floor.png` | 安靜趴定 | 下巴完整貼地 | S04 距離＋ | 生成 |
+| `dog-kitchen-door.png` | 跟著觀望 | 停在廚房門檻外 | S04 記憶 | 生成 |
+| `dog-ear-flat.png` | 被尖聲嚇到 | 耳朵平、往後退 | S05 語氣− | 生成 |
+| `dog-sniff-wire.png` | 好奇 | 聞耳機線 | S05 鉤子 | 生成 |
+| `dog-behind-legs.png` | 求保護 | 縮身躲腳邊偷看 | S06 | `refs/ref-behind-legs` |
+| `dog-forehead-nudge.png` | 輕輕道謝 | 額頭輕頂小腿 | S06 記憶 | 生成 |
+| `dog-guard-door.png` | 不安守門 | 趴在房門口 | S07 | 生成 |
 | `dog-nose-fingertip.png` | 輕觸 | 鼻尖碰指尖 | S07 記憶 | 生成 |
-| `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S08 低 | 生成 |
-| `dog-leash-wait.png` | 累但信任 | 胸背帶、停步等待 | S08 高；S09 玄關 | 生成 |
-| `dog-harness-bite.png` | 適應裝備 | 咬胸背帶布邊 | S08 穿帶 | 生成 |
-| `dog-drink-bowl.png` | 急喝水 | 低頭喝水碗 | S08 返家；結局 A | 生成 |
+| `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S08 低信任 | 生成 |
+| `dog-leash-wait.png` | 累但仍信任 | 穿胸背帶、停步等待 | S08 高信任；S09 玄關 | 生成 |
+| `dog-harness-bite.png` | 適應裝備 | 咬胸背帶布邊 | S08 穿胸背帶 | 生成 |
+| `dog-drink-bowl.png` | 急喝水 | 低頭喝水碗 | S08 回家；結局 A | 生成 |
 | `dog-shoe-sleep.png` | 安心 | 靠燕麥灰平底鞋邊睡 | S08 記憶 | 生成 |
-| `dog-farewell.png` | 告別上望 | 坐姿抬頭（無牽繩／無胸背帶） | S09 客廳 | 生成 |
-| `dog-paper-bag-sniff.png` | 聞紙袋 | 嗅交接紙袋 | S09 玄關 | 生成 |
-| `dog-cafe-refuse.png` | 拒絕警告 | 胸背帶＋牽繩、貼腳對伸手僵 | S09 咖啡廳 | 生成 |
-| `dog-cafe-tense.png` | 兩人中間僵 | 僵住、面向認得的人 | S09 咖啡廳低信任 | 生成 |
-| `dog-refuse-stranger.png` | 拒絕 | 胸背帶＋牽繩、低蹲對伸手僵 | S09 fallback | `refs/ref-refuse-stranger` |
-| `dog-back-sleep.png` | 信任落地 | **背對**睡在伸手可及處 | 結局 A | 生成 |
-| `dog-check-sleep.png` | 選定仍學 | 睡近但睜眼確認 | 結局 B | 生成 |
-| `dog-door-edge.png` | 薄冰 | 睡門邊、不看人 | 結局 D | 生成 |
+| `dog-farewell.png` | 告別上望 | 坐著抬頭（無牽繩／無胸背帶） | S09 客廳 | 生成 |
+| `dog-paper-bag-sniff.png` | 聞紙袋 | 聞交接用的紙袋 | S09 玄關 | 生成 |
+| `dog-cafe-refuse.png` | 拒絕示警 | 胸背帶＋牽繩、貼腳、對伸手僵住 | S09 咖啡廳 | 生成 |
+| `dog-cafe-tense.png` | 夾在兩人中間僵住 | 僵住、面向認得的人 | S09 咖啡廳低信任 | 生成 |
+| `dog-refuse-stranger.png` | 拒絕 | 胸背帶＋牽繩、低蹲對伸手僵住 | S09 備援 | `refs/ref-refuse-stranger` |
+| `dog-back-sleep.png` | 信任落地 | **背對**睡在伸手就碰得到的地方 | 結局 A | 生成 |
+| `dog-check-sleep.png` | 選了人，還在確認 | 睡得近，但眼睛睜著確認 | 結局 B | 生成 |
+| `dog-door-edge.png` | 信任很薄 | 睡門邊、不看人 | 結局 D | 生成 |
 
 ---
 
@@ -171,21 +184,21 @@ No text, no logo, no purebred markers, no trust meter UI.
 ## 5. 一致性審查清單（定稿前打勾）
 
 - [ ] 對得上 `dog-ref-canonical.png` 與 `assets/dog/refs/`（同一隻 B）
-- [ ] 蜂蜜褐主體＋深耳尖＋背脊 grizzle＋奶油吻周仍在
-- [ ] 毛質仍是 **wiry／scruffy＋厚 impasto**，未漂成蓬毛或光滑短毛
-- [ ] 仍是短腿幼犬，未變壯年犬／Q 版
-- [ ] 耳為軟垂，非尖直立雙耳純種感
-- [ ] 大深褐眼＋catchlight 仍在
-- [ ] 表情與身體動作都有改（不是只換背景）
-- [ ] 無文字／logo／信任數字
-- [ ] 狗為獨立透明 PNG，未嵌進 bg
-- [ ] 未自動開遊戲
+- [ ] 蜜金／金棕主體＋深耳尖＋背脊鞍斑＋奶油吻周都還在
+- [ ] 毛質仍是 **硬毛略亂＋厚油彩筆觸**（wiry／scruffy／impasto），沒漂成蓬毛或光滑短毛
+- [ ] 仍是短腿小狗，沒變成成犬／Q 版
+- [ ] 耳朵是軟垂的，不是尖尖直立的純種感
+- [ ] 又大又深褐的眼睛＋亮點都還在
+- [ ] 表情跟身體動作都有改（不是只換背景）
+- [ ] 沒有文字／logo／信任數字
+- [ ] 狗是獨立透明 PNG，沒嵌進背景
+- [ ] 沒有自動開遊戲
 
 ### 不一致時怎麼辦
 
-1. 重貼 **IDENTITY LOCK**＋明確寫 `must match dog-ref-canonical.png and refs/`  
+1. 重貼 **IDENTITY LOCK**，並明確寫 `must match dog-ref-canonical.png and refs/`  
 2. 加 `--no`：`fluffy coat, round plush face, purebred, chibi, photorealistic, cream background`  
-3. 仍漂＝用基準圖做 img2img／edit，只改 pose
+3. 還是漂＝用基準圖做 img2img／edit，**只改 pose**
 
 ---
 
@@ -195,8 +208,8 @@ No text, no logo, no purebred markers, no trust meter UI.
 |------|------|
 | **本檔 `image_dog.md`** | 小7 **外型鎖定＋pose 一致性** |
 | `image.md` | 總美術規範、人物／背景／STYLE |
-| `image_bg.md` | 背景 place／light；**背景無人無狗** |
-| `game_guild.md` | 信任體感用距離／睡姿表達，不顯示數字 |
+| `image_bg.md` | 背景地點／光線；**背景不要有人、也不要有狗** |
+| `game_guild.md` | 信任用距離／睡姿讓人感覺得到，不顯示數字 |
 
 `image.md` 的狗章節以本檔為準；衝突時以 **本檔 Option B** 為準。
 

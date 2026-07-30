@@ -43,7 +43,11 @@ init python:
         if eid == "A":
             lines.extend([
                 "紀念照片｜躺在大腿",
-                "紀念照片｜背靠同睡",
+                "紀念照片｜額頭輕碰",
+                "紀念照片｜擋在身後",
+                "紀念照片｜鞋邊小睡",
+                "紀念照片｜指尖碰鼻",
+                "紀念照片｜新水碗",
                 "狗的日記｜她的背靠著我",
                 "予安心境｜一百個清晨裡的信任",
                 "朋友視角｜Kelly",
@@ -132,7 +136,7 @@ screen ending_unlock_notice(ending_id="A"):
     add Solid("#17120F99")
 
     frame at ending_unlock_appear:
-        background Solid("#F3E9D9EE")
+        background Solid(LHTL_PANEL_GLASS)
         padding (36, 28)
         xalign 0.5
         yalign 0.48
