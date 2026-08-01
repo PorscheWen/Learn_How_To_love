@@ -38,7 +38,7 @@
 - **Section 03｜大門的臨時國界：** 牠在大門外睡著；她不忍心，開門把牠帶回屋內直到天明。
 - **Section 04｜共享同一種安靜：** 沙發與地板隔著兩步，他們不急著靠近，只練習在同一份安靜裡留下。
 - **Section 05｜你的聲音有兩種：** 戴上耳機後，予安的聲音變得又快又尖；小7開始分辨，哪一種聲音會為牠慢下來。
-- **Section 06｜走廊上的第三者：** 當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。
+- **Section 06｜樓梯間的第三者：** 當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。
 - **Section 07｜她倒下的那天：** 予安病得起不了身，小7不懂怎麼照顧人，只知道守在門口，試著等她回應。
 - **Section 08｜走到轉角就好：** 第一次出門只為抵達巷口；世界太吵時，予安得決定要拉著牠，還是一起停下。
 - **Section 09｜差點交給別人：** 同事真誠提出接手；在牽繩交出去以前，予安必須承認誰已經選過誰。
@@ -52,7 +52,7 @@
 - S02 依 `peeked_backdoor` 軟分軌開場；信任選擇組（蹲等 `+1`／硬抱 `−1`／趕走後良心回頭淨 `0`）為本段唯一動 trust 的選項組，路徑選擇寫入 `called_shelter`／`vet_first`／`gate_night`，溫柔路線加成後淨變動落在 `0～+2／−1`。演出採後門遠距進場、距離選擇、退一步測試與空紙箱離場四拍；蹲等路線以 `far → mid → near` 和 `melancholy → tender → warm` 回應信任。
 - S03 完整實作路徑開場、外套風味、歸來信任選擇；夜裡見狗在**公寓大門外**睡著後**一定帶回屋內**（`entrance` 玄關／客廳軟分軌），待到天明再進 S04。背景序列：`gate-night` → `entrance-night` → `living-night` →（清晨）`entrance-day`／`living-day`。
 - S04 完整實作平行安靜／硬抱合照／關浴室三種質地，以及「只到廚房門口」記憶點。
-- S05 完整實作 Tone 軸、視訊早會、耳機回授／主管點名高峰、拔插頭「喀」聲回收，以及正式改名 UI；可保留「小7」或輸入最多 12 字的新名字，空白輸入沿用原名。
+- S05 完整實作 Tone 軸、視訊早會、耳機回授／主管點名高峰、拔插頭「喀」聲回收，以及正式改名 UI；可保留「小7」或輸入最多 12 字的新名字，空白輸入沿用原名。名字落定後播放 `dog wag` 搖尾巴循環動畫（`assets/dog/wag/` 5 幀 ping-pong）；門外腳步聲起切回 `stair_watch`。
 - S06 完整實作 Guard 軸、鄰居持續伸手說服、推車輪「喀、喀」壓力、選擇站位、「我們」與額頭輕碰記憶點。
 - S07 完整實作發燒守門、起身失敗／耳鳴體感高峰、Tone 延續與「我還在」，並以兩道呼吸收束；禁止把小7寫成會拿藥或預知病情的靈犬。
 - S08 完整實作胸背帶穿戴、低／中／高信任外出軟分軌、Dist 停等／硬拖／提早回家，以及鞋邊睡記憶點。巷口狗一開始在身後不願前進，再慢慢跟上；轉角機車呼嘯嚇退回身後。停等 `behind／far → mid → near`、提早回家 `mid` 鬆弧或硬拖全程緊張距離，最後用返家距離及同事提議收束四拍。
@@ -67,7 +67,7 @@
 - 隱藏內容：各結局解鎖狗日記／予安心境／朋友視角全文（`hidden_content.rpy`）；主選單「隱藏內容」可閱讀。
 - 結局收束：`endings.rpy` 的 `ending_coda_finish`（安靜睡姿節拍 → 標題卡 → 解鎖提示 → `ending_aftercare`）；`process_ending_unlock` 寫入日記／心境／朋友視角（A 另含紀念照＋Ch2 提示）；`sync_unlocked_ending_rewards` **必須回傳 `None`**（禁放進主選單 `action` 清單，否則 `True` 會開新遊戲）。
 - 人物立繪：S08 玄關用 `char-yuan-leash`（蹲）、巷口用 `char-yuan-walk`（走路；樹下停等才切回蹲）；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`（×0.8）、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。
-- 狗立繪：S07～S10 依守門、牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。
+- 狗立繪：S07～S10 依守門、牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。S03 `door_sleep` 與結局 A／B／D 三種睡姿為 5 幀呼吸循環動畫（`assets/dog/{door-sleep,back-sleep,check-sleep,door-edge}/`），幀缺失時落回靜態圖。第二批動作動畫：S05 `sniff_wire` 嗅耳機線、S07 `guard_door` 守門呼吸、S08 `drink_bowl` 舔水、S09 `farewell` 尾巴掃地（各 5 幀，同 fallback 機制）。
 - BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
 - 狗 SFX：`dog_sfx()` 以低音量播放稀疏 one-shot；S02／S03／S05／S06／S07／S08／S09 使用 `soft`、`whimper`、`murmur`、`bark`、`growl`，S01 與結局 C 空屋不播放。音源授權見 `assets/audio/sfx/CREDITS.md`。
 
@@ -96,10 +96,10 @@
 │  ├─ bg-living-day.png
 │  ├─ bg-backdoor-night.png
 │  ├─ bg-stairwell-night.png
+│  ├─ bg-stairwell-day.png
 │  ├─ bg-gate-night.png
 │  ├─ bg-entrance-night.png
 │  ├─ bg-entrance-day.png
-│  ├─ bg-corridor-day.png
 │  ├─ bg-alley-day.png
 │  ├─ bg-alley-night.png
 │  ├─ bg-cafe-day.png
@@ -139,7 +139,17 @@
 │  ├─ dog-refuse-stranger.png
 │  ├─ dog-back-sleep.png
 │  ├─ dog-check-sleep.png
-│  └─ dog-door-edge.png
+│  ├─ dog-door-edge.png
+│  ├─ wag/
+│  │  └─ dog-wag-01.png … dog-wag-05.png（S05 搖尾巴動畫幀）
+│  ├─ door-sleep/（S03 熟睡呼吸動畫幀 01～05）
+│  ├─ back-sleep/（結局 A 呼吸動畫幀 01～05）
+│  ├─ check-sleep/（結局 B 呼吸動畫幀 01～05）
+│  ├─ door-edge/（結局 D 呼吸動畫幀 01～05）
+│  ├─ sniff-wire/（S05 嗅耳機線動畫幀 01～05）
+│  ├─ guard-door/（S07 守門呼吸動畫幀 01～05）
+│  ├─ drink-bowl/（S08 舔水動畫幀 01～05）
+│  └─ farewell/（S09 尾巴掃地動畫幀 01～05）
 ├─ gallery/
 │  ├─ ending-a-back.png
 │  ├─ ending-b-learning.png
@@ -164,6 +174,24 @@
 3. `tools/flux_*.py`（FLUX 2 Pro）僅在 Cursor 不可用、或使用者明確指定時當備援。
 4. `assets/bg/`、`assets/char/`、`assets/dog/` 只放遊戲正式資產；綠幕來源放 `assets/dog_mj/`，去背完成後刪除遊戲目錄內的 `*-green.png`。
 5. 不保留未引用備援圖、`assets/dog_old/` 舊圖或 `*-regen` 中介圖。
+
+### 動畫序列幀產線（Seedance｜2026-08-01）
+
+狗的循環動畫（如 S05 搖尾巴）用 AceData Seedance 圖生影片再抽幀：
+
+```powershell
+# 1) 以現有 pose PNG 生成短影片（--pad 加白邊防頭腳被裁）
+python .\tools\seedance-generate.py --image ..\assets\dog\dog-ref-canonical.png `
+    --prompt "..." --ratio 3:4 --pad --duration 3
+
+# 2) 抽幀＋白背去背＋亮度標準化 → 透明 PNG
+python .\tools\video-to-frames.py 影片.mp4 ..\assets\dog\wag --frames 8
+```
+
+- Token 放 `tools/.env`（`ACEDATA_API_TOKEN`／`ACEDATA_PLATFORM_TOKEN`，已被 gitignore）；每次生成後會回報剩餘積分。
+- **抽幀後必做**：依 pad 幾何把每幀裁回原圖框架（否則貼底錨點下狗會浮空），參考 `tools/output/seedance/normalize-frames.py`；裁回後 `DOG_POSE_SCALE` 直接沿用靜態 pose 原值。
+- 規範（動作純度、亮度、縮放、ping-pong 播放）見 `../agents/image_dog.md` §3.5。
+- 幀落地後在 `script.rpy` 補 `DOG_POSE_SCALE` 與 ATL `image dog {動作}` 定義。
 
 ### 2026-07-19 美術更新
 

@@ -104,52 +104,81 @@ screen quick_menu():
 screen main_menu():
     tag menu
 
-    ## 主視覺：theme/title-main.png；缺檔退回深棕
+    ## 主視覺：theme/title-main.png；缺圖退回深色 → 面板文字須用亮色
     add "lhtl_title_bg"
-    add Solid("#B77A4518")
+    add Solid("#17120F22")
 
     frame:
         background Solid(LHTL_PANEL_GLASS)
-        padding (36, 18)
+        padding (32, 24)
         xalign 0.5
         yalign 0.5
-        xsize 520
+        xsize 420
 
-        ## 勿用 ymaximum 裁切：會把「結局一覽／隱藏內容」裁掉
         vbox:
-            spacing 3
+            spacing 0
             xalign 0.5
             xfill True
 
             text "Learn How to Love":
                 font CJK_FONT
-                size 32
-                color LHTL_TEXT
+                size 26
+                color LHTL_TEXT_LIGHT
                 xalign 0.5
+                outlines [(2, "#17120F99", 0, 0)]
 
             text "Ch1 Trust｜學會靠近":
                 font CJK_FONT
-                size 16
-                color LHTL_ACCENT_DARK
+                size 14
+                color LHTL_TEXT_SOFT
                 xalign 0.5
+                outlines [(1, "#17120F66", 0, 0)]
 
-            null height 4
+            null height 14
 
-            textbutton "開始" style "menu_button" action Start():
+            text "遊玩":
+                font CJK_FONT
+                size 13
+                color LHTL_TEXT_SOFT
+                xalign 0.0
+
+            null height 6
+
+            textbutton "開始" style "menu_primary_button" action Start():
                 xfill True
+            null height 6
             textbutton "讀取進度" style "menu_button" action ShowMenu("load"):
                 xfill True
+            null height 6
             textbutton "章節選擇" style "menu_button" action ShowMenu("section_select"):
                 xfill True
-            ## 先開選單；解鎖另鍵／進畫面後手動，避免 Function 失敗擋住 ShowMenu
+
+            null height 14
+
+            text "收藏":
+                font CJK_FONT
+                size 13
+                color LHTL_TEXT_SOFT
+                xalign 0.0
+
+            null height 6
+
             textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery"):
                 xfill True
+            null height 6
             textbutton "隱藏內容" style "menu_button" action ShowMenu("hidden_content_gallery"):
                 xfill True
-            textbutton "設定" style "menu_button" action ShowMenu("preferences"):
+
+            null height 16
+
+            hbox:
+                spacing 10
+                xalign 0.5
                 xfill True
-            textbutton "離開" style "menu_button" action Quit(confirm=False):
-                xfill True
+                textbutton "設定" style "menu_back_button" action ShowMenu("preferences"):
+                    xminimum 170
+                textbutton "離開" style "menu_back_button" action Quit(confirm=False):
+                    xminimum 170
 
     key "K_F8" action Function(dev_unlock_all_gallery)
     key "shift_K_u" action Function(dev_unlock_all_gallery)
@@ -161,55 +190,109 @@ screen ending_gallery():
     key "K_F8" action Function(dev_unlock_all_gallery)
     key "shift_K_u" action Function(dev_unlock_all_gallery)
 
-    add Solid("#17120F88")
     add "lhtl_menu_bg"
+    add Solid("#17120F33")
 
     frame:
         background Solid(LHTL_PANEL_GLASS)
-        padding (22, 14)
-        xalign 0.5
+        padding (28, 20)
+        xalign 0.05
         yalign 0.5
-        xsize 860
-        ysize 640
+        xsize 760
+        ysize 620
 
-        vbox:
-            spacing 3
+        side "t c b":
             xfill True
+            yfill True
+            spacing 10
 
-            text "結局一覽（點項目看大圖）":
-                font CJK_FONT
-                size 22
-                color "#7A4E2E"
-                xalign 0.5
+            vbox:
+                spacing 2
+                xfill True
+                text "結局一覽":
+                    font CJK_FONT
+                    size 24
+                    color LHTL_TEXT_LIGHT
+                    outlines [(2, "#17120F99", 0, 0)]
+                text "點項目看大圖":
+                    font CJK_FONT
+                    size 13
+                    color LHTL_TEXT_SOFT
 
-            textbutton "結局 A｜背靠" style "menu_button" action Function(open_gallery_image, "gallery/ending-a-back.png", "結局 A｜背靠"):
+            viewport:
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
                 xfill True
-            textbutton "結局 B｜選定但還在學" style "menu_button" action Function(open_gallery_image, "gallery/ending-b-learning.png", "結局 B｜選定但還在學"):
-                xfill True
-            textbutton "結局 C｜送走之後" style "menu_button" action Function(open_gallery_image, "gallery/ending-c-handover.png", "結局 C｜送走之後"):
-                xfill True
-            textbutton "結局 D｜薄冰同住" style "menu_button" action Function(open_gallery_image, "gallery/ending-d-thin-ice.png", "結局 D｜薄冰同住"):
-                xfill True
+                yfill True
 
-            text "隱藏紀念照片":
-                font CJK_FONT
-                size 16
-                color "#7A4E2E"
+                vbox:
+                    spacing 8
+                    xfill True
 
-            textbutton "紀念｜躺在大腿" style "menu_button" action Function(open_gallery_image, "gallery/secret-lap-sleep.png", "紀念照片｜躺在大腿"):
-                xfill True
-            textbutton "紀念｜額頭輕碰" style "menu_button" action Function(open_gallery_image, "gallery/secret-forehead-nudge.png", "紀念照片｜額頭輕碰"):
-                xfill True
-            textbutton "紀念｜擋在身後" style "menu_button" action Function(open_gallery_image, "gallery/secret-behind-legs.png", "紀念照片｜擋在身後"):
-                xfill True
-            textbutton "紀念｜鞋邊小睡" style "menu_button" action Function(open_gallery_image, "gallery/secret-shoe-sleep.png", "紀念照片｜鞋邊小睡"):
-                xfill True
-            textbutton "紀念｜指尖碰鼻" style "menu_button" action Function(open_gallery_image, "gallery/secret-nose-touch.png", "紀念照片｜指尖碰鼻"):
-                xfill True
-            textbutton "紀念｜新水碗" style "menu_button" action Function(open_gallery_image, "gallery/secret-water-bowl.png", "紀念照片｜新水碗"):
-                xfill True
+                    $ latest_run = latest_trajectory_summary()
+                    if latest_run:
+                        text "本輪旅程":
+                            font CJK_FONT
+                            size 14
+                            color LHTL_TEXT_SOFT
+                        frame:
+                            background Solid("#F3E9D9CC")
+                            padding (14, 10)
+                            xfill True
+                            vbox:
+                                spacing 4
+                                text latest_run[0]:
+                                    font CJK_FONT
+                                    size 16
+                                    color "#4A3728"
+                                text latest_run[1]:
+                                    font CJK_FONT
+                                    size 13
+                                    color "#7A4E2E"
+                        null height 4
 
-            textbutton "返回主選單" style "menu_button" action Return():
+                    text "結局":
+                        font CJK_FONT
+                        size 14
+                        color LHTL_TEXT_SOFT
+
+                    grid 2 2:
+                        spacing 8
+                        xfill True
+
+                        textbutton "結局 A｜背靠" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-a-back.png", "結局 A｜背靠"):
+                            xsize 340
+                        textbutton "結局 B｜選定但還在學" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-b-learning.png", "結局 B｜選定但還在學"):
+                            xsize 340
+                        textbutton "結局 C｜送走之後" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-c-handover.png", "結局 C｜送走之後"):
+                            xsize 340
+                        textbutton "結局 D｜薄冰同住" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-d-thin-ice.png", "結局 D｜薄冰同住"):
+                            xsize 340
+
+                    null height 4
+
+                    text "隱藏紀念照片":
+                        font CJK_FONT
+                        size 14
+                        color LHTL_TEXT_SOFT
+
+                    textbutton "紀念｜躺在大腿" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-lap-sleep.png", "紀念照片｜躺在大腿"):
+                        xfill True
+                    textbutton "紀念｜額頭輕碰" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-forehead-nudge.png", "紀念照片｜額頭輕碰"):
+                        xfill True
+                    textbutton "紀念｜擋在身後" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-behind-legs.png", "紀念照片｜擋在身後"):
+                        xfill True
+                    textbutton "紀念｜鞋邊小睡" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-shoe-sleep.png", "紀念照片｜鞋邊小睡"):
+                        xfill True
+                    textbutton "紀念｜指尖碰鼻" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-nose-touch.png", "紀念照片｜指尖碰鼻"):
+                        xfill True
+                    textbutton "紀念｜新水碗" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-water-bowl.png", "紀念照片｜新水碗"):
+                        xfill True
+                    textbutton "紀念｜背對背" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-back-to-back.png", "紀念照片｜背對背"):
+                        xfill True
+
+            textbutton "返回" style "menu_back_button" action Return():
                 xalign 0.5
 
 
@@ -254,7 +337,7 @@ screen gallery_image_view(title="紀念照片", img_path="gallery/secret-lap-sle
             size 22
             color "#7A4E2E"
 
-    textbutton "關閉" style "menu_button" action ShowMenu("ending_gallery"):
+    textbutton "關閉" style "menu_back_button" action ShowMenu("ending_gallery"):
         xalign 0.5
         yalign 0.96
 
@@ -276,7 +359,7 @@ screen ending_still_view(ending_id="A", title="", img_path="gallery/ending-a-bac
             font CJK_FONT
             size 22
             color "#7A4E2E"
-    textbutton "關閉" style "menu_button" action ShowMenu("ending_gallery"):
+    textbutton "關閉" style "menu_back_button" action ShowMenu("ending_gallery"):
         xalign 0.5
         yalign 0.96
 
@@ -300,7 +383,7 @@ screen secret_photo_view(photo="lap_sleep"):
             font CJK_FONT
             size 22
             color "#7A4E2E"
-    textbutton "關閉" style "menu_button" action ShowMenu("ending_gallery"):
+    textbutton "關閉" style "menu_back_button" action ShowMenu("ending_gallery"):
         xalign 0.5
         yalign 0.96
 
@@ -311,43 +394,52 @@ screen hidden_content_gallery():
     key "K_F8" action Function(dev_unlock_all_gallery)
     key "shift_K_u" action Function(dev_unlock_all_gallery)
 
-    add Solid("#17120F88")
     add "lhtl_menu_bg"
+    add Solid("#17120F33")
 
     frame:
         background Solid(LHTL_PANEL_GLASS)
-        padding (22, 14)
-        xalign 0.5
+        padding (28, 20)
+        xalign 0.05
         yalign 0.5
-        xsize 860
-        ysize 640
+        xsize 760
+        ysize 620
 
-        vbox:
-            spacing 4
+        side "t c b":
             xfill True
+            yfill True
+            spacing 10
 
-            text "隱藏內容（點項目讀全文）":
-                font CJK_FONT
-                size 22
-                color "#7A4E2E"
-                xalign 0.5
+            vbox:
+                spacing 2
+                xfill True
+                text "隱藏內容":
+                    font CJK_FONT
+                    size 24
+                    color LHTL_TEXT_LIGHT
+                    outlines [(2, "#17120F99", 0, 0)]
+                text "點項目讀全文":
+                    font CJK_FONT
+                    size 13
+                    color LHTL_TEXT_SOFT
 
             viewport:
                 scrollbars "vertical"
                 mousewheel True
+                draggable True
                 xfill True
-                ysize 520
+                yfill True
 
                 vbox:
-                    spacing 4
+                    spacing 7
                     xfill True
                     for content_id in HIDDEN_CONTENT_ORDER:
                         $ entry = hidden_content_entry(content_id)
                         if entry is not None:
-                            textbutton entry["label"] style "menu_button" action Show("hidden_content_reader", content_id=content_id):
+                            textbutton entry["label"] style "menu_list_button" action Show("hidden_content_reader", content_id=content_id):
                                 xfill True
 
-            textbutton "返回主選單" style "menu_button" action Return():
+            textbutton "返回" style "menu_back_button" action Return():
                 xalign 0.5
 
 
@@ -359,7 +451,8 @@ screen hidden_content_reader(content_id=""):
     $ entry = hidden_content_entry(content_id) or {"label": "（空）", "body": ""}
 
     frame:
-        background Solid(LHTL_PANEL_GLASS)
+        ## 長文閱讀用實色米白底（玻璃底會讓深棕內文沉進深色背景）
+        background Solid("#F3E9D9F2")
         padding (36, 24)
         xalign 0.5
         yalign 0.5
@@ -388,7 +481,7 @@ screen hidden_content_reader(content_id=""):
                     color LHTL_TEXT
                     line_spacing 8
 
-            textbutton "關閉" style "menu_button":
+            textbutton "關閉" style "menu_back_button":
                 action Hide("hidden_content_reader")
                 xalign 0.5
 
@@ -404,7 +497,7 @@ screen section_select():
         ("start_section_03", "Section 03｜大門的臨時國界", "牠在大門外睡著；她不忍心，開門把牠帶回屋內直到天明。"),
         ("start_section_04", "Section 04｜共享同一種安靜", "沙發與地板隔著兩步，他們不急著靠近，只練習在同一份安靜裡留下。"),
         ("start_section_05", "Section 05｜你的聲音有兩種", "戴上耳機後，予安的聲音變得又快又尖；小7開始分辨，哪一種聲音會為牠慢下來。"),
-        ("start_section_06", "Section 06｜走廊上的第三者", "當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。"),
+        ("start_section_06", "Section 06｜樓梯間的第三者", "當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。"),
         ("start_section_07", "Section 07｜她倒下的那天", "予安病得起不了身，小7不懂怎麼照顧人，只知道守在門口，試著等她回應。"),
         ("start_section_08", "Section 08｜走到轉角就好", "第一次出門只為抵達巷口；世界太吵時，予安得決定要拉著牠，還是一起停下。"),
         ("start_section_09", "Section 09｜差點交給別人", "同事真誠提出接手；在牽繩交出去以前，予安必須承認誰已經選過誰。"),
@@ -412,8 +505,8 @@ screen section_select():
     ]
 
     frame:
-        background Solid(LHTL_MENU_SHELL)
-        padding (24, 14)
+        background Solid(LHTL_PANEL_GLASS)
+        padding (24, 16)
         xalign 0.04
         yalign 0.5
         xsize 980
@@ -429,11 +522,12 @@ screen section_select():
                 xfill True
                 text "章節選擇":
                     font CJK_FONT
-                    size gui.label_text_size
+                    size 24
                     color LHTL_TEXT_LIGHT
+                    outlines [(2, "#17120F99", 0, 0)]
                 text "選擇章節會以該段的預設狀態開始，不影響既有存檔。":
                     font CJK_FONT
-                    size 15
+                    size 13
                     color LHTL_TEXT_SOFT
 
             # 兩欄網格一次顯示 S01～S10；高度控在 side 中央區內，避免壓住返回
@@ -462,34 +556,36 @@ screen section_select():
                                 size 11
                                 color "#806C5B"
 
-            textbutton "返回" style "embed_menu_button" action If(main_menu, true=ShowMenu("main_menu"), false=Return()):
+            textbutton "返回" style "menu_back_button" action If(main_menu, true=ShowMenu("main_menu"), false=Return()):
                 xalign 0.5
 
 
-screen game_menu(title):
+screen game_menu(title, show_quit=False):
     tag menu
 
-    ## 選單底圖：theme/menu-bg.png；半透明殼＋項目嵌牆，右側牆鉤露出
+    ## 選單底圖：左欄面板，右側牆鉤／油畫透出
     add "lhtl_menu_bg"
+    add Solid("#17120F22")
 
-    ## side t/c/b：標題／內容／返回各佔一區，避免返回被 yfill 擠出外框
+    ## side t/c/b：標題／內容／底部按鈕
     frame:
-        background Solid(LHTL_MENU_SHELL)
-        padding (40, 24)
+        background Solid(LHTL_PANEL_GLASS)
+        padding (32, 22)
         xalign 0.05
         yalign 0.5
-        xsize 980
-        ysize 610
+        xsize 900
+        ysize 600
 
         side "t c b":
             xfill True
             yfill True
-            spacing 14
+            spacing 12
 
             text title:
                 font CJK_FONT
-                size gui.label_text_size
+                size 26
                 color LHTL_TEXT_LIGHT
+                outlines [(2, "#17120F99", 0, 0)]
 
             frame:
                 background None
@@ -498,8 +594,18 @@ screen game_menu(title):
                 yfill True
                 transclude
 
-            textbutton "返回" style "embed_menu_button" action Return():
-                xalign 0.5
+            ## 設定頁：返回＋離開並排；其餘選單只顯示返回
+            if show_quit:
+                hbox:
+                    spacing 14
+                    xalign 0.5
+                    textbutton "返回" style "menu_back_button" action Return():
+                        xminimum 160
+                    textbutton "離開遊戲" style "menu_back_button" action Quit(confirm=False):
+                        xminimum 160
+            else:
+                textbutton "返回" style "menu_back_button" action Return():
+                    xalign 0.5
 
 
 screen save():
@@ -555,28 +661,29 @@ screen file_slots():
 screen preferences():
     tag menu
 
-    use game_menu("設定"):
+    use game_menu("設定", show_quit=True):
         ## 勿用 viewport+yfill 嵌在 game_menu 的 side 中央：高度會被算成 0，整頁空白
-        ## 內容高度可進中央區；外層「返回」已由 side t/c/b 分區，不重疊
+        ## 內容須壓在 side 中央區內（約 ≤450px），勿用 yalign 推位（會疊標題／返回）
         vbox:
-            spacing 20
+            spacing 8
             xalign 0.5
+            xfill True
 
             hbox:
-                spacing 48
+                spacing 28
                 xalign 0.5
 
                 ## 左欄：閱讀／顯示
                 vbox:
-                    spacing 18
-                    xsize 400
+                    spacing 8
+                    xsize 380
 
                     vbox:
-                        spacing 8
+                        spacing 4
                         text "文字速度":
                             font CJK_FONT
-                            size 20
-                            color LHTL_TEXT_LIGHT
+                            size 16
+                            color LHTL_TEXT
                         hbox:
                             spacing 8
                             textbutton "慢" style "embed_pref_button" action Preference("text speed", 20)
@@ -584,19 +691,19 @@ screen preferences():
                             textbutton "快" style "embed_pref_button" action Preference("text speed", 50)
 
                     vbox:
-                        spacing 8
+                        spacing 4
                         text "自動前進等待":
                             font CJK_FONT
-                            size 20
-                            color LHTL_TEXT_LIGHT
+                            size 16
+                            color LHTL_TEXT
                         bar value Preference("auto-forward time") style "lhtl_slider"
 
                     vbox:
-                        spacing 8
+                        spacing 4
                         text "顯示模式":
                             font CJK_FONT
-                            size 20
-                            color LHTL_TEXT_LIGHT
+                            size 16
+                            color LHTL_TEXT
                         hbox:
                             spacing 8
                             textbutton "視窗" style "embed_pref_button" action Preference("display", "window")
@@ -604,29 +711,107 @@ screen preferences():
 
                 ## 右欄：聲音
                 vbox:
-                    spacing 18
-                    xsize 400
+                    spacing 8
+                    xsize 380
 
                     vbox:
-                        spacing 8
+                        spacing 4
                         text "音樂音量":
                             font CJK_FONT
-                            size 20
-                            color LHTL_TEXT_LIGHT
+                            size 16
+                            color LHTL_TEXT
                         bar value Preference("music volume") style "lhtl_slider"
 
                     vbox:
-                        spacing 8
+                        spacing 4
                         text "音效音量":
                             font CJK_FONT
-                            size 20
-                            color LHTL_TEXT_LIGHT
+                            size 16
+                            color LHTL_TEXT
                         bar value Preference("sound volume") style "lhtl_slider"
 
                     textbutton "音樂靜音切換" style "embed_pref_button" action Preference("music mute", "toggle")
 
-            textbutton "離開遊戲" style "embed_pref_button" action Quit(confirm=False):
+            ## 輔助需求：2×2 網格壓高度，避免擠到「返回」
+            frame:
+                background Solid("#F3E9D9EE")
+                padding (14, 8)
+                xsize 780
                 xalign 0.5
+
+                vbox:
+                    spacing 6
+                    xfill True
+
+                    hbox:
+                        spacing 12
+                        xalign 0.5
+                        text "輔助需求":
+                            font CJK_FONT
+                            size 18
+                            color "#7A4E2E"
+                        textbutton "開啟輔助組合" style "embed_pref_button" action Function(enable_assist_pack):
+                            xminimum 140
+                        textbutton "關閉輔助組合" style "embed_pref_button" action Function(disable_assist_pack):
+                            xminimum 140
+
+                    grid 2 2:
+                        spacing 8
+                        xalign 0.5
+
+                        hbox:
+                            spacing 8
+                            text "大字體":
+                                font CJK_FONT
+                                size 16
+                                color "#4A3728"
+                                xminimum 72
+                            textbutton "開" style "embed_pref_button" action Function(set_assist, "assist_large_text", True) selected persistent.assist_large_text:
+                                xminimum 64
+                            textbutton "關" style "embed_pref_button" action Function(set_assist, "assist_large_text", False) selected (not persistent.assist_large_text):
+                                xminimum 64
+
+                        hbox:
+                            spacing 8
+                            text "高對比":
+                                font CJK_FONT
+                                size 16
+                                color "#4A3728"
+                                xminimum 72
+                            textbutton "開" style "embed_pref_button" action Function(set_assist, "assist_high_contrast", True) selected persistent.assist_high_contrast:
+                                xminimum 64
+                            textbutton "關" style "embed_pref_button" action Function(set_assist, "assist_high_contrast", False) selected (not persistent.assist_high_contrast):
+                                xminimum 64
+
+                        hbox:
+                            spacing 8
+                            text "休息提醒":
+                                font CJK_FONT
+                                size 16
+                                color "#4A3728"
+                                xminimum 72
+                            textbutton "開" style "embed_pref_button" action Function(set_assist, "assist_rest_reminder", True) selected persistent.assist_rest_reminder:
+                                xminimum 64
+                            textbutton "關" style "embed_pref_button" action Function(set_assist, "assist_rest_reminder", False) selected (not persistent.assist_rest_reminder):
+                                xminimum 64
+
+                        hbox:
+                            spacing 8
+                            text "略過已讀":
+                                font CJK_FONT
+                                size 16
+                                color "#4A3728"
+                                xminimum 72
+                            textbutton "開" style "embed_pref_button" action Function(set_assist, "assist_skip_seen", True) selected persistent.assist_skip_seen:
+                                xminimum 64
+                            textbutton "關" style "embed_pref_button" action Function(set_assist, "assist_skip_seen", False) selected (not persistent.assist_skip_seen):
+                                xminimum 64
+
+                    text "略過已讀開＝Ctrl 快轉已看過；建議年長／新手先開輔助組合。":
+                        font CJK_FONT
+                        size 12
+                        color "#806C5B"
+                        xalign 0.5
 
 
 style lhtl_slider is slider:

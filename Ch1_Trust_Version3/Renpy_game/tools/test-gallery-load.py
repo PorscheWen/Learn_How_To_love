@@ -17,6 +17,7 @@ GALLERY_FILES = [
     "gallery/secret-shoe-sleep.png",
     "gallery/secret-nose-touch.png",
     "gallery/secret-water-bowl.png",
+    "gallery/secret-back-to-back.png",
     "gallery/ending-a-back.png",
     "gallery/ending-b-learning.png",
     "gallery/ending-c-handover.png",
@@ -30,6 +31,7 @@ IMAGE_DEFS = [
     "image gallery secret_shoe_sleep",
     "image gallery secret_nose_touch",
     "image gallery secret_water_bowl",
+    "image gallery secret_back_to_back",
     "image gallery ending_a_back",
     "image gallery ending_b_learning",
     "image gallery ending_c_handover",
@@ -43,6 +45,7 @@ SECRET_IDS = (
     "shoe_sleep",
     "nose_touch",
     "water_bowl",
+    "back_to_back",
 )
 
 HIDDEN_IDS = (
@@ -87,8 +90,6 @@ def main() -> int:
     for needle in IMAGE_DEFS:
         if needle not in script:
             fail(f"missing image def: {needle}")
-    if "image gallery secret_back_to_back" in script:
-        fail("secret_back_to_back should be removed from image defs")
     ok("script.rpy gallery image definitions")
 
     screens = (GAME / "screens.rpy").read_text(encoding="utf-8")
@@ -117,14 +118,13 @@ def main() -> int:
     for pid in SECRET_IDS:
         if f'"{pid}"' not in hc:
             fail(f"SECRET_PHOTO_META missing {pid}")
-    if '"back_to_back"' in hc:
-        fail("back_to_back still in hidden_content SECRET_PHOTO")
     ok(f"hidden_content.rpy entries ({len(HIDDEN_IDS)} ids + {len(SECRET_IDS)} photos)")
 
     if 'unlock_secret_photo("lap_sleep")' not in script and "unlock_secret_photo(_pid)" not in script:
         fail("ending A must unlock secret photos")
-    if 'unlock_secret_photo("back_to_back")' in script:
-        fail("back_to_back unlock should be removed")
+    ## back_to_back 屬 known 紀念照：結局 A 解鎖後由 secret_photo_unlocked 整組視為已開
+    if "back_to_back" not in script:
+        fail("script.rpy missing back_to_back wiring")
     if 'process_ending_unlock' not in script:
         fail("missing process_ending_unlock")
     ok("unlock wiring present")

@@ -13,7 +13,7 @@ init python:
         "D": "gallery/ending-d-thin-ice.png",
     }
 
-    ## 結局 A 解鎖；順序＝結局一覽列表順序（無背對背）
+    ## 結局 A 解鎖；順序＝結局一覽列表順序
     SECRET_PHOTO_ORDER = [
         "lap_sleep",
         "forehead_nudge",
@@ -21,6 +21,7 @@ init python:
         "shoe_sleep",
         "nose_touch",
         "water_bowl",
+        "back_to_back",
     ]
 
     SECRET_PHOTO_META = {
@@ -40,7 +41,7 @@ init python:
         },
         "behind_legs": {
             "title": "紀念照片｜擋在身後",
-            "hint": "走廊上，牠站在你腿邊。",
+            "hint": "樓梯間裡，牠站在你腿邊。",
             "image": "gallery secret_behind_legs",
             "path": "gallery/secret-behind-legs.png",
             "button": "✓  紀念照片｜擋在身後",
@@ -65,6 +66,13 @@ init python:
             "image": "gallery secret_water_bowl",
             "path": "gallery/secret-water-bowl.png",
             "button": "✓  紀念照片｜新水碗",
+        },
+        "back_to_back": {
+            "title": "紀念照片｜背對背",
+            "hint": "牠把背交給你的那一夜。",
+            "image": "gallery secret_back_to_back",
+            "path": "gallery/secret-back-to-back.png",
+            "button": "✓  紀念照片｜背對背",
         },
     }
 

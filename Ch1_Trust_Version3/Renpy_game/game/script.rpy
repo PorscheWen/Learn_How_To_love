@@ -4,7 +4,7 @@
 ## Section 03：大門的臨時國界
 ## Section 04：共享同一種安靜
 ## Section 05：你的聲音有兩種
-## Section 06：走廊上的第三者
+## Section 06：樓梯間的第三者
 ## Section 07：她倒下的那天
 ## Section 08：走到轉角就好
 ## Section 09：差點交給別人
@@ -83,6 +83,32 @@ init python:
         "dog/dog-cafe-refuse.png": 0.715,
         "dog/dog-cafe-tense.png": 0.733,
     }
+
+    # 搖尾巴序列幀（Seedance 圖生影片抽幀，見 tools/seedance-generate.py）
+    # scale 依 content bbox 對齊 dog-anxious 站姿（tools 計算值 0.850）
+    # 5 幀已做亮度標準化；播放採來回（ping-pong）避免循環接縫跳動
+    DOG_POSE_SCALE.update({
+        "dog/wag/dog-wag-%02d.png" % i: 0.850 for i in range(1, 6)
+    })
+
+    # 動畫序列幀（同產線；各 5 幀）
+    # 幀已用 tools 的 normalize-frames 裁回原圖框架（同畫布、同留白、同位置），
+    # 因此 scale 直接沿用各自靜態 pose 的原值；勿再另行換算。
+    ANIM_POSE_SCALE = {
+        "door-sleep": 0.42,
+        "back-sleep": 0.427,
+        "check-sleep": 0.452,
+        "door-edge": 0.434,
+        "sniff-wire": 0.71,
+        "drink-bowl": 0.564,
+        "farewell": 0.468,
+        "guard-door": 0.438,
+    }
+    for _pose, _scale in ANIM_POSE_SCALE.items():
+        DOG_POSE_SCALE.update({
+            "dog/%s/dog-%s-%02d.png" % (_pose, _pose, i): _scale
+            for i in range(1, 6)
+        })
 
     def dog_sprite(path, fallback=Solid("#00000000")):
         scale = DOG_POSE_SCALE.get(path, 1.0)
@@ -248,6 +274,7 @@ init python:
         known = (
             "lap_sleep", "forehead_nudge", "behind_legs",
             "shoe_sleep", "nose_touch", "water_bowl",
+            "back_to_back",
         )
         if photo_id in known:
             if ending_unlocked("A"):
@@ -447,6 +474,38 @@ init python:
         })
         persistent.playthrough_trajectories = trajectories
 
+    TRAJECTORY_ENDING_TITLES = {
+        "back_to_back": "結局 A｜背靠",
+        "chosen_learning": "結局 B｜選定但還在學",
+        "handed_over": "結局 C｜送走之後",
+        "thin_ice": "結局 D｜薄冰同住",
+    }
+
+    def _trajectory_axis_word(value):
+        if value >= 2:
+            return "穩定"
+        if value == 1:
+            return "漸穩"
+        if value == 0:
+            return "還在學"
+        return "待修復"
+
+    def latest_trajectory_summary():
+        """結局一覽「本輪旅程」小卡：回傳兩行文字，尚無紀錄時回 None。"""
+        trajectories = persistent.playthrough_trajectories or []
+        if not trajectories:
+            return None
+        latest = trajectories[-1]
+        title = TRAJECTORY_ENDING_TITLES.get(latest.get("ending"), "尚未走到結局")
+        line_top = "{}｜{}".format(latest.get("dog_name") or "小7", title)
+        line_bottom = "最終信任 {}/12｜距離 {}・語氣 {}・守護 {}".format(
+            latest.get("final_trust", 0),
+            _trajectory_axis_word(latest.get("dist_axis", 0)),
+            _trajectory_axis_word(latest.get("tone_axis", 0)),
+            _trajectory_axis_word(latest.get("guard_axis", 0)),
+        )
+        return [line_top, line_bottom]
+
 
 image bg office_night = optional_background(
     "bg/bg-office-night.png", "#141B24"
@@ -467,6 +526,7 @@ image gallery secret_behind_legs = "gallery/secret-behind-legs.png"
 image gallery secret_shoe_sleep = "gallery/secret-shoe-sleep.png"
 image gallery secret_nose_touch = "gallery/secret-nose-touch.png"
 image gallery secret_water_bowl = "gallery/secret-water-bowl.png"
+image gallery secret_back_to_back = "gallery/secret-back-to-back.png"
 image gallery ending_a_back = "gallery/ending-a-back.png"
 image gallery ending_b_learning = "gallery/ending-b-learning.png"
 image gallery ending_c_handover = "gallery/ending-c-handover.png"
@@ -493,8 +553,8 @@ image bg living_day = optional_background(
 image bg living_dusk = optional_background(
     "bg/bg-living-dusk.png", "#6B5A48"
 )
-image bg corridor_day = optional_background(
-    "bg/bg-corridor-day.png", "#A99B8B"
+image bg stairwell_day = optional_background(
+    "bg/bg-stairwell-day.png", "#C9B896"
 )
 image bg alley_day = optional_background(
     "bg/bg-alley-day.png", "#B7AA93"
@@ -590,9 +650,25 @@ image dog sniff_bento = dog_sprite(
 image dog stair_watch = dog_sprite(
     "dog/dog-stair-watch.png", "dog/dog-anxious.png"
 )
-image dog door_sleep = dog_sprite(
-    "dog/dog-door-sleep.png", "dog/dog-anxious.png"
-)
+# 呼吸循環（幀缺失時 dog_sprite 落回靜態圖；熟睡＝呼吸慢而勻）
+image dog door_sleep:
+    dog_sprite("dog/door-sleep/dog-door-sleep-01.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-02.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-03.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-04.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-05.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-04.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-03.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    dog_sprite("dog/door-sleep/dog-door-sleep-02.png", "dog/dog-door-sleep.png")
+    pause 0.35
+    repeat
 image dog coat_sniff = dog_sprite(
     "dog/dog-coat-sniff.png", "dog/dog-door-sleep.png"
 )
@@ -608,18 +684,44 @@ image dog kitchen_door = dog_sprite(
 image dog ear_flat = dog_sprite(
     "dog/dog-ear-flat.png", "dog/dog-anxious.png"
 )
-image dog sniff_wire = dog_sprite(
-    "dog/dog-sniff-wire.png", "dog/dog-halfstep.png"
-)
+# S05 嗅耳機線：幀序＝鼻碰線→抬起→再碰線 完整週期，順播即無縫循環（約 1.2 秒）
+image dog sniff_wire:
+    dog_sprite("dog/sniff-wire/dog-sniff-wire-01.png", "dog/dog-sniff-wire.png")
+    pause 0.24
+    dog_sprite("dog/sniff-wire/dog-sniff-wire-02.png", "dog/dog-sniff-wire.png")
+    pause 0.24
+    dog_sprite("dog/sniff-wire/dog-sniff-wire-03.png", "dog/dog-sniff-wire.png")
+    pause 0.24
+    dog_sprite("dog/sniff-wire/dog-sniff-wire-04.png", "dog/dog-sniff-wire.png")
+    pause 0.24
+    dog_sprite("dog/sniff-wire/dog-sniff-wire-05.png", "dog/dog-sniff-wire.png")
+    pause 0.24
+    repeat
 image dog behind_legs = dog_sprite(
     "dog/dog-behind-legs.png", "dog/dog-anxious.png"
 )
 image dog forehead_nudge = dog_sprite(
     "dog/dog-forehead-nudge.png", "dog/dog-halfstep.png"
 )
-image dog guard_door = dog_sprite(
-    "dog/dog-guard-door.png", "dog/dog-door-sleep.png"
-)
+# S07 守門：醒著趴等的呼吸，比睡姿稍快（ping-pong 一圈約 2.2 秒）
+image dog guard_door:
+    dog_sprite("dog/guard-door/dog-guard-door-01.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-02.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-03.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-04.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-05.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-04.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-03.png", "dog/dog-guard-door.png")
+    pause 0.28
+    dog_sprite("dog/guard-door/dog-guard-door-02.png", "dog/dog-guard-door.png")
+    pause 0.28
+    repeat
 image dog nose_tip = dog_sprite(
     "dog/dog-nose-fingertip.png", "dog/dog-halfstep.png"
 )
@@ -632,12 +734,45 @@ image dog leash_wait = dog_sprite(
 image dog harness_bite = dog_sprite(
     "dog/dog-harness-bite.png", "dog/dog-leash-wait.png"
 )
-image dog drink_bowl = dog_sprite(
-    "dog/dog-drink-bowl.png", "dog/dog-halfstep.png"
-)
-image dog farewell = dog_sprite(
-    "dog/dog-farewell.png", "dog/dog-halfstep.png"
-)
+# S08 回家／結局 A 前：低頭舔水（ping-pong 一圈約 0.8 秒）
+image dog drink_bowl:
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-01.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-02.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-03.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-04.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-05.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-04.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-03.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-02.png", "dog/dog-drink-bowl.png")
+    pause 0.10
+    repeat
+# S09 告別：坐著抬頭，尾巴貼地左右輕掃——不確定的搖，比 S05 wag 收斂
+# 幀序依尾巴位置排序（content bbox 寬度），ping-pong 一趟約 1.6 秒
+image dog farewell:
+    dog_sprite("dog/farewell/dog-farewell-01.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-02.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-03.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-04.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-05.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-04.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-03.png", "dog/dog-farewell.png")
+    pause 0.20
+    dog_sprite("dog/farewell/dog-farewell-02.png", "dog/dog-farewell.png")
+    pause 0.20
+    repeat
 image dog paper_bag = dog_sprite(
     "dog/dog-paper-bag-sniff.png", "dog/dog-farewell.png"
 )
@@ -653,15 +788,85 @@ image dog shoe_sleep = dog_sprite(
 image dog refuse_stranger = dog_sprite(
     "dog/dog-refuse-stranger.png", "dog/dog-ear-flat.png"
 )
-image dog back_sleep = dog_sprite(
-    "dog/dog-back-sleep.png", "dog/dog-shoe-sleep.png"
-)
-image dog check_sleep = dog_sprite(
-    "dog/dog-check-sleep.png", "dog/dog-parallel.png"
-)
-image dog door_edge = dog_sprite(
-    "dog/dog-door-edge.png", "dog/dog-door-sleep.png"
-)
+# 結局 A：背對熟睡，呼吸最深最勻（信任落地）
+image dog back_sleep:
+    dog_sprite("dog/back-sleep/dog-back-sleep-01.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-02.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-03.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-04.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-05.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-04.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-03.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    dog_sprite("dog/back-sleep/dog-back-sleep-02.png", "dog/dog-back-sleep.png")
+    pause 0.38
+    repeat
+
+# 結局 B：睡得近但眼睛微睜，呼吸稍淺（還在確認）
+image dog check_sleep:
+    dog_sprite("dog/check-sleep/dog-check-sleep-01.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-02.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-03.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-04.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-05.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-04.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-03.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    dog_sprite("dog/check-sleep/dog-check-sleep-02.png", "dog/dog-check-sleep.png")
+    pause 0.32
+    repeat
+
+# 結局 D：睡門邊，呼吸淺而略快（睡得不安穩）
+image dog door_edge:
+    dog_sprite("dog/door-edge/dog-door-edge-01.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-02.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-03.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-04.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-05.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-04.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-03.png", "dog/dog-door-edge.png")
+    pause 0.26
+    dog_sprite("dog/door-edge/dog-door-edge-02.png", "dog/dog-door-edge.png")
+    pause 0.26
+    repeat
+
+# 搖尾巴循環動畫（5 幀來回播放，約 1 秒一圈）
+image dog wag:
+    dog_sprite("dog/wag/dog-wag-01.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-02.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-03.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-04.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-05.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-04.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-03.png", "dog/dog-anxious.png")
+    pause 0.12
+    dog_sprite("dog/wag/dog-wag-02.png", "dog/dog-anxious.png")
+    pause 0.12
+    repeat
 
 
 # 腳底錨在字幕框上緣附近（720×108 → y≈0.86），水平依場景分開，避免人狗／兩人糊成一團。
@@ -702,6 +907,13 @@ transform dog_near:
     yanchor 1.0
     ypos 0.86
     zoom 0.34
+
+# S03 樓梯間狗窩：門外過夜視角，狗 ×0.9（0.26×0.9）
+transform dog_far_stair:
+    xalign 0.58
+    yanchor 1.0
+    ypos 0.86
+    zoom 0.234
 
 # 予安在右、圖檔狗面朝左時：水平翻轉使人狗互視（抬眼／靠近／鼻尖等）。
 transform dog_far_to_yuan:
@@ -1115,7 +1327,8 @@ label start_section_08:
 
 label start_section_09:
     call reset_story_state
-    $ trust = 7
+    ## 8：讓「留下」(+2) 恰好過結局 A 門檻（trust>=10），重試迴圈才收集得到 A
+    $ trust = 8
     $ dist = 3
     $ tone = 2
     $ guard = 1
@@ -1611,22 +1824,26 @@ label section_03_gate_temp_border:
     ya "今晚不算數。"
     "她又說一次，像對合約蓋章。聲音卻比預期更乾。"
 
+    ## 狗留下的位置：樓梯間轉角（門外這一側）
+    scene bg stairwell_night
+    with Dissolve(1.0)
+
     menu:
         "脫下外套，鋪成一塊臨時墊子":
             $ flags["coat_bed"] = True
             "她脫下外套鋪平，紙盤裡倒了半瓶水。"
-            show dog coat_sniff at dog_far
+            show dog coat_sniff at dog_far_stair
             with Dissolve(0.8)
             "狗縮在外套邊，先嗅衣領再嗅袖口。氣味熟一點，身體才敢放下半寸；耳朵仍朝向巷口。"
 
         "把外套折好，留一小塊能靠著的地方":
             $ flags["coat_bed"] = False
             "她把外套折成靠墊，擺在門邊牆角，紙盤裡倒了半瓶水。"
-            show dog coat_sniff at dog_far
+            show dog coat_sniff at dog_far_stair
             with Dissolve(0.8)
             "狗沒有趴上去，只讓肩膀貼著衣角——先借一點溫度，不借整件事。"
 
-    show dog stair_watch at dog_far
+    show dog stair_watch at dog_far_stair
     with Dissolve(1.0)
 
     $ dog_sfx("murmur")
@@ -1665,9 +1882,9 @@ label section_03_gate_temp_border:
             $ flags["s03_returned"] = True
             $ flags["s03_ignored"] = False
             $ flags["s03_choice"] = "return"
-            scene bg gate_night
+            scene bg stairwell_night
             with Dissolve(1.0)
-            show dog stair_watch at dog_far
+            show dog stair_watch at dog_far_stair
             with Dissolve(0.6)
             "她還是開了大門。狗還在。窩更靠牆，更能看見鐵門打開的角度。外套被拖歪一角。"
             "門一開，牠先退半步，耳朵貼平。予安停在兩步外蹲下——膝蓋響了一下，狗的肩膀又緊半寸。"
@@ -1686,9 +1903,9 @@ label section_03_gate_temp_border:
             $ flags["s03_returned"] = False
             $ flags["s03_ignored"] = False
             $ flags["s03_choice"] = "shoo"
-            scene bg gate_night
+            scene bg stairwell_night
             with Dissolve(1.0)
-            show dog stair_watch at dog_far
+            show dog stair_watch at dog_far_stair
             with Dissolve(0.6)
             "她開了大門。煩躁來得比心疼快——鞋尖把衣角推回牆邊，也把狗逼得更裡面。"
             ya "別擋路。"
@@ -1704,9 +1921,9 @@ label section_03_gate_temp_border:
             $ flags["s03_returned"] = False
             $ flags["s03_ignored"] = True
             $ flags["s03_choice"] = "ignore"
-            scene bg gate_night
+            scene bg stairwell_night
             with Dissolve(0.8)
-            show dog stair_watch at dog_far
+            show dog stair_watch at dog_far_stair
             with Dissolve(0.5)
             "她把大門開一道縫，看見水盤還有水，便告訴自己這樣就夠了。"
             "狗抬眼確認人還在不在。她沒有走近，也沒有說話。"
@@ -1729,11 +1946,11 @@ label section_03_gate_temp_border:
 
     "她穿上拖鞋，沒開大燈，把手放上大門門把。掌心出汗，門把反而變涼。"
 
-    scene bg gate_night
+    scene bg stairwell_night
     with Dissolve(1.0)
 
     hide dog
-    show dog door_sleep at dog_far
+    show dog door_sleep at dog_far_stair
     with Dissolve(1.2)
 
     if flags.get("s03_ignored", False):
@@ -1756,20 +1973,21 @@ label section_03_gate_temp_border:
             "予安把外套連同那一小團一起抱起來。狗在臂彎裡僵了一下，隨後才發現沒有被扔下。"
             scene bg entrance_night
             with Dissolve(1.0)
+            ## 進門時清醒：確認氣味／緊繃，尚未入睡
             if trust >= 2 or flags.get("s03_returned", False):
-                show dog door_sleep at dog_entrance_mid
+                show dog halfstep at dog_entrance_mid
                 with Dissolve(0.7)
                 "跨過門檻。牠的鼻子貼著袖口，確認門裡的氣味：咖啡、洗衣精、她。"
             else:
-                show dog door_sleep at dog_entrance_far
+                show dog ear_flat at dog_entrance_far
                 with Dissolve(0.7)
                 "跨過門檻時，牠的身體一直繃著。直到門關上，下巴才放下半公分。"
             "她把門關好，燈只留這一盞。"
             scene bg living_night
             with Dissolve(1.2)
-            show dog door_sleep at dog_mid
+            show dog parallel at dog_mid
             with Dissolve(0.8)
-            "外套鋪進客廳地板，離沙發兩步。狗轉了一圈，背朝門、臉朝她躺下——仍怕，但怕得比較近。"
+            "外套鋪進客廳地板，離沙發兩步。狗轉了一圈，背朝門、臉朝她躺下——仍怕，但怕得比較近。眼睛還睜著，盯了她一會兒。"
 
         "帶進來，但先只放到玄關——明天再算":
             $ flags["entered_home"] = True
@@ -1778,9 +1996,9 @@ label section_03_gate_temp_border:
             thought "先進玄關就好。不要整間屋子。"
             scene bg entrance_night
             with Dissolve(1.2)
-            show dog door_sleep at dog_entrance_far
+            show dog parallel at dog_entrance_far
             with Dissolve(0.8)
-            "玄關地墊成了新的臨時國界——已在門內，卻還貼著門。狗趴在鞋邊，鼻子朝客廳探了一下，又縮回。"
+            "玄關地墊成了新的臨時國界——已在門內，卻還貼著門。狗趴在鞋邊，醒著，鼻子朝客廳探了一下，又縮回。"
             "予安坐在牠看得見的地方，把今晚縮成門檻到鞋櫃這一段。"
 
     $ play_bgm("tender", fade=2.2)
@@ -1797,21 +2015,22 @@ label section_03_gate_temp_border:
     "予安沒有再把牠送回門外。她聽兩種呼吸慢慢對上拍子。"
     thought "只到天明。天明以後的事，天明再說。"
 
+    ## 隔天早上：狗已醒，抬頭與女主對望
     if flags.get("delayed_entry", False):
         scene bg entrance_day
         with Dissolve(1.4)
-        show dog door_sleep at dog_entrance_far
+        show dog parallel at dog_entrance_far
         with Dissolve(0.6)
-        "清晨。窗光先到玄關地墊。狗仍在那一小塊，看她，又看客廳深處。"
+        "清晨。窗光先到玄關地墊。狗已經醒了，仍在那一小塊，看她，又看客廳深處。"
     else:
         scene bg living_day
         with Dissolve(1.4)
-        show dog door_sleep at dog_mid
+        show dog parallel at dog_mid_to_yuan
         with Dissolve(0.6)
-        "清晨。窗光先到地板。狗還在那兩步遠——恐懼會醒來，但人不曾消失。"
+        "清晨。窗光先到地板。狗已經醒了，還在那兩步遠——恐懼會醒來，但人不曾消失。"
 
     ya "……早。"
-    "狗不回答。可牠還在門裡——這比任何句子都清楚。"
+    "狗不回答，只是抬著頭，視線越過地板，和她的眼睛對上。牠還在門裡——這比任何句子都清楚。"
 
     if flags.get("called_shelter", False):
         "手機震動一次：動保單位改期，說下週才排得到。她看完，沒有回。"
@@ -1941,13 +2160,15 @@ label section_04_shared_quiet:
         "狗抬眼看她幾次，沒有起身。她把這當成安靜成立，不是邀請。"
     else:
         "狗抬眼時先找出口。她回到原位後，牠才把下巴放下。"
-    "窗光移過地板一塊又一塊。她去倒水之前，地板上那團蜂蜜褐一直留在原位。"
+    "窗光移過地板一塊又一塊。她去倒水之前，地板上那團蜷著的毛一直留在原位。"
 
-    "傍晚，她口渴，起身去廚房倒水。腳步剛離沙發，地板上那團蜂蜜褐也跟著動了。"
+    "傍晚，她口渴，起身去廚房倒水。腳步剛離沙發，地板上那塊焦糖色也跟著動了。"
 
-    hide dog
-    show dog kitchen_door at dog_mid
+    ## 廚房 POV（bg-kitchen-day 構圖＝從水槽邊往客廳看）：狗停在門線外
+    scene bg kitchen_day
     with Dissolve(1.0)
+    show dog kitchen_door at dog_mid
+    with Dissolve(0.8)
 
     "不是撲上來。牠只跟到廚房門口，在門檻外停住。"
     "只到門口。不進來。"
@@ -1958,6 +2179,15 @@ label section_04_shared_quiet:
     "她沒有叫牠再走一步，也沒有關廚房門。"
 
     $ play_bgm("warm", fade=2.2)
+
+    ## 回客廳：scene 已清空廚房 POV 的狗，依分支恢復原本的人狗位置
+    scene bg living_day
+    show yuan sofa at char_sofa
+    if flags.get("s04_parallel", False):
+        show dog chin_floor at dog_sofa_near
+    else:
+        show dog anxious at dog_far
+    with Dissolve(1.0)
 
     "倒完水，她走回沙發。狗又回到地板原位。下巴貼地。安靜重新合上。"
     "她順手把水碗挪到廚房門檻外緣。人進出都會經過，牠卻不必跨進那條線。"
@@ -2124,11 +2354,17 @@ label section_05_two_voices:
                 $ dog_label = proposed_name
             "予安把「[dog_label]」念得很輕。狗未必懂名字，耳朵卻朝她動了一下。"
 
+    show dog wag at dog_mid
+    with Dissolve(0.8)
+    "名字落定的那幾秒，[dog_label]的尾巴輕輕搖了起來——弧度不大，卻是今天第一次。"
+
     "手機跳出房東訊息：若有養寵物，記得補報備。語氣不兇，只附一張表格連結。"
     $ flags["ch2_seed_lease_pet"] = True
     "她把連結存進備忘，沒有立刻填。"
 
     "門外傳來電梯開門聲。有人拖著紙箱經過，腳步停在她門前。"
+    show dog stair_watch at dog_mid
+    with Dissolve(0.5)
     neighbor "妳有養狗喔？"
     "狗的身體比她更早聽懂陌生。"
 
@@ -2138,23 +2374,23 @@ label section_05_two_voices:
 
 
 ## ------------------------------------------------------------
-## Section 06：走廊上的第三者
+## Section 06：樓梯間的第三者
 ## 一件事：陌生人伸手時予安站在哪裡。唯一動 trust 的選項組為 Guard。
 ## flags 寫入：s06_protected／s06_allowed_touch／s06_sent_inside
 ## ------------------------------------------------------------
 
 label section_06_corridor_third_person:
     $ current_section = "s06"
-    $ save_name = "Section 06｜走廊上的第三者"
+    $ save_name = "Section 06｜樓梯間的第三者"
     $ trust = max(0, min(12, trust))
-    ## 走廊一段先靜音（承接 S05 後不立刻起樂）
+    ## 樓梯間一段先靜音（承接 S05 後不立刻起樂）
     $ renpy.music.stop(channel="music", fadeout=1.2)
     $ _current_bgm = None
 
-    scene bg corridor_day
+    scene bg stairwell_day
     with Dissolve(1.5)
 
-    $ show_section_title("Section 06", "走廊上的第三者")
+    $ show_section_title("Section 06", "樓梯間的第三者")
 
     "門外的人是隔壁新搬來的鄰居。紙箱疊在推車上，最上面那箱歪了一角。"
 
@@ -2206,7 +2442,7 @@ label section_06_corridor_third_person:
             ya "不好意思，牠還在適應。今天先不要摸牠。"
             neighbor "喔，好啊。我只是看牠很可愛。"
             ya "我知道，謝謝妳。"
-            "走廊只安靜了兩秒，鄰居便把手收了回去。"
+            "樓梯間只安靜了兩秒，鄰居便把手收了回去。"
             show dog behind_legs at dog_behind_pair
             show yuan block at char_right
             with Dissolve(0.6)
@@ -2253,7 +2489,7 @@ label section_06_corridor_third_person:
     "「我們」兩個字比她預想得自然。說完才發現，已經收不回去了。"
 
     neighbor "好啦，那我先不吵牠。下次遠遠打招呼。"
-    "予安點頭。拒絕沒有讓走廊裂開。她低頭看狗——牠只知道那隻伸來的手最後停住了。"
+    "予安點頭。拒絕沒有讓樓梯間裂開。她低頭看狗——牠只知道那隻伸來的手最後停住了。"
 
     "電梯門關上。予安退回屋內，沒有急著把門甩上。"
 
@@ -2267,7 +2503,7 @@ label section_06_corridor_third_person:
     if flags.get("s06_sent_inside", False):
         "狗在鞋櫃旁等著。予安把門留開，退到兩步外，等牠自己決定要不要靠近。"
     else:
-        "她等[dog_label]自己跨過門線，才把走廊的聲音關在外面。"
+        "她等[dog_label]自己跨過門線，才把樓梯間的聲音關在外面。"
 
     $ play_bgm("tender", fade=2.2)
 
@@ -2287,16 +2523,16 @@ label section_06_corridor_third_person:
         with Dissolve(1.0)
         "狗往前走了半步，鼻尖停在褲管外一點點，最後沒有碰上。予安沒有追，只讓那段距離留到下一次。"
 
-    "走廊外又傳來推車輪子壓過磁磚縫的聲音。[dog_label]抬頭，身體先朝門的方向繃了一下。"
+    "樓梯間又傳來推車輪子壓過磁磚縫的聲音。[dog_label]抬頭，身體先朝門的方向繃了一下。"
     "予安沒有立刻說「沒事」。她先走到門邊，確認門鎖好，再回到牠看得見的位置坐下。"
     "狗聽不懂緊張是什麼，只看見她的手沒有再伸過來。過了一會兒，牠把原本懸著的前腳放回地板。"
-    "走廊安靜下來。那半步沒有被催促。"
+    "樓梯間安靜下來。那半步沒有被催促。"
 
     centered "{size=30}{color=#F7EFE4}今晚，站的位置就夠了。{/color}{/size}"
 
     "她把這句話留給自己。"
     "玄關燈還亮著。[dog_label]在鞋櫃旁繞了一圈，最後選了能同時看見她與門的位置趴下。"
-    "予安沒有關燈。今晚先讓走廊那一點餘波，慢慢散掉。"
+    "予安沒有關燈。今晚先讓樓梯間那一點餘波，慢慢散掉。"
     "她把鞋子擺整齊，動作比平常慢一點——怕再發出像推車輪那樣突然的聲響。"
 
     $ trust = max(0, min(12, trust))
@@ -2489,7 +2725,7 @@ label section_08_corner_walk:
     with Dissolve(0.5)
     ya "走到轉角就好。"
 
-    "她把手放上門把，先開一道縫。門外走廊的冷氣與燈管味鑽進來。[dog_label]的鼻子動了兩下，前腳踩出門檻半步，後腳仍留在地墊上。"
+    "她把手放上門把，先開一道縫。門外樓梯間的冷氣與燈管味鑽進來。[dog_label]的鼻子動了兩下，前腳踩出門檻半步，後腳仍留在地墊上。"
     "予安沒有用牽繩把那兩隻後腳拉過去。她側身讓出空間，門開大一點，又停住。"
     "第一次，牠縮回來。地墊還暖，外面還陌生。"
     pause 0.7
@@ -2676,7 +2912,7 @@ label section_08_corner_walk:
     "「妳最近是不是很累？」對方停了一下，語氣沒有玩笑。"
     pause 0.6
     "「如果真的顧不來，我可以養。」"
-    "予安看著螢幕裡那團蜂蜜色，沒有立刻回答。"
+    "予安看著螢幕裡那個小小的身影，沒有立刻回答。"
 
     $ trust = max(0, min(12, trust))
     $ renpy.block_rollback()
@@ -2914,7 +3150,7 @@ label section_10_share_the_key:
 
     if flags.get("gave_away", False):
         "從咖啡廳走回公寓，予安經過他們第一次練習散步的轉角。樹影還在原來的位置，地上卻沒有一條牽繩提醒她停下。"
-        "她走得比平常快。到家門口才發現，今天不需要先看腳邊有沒有一團蜂蜜色跟著。"
+        "她走得比平常快。到家門口才發現，今天不需要先看腳邊有沒有那個小小的重量跟著。"
         "鑰匙插進鎖孔，門開得很順。屋裡沒有水碗被推動，也沒有爪子因為門聲從地板上站起來。"
         "予安把鞋脫好，照習慣留出靠牆那一小塊位置。做完才想起，已經沒有誰需要從那裡繞過她。"
         "玄關的燈亮得太乾淨。以前她會先側身，讓出狗轉身的弧；今晚那道弧空著，她反而站得不自在。"

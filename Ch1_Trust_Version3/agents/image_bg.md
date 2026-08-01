@@ -106,14 +106,14 @@ bg-{place}-{light}.png
 | **`bg-backdoor-night.png`** | backdoor | night | **後門基準** | **S02** 卸貨後門／機車棚／紙箱邊 |
 | **`bg-gate-night.png`** | gate | night | **大門基準** | **S03** 公寓大門外 |
 | **`bg-street-night.png`** | street | night | 街景 | 可作街景／過場 |
-| **`bg-stairwell-night.png`** | stairwell | night | 舊梯廳資產 | 保留；S03 已改大門，暫不引用 |
+| **`bg-stairwell-night.png`** | stairwell | night | 梯廳（夜） | S03 樓梯間段落使用 |
 | `bg-convenience-night.png` | convenience | night | 超商基準 | S01／S02 店內（微波／結帳） |
 
 ### 3.2 P1（場次 B／C）
 
 | 檔名 | Place | Light | 用途 |
 |------|-------|-------|------|
-| `bg-corridor-day.png` | corridor | day | **S06** 公寓走廊／被看見 |
+| `bg-stairwell-day.png` | stairwell | day | **S06** 梯廳（日）／被看見；自 `bg-stairwell-night` 日光化，同構圖 |
 | `bg-alley-day.png` | alley | day | **S08** 巷口轉角（走到轉角就好） |
 | `bg-cafe-day.png` | cafe | day | **S09** 咖啡廳門口（差點送走） |
 | `bg-entrance-night.png` | entrance | night | 玄關基準；**S03** 門檻／帶回屋內 |
@@ -148,7 +148,7 @@ bg-{place}-{light}.png
 | 03 | **`gate-night`** → **`entrance-night`** → `living-night` →（清晨）`entrance-day`／`living-day` | 夜→清晨；大門外／門內靠玄關過渡 |
 | 04 | `living-day`（主）／`kitchen-day`（門口） | 日；夜安靜可用 living-night |
 | 05 | `living-day` | 日 |
-| 06 | `corridor-day` | 日 |
+| 06 | `stairwell-day` | 日；與 S03 夜梯廳同構圖 |
 | 07 | `living-night` | 病中夜 |
 | 08 | **`entrance-day`**（穿帶／出門／返家解帶）→ **`alley-day`**（巷口）→（午後）`living-day` | 外出日；胸背帶與門線都在玄關 |
 | 09 | `living-day`（打包／告別）→ **`entrance-day`**（扣帶出門 ×0.8）→ `cafe-day` →（留下）`living-*` | 日 |
@@ -253,7 +253,7 @@ bg-{place}-{light}.png
 | `bg-gate-night.png` | `bg gate_night` |
 | `bg-stairwell-night.png` | `bg stairwell_night` |
 | `bg-convenience-night.png` | `bg convenience_night` |
-| `bg-corridor-day.png` | `bg corridor_day` |
+| `bg-stairwell-day.png` | `bg stairwell_day` |
 | `bg-alley-day.png` | `bg alley_day` |
 | `bg-cafe-day.png` | `bg cafe_day` |
 | `bg-entrance-night.png` | `bg entrance_night` |
@@ -312,6 +312,14 @@ bg-{place}-{light}.png
 
 重產後 `refs/` 四張錨點已同步為本次正式圖縮圖用途之同構圖檔。可選三張於 2026-07-25 依同一公式補齊。
 
+### 2026-08-02｜S06 走廊改梯廳日景
+
+- `bg-corridor-day.png` 退役 → 移入 `assets/bg/_backup_20260802/`
+- 新圖 `bg-stairwell-day.png`：以 `bg-stairwell-night.png` 為參考圖，
+  NanoBanana（`nano-banana-2`，edit 模式，`tools/nanobanana-edit.py`）日光化，
+  電梯／樓梯／窗／盆栽／大門構圖完全對齊夜版 → S03 夜與 S06 日同一梯廳，場景連續
+- `script.rpy`：`image bg corridor_day` → `image bg stairwell_day`；S06 開場 scene 同步改
+
 ---
 
-*更新：2026-07-25｜全量背景重產＋可選三張（kitchen-day／alley-night／living-dusk）補齊；原圖備份於 `_backup_20260725_125336`*
+*更新：2026-08-02｜S06 改用 `bg-stairwell-day`（自夜版日光化）；corridor-day 退役進 `_backup_20260802`*

@@ -242,7 +242,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | P0 | `bg-backdoor-night.png` | **S02 相遇**（卸貨後門／機車棚） |
 | P0 | `bg-stairwell-night.png` | **S03** |
 | P1 | `bg-convenience-night.png` | S01／S02 |
-| P1 | `bg-corridor-day.png` | S06 |
+| P1 | `bg-stairwell-day.png` | S06 |
 | P1 | `bg-alley-day.png` | S08 巷口轉角 |
 | P1 | `bg-cafe-day.png` | S09 咖啡廳門口 |
 | P2 | `bg-office-night.png` | S01 可省略／用黑場＋對白 |
@@ -333,7 +333,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | 03 | stairwell-night | stair-watch → door-sleep | 換窩；歸來 |
 | 04 | living-day/night | parallel / kitchen-door | 平行安靜 |
 | 05 | living-day | ear-flat / sniff-wire | Tone 尖↔低 |
-| 06 | corridor-day | behind-legs / forehead-nudge | Guard 擋人 |
+| 06 | stairwell-day | behind-legs / forehead-nudge | Guard 擋人 |
 | 07 | living-night | guard-door | 依賴對調 |
 | 08 | alley-day → living | street-tense / leash-wait / shoe-sleep | Dist 停等 |
 | 09 | living-day → entrance-day → cafe-day | farewell → leash-wait → cafe-refuse／cafe-tense | 告別→扣帶→G2 留下／送走 |

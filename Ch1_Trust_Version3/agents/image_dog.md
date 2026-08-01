@@ -158,6 +158,43 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 
 ---
 
+## 3.5 動畫序列幀（Seedance 產線｜2026-08-01 新增）
+
+> 靜態 pose 之外的**循環動畫**：以現有 pose PNG 為首尾幀，用 Seedance 圖生影片後抽幀去背。
+
+| 規則 | 說明 |
+|------|------|
+| 產線 | `tools/seedance-generate.py`（圖生影片，`--pad --ratio 3:4` 防裁切）→ `tools/video-to-frames.py`（抽幀＋白背去背）→ **裁回原圖框架**（見下） |
+| 路徑 | `assets/dog/wag/dog-{動作}-{NN}.png`（動作一個子資料夾） |
+| 動作純度 | **一個動畫只做一個動作**（如搖尾巴）；耳朵翻起、吐舌等多餘動作的幀直接剔除 |
+| 亮度 | 各幀非透明區域平均亮度須標準化（以原圖首幀為基準調 gain，模型輸出偏暗約 10%） |
+| **裁回原框（必做）** | `--pad` 會改變畫布幾何（底部留白變大），貼底錨點下狗會**浮空 +90～135px**；抽幀後必須依 pad 幾何把每幀裁回原圖區域再放大回原圖尺寸（橫式 1112×834 crop (111,120,1001,714)→1536×1024；直式 834×1112 crop (120,111,714,1001)→1024×1536），參考 `tools/output/seedance/normalize-frames.py` |
+| 縮放 | 裁回原框後 `DOG_POSE_SCALE` **直接沿用靜態 pose 原值**，勿另行換算 |
+| 播放 | 幀數少（<8）用 **ping-pong 來回**避免循環接縫；ATL `pause 0.12` |
+| 一致性 | 首幀必用現有 pose PNG，抽幀後逐幀檢查毛色／鞍斑／耳形（同 §5 清單） |
+
+### 已落地動畫
+
+| 動作 | 幀 | 首幀來源 | 用處 |
+|------|----|-----------|------|
+| `dog wag`（搖尾巴） | `wag/dog-wag-01~05.png`（ping-pong） | `dog-ref-canonical.png` | S05 取名後 |
+| `dog door_sleep`（熟睡呼吸，pause 0.35） | `door-sleep/dog-door-sleep-01~05.png` | `dog-door-sleep.png` | S03 大門外／玄關 |
+| `dog back_sleep`（深勻呼吸，pause 0.38） | `back-sleep/dog-back-sleep-01~05.png` | `dog-back-sleep.png` | 結局 A |
+| `dog check_sleep`（淺呼吸＋眼微睜，pause 0.32） | `check-sleep/dog-check-sleep-01~05.png` | `dog-check-sleep.png` | 結局 B |
+| `dog door_edge`（淺快呼吸，pause 0.26） | `door-edge/dog-door-edge-01~05.png` | `dog-door-edge.png` | 結局 D |
+| `dog sniff_wire`（嗅耳機線，順播 pause 0.24） | `sniff-wire/dog-sniff-wire-01~05.png` | `dog-sniff-wire.png` | S05 記憶點 |
+| `dog guard_door`（醒著守門呼吸，pause 0.28） | `guard-door/dog-guard-door-01~05.png` | `dog-guard-door.png` | S07 |
+| `dog drink_bowl`（舔水，pause 0.10） | `drink-bowl/dog-drink-bowl-01~05.png` | `dog-drink-bowl.png` | S08 回家／結局 A 前 |
+| `dog farewell`（尾巴貼地輕掃，pause 0.20） | `farewell/dog-farewell-01~05.png` | `dog-farewell.png` | S09 告別 |
+
+呼吸動畫幀序＝吸氣淺→深（依 content bbox 高度排序），ping-pong 播放即一次完整呼吸；亮度已校正到與靜態原圖一致（模型輸出偏暗約 10%）。
+
+第二批挑幀策略：`sniff_wire` 取「碰線→抬起→再碰線」完整週期**順播**（首尾同相位、無縫）；`farewell` 依 content bbox **寬度**排序（＝尾巴掃地位置）ping-pong；`drink_bowl`／`guard_door` 取連續幀 ping-pong。
+
+2026-08-01 尺寸修正：八個動畫姿勢的幀已全部裁回原圖框架（修正浮空），縮放沿用靜態原值；`sniff_wire` 模型延長到原圖框外的耳機線以窄幅 alpha 淡出收尾（y 1030→1075、左緣 60px）。修正前原幀備份於 `Renpy_game/tools/output/seedance/prenorm-backup/`。
+
+---
+
 ## 4. 完整 Prompt 模板（複製）
 
 ```text
@@ -222,7 +259,11 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 2026-07-19 | Option B wiry 定稿；正式狗資產 |
 | 2026-07-25 | 用戶提供 5 張錨點圖 → 備份至 `assets/dog/_backup_20260725_183542/`；重寫 IDENTITY／STYLE；落地 canonical／anxious／behind-legs／refuse-stranger；其餘 pose 依新鎖全量重產 |
 | 2026-07-28 | 新增 `dog-farewell`／`dog-cafe-refuse`／`dog-cafe-tense`；S09 朝向見 `section_09_almost_handoff.md` |
+| 2026-08-01 | 新增動畫序列幀產線（§3.5）；落地 `dog wag` 搖尾巴 5 幀（S05 取名後）；工具 `seedance-generate.py`／`video-to-frames.py` |
+| 2026-08-01 | 落地四個睡姿呼吸動畫：`door_sleep`／`back_sleep`／`check_sleep`／`door_edge`（各 5 幀，S03＋結局 A／B／D）；fast 模型 i2v 不送 `camerafixed` |
+| 2026-08-01 | 落地第二批動作動畫：`sniff_wire`（S05）／`guard_door`（S07）／`drink_bowl`（S08）／`farewell`（S09）；中繼檔保留於 `Renpy_game/tools/output/seedance/` |
+| 2026-08-01 | 修正八個動畫姿勢浮空（S03／S05／S07／S08／S09／結局）：幀裁回原圖框架、scale 沿用靜態原值；產線新增「裁回原框」必做步驟 |
 
 ---
 
-*更新：2026-07-28｜S09 告別／咖啡廳狗姿；Option B 錨點鎖定見 2026-07-25*
+*更新：2026-08-01｜動畫序列幀產線＋`dog wag`；Option B 錨點鎖定見 2026-07-25*

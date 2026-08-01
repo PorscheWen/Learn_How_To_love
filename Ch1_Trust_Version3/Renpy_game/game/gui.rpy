@@ -7,11 +7,15 @@ define CJK_FONT = "SourceHanSansLite.ttf"
 
 define LHTL_BG = "#17120F"
 define LHTL_PANEL = "#F3E9D9AA"
-define LHTL_PANEL_GLASS = "#F3E9D966"
-## 選單外框更透、項目半透，讓 title／menu-bg 油畫透出
+define LHTL_PANEL_GLASS = "#F3E9D955"
+## 選單外框透、按鈕略實（半透明仍透出油畫，字可讀）
 define LHTL_MENU_SHELL = "#17120F22"
-define LHTL_MENU_ITEM = "#F3E9D999"
-define LHTL_MENU_ITEM_HOVER = "#E2C8A7CC"
+define LHTL_MENU_ITEM = "#F3E9D9C4"
+define LHTL_MENU_ITEM_HOVER = "#E8C9A0F0"
+define LHTL_MENU_ITEM_PRIMARY = "#D9B48AE8"
+define LHTL_MENU_ITEM_PRIMARY_HOVER = "#C99A6CF5"
+define LHTL_MENU_ITEM_MUTED = "#F3E9D988"
+define LHTL_MENU_ITEM_MUTED_HOVER = "#E2C8A7CC"
 define LHTL_PANEL_DARK = "#2E241FCC"
 define LHTL_TEXT = "#4A3728"
 define LHTL_TEXT_LIGHT = "#F7EFE4"
@@ -102,20 +106,63 @@ style quick_button_text:
     size 15
     color LHTL_TEXT_LIGHT
 
+## 主選單／一般選項（可點區加大、hover 清楚）
 style menu_button:
     background Solid(LHTL_MENU_ITEM)
     hover_background Solid(LHTL_MENU_ITEM_HOVER)
-    padding (18, 8)
+    selected_background Solid(LHTL_MENU_ITEM_HOVER)
+    padding (20, 10)
     xminimum 240
+    yminimum 44
+    xalign 0.5
 
 style menu_button_text:
     font CJK_FONT
     size 19
     color LHTL_TEXT
     hover_color LHTL_ACCENT_DARK
+    selected_color LHTL_ACCENT_DARK
     xalign 0.5
+    text_align 0.5
+    outlines [(1, "#F7EFE455", 0, 0)]
 
-## 嵌在 menu-bg 上的選項／卡片（半透明，牆面紋理透出）
+## 「開始」主行動：略深、更醒目
+style menu_primary_button is menu_button:
+    background Solid(LHTL_MENU_ITEM_PRIMARY)
+    hover_background Solid(LHTL_MENU_ITEM_PRIMARY_HOVER)
+    padding (20, 12)
+    yminimum 50
+
+style menu_primary_button_text is menu_button_text:
+    size 21
+    color LHTL_ACCENT_DARK
+    hover_color "#5C3A22"
+
+## 返回／次要
+style menu_back_button is menu_button:
+    background Solid(LHTL_MENU_ITEM_MUTED)
+    hover_background Solid(LHTL_MENU_ITEM_MUTED_HOVER)
+    xminimum 160
+    yminimum 40
+    padding (16, 8)
+
+style menu_back_button_text is menu_button_text:
+    size 17
+    color "#5C4A3A"
+
+## 長列表（結局／隱藏內容）：左對齊方便掃讀
+style menu_list_button is menu_button:
+    padding (16, 9)
+    xminimum 180
+    yminimum 40
+    xalign 0.0
+
+style menu_list_button_text is menu_button_text:
+    size 17
+    xalign 0.0
+    text_align 0.0
+
+## 嵌在 menu-bg 上的選項／卡片
 style embed_menu_button is menu_button:
     background Solid(LHTL_MENU_ITEM)
     hover_background Solid(LHTL_MENU_ITEM_HOVER)

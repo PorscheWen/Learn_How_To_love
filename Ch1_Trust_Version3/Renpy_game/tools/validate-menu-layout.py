@@ -43,21 +43,23 @@ def frame_metrics(body: str) -> list[tuple[int | None, int | None]]:
     return out
 
 
-# --- 主選單：須有離開、設定並排 ---
+# --- 主選單：設定／離開並排；勿用 ymaximum 裁切按鈕 ---
 mm = screen_body("main_menu")
 if 'textbutton "離開"' not in mm or "Quit(" not in mm:
     fail("主選單缺少離開")
 if "hbox:" not in mm or 'textbutton "設定"' not in mm:
     fail("主選單設定／離開應並排 hbox")
-if "ymaximum 660" not in mm:
-    fail("主選單缺 ymaximum 防護")
-ok("主選單：離開可見、高度防護")
+if re.search(r"ymaximum\s+\d+", mm):
+    fail("主選單勿用 ymaximum（會裁掉結局一覽／隱藏內容）")
+ok("主選單：設定／離開並排、無高度裁切")
 
-# --- 結局／隱藏：side yfill + viewport yfill，禁死 ymaximum 420 ---
+# --- 結局／隱藏：viewport 可捲、框不超螢幕；返回用 Return ---
 for name in ("ending_gallery", "hidden_content_gallery"):
     body = screen_body(name)
-    if "yfill True" not in body:
-        fail(f"{name} 缺 yfill（返回易被擠）")
+    if "viewport:" not in body:
+        fail(f"{name} 缺 viewport（列表過長需捲動）")
+    if "action Return()" not in body and 'ShowMenu("main_menu")' not in body:
+        fail(f"{name} 缺返回")
     if re.search(r"ymaximum\s+420", body):
         fail(f"{name} 仍用 ymaximum 420（會與返回重疊）")
     metrics = frame_metrics(body)
@@ -66,7 +68,7 @@ for name in ("ending_gallery", "hidden_content_gallery"):
             fail(f"{name} frame xsize {xs} > {W}")
         if ys and ys > H - 40:
             fail(f"{name} frame ysize {ys} 幾乎滿高，易裁切")
-    ok(f"{name}：side／viewport 可伸縮，框在螢幕內")
+    ok(f"{name}：viewport 可捲、框在螢幕內")
 
 # --- 章節：網格高度估算 ---
 ss = screen_body("section_select")
@@ -108,11 +110,26 @@ if re.search(r"yalign\s+0\.\d+", pref):
     fail("設定頁內容仍用 yalign 推位（易疊到標題／返回）")
 if "MainMenu(" in pref:
     fail("設定頁仍有 MainMenu()")
-if "Quit(" not in pref:
-    fail("設定頁缺離開遊戲")
+if "show_quit=True" not in pref and "show_quit = True" not in pref:
+    fail("設定頁應 use game_menu(..., show_quit=True) 讓返回／離開並排")
+gm_all = screen_body("game_menu")
+if "Quit(" not in gm_all and "Quit(" not in pref:
+    fail("設定頁缺離開遊戲（應在 game_menu show_quit 列）")
 if 'text "文字速度"' not in pref or 'text "音樂音量"' not in pref:
     fail("設定頁缺主要控制項")
-ok("設定頁：內容可見、無推位重疊、可離開")
+if 'text "輔助需求"' not in pref:
+    fail("設定頁缺輔助需求區塊")
+for flag in (
+    "assist_large_text",
+    "assist_high_contrast",
+    "assist_rest_reminder",
+    "assist_skip_seen",
+):
+    if flag not in pref:
+        fail(f"設定頁缺輔助開關 {flag}")
+if "grid 2 2" not in pref:
+    fail("設定頁輔助開關宜用 grid 2 2 壓高度（直排易擠返回）")
+ok("設定頁：內容可見、無推位重疊、返回／離開並排、含輔助需求")
 
 # --- 靜幀／照片：標題頂、關閉底（主選單用 ShowMenu + tag menu）---
 for name in ("gallery_image_view", "ending_still_view", "secret_photo_view"):

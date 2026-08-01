@@ -81,17 +81,26 @@ else:
 eg = screen_body("ending_gallery")
 hg = screen_body("hidden_content_gallery")
 ss = screen_body("section_select")
+## Return() 標準行為：主選單開啟時回主選單、遊戲中回遊戲，皆安全
 for name, body in (
     ("ending_gallery", eg),
     ("hidden_content_gallery", hg),
 ):
-    if "ShowMenu(\"main_menu\")" not in body and "If(main_menu" not in body:
+    if (
+        "action Return()" not in body
+        and 'ShowMenu("main_menu")' not in body
+        and "If(main_menu" not in body
+    ):
         fail(f"{name} 返回未處理主選單情境")
     if re.search(r'action\s+MainMenu\(\)', body):
         fail(f"{name} 不應使用 MainMenu() 當返回")
 ok("結局一覽／隱藏內容返回安全")
 
-if 'ShowMenu("main_menu")' not in ss and "If(main_menu" not in ss:
+if (
+    "action Return()" not in ss
+    and 'ShowMenu("main_menu")' not in ss
+    and "If(main_menu" not in ss
+):
     fail("section_select 返回未連回主選單")
 else:
     ok("章節選擇可返回主選單")
@@ -102,10 +111,17 @@ if re.search(r"action\s+MainMenu\(\)", pref):
     fail("preferences 內有 MainMenu()：遊戲中開設定會被丟回標題")
 if "use game_menu" not in pref:
     fail("preferences 未套用 game_menu（缺統一返回）")
-if "Quit(" not in pref:
+## 離開遊戲：設定頁自帶 Quit，或委派 game_menu(show_quit=True) 顯示
+gm_body = screen_body("game_menu")
+has_quit = "Quit(" in pref or ("show_quit=True" in pref and "Quit(" in gm_body)
+if not has_quit:
     fail("preferences 缺離開遊戲 Quit")
+elif 'text "輔助需求"' not in pref:
+    fail("preferences 缺輔助需求")
+elif "enable_assist_pack" not in pref:
+    fail("preferences 缺開啟輔助組合")
 else:
-    ok("設定頁無 MainMenu，有離開遊戲／game_menu Return")
+    ok("設定頁無 MainMenu，有離開遊戲／game_menu Return／輔助需求")
 
 gm = screen_body("game_menu")
 if "action Return()" not in gm:

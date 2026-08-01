@@ -93,7 +93,7 @@
 | `bg-living-day` | S04／S05 | `warm`；會議尖用 `calm` | `warm`／`calm` |
 | `bg-kitchen-day` | 門口跟隨 | 繼承 living；靠近用 `tender` | — |
 | `bg-entrance-night` | 進門過渡 | `tender`／`warm` | `tender`／`warm` |
-| `bg-corridor-day` | S06 被看見 | `calm`；擋下後 `tender` | `calm`／`tender` |
+| `bg-stairwell-day` | S06 被看見 | `calm`；擋下後 `tender` | `calm`／`tender` |
 | `bg-alley-day` | S08 巷口 | `warm`；僵住／硬拖 `calm`（`tense`） | `warm`／`calm` |
 | `bg-cafe-day` | S09 差點送走 | `calm`；留下→`tender`；送走→`melancholy` | 分歧 |
 | `bg-street-night` | 通勤（若用） | `calm`／`melancholy` | 勿搶 S02 後門主軸 |
@@ -178,16 +178,16 @@
 | 用力甩開／會議語氣吼 | `calm`（`tense`） |
 | 脫耳機、嗅線／拔插頭「喀」 | `tender`；「喀」維持字幕，不另播 one-shot |
 
-### S06｜走廊上的第三者
+### S06｜樓梯間的第三者
 
 弧線：**靜音（走廊）** → `tender`（進門玄關）
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 被搭話／伸手摸 | corridor-day | **無 BGM**（停樂） |
-| 推車輪卡縫「喀、喀」 | corridor-day | 維持靜音；文字記憶點，不新增環境 SFX |
-| 擋在中間、婉拒 | corridor-day | 維持靜音 |
-| 塞回屋／給摸 | corridor-day | 維持靜音 |
+| 被搭話／伸手摸 | stairwell-day | **無 BGM**（停樂） |
+| 推車輪卡縫「喀、喀」 | stairwell-day | 維持靜音；文字記憶點，不新增環境 SFX |
+| 擋在中間、婉拒 | stairwell-day | 維持靜音 |
+| 塞回屋／給摸 | stairwell-day | 維持靜音 |
 | 進門後、額頭頂腿 | entrance-day | `tender` |
 
 ### S07｜她倒下的那天

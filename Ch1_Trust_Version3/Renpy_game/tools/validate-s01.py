@@ -83,7 +83,7 @@ required = {
     "S05 fear pose": "show dog ear_flat",
     "S05 memory pose": "show dog sniff_wire",
     "S05 rename UI": 'renpy.input("想怎麼叫牠？"',
-    "S06 title call": 'show_section_title("Section 06", "走廊上的第三者")',
+    "S06 title call": 'show_section_title("Section 06", "樓梯間的第三者")',
     "S06 BGM silent start": 'renpy.music.stop(channel="music"',
     "S06 BGM after enter": 'play_bgm("tender"',
     "S06 entrance after door": "scene bg entrance_day",
