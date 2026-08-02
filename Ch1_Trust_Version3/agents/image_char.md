@@ -62,7 +62,7 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | 檔名 | 表情／動作 | 服裝／道具 | 主用 |
 |------|------------|------------|------|
 | `char-yuan-commute.png` | 疲憊垂眼、略駝 | 奶油開襟針織＋灰 T＋深褐寬褲；**耳機掛脖**；右手提便當塑膠袋 | S01／夜歸／超商 |
-| `char-yuan-sofa.png` | 平行安靜 | 沙發坐姿滑手機；手垂下 | **S04** 人狗同框 |
+| `char-yuan-sofa.png` | 平行安靜 | **木椅坐姿**滑手機（對齊 `bg-living-day` 右前景矮凳；transform `char_chair`）；手垂下 | **S04** 人狗同框 |
 | `char-yuan-squat-side.png` | 側身蹲等 | 米白襯衫＋橄欖褲；側蹲不伸手；**無牽繩** | **S02** Dist＋ |
 | `char-yuan-carry-pup.png` | 側抱幼犬 | 通勤服；側抱小7離後門 | **S02** 帶走 |
 | `char-yuan-headphones.png` | 專注／疏離 | 淺灰藍長袖襯衫袖捲起＋深褐褲；**耳機戴上**；雙手插口袋 | S05 Tone 尖 |
@@ -79,7 +79,7 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | `char-coworker.png` | 真誠提議 | 年輕女同事；淡紫開襟＋米內搭＋炭灰褲；一手前伸 | S09 茶水間 |
 | `char-coworker-cafe.png` | 蹲等聞狗 | 同上服裝；**蹲姿側身**；手留膝上／低伸；**面向右**（對女主／狗） | S09 咖啡廳 |
 
-**站位慣例：** 予安多在 `char_right`／`char_sofa`（面左看狗）；需人狗互視時，狗用 `dog_*_to_yuan`（水平翻轉面右）。合成圖（`carry_pup`／`leash_pass`／`nose_tip`）同框時先 `hide` 另一層，避免雙重手／雙重狗。
+**站位慣例：** 予安多在 `char_right`／`char_chair`（S04 面左看狗）；需人狗互視時，狗用 `dog_*_to_yuan` 或 `dog_chair_*`（水平翻轉面右）。合成圖（`carry_pup`／`leash_pass`／`nose_tip`）同框時先 `hide` 另一層，避免雙重手／雙重狗。
 
 ---
 

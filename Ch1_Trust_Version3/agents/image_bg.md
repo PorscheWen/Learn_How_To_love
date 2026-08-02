@@ -320,6 +320,20 @@ bg-{place}-{light}.png
   電梯／樓梯／窗／盆栽／大門構圖完全對齊夜版 → S03 夜與 S06 日同一梯廳，場景連續
 - `script.rpy`：`image bg corridor_day` → `image bg stairwell_day`；S06 開場 scene 同步改
 
+### 2026-08-02｜stairwell-day 電梯／門口對調
+
+- `bg-stairwell-day.png`：NanoBanana edit（`nano-banana-2`）將**左側電梯**與**右側木門**對調
+  → 現為左門口（壁燈＋地墊）／中央樓梯窗／右電梯
+- 對調前原檔：`assets/bg/_backup_20260802/bg-stairwell-day_before_swap.png`
+
+### 2026-08-02｜stairwell-night 自 day 同步夜景
+
+- `bg-stairwell-night.png`：以對調後的 `bg-stairwell-day.png` 為參考，
+  NanoBanana（`nano-banana-2`，edit）轉夜景，構圖對齊日版
+  → 左門口／中央樓梯窗／右電梯；窗外夜空＋城市燈
+- 同步前原檔：`assets/bg/_backup_20260802/bg-stairwell-night_before_day_sync.png`
+- S03 `dog_far_stair`：`xalign 0.22`（靠左側門墊），勿落在中央樓梯口
+
 ---
 
-*更新：2026-08-02｜S06 改用 `bg-stairwell-day`（自夜版日光化）；corridor-day 退役進 `_backup_20260802`*
+*更新：2026-08-02｜stairwell 日夜同構圖（左門／右電梯）；S03 狗靠門*

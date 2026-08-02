@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>對話／旁白修改器 — Ch1 Trust V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3eee6;
+      --panel: #fffdf9;
+      --border: #ddd2c3;
+      --text: #4a3728;
+      --muted: #7a6a5a;
+      --accent: #8b6914;
+      --accent-soft: #f0e6d0;
+      --narration: #5c4a3a;
+      --dialogue: #2f5d50;
+      --thought: #6e5d72;
+      --choice: #8a4b2a;
+      --note: #6b5f52;
+      --changed: #c45c26;
+      --danger: #a33;
+      --nav-w: 260px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1rem;
+      align-items: center;
+      padding: 0.7rem 1.1rem;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(74, 55, 40, 0.06);
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .topbar .meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      max-width: 42vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .actions { margin-left: auto; display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+    }
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button:hover:not(:disabled) { filter: brightness(0.97); }
+    .status {
+      font-size: 0.82rem;
+      color: var(--muted);
+      min-width: 8rem;
+    }
+    .status.ok { color: #2f5d50; }
+    .status.err { color: var(--danger); }
+    .status.dirty { color: var(--changed); font-weight: 500; }
+    .layout {
+      display: grid;
+      grid-template-columns: var(--nav-w) 1fr;
+      min-height: calc(100vh - 58px);
+    }
+    nav {
+      position: sticky;
+      top: 58px;
+      height: calc(100vh - 58px);
+      overflow: auto;
+      padding: 0.9rem 0.75rem;
+      background: #ebe4d8;
+      border-right: 1px solid var(--border);
+    }
+    nav h2 {
+      margin: 0 0 0.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .sec-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 0.3rem;
+      padding: 0.45rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-size: 0.84rem;
+    }
+    .sec-btn:hover { background: var(--accent-soft); }
+    .sec-btn.active {
+      background: var(--panel);
+      border-color: var(--border);
+      box-shadow: 0 1px 4px rgba(74, 55, 40, 0.06);
+    }
+    .sec-btn .counts {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+    main {
+      padding: 1rem 1.25rem 3rem;
+      max-width: 980px;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.9rem;
+    }
+    .toolbar input[type="search"] {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+      background: var(--panel);
+    }
+    .filters { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .filters label {
+      font-size: 0.78rem;
+      padding: 0.28rem 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--panel);
+      cursor: pointer;
+      user-select: none;
+    }
+    .filters input { display: none; }
+    .filters label.on {
+      background: var(--accent-soft);
+      border-color: #c9b48a;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .hint {
+      background: var(--accent-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 0.9rem 0.85rem;
+      margin-bottom: 0.65rem;
+    }
+    .card.dirty { border-color: #e0a882; box-shadow: 0 0 0 1px rgba(196, 92, 38, 0.12); }
+    .card.note {
+      background: #f7f2ea;
+      border-style: dashed;
+    }
+    .card-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.7rem;
+      align-items: center;
+      margin-bottom: 0.45rem;
+      font-size: 0.78rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.12rem 0.45rem;
+      border-radius: 6px;
+      font-weight: 500;
+      color: #fff;
+      font-size: 0.72rem;
+    }
+    .badge.narration { background: var(--narration); }
+    .badge.dialogue { background: var(--dialogue); }
+    .badge.thought { background: var(--thought); }
+    .badge.choice { background: var(--choice); }
+    .badge.note { background: var(--note); }
+    .line-no { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .menu-tag {
+      color: var(--choice);
+      font-weight: 500;
+    }
+    textarea {
+      width: 100%;
+      min-height: 3.2rem;
+      resize: vertical;
+      font: inherit;
+      line-height: 1.55;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+    }
+    textarea:focus {
+      outline: 2px solid #d4c09a;
+      border-color: #c9b48a;
+    }
+    textarea[readonly] {
+      background: #f3eee6;
+      color: var(--muted);
+    }
+    .empty {
+      color: var(--muted);
+      padding: 2rem 0;
+      text-align: center;
+    }
+    .preview-block {
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      padding: 0.2rem 0;
+    }
+    .preview-block .who {
+      font-weight: 700;
+      margin-right: 0.35rem;
+    }
+    .preview-block.choice {
+      border-left: 3px solid var(--choice);
+      padding-left: 0.65rem;
+      margin: 0.35rem 0;
+      color: var(--choice);
+    }
+    .preview-block.thought { color: var(--thought); font-style: italic; }
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: 1fr; }
+      nav {
+        position: static;
+        height: auto;
+        max-height: 220px;
+      }
+      .topbar .meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>對話／旁白修改器</h1>
+    <div class="meta" id="scriptPath">載入中…</div>
+    <div class="actions">
+      <span class="status" id="status">—</span>
+      <button type="button" id="btnReload">重新載入</button>
+      <button type="button" class="primary" id="btnSave" disabled>儲存變更</button>
+    </div>
+  </div>
+  <div class="layout">
+    <nav>
+      <h2>章節</h2>
+      <div id="sectionList"></div>
+    </nav>
+    <main>
+      <div class="hint">
+        選左側章節可瀏覽旁白、對白、心裡話與選項。改完按「儲存變更」寫回
+        <code>game/script.rpy</code>（只改字串內容，不動程式邏輯）。建議改完跑驗證再開遊戲確認。
+      </div>
+      <div class="toolbar">
+        <input type="search" id="search" placeholder="搜尋內文…" />
+        <div class="filters" id="filters">
+          <label class="on" data-kind="narration"><input type="checkbox" checked />旁白</label>
+          <label class="on" data-kind="dialogue"><input type="checkbox" checked />對白</label>
+          <label class="on" data-kind="thought"><input type="checkbox" checked />心裡話</label>
+          <label class="on" data-kind="choice"><input type="checkbox" checked />選項</label>
+          <label class="on" data-kind="note"><input type="checkbox" checked />註記</label>
+        </div>
+        <label style="font-size:0.82rem;color:var(--muted)">
+          <input type="checkbox" id="previewMode" /> 預覽模式
+        </label>
+        <label style="font-size:0.82rem;color:var(--muted)">
+          <input type="checkbox" id="dirtyOnly" /> 只看已改
+        </label>
+      </div>
+      <div id="titleBar" style="margin-bottom:0.75rem;font-weight:700"></div>
+      <div id="content" class="empty">請選擇章節</div>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      sections: [],
+      currentId: null,
+      items: [],
+      originals: new Map(), // line -> text
+      drafts: new Map(),
+      preview: false,
+      dirtyOnly: false,
+      kinds: new Set(["narration", "dialogue", "thought", "choice", "note"]),
+      search: "",
+    };
+
+    const el = {
+      sectionList: document.getElementById("sectionList"),
+      content: document.getElementById("content"),
+      titleBar: document.getElementById("titleBar"),
+      scriptPath: document.getElementById("scriptPath"),
+      status: document.getElementById("status"),
+      btnSave: document.getElementById("btnSave"),
+      btnReload: document.getElementById("btnReload"),
+      search: document.getElementById("search"),
+      previewMode: document.getElementById("previewMode"),
+      dirtyOnly: document.getElementById("dirtyOnly"),
+    };
+
+    const KIND_LABEL = {
+      narration: "旁白",
+      dialogue: "對白",
+      thought: "心裡話",
+      choice: "選項",
+      note: "註記",
+    };
+
+    function setStatus(text, cls) {
+      el.status.textContent = text;
+      el.status.className = "status" + (cls ? " " + cls : "");
+    }
+
+    function dirtyCount() {
+      let n = 0;
+      for (const [line, text] of state.drafts) {
+        if (text !== state.originals.get(line)) n += 1;
+      }
+      return n;
+    }
+
+    function refreshSaveBtn() {
+      const n = dirtyCount();
+      el.btnSave.disabled = n === 0;
+      el.btnSave.textContent = n ? `儲存變更（${n}）` : "儲存變更";
+      if (n) setStatus(`${n} 處未存`, "dirty");
+    }
+
+    async function loadMeta() {
+      const res = await fetch("/api/meta");
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "載入失敗");
+      state.sections = data.sections;
+      el.scriptPath.textContent = data.script;
+      renderSections();
+    }
+
+    function renderSections() {
+      el.sectionList.innerHTML = "";
+      for (const s of state.sections) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "sec-btn" + (s.id === state.currentId ? " active" : "");
+        const c = s.counts || {};
+        btn.innerHTML = `${escapeHtml(s.title)}<span class="counts">旁白 ${c.narration || 0} · 對白 ${c.dialogue || 0} · 選項 ${c.choice || 0}</span>`;
+        btn.addEventListener("click", () => selectSection(s.id));
+        el.sectionList.appendChild(btn);
+      }
+    }
+
+    async function selectSection(id, force) {
+      if (!force && dirtyCount() > 0) {
+        if (!confirm("目前有未儲存變更，確定切換章節？未存內容會遺失。")) return;
+      }
+      state.currentId = id;
+      renderSections();
+      setStatus("載入中…");
+      const res = await fetch(`/api/section/${id}`);
+      const data = await res.json();
+      if (!data.ok) {
+        setStatus(data.error || "載入失敗", "err");
+        return;
+      }
+      const section = data.section;
+      state.items = section.items || [];
+      state.originals = new Map();
+      state.drafts = new Map();
+      for (const item of state.items) {
+        if (item.readonly) continue;
+        state.originals.set(item.line, item.text);
+        state.drafts.set(item.line, item.text);
+      }
+      el.titleBar.textContent = `${section.title}（L${section.start_line}–${section.end_line}）`;
+      setStatus("已載入", "ok");
+      refreshSaveBtn();
+      renderContent();
+    }
+
+    function visibleItems() {
+      const q = state.search.trim().toLowerCase();
+      return state.items.filter((item) => {
+        if (!state.kinds.has(item.kind)) return false;
+        if (state.dirtyOnly && !item.readonly) {
+          const cur = state.drafts.get(item.line);
+          if (cur === state.originals.get(item.line)) return false;
+        }
+        if (!q) return true;
+        const hay = `${item.text} ${item.speaker_label || ""} ${KIND_LABEL[item.kind] || ""}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function renderContent() {
+      const items = visibleItems();
+      if (!state.currentId) {
+        el.content.className = "empty";
+        el.content.textContent = "請選擇章節";
+        return;
+      }
+      if (!items.length) {
+        el.content.className = "empty";
+        el.content.textContent = "沒有符合條件的內容";
+        return;
+      }
+      el.content.className = "";
+      el.content.innerHTML = "";
+
+      if (state.preview) {
+        for (const item of items) {
+          const block = document.createElement("div");
+          block.className = "preview-block " + item.kind;
+          const text = item.readonly ? item.text : (state.drafts.get(item.line) ?? item.text);
+          if (item.kind === "choice") {
+            block.textContent = `▸ ${text}`;
+          } else if (item.kind === "thought") {
+            block.textContent = `（${text}）`;
+          } else if (item.kind === "dialogue") {
+            block.innerHTML = `<span class="who">${escapeHtml(item.speaker_label || "")}</span>${escapeHtml(text)}`;
+          } else if (item.kind === "note") {
+            block.style.color = "var(--muted)";
+            block.textContent = `※ ${text}`;
+          } else {
+            block.textContent = text;
+          }
+          el.content.appendChild(block);
+        }
+        return;
+      }
+
+      let lastMenu = null;
+      for (const item of items) {
+        if (item.kind === "choice" && item.menu_index !== lastMenu) {
+          lastMenu = item.menu_index;
+          const sep = document.createElement("div");
+          sep.style.cssText = "margin:0.9rem 0 0.4rem;font-size:0.8rem;color:var(--choice);font-weight:600";
+          sep.textContent = `選項組 #${item.menu_index}`;
+          el.content.appendChild(sep);
+        }
+
+        const card = document.createElement("div");
+        const cur = item.readonly ? item.text : (state.drafts.get(item.line) ?? item.text);
+        const isDirty = !item.readonly && cur !== state.originals.get(item.line);
+        card.className = "card" + (item.kind === "note" ? " note" : "") + (isDirty ? " dirty" : "");
+
+        const head = document.createElement("div");
+        head.className = "card-head";
+        head.innerHTML = `
+          <span class="badge ${item.kind}">${KIND_LABEL[item.kind] || item.kind}</span>
+          ${item.speaker_label && item.kind !== "narration" && item.kind !== "choice" && item.kind !== "note"
+            ? `<span>${escapeHtml(item.speaker_label)}</span>` : ""}
+          ${item.kind === "choice" ? `<span class="menu-tag">選項 ${item.choice_index}</span>` : ""}
+          <span class="line-no">L${item.line}</span>
+        `;
+        card.appendChild(head);
+
+        const ta = document.createElement("textarea");
+        ta.value = cur;
+        ta.rows = Math.min(8, Math.max(2, Math.ceil(cur.length / 42)));
+        if (item.readonly) {
+          ta.readOnly = true;
+        } else {
+          ta.addEventListener("input", () => {
+            state.drafts.set(item.line, ta.value);
+            const dirty = ta.value !== state.originals.get(item.line);
+            card.classList.toggle("dirty", dirty);
+            refreshSaveBtn();
+          });
+        }
+        card.appendChild(ta);
+        el.content.appendChild(card);
+      }
+    }
+
+    async function saveChanges() {
+      const changes = [];
+      for (const [line, text] of state.drafts) {
+        if (text !== state.originals.get(line)) {
+          changes.push({ line, text });
+        }
+      }
+      if (!changes.length) return;
+      setStatus("儲存中…");
+      el.btnSave.disabled = true;
+      const res = await fetch("/api/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ changes }),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        setStatus((data.errors && data.errors.join("；")) || data.error || "儲存失敗", "err");
+        refreshSaveBtn();
+        return;
+      }
+      setStatus(`已寫入 ${data.updated} 處`, "ok");
+      await selectSection(state.currentId, true);
+      await loadMeta();
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    el.btnSave.addEventListener("click", () => saveChanges().catch((e) => setStatus(String(e), "err")));
+    el.btnReload.addEventListener("click", async () => {
+      if (dirtyCount() > 0 && !confirm("有未儲存變更，確定重新載入？")) return;
+      try {
+        await loadMeta();
+        if (state.currentId) await selectSection(state.currentId, true);
+        setStatus("已重新載入", "ok");
+      } catch (e) {
+        setStatus(String(e), "err");
+      }
+    });
+    el.search.addEventListener("input", () => {
+      state.search = el.search.value;
+      renderContent();
+    });
+    el.previewMode.addEventListener("change", () => {
+      state.preview = el.previewMode.checked;
+      renderContent();
+    });
+    el.dirtyOnly.addEventListener("change", () => {
+      state.dirtyOnly = el.dirtyOnly.checked;
+      renderContent();
+    });
+    document.querySelectorAll("#filters label").forEach((label) => {
+      label.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const kind = label.dataset.kind;
+        if (state.kinds.has(kind)) state.kinds.delete(kind);
+        else state.kinds.add(kind);
+        label.classList.toggle("on", state.kinds.has(kind));
+        renderContent();
+      });
+    });
+
+    window.addEventListener("beforeunload", (e) => {
+      if (dirtyCount() > 0) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    });
+
+    loadMeta()
+      .then(() => {
+        setStatus("就緒", "ok");
+        if (state.sections[0]) selectSection(state.sections[0].id, true);
+      })
+      .catch((e) => setStatus(String(e), "err"));
+  </script>
+</body>
+</html>

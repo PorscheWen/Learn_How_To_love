@@ -152,7 +152,7 @@ screen ending_unlock_notice(ending_id="A"):
                 xalign 0.5
             null height 4
             for line in ending_unlock_lines(ending_id):
-                text "·  " + line:
+                text "・  " + line:
                     font CJK_FONT
                     size 18
                     color LHTL_TEXT
