@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 """選單版面靜態驗收（1280×720）：框尺寸、網格是否超出、side 是否 yfill、禁固定 ymaximum 擠返回。"""
 from __future__ import annotations
 

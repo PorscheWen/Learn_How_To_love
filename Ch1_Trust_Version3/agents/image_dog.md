@@ -257,7 +257,7 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 日期 | 內容 |
 |------|------|
 | 2026-07-19 | Option B wiry 定稿；正式狗資產 |
-| 2026-07-25 | 用戶提供 5 張錨點圖 → 備份至 `assets/dog/_backup_20260725_183542/`；重寫 IDENTITY／STYLE；落地 canonical／anxious／behind-legs／refuse-stranger；其餘 pose 依新鎖全量重產 |
+| 2026-07-25 | 用戶提供 5 張錨點圖 → 備份至 `assets/_backup_unused/_backup_20260725_183542/`；重寫 IDENTITY／STYLE；落地 canonical／anxious／behind-legs／refuse-stranger；其餘 pose 依新鎖全量重產 |
 | 2026-07-28 | 新增 `dog-farewell`／`dog-cafe-refuse`／`dog-cafe-tense`；S09 朝向見 `section_09_almost_handoff.md` |
 | 2026-08-01 | 新增動畫序列幀產線（§3.5）；落地 `dog wag` 搖尾巴 5 幀（S05 取名後）；工具 `seedance-generate.py`／`video-to-frames.py` |
 | 2026-08-01 | 落地四個睡姿呼吸動畫：`door_sleep`／`back_sleep`／`check_sleep`／`door_edge`（各 5 幀，S03＋結局 A／B／D）；fast 模型 i2v 不送 `camerafixed` |

@@ -3,36 +3,36 @@
 ## 安靜的距離／睡姿 coda；可點擊或 Ctrl 略過 pause。
 ## ------------------------------------------------------------
 
-# 距離緩動：遠 → 近（結局 A 靠近）
+# 距離緩動：遠 → 近（結局 A 靠近）；與全段 ×0.8 基線對齊
 transform dog_coda_approach:
     xalign 0.58
     yanchor 1.0
     ypos 0.86
-    zoom 0.26
-    ease 2.8 xalign 0.50 zoom 0.30
-    ease 2.6 xalign 0.42 zoom 0.34
+    zoom 0.208
+    ease 2.8 xalign 0.50 zoom 0.24
+    ease 2.6 xalign 0.42 zoom 0.272
 
 # 選定仍學：中距 ↔ 略近（回頭確認感）
 transform dog_coda_check:
     xalign 0.50
     yanchor 1.0
     ypos 0.86
-    zoom 0.30
-    ease 1.6 xalign 0.46 zoom 0.32
+    zoom 0.24
+    ease 1.6 xalign 0.46 zoom 0.256
     pause 0.8
-    ease 1.4 xalign 0.50 zoom 0.30
+    ease 1.4 xalign 0.50 zoom 0.24
     pause 1.0
-    ease 1.8 xalign 0.44 zoom 0.33
+    ease 1.8 xalign 0.44 zoom 0.264
 
 # 薄冰：門邊略鬆、仍遠
 transform dog_coda_thin_ice:
     xalign 0.62
     yanchor 1.0
     ypos 0.86
-    zoom 0.24
-    ease 2.2 xalign 0.58 zoom 0.26
+    zoom 0.192
+    ease 2.2 xalign 0.58 zoom 0.208
     pause 1.2
-    ease 1.8 xalign 0.60 zoom 0.25
+    ease 1.8 xalign 0.60 zoom 0.2
 
 
 init python:
@@ -270,7 +270,7 @@ label ending_beat_handed_over:
     with Dissolve(0.8)
     $ ending_coda_pause(1.2)
 
-    ## 「同事傳來的照片」——文字框代替缺圖，避免狗誤入畫面
+    ## 「同事傳來的照片」......文字框代替缺圖，避免狗誤入畫面
     show screen ending_c_photo_card
     $ ending_coda_pause(3.2)
     hide screen ending_c_photo_card

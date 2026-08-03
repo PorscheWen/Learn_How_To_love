@@ -30,24 +30,24 @@ POSE_SCALE = {
     "dog-street-tense": 0.808,
 }
 CHAR_T = {
-    "char_center": (0.50, 0.86, 0.48),
-    "char_right": (0.74, 0.86, 0.45),
-    "char_left": (0.26, 0.86, 0.45),
-    "char_right_walk": (0.74, 0.86, 0.40),
+    "char_center": (0.50, 0.86, 0.384),
+    "char_right": (0.74, 0.86, 0.36),
+    "char_left": (0.26, 0.86, 0.36),
+    "char_right_walk": (0.74, 0.86, 0.32),
 }
 DOG_T = {
-    "dog_far": (0.58, 0.86, 0.26),
-    "dog_mid": (0.50, 0.86, 0.30),
-    "dog_near": (0.42, 0.86, 0.34),
-    "dog_far_pair": (0.50, 0.86, 0.22),
-    "dog_mid_pair": (0.56, 0.86, 0.23),
-    "dog_near_pair": (0.60, 0.86, 0.24),
-    "dog_nudge": (0.68, 0.86, 0.28),
-    "dog_entrance_far": (0.50, 0.87, 0.24),
-    "dog_entrance_mid": (0.54, 0.87, 0.27),
-    "dog_far_walk": (0.30, 0.86, 0.24),
-    "dog_mid_walk": (0.40, 0.86, 0.27),
-    "dog_near_walk": (0.50, 0.86, 0.30),
+    "dog_far": (0.58, 0.86, 0.208),
+    "dog_mid": (0.50, 0.86, 0.24),
+    "dog_near": (0.42, 0.86, 0.272),
+    "dog_far_pair": (0.50, 0.86, 0.176),
+    "dog_mid_pair": (0.56, 0.86, 0.184),
+    "dog_near_pair": (0.60, 0.86, 0.192),
+    "dog_nudge": (0.68, 0.86, 0.224),
+    "dog_entrance_far": (0.50, 0.87, 0.192),
+    "dog_entrance_mid": (0.54, 0.87, 0.216),
+    "dog_far_walk": (0.30, 0.86, 0.192),
+    "dog_mid_walk": (0.40, 0.86, 0.216),
+    "dog_near_walk": (0.50, 0.86, 0.24),
 }
 
 

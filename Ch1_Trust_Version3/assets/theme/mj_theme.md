@@ -54,7 +54,7 @@ Composition: hooks in the left third, large negative space right for title text.
 
 ## 3. 現況（2026-07-25）
 
-- **備份：** `assets/theme/_backup_20260725_132123/`（重產前 `title-main.png`／`menu-bg.png`）
+- **備份：** `assets/_backup_unused/theme/_backup_20260725_132123/`（重產前 `title-main.png`／`menu-bg.png`）
 - **公式：** BG ONE-LINER ＋ `mj_theme` 方案構圖 ＋ reference（`ref-living-night`、`dog-ref-canonical`、舊檔構圖）
 - **`title-main.png` 已重產落地**（方案 A：予安背影左下、小7右下、中央留白），2048×1152
 - **`menu-bg.png` 已重產落地**（方案 C：牆鉤掛鑰匙＋牽繩、單側暖光、大面積暗紋理留白），2048×1152  
@@ -63,7 +63,7 @@ Composition: hooks in the left third, large negative space right for title text.
   - **UI 嵌入**：半透明殼（`LHTL_MENU_SHELL`）靠左；選項／存檔卡用 `LHTL_MENU_ITEM` 嵌在牆面；**右側約 25% 留給牆鉤**
   - **版面契約（2026-07-29）**：子選單用 `side "t c b"` 分標題／內容／返回；結局／隱藏列表 viewport 用 `yfill`（勿死鎖 `ymaximum 420`）；**設定頁勿在 side 中央放 `viewport`＋`yfill`**（會整頁空白）。靜態驗收：`Renpy_game/tools/validate-menus.py`、`validate-menu-layout.py`
 - MJ prompt 保留作備援；換圖覆蓋同名檔即可，不用改程式
-- 資料夾只放正式檔與 `mj_theme.md`；備份在 `_backup_*`
+- 資料夾只放正式檔與 `mj_theme.md`；備份在 `assets/_backup_unused/theme/`
 
 ## 3.1 落地流程
 

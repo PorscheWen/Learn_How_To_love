@@ -362,10 +362,10 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ### 2026-07-25 正式資產狀態
 
-- 背景 **13 張**已依 BG ONE-LINER 全量重產（含 `gate-night`）；原圖備份於 `assets/bg/_backup_20260725_125336/`。
+- 背景 **13 張**已依 BG ONE-LINER 全量重產（含 `gate-night`）；原圖備份於 `assets/_backup_unused/bg/_backup_20260725_125336/`。
 - 風格錨點：`assets/bg/refs/` 四張已同步本次正式構圖。
-- **狗圖（同日晚）：** 以用戶 5 張錨點重鎖 Option B；原圖備份於 `assets/dog/_backup_20260725_183542/`；`canonical`／`anxious`／`behind-legs`／`refuse-stranger` 直接落地錨點去背版；其餘 15 pose 依新 IDENTITY LOCK 全量重產（黑底＋`remove_ai_bg.py`）。詳見 `image_dog.md`。
-- **人物（同日）：** 7 張 `assets/char/` 全量重產；備份 `assets/char/_backup_20260725_193450/`；新建 [`image_char.md`](image_char.md)（予安 IDENTITY＋NPC）；錨點 `assets/char/refs/`。
+- **狗圖（同日晚）：** 以用戶 5 張錨點重鎖 Option B；原圖備份於 `assets/_backup_unused/_backup_20260725_183542/`；`canonical`／`anxious`／`behind-legs`／`refuse-stranger` 直接落地錨點去背版；其餘 15 pose 依新 IDENTITY LOCK 全量重產（黑底＋`remove_ai_bg.py`）。詳見 `image_dog.md`。
+- **人物（同日）：** 7 張 `assets/char/` 全量重產；備份 `assets/_backup_unused/_backup_20260725_193450/`；新建 [`image_char.md`](image_char.md)（予安 IDENTITY＋NPC）；錨點 `assets/char/refs/`。
 
 ### 2026-07-28｜S09 專用立繪與劇情朝向
 

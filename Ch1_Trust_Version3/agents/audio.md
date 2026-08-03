@@ -14,7 +14,7 @@
 | guild 規則 | 音訊落地 |
 |------------|----------|
 | 整章 60～85 分／十段 | 每段約 **1～2 次**換曲；整章約 **8～14 次** crossfade，勿每選項換 |
-| 開場 ≤15 分（S01＋S02） | S01 `calm`／空白感 → S02 相遇可短暫 `melancholy` → 帶走後 `warm`／`tender` |
+| 開場 ≤15 分（S01＋S02） | S01 全段 `almost-gave` 空白感 → S02 相遇 `melancholy` → 帶走後 `warm`／`tender` |
 | 軟分軌 | **同 bg 不強制換 BGM**；高低信任用狗 SFX／pose，不另開 BGM 線 |
 | 硬分歧 S09／S10 | 結局 A／B → `tender`／`warm`；C → `melancholy`／`calm`；D → `calm` |
 | 無 Game Over | C／D **不**播失敗／懲罰音效 |
@@ -47,13 +47,13 @@
 | `melancholy.ogg` | `melancholy` | 低沉、孤獨 | **S02 後門一瞥**、結局 C 送走；勿整章濫用 |
 | `sick-guard.ogg` | `sick_guard` | 深夜、脆弱、守候 | S07 生病守門，避免與 S03／S05 共用同一首 |
 | `almost-gave.ogg` | `almost_gave` | 沉靜、猶豫、情緒高峰 | S09 理性清單與咖啡廳交接前 |
-| `first-light.ogg` | `hopeful` | 淡光、承認留下 | 結局 A 掛勾與「再試一年」 |
+| `first-light.ogg` | `hopeful` | 淡光、承認留下 | 結局 A／B「再試一年」 |
 
 ### Profile 別名（劇本 → 實體）
 
 | 劇本標籤 | Profile | OGG | 備註 |
 |----------|---------|-----|------|
-| `blank_night` | `calm` | `calm.ogg` | S01 一個人剛剛好 |
+| `blank_night` | 空白加班 ambient | `almost-gave.ogg` @0.88 | S01 螢幕光／一個人剛剛好；**勿**與主選單 `calm.ogg` 同檔 |
 | `backdoor_glance` | `melancholy` | `melancholy.ogg` | S02 相遇 |
 | `gate_border` | `melancholy` | `melancholy.ogg` @0.92 | S03 大門（與主選單 calm 分開，避免章節直達靜音） |
 | `stair_border` | `melancholy` | `melancholy.ogg` @0.92 | 舊別名（仍可用） |
@@ -72,7 +72,7 @@
 
 | Profile | OGG | 用途 |
 |---------|-----|------|
-| `night` | `calm.ogg` @0.93 | 深夜就寢 |
+| `night` | `blank_night` 略降／升 | `almost-gave.ogg` @0.93 | S01 巷口／入睡（與加班同曲，勿切 calm） |
 | `tense` | `calm.ogg` @0.88 | 衝突當下（短；禁 jump scare） |
 | `sunset` | `tender.ogg` | 傍晚帶回／進門 |
 | `hopeful` | `first-light.ogg` | S10 掛勾／「再試一年」 |
@@ -85,8 +85,8 @@
 
 | bg | 時段感覺 | 預設 Profile | OGG |
 |----|----------|--------------|-----|
-| `bg-office-night` | 加班空白 | `calm` | `calm.ogg` |
-| `bg-convenience-night` | 超商夜 | `calm`；店員鉤子後可維持 | `calm.ogg` |
+| `bg-office-night` | 加班空白 | `blank_night` | `almost-gave.ogg` |
+| `bg-convenience-night` | 超商夜（S01） | `blank_night`；S02 起可轉 `melancholy` | `almost-gave`／`melancholy` |
 | `bg-backdoor-night` | **S02 相遇** | `melancholy` → 帶走後 `tender`／`warm` | `melancholy` → `tender`／`warm` |
 | `bg-stairwell-night` | S03 臨時國界 | `melancholy`；「我還在」→ `tender` | `melancholy`／`tender` |
 | `bg-living-night` | 夜客廳、S07、S10 | `warm`（陪伴）／`calm`（焦慮／薄冰） | `warm`／`calm` |
@@ -102,7 +102,7 @@
 
 | 劇情情緒 | Profile | Section 例 |
 |----------|---------|------------|
-| 一個人剛剛好／空白 | `calm` | S01 |
+| 一個人剛剛好／空白 | `blank_night` | S01 加班／回家空白 |
 | 後門發現／沒能假裝沒看見 | `melancholy` | S02 開場 |
 | 蹲等、半步、溫柔抱走 | `tender` | S02 A |
 | 腳趕／硬抓／關浴室 | `calm`（`tense`）短 | Dist− |
@@ -125,15 +125,15 @@
 
 ### S01｜螢幕光比月亮亮
 
-弧線：`blank_night`／`calm`（空白）→ 巷口 `night` → 客廳回 `blank_night`（勿早轉暖；勿搶 S02 `melancholy`）
+弧線：全段 `blank_night` → 巷口略升為 `night`（同檔 `almost-gave.ogg` 只調音量）→ 回家／入睡維持，勿重啟；勿搶 S02 `melancholy`
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 加班 | office-night | `blank_night`（`calm.ogg`） |
-| 超商 | convenience-night | `calm` |
-| 巷口轉角 | street-night | `night`（同曲略降音量） |
+| 加班 | office-night | `blank_night`（`almost-gave.ogg` @0.88；與主選單分開） |
+| 超商 | convenience-night | 維持（同曲不重播） |
+| 巷口轉角 | street-night | `night`（同曲 @0.93，只調音量） |
 | 繞看一眼（風味） | **backdoor-night**（遠望、無狗立繪） | 維持 `night` |
-| 回家客廳／收束 | living-night | `blank_night` → 入睡 `night` |
+| 回家客廳／收束 | living-night | 維持 `night` |
 
 ### S02｜後門那一瞥
 
@@ -154,7 +154,8 @@
 | 鋪外套、進屋 | gate-night | `melancholy`（`gate_border`） |
 | 開門輕聲／補水 | gate-night | `tender` |
 | 腳趕／吼 | gate-night | `calm`（`tense`）短 |
-| 房門外睡 | entrance／living | `warm` 輕 |
+| 房門外睡 | entrance／living | `tender`（入睡） |
+| 清晨對望鉤子 | entrance／living-day | `warm` 輕（進 S04 同檔不重播） |
 
 ### S04｜共享同一種安靜
 
@@ -164,7 +165,7 @@
 |------|-----|---------|
 | 沙發／地板平行 | living-day | `warm` |
 | 硬抱／關浴室 | living／bathroom 感 | `calm`（`tense`）短 → 仍回 living |
-| 廚房門口記憶點 | kitchen／living | `tender` 短 |
+| 廚房門口記憶點 | kitchen／living | `tender` 短（跟隨成立）→ 回 `warm` |
 | 場次 A 存檔收束 | living | `warm` |
 
 ### S05｜你的聲音有兩種
@@ -202,15 +203,16 @@
 
 ### S08｜走到轉角就好
 
-弧線：`warm`／`calm` → `tender`（鞋邊睡）
+弧線：`warm`／`calm` → 驚嚇 `tense` 短 → 選項直接定 `tender` 或 `calm` → 返家不再切曲
 
 | 節點 | bg | Profile |
 |------|-----|---------|
 | 巷口出發 | alley-day | `warm`；低信任貼牆用 `calm` |
-| 硬拖達標 | alley-day | `calm`（`tense`） |
-| 停等、提早回家 | alley → living | `tender`／`warm` |
-| 靠鞋睡 | living | `tender` |
-| 場次 B 存檔收束 | living | `warm`／`tender` |
+| 機車呼嘯 | alley-day | `tense` 短 |
+| 停等／提早回家 | alley → living | `tender`（維持至鞋邊睡） |
+| 硬拖達標 | alley-day | `calm`（與 tense 同檔，只調音量） |
+| 靠鞋睡 | living | 維持 `tender`（勿再切 `warm`） |
+| 場次 B 存檔收束 | living | 繼承上列 |
 
 ### S09｜差點交給別人
 
@@ -229,8 +231,8 @@
 
 | 結局 | Profile | 畫面對齊 |
 |------|---------|----------|
-| A 背靠 | `tender`（`ending_back`） | 背對睡；鑰匙＋牽繩 |
-| B 選定 | `warm`／`tender` | 睡近仍確認 |
+| A 背靠 | `tender`（`ending_back`）→「再試一年」`hopeful` | 背對睡；鑰匙＋牽繩 |
+| B 選定 | `warm`（`ending_learning`）→「再試一年」`hopeful` | 睡近仍確認；與 A 對稱 |
 | C 已在 S09 | 維持 `melancholy`；空屋 `calm` | 冰箱嗡嗡（無狗 SFX） |
 | D 薄冰 | `calm`（`ending_thin_ice`） | 門邊睡、不看「晚上見」 |
 
@@ -243,16 +245,22 @@
 | 情緒／beat | cue 池 | Section 例 |
 |------------|--------|------------|
 | 後門害怕／對視 | soft／whimper／murmur（依選項擇一） | S02 |
+| 喝水／嗅外套 | soft（好）／whimper（壞） | S02／S03 |
 | 警戒半步／貼牆 | soft／sigh | S02／S08 低 |
 | 吃飯抬眼 | soft | S02 |
-| 樓梯間不安 | murmur | S03（已落地） |
-| 平行安靜（極稀） | sigh | S04 可省略 |
-| 被尖聲嚇到 | whimper 短 | S05 尖聲分支（已落地） |
-| 嗅耳機線 | soft | S05 鉤子 |
-| 躲腿後／頂額 | soft | S06 額頭輕碰（已落地） |
-| 守門輕吠 | bark（一次） | S07（已落地） |
-| 巷口僵住 | whimper | S08 機車驚嚇（已落地） |
-| 拒絕陌生人 | growl／低鳴（一次） | S09 高信任分支（已落地） |
+| 樓梯間不安 | murmur | S03／S06 鄰居伸手 |
+| 平行安靜 | sigh | S04 |
+| 硬抱／關浴室 | whimper | S04 Tone− |
+| 廚房門口跟隨 | soft | S04 鉤子 |
+| 被尖聲嚇到 | whimper 短 | S05 尖聲分支 |
+| 嗅耳機線 | soft | S05 開場＋鉤子 |
+| 躲腿後／頂額 | murmur／soft | S06 |
+| 守門輕吠 | bark（一次）＋分支 soft／whimper／murmur | S07 |
+| 巷口僵住 | whimper | S08 機車驚嚇 |
+| 停等／提早回家 | soft；鞋邊睡 sigh | S08 |
+| 拒絕陌生人 | growl／murmur（依信任） | S09 |
+| 留下確認 | soft | S09 留下 |
+| 掛勾／玄關 | soft／sigh | S10（非 C） |
 | 背對入睡 | sigh（極輕）或靜音 | S10 A |
 | 送走後空屋 | **不播**幼犬聲 | 結局 C |
 
@@ -268,7 +276,7 @@ dog_sfx(cue)        # whimper／murmur／soft／sigh／yip／bark／growl
 stop_bgm()
 ```
 
-- 同 profile 重進場景不重播；換曲 crossfade 1.5～2.5s  
+- 同 profile 重進場景不重播；**同檔不同別名只調音量**（勿重啟循環）；換曲 crossfade 1.5～2.5s  
 - 主選單可靜音  
 - 資產可先從 V2 四曲複製至 `Ch1_Trust_Version3/assets/audio/`，並更新 CREDITS
 

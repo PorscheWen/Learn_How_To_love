@@ -119,6 +119,7 @@ bg-{place}-{light}.png
 | `bg-entrance-night.png` | entrance | night | 玄關基準；**S03** 門檻／帶回屋內 |
 | `bg-entrance-day.png` | entrance | day | S03 清晨；S04 `delayed_entry`；**S08** 穿帶／出門／返家；**S09** 週六扣帶出門 |
 | `bg-kitchen-day.png` | kitchen | day | S04 門口記憶點（**已落地**） |
+| `bg-kitchen-night.png` | kitchen | night | **S01** 開冰箱（自 day 夜化；**已落地**） |
 
 ### 3.3 P2（可省略／已補）
 
@@ -136,6 +137,7 @@ bg-{place}-{light}.png
 | `petshop`／`clinic`／`treestreet` | **非 Ch1 主幹**；勿當 Version3 優先產圖 |
 | `street-night` 雨夜紙箱 | 相遇改 **`backdoor-night`**；勿再當 S02 主圖 |
 | `living-*` | **沿用家族**；構圖可繼承，用途改對十段 |
+| `clinic` | **S02 `vet_first` 短場**可用 `bg-clinic-night`；非十段主幹常駐 |
 
 ---
 
@@ -143,16 +145,16 @@ bg-{place}-{light}.png
 
 | Sec | 建議 bg 序列 | light 注意 |
 |-----|--------------|------------|
-| 01 | `office-night`（可省）→ `convenience-night` → `living-night` | 全夜 |
-| 02 | `convenience-night` → **`backdoor-night`** →（過渡）`entrance-night`／`living-night` | 傍晚／夜 |
+| 01 | `office-night`（可省）→ `convenience-night` → **`entrance-night`** → `living-night` → **`kitchen-night`** → `living-night` | 全夜；回家三拍：玄關／客廳坐下／廚房冰箱 |
+| 02 | **`office-night`** → `convenience-night` → `street-night` → **`backdoor-night`** → `street-night` →（`vet_first`：**`clinic-night`**）／否則 **`entrance-night`** → `living-night` | 傍晚／夜；急診短場後進 S03 大門 |
 | 03 | **`gate-night`** → **`entrance-night`** → `living-night` →（清晨）`entrance-day`／`living-day` | 夜→清晨；大門外／門內靠玄關過渡 |
 | 04 | `living-day`（主）／`kitchen-day`（門口） | 日；夜安靜可用 living-night |
 | 05 | `living-day` | 日 |
-| 06 | `stairwell-day` | 日；與 S03 夜梯廳同構圖 |
-| 07 | `living-night` | 病中夜 |
-| 08 | **`entrance-day`**（穿帶／出門／返家解帶）→ **`alley-day`**（巷口）→（午後）`living-day` | 外出日；胸背帶與門線都在玄關 |
-| 09 | `living-day`（打包／告別）→ **`entrance-day`**（扣帶出門 ×0.8）→ `cafe-day` →（留下）`living-*` | 日 |
-| 10 | `living-night` | 停電／颱風夜；結局睡姿靠疊層 |
+| 06 | `stairwell-day` → `entrance-day` | 日；與 S03 夜梯廳同構圖 |
+| 07 | `living-night` → **`kitchen-night`（倒水）** → `living-night` → `office-night` | 病中夜；倒水切廚房 |
+| 08 | **`entrance-day`** → **`alley-day`** → `entrance-day` → `living-day` → **`office-night`（週一）** | 外出日；尾鉤切辦公室 |
+| 09 | `office-night` → **`living-night`（三晚）** → `living-day` → **`entrance-day`** → `cafe-day` | 猶豫夜回客廳 |
+| 10 | 送走：`alley-night` → `entrance-night` → `kitchen-night` → `living-night`；留下：`street-night` → `entrance-night` → `living-night` → `kitchen-night` → `living-night` | 停電／颱風夜在客廳 |
 
 **軟分軌提醒：** S05～S08 低／中／高信任共用上表 bg，只換狗 pose（見 `image.md` §0／§6.2）。
 
@@ -223,6 +225,13 @@ bg-{place}-{light}.png
 - 小廚房＋門檻線清晰（S04「只到門口」）
 - 與 living 建材色一致
 
+### clinic（S02 `vet_first` 短場）
+
+- 夜間巷口**動物醫院外觀**：玻璃門／大面窗望進等候區；冷靛夜 vs 暖琥珀室內燈
+- **必備：** 門楣燈箱招牌（僅醫療十字＋爪印符號，**禁可讀文字／店名**）；木櫃檯＋檯燈；等候椅；體重秤；空牽繩掛勾；不可辨識海報色塊；診療室門縫／不鏽鋼台邊暗示
+- 外：濕石板／騎樓感、街燈、停放機車、盆栽；**無人無狗無動物**
+- 正式檔：`bg-clinic-night.png` → `bg clinic_night`
+
 ---
 
 ## 6. 產圖流程（建議）
@@ -259,6 +268,7 @@ bg-{place}-{light}.png
 | `bg-entrance-night.png` | `bg entrance_night` |
 | `bg-entrance-day.png` | `bg entrance_day` |
 | `bg-kitchen-day.png` | `bg kitchen_day` |
+| `bg-kitchen-night.png` | `bg kitchen_night` |
 | `bg-living-dusk.png` | `bg living_dusk` |
 | `bg-alley-night.png` | `bg alley_night` |
 
@@ -282,7 +292,7 @@ bg-{place}-{light}.png
 
 ### 2026-07-25｜全量重產（BG ONE-LINER）
 
-- **備份：** `assets/bg/_backup_20260725_125336/`（重產前 13 張原檔）
+- **備份：** `assets/_backup_unused/bg/_backup_20260725_125336/`（重產前 13 張原檔）
 - **公式：** BG ONE-LINER ＋ place／light／構圖一句 ＋ `assets/bg/refs/` 對應 reference
 - **尺寸：** 全部落地 **2048×1152**
 - **ref 對應：**
@@ -314,7 +324,7 @@ bg-{place}-{light}.png
 
 ### 2026-08-02｜S06 走廊改梯廳日景
 
-- `bg-corridor-day.png` 退役 → 移入 `assets/bg/_backup_20260802/`
+- `bg-corridor-day.png` 退役 → 移入 `assets/_backup_unused/bg/_backup_20260802/`
 - 新圖 `bg-stairwell-day.png`：以 `bg-stairwell-night.png` 為參考圖，
   NanoBanana（`nano-banana-2`，edit 模式，`tools/nanobanana-edit.py`）日光化，
   電梯／樓梯／窗／盆栽／大門構圖完全對齊夜版 → S03 夜與 S06 日同一梯廳，場景連續
@@ -324,16 +334,23 @@ bg-{place}-{light}.png
 
 - `bg-stairwell-day.png`：NanoBanana edit（`nano-banana-2`）將**左側電梯**與**右側木門**對調
   → 現為左門口（壁燈＋地墊）／中央樓梯窗／右電梯
-- 對調前原檔：`assets/bg/_backup_20260802/bg-stairwell-day_before_swap.png`
+- 對調前原檔：`assets/_backup_unused/bg/_backup_20260802/bg-stairwell-day_before_swap.png`
 
 ### 2026-08-02｜stairwell-night 自 day 同步夜景
 
 - `bg-stairwell-night.png`：以對調後的 `bg-stairwell-day.png` 為參考，
   NanoBanana（`nano-banana-2`，edit）轉夜景，構圖對齊日版
   → 左門口／中央樓梯窗／右電梯；窗外夜空＋城市燈
-- 同步前原檔：`assets/bg/_backup_20260802/bg-stairwell-night_before_day_sync.png`
+- 同步前原檔：`assets/_backup_unused/bg/_backup_20260802/bg-stairwell-night_before_day_sync.png`
 - S03 `dog_far_stair`：`xalign 0.22`（靠左側門墊），勿落在中央樓梯口
+
+### 2026-08-04｜clinic-night 重產（招牌／櫃檯／擺設）
+
+- `bg-clinic-night.png`：夜間動物醫院外觀＋玻璃窗望進等候區
+  → 門楣燈箱（十字＋爪印、無字）、木櫃檯＋檯燈／螢幕、等候椅、體重秤、空牽繩掛勾、抽象海報
+- 舊檔備份：`assets/_backup_unused/bg/_backup_clinic_20260804_015626/`
+- 畫布對齊其他 V3 夜景：`2048×1152`
 
 ---
 
-*更新：2026-08-02｜stairwell 日夜同構圖（左門／右電梯）；S03 狗靠門*
+*更新：2026-08-04｜clinic-night 招牌／櫃檯／診療擺設重產*

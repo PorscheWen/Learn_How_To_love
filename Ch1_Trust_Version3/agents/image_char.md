@@ -148,7 +148,7 @@ No text, no logo, no trust meter UI, no scenery.
 
 | 日期 | 內容 |
 |------|------|
-| 2026-07-25 | 建立本檔；備份 `assets/char/_backup_20260725_193450/`；以現有 7 張為錨重寫 IDENTITY／STYLE；全量重產 |
+| 2026-07-25 | 建立本檔；備份 `assets/_backup_unused/_backup_20260725_193450/`；以現有 7 張為錨重寫 IDENTITY／STYLE；全量重產 |
 | 2026-07-28 | 新增 `char-yuan-farewell`／`char-yuan-cafe`／`char-coworker-cafe`；S09 朝向寫入 pose 表 |
 | 2026-07-29 | 新增 `char-yuan-walk`；S08 巷口改走路立繪（蹲姿僅玄關／樹下停等） |
 

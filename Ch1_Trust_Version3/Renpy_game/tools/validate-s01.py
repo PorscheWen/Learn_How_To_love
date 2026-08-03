@@ -195,8 +195,10 @@ if s02.count('flags["s02_conscience_return"] = True') != 1:
     fail("S02 趕走後良心回頭必須且只能寫入一次 s02_conscience_return=True")
 if s02.count('flags["s02_conscience_return"] = False') != 2:
     fail("S02 蹲等／硬抓必須各自清除 s02_conscience_return")
-if 'not flags.get("s02_conscience_return", False)' not in s02:
-    fail("S02 BGM 收束必須區分良心回頭，避免 tender 被切回 melancholy")
+# 好路徑進 tender 後不得再切回 melancholy（同曲維持即可；勿用 play_bgm 打斷）
+_s02_after_tender = s02.split('play_bgm("tender"', 1)[-1] if 'play_bgm("tender"' in s02 else s02
+if 'play_bgm("melancholy"' in _s02_after_tender:
+    fail("S02 BGM 收束不得在 tender 後切回 melancholy（避免反覆換曲）")
 if 'elif flags.get("s02_conscience_return", False):' not in s02:
     fail("S02 良心回頭必須有獨立的距離／喝水反應鏡頭")
 
