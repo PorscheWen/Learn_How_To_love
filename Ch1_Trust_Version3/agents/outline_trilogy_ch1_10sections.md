@@ -14,7 +14,7 @@
 | **Ch2** | Bond｜還在這裡 | 壯年日常 | 班表、疲倦、小傷與修復；互相依賴長在平凡裡 |
 | **Ch3** | Farewell｜好好說再見 | 老犬～離別 | 衰老、抉擇、告別；眼淚來自一起走過的路 |
 
-**不變原則：** Ch1／Ch2 不因失誤養死；死亡只在 Ch3。狗不擬人說話。女主第一次養犬、會內疚、會學。
+**不變原則：** Ch1／Ch2 不因失誤養死；死亡只在 Ch3。狗不擬人說話。女主**成年後第一次獨立飼養**（幼年有他人狗的陰影，Ch1 半隱）；會內疚、會學。Playable：`Ch1_Trust_Version3/Renpy_game/`。
 
 **姓名鎖定：** 女主 **予安**；狗預設 **小7**（便利商店暱稱），玩家可改名（`dogLabel`）。  
 **外型鎖定：** 小7＝**Option B｜wiry**（短腿偏瘦、scruffy／wiry 硬毛＋厚 impasto、蜂蜜褐＋深垂耳＋背脊 grizzle＋奶油吻周；大深褐眼＋catchlight；基準圖 `assets/dog/dog-ref-canonical.png`＋`assets/dog/refs/`；見 `agents/image_dog.md`）。

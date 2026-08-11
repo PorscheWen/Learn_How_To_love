@@ -24,7 +24,7 @@
 NOUS_API_KEY=sk-nous-xxxxxxxx
 CURSOR_API_KEY=cursor_xxxxxxxx
 
-HERMES_GAME_CWD=../../Ch1_Trust/game
+HERMES_GAME_CWD=../../Ch1_Trust_Version3/Renpy_game
 HERMES_CONTENT_MODEL=deepseek/deepseek-v4-pro
 HERMES_AGENT_PROVIDER=nous
 HERMES_AGENT_MODEL=google/gemini-2.5-pro
@@ -89,7 +89,7 @@ python hermes.py agent --job lhtl-flux-dog-dryer        # → …/dog/Week0/dog-
 python hermes.py agent --job lhtl-flux-dog-wet          # → …/dog/Week0/dog-wet.png
 ```
 
-美術落地目錄：**`Ch1_Trust/Renpy_game/game/assets/`**（HTML `Ch1_Trust/game/` 已移除）。
+美術落地目錄：**`Ch1_Trust_Version3/assets/`**（及 Ren'Py 引用路徑）。舊 HTML `Ch1_Trust/game/` **已不在本倉庫**。
 
 前置：`hermes login` 且 `config.yaml` 內 `image_gen.use_gateway: true`、`tts.use_gateway: true`。
 
@@ -105,9 +105,9 @@ cd Learn_How_To_Love\tools\hermes
 
 ## 5. Agent 行為（重要）
 
-- **修改 `Ch1_Trust/game/` 後，不要自動開啟遊戲或瀏覽器**，除非使用者明確要求。
-- 驗證用 `node tools/validate-*.js`；開遊戲僅在使用者說「開遊戲」「測試」時執行 `Ch1_Trust/game/開啟遊戲.bat`。
+- **修改 `Ch1_Trust_Version3/` 後，不要自動開啟遊戲**，除非使用者明確要求。
+- 驗證：`python Ch1_Trust_Version3/Renpy_game/tools/validate-*.py`；開遊戲僅在使用者說「開遊戲」「測試」時執行對應 `開啟遊戲.bat`。
 
 ---
 
-*最後更新：2026-07-10*
+*最後更新：2026-08-11 · Playable＝Version3 Ren'Py*

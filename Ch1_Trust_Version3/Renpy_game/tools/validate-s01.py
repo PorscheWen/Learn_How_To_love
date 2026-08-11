@@ -119,6 +119,7 @@ required = {
     "Ch2 water seed": 'flags["ch2_seed_water_bowl"] = True',
     "Ch2 lease seed": 'flags["ch2_seed_lease_pet"] = True',
     "Ch2 dog origin seed": 'flags["ch2_seed_dog_no_collar"] = True',
+    "Ch2 dog had-someone seed": 'flags["ch2_seed_dog_had_someone"] = True',
     "Ch2 yuan family seed": 'flags["ch2_seed_yuan_family_unread"] = True',
     "Ch2 entry persist": 'persistent.ch2_from_ch1',
     "S09 title call": 'show_section_title("Section 09", "差點交給別人")',

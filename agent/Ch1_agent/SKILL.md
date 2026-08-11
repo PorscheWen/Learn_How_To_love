@@ -19,11 +19,12 @@ description: >-
 **權威文件（衝突時依序）：**
 
 1. [`guide_line.md`](../../guide_line.md)（系列最高）
-2. [`Ch1_Trust/Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md)（本章聖經）
-3. [`reference.md`](reference.md)（進度、節奏表、調度矩陣）
-4. 各子 agent 的 `SKILL.md`
+2. [`MEMORY.md`](../../MEMORY.md)（世界觀／身世／Playable）
+3. [`Ch1_Trust_Version3/agents/game_guild.md`](../../Ch1_Trust_Version3/agents/game_guild.md)（本章信任／十段）
+4. [`reference.md`](reference.md)（進度、節奏表、調度矩陣）
+5. 各子 agent 的 `SKILL.md`
 
-**playable 基線：** [`Ch1_Trust/game/`](../../Ch1_Trust/game/)（優先於 `Demo/`）
+**playable 基線：** [`Ch1_Trust_Version3/Renpy_game/`](../../Ch1_Trust_Version3/Renpy_game/)（舊 Web `Ch1_Trust/game/` 已不在倉庫）
 
 **你負責：** 拆週任務、排產順序、對照 guide_line、指派子 agent、定義驗收關卡、彙總阻塞項。  
 **你不負責：** 親自寫完整場景包、畫 PNG、調 Web Audio、逐句潤字——**讀子 agent skill 後委派或並行調用**。
@@ -58,11 +59,11 @@ description: >-
 |------|------|------|
 | **主（必讀）** | [`visual-art/SKILL.md`](../visual-art/SKILL.md) | 角色外型、年齡 tier、審查清單 |
 | **主（必讀）** | [`visual-art/reference.md`](../visual-art/reference.md) | 角色外型聖經、色票、構圖 |
-| **主** | [`Ch1_Trust/Nous_Portal.md`](../../Ch1_Trust/Nous_Portal.md) §4 | FLUX／TTS job 觸發 |
+| **主** | [`Nous_Portal.md`](../../Nous_Portal.md) §4 | FLUX／TTS job 觸發 |
 | **主** | `tools/hermes/jobs.json` | `lhtl-flux-*` 一鍵生圖 |
 | **輔** | [`visual-art/pose-prompts.json`](../visual-art/pose-prompts.json) | pose 英文描述（寫進 FLUX prompt） |
 | **輔** | [`visual-art/midjourney-guide.md`](../visual-art/midjourney-guide.md) | 舊 MJ 備援（非預設） |
-| **工具** | `Ch1_Trust/game/tools/remove_dog_bg.py` | 狗圖去背 |
+| **工具** | `Ch1_Trust_Version3/tools/`（去背／校正腳本） | 資產後處理 |
 
 ### 標準產圖流程（委派 visual-art 時須遵守）
 
@@ -71,14 +72,14 @@ description: >-
 2. 查 pose-prompts.json 組 FLUX prompt（對齊 dog-anxious／既有 bg 風格）
 3. cd tools/hermes → python hermes.py agent --job lhtl-flux-{name}
    （或 Portal 一鍵產生；模型 fal-ai/flux-2-pro）
-4. 狗圖：python Ch1_Trust/game/tools/remove_dog_bg.py {pose}
+4. 狗圖：落地至 `Ch1_Trust_Version3/assets/dog/` 後做去背／校正（見 Version3 tools）
 5. visual-art 審查：reference §角色外型
-6. 程式：scenes.js dogPose · systems.js DOG_POSES · 刪 DOG_POSE_ASSET 別名
+6. 程式：`script.rpy` 的 `show dog …`／image 定義對齊新 pose
 ```
 
-**禁止：** 未讀 visual-art 即產圖；用 Cursor GenerateImage 或 placeholder 代替定稿；Ch1 用 aging 灰吻；Week2 新 pose 長期別名舊圖。
+**禁止：** 未讀 visual-art 即產圖；用 Cursor GenerateImage 或 placeholder 代替定稿；Ch1 用 aging 灰吻。
 
-**Week3 成長圖：** 優先 MJ 依 tier 產 adolescent PNG；`generate-dog-grown-assets.py` **僅**在已有 Week0 水彩定稿後批量衍生，不可替代 visual-art 定稿流程。
+**現行引擎提醒：** Playable 為 Ren'Py（`Ch1_Trust_Version3`），勿再寫入已移除的 `scenes.js`／`Ch1_Trust/game/`。
 
 ---
 
@@ -114,16 +115,15 @@ description: >-
 3. visual-art ⫽ audio-sound ⫽（依架構資產表）
    → **必經 §Ch1 產圖路由**（visual-art 為主 + midjourney-guide 輔 + art-pose.ps1）
    → 背景、pose PNG、SCENE_CUES
-4. 程式落地 → Ch1_Trust/game/js/
-   scenes.js · choice-reactions.js · systems.js · dog-audio.js · index.html 跳日
+4. 程式落地 → `Ch1_Trust_Version3/Renpy_game/game/`（`.rpy`）＋必要時 `agents/section_*.md`
 5. game-tester
-   → test-weekN-flow.js · validate-choice-reactions.js · validate-weekN-chronology.js
-   → chapter-landing-checklist.md 全項
-6. 修 P0–P1 → 再跑自動化 → 更新 reference.md 進度表
+   → `Renpy_game/tools/validate-*.py` · Version3 `agents/tester.md`
+   → chapter-landing-checklist（若適用）
+6. 修 P0–P1 → 再跑自動化 → 更新進度表
 ```
 
-**僅改語氣：** 跳 1、3、4 大部，走 `tw-narrative-voice` + `tw-locale-pass.js`。  
-**僅測試：** 直接 `game-tester`，不經完整產線。
+**僅改語氣：** 走 `tw-narrative-voice` 改 `.rpy`／section 稿。  
+**僅測試：** 直接 `game-tester`／Version3 tester，不經完整產線。
 
 ---
 
@@ -136,7 +136,7 @@ description: >-
 | 「照 guide_line 發展整章」 | 對照 §全章總覽表；未落地週依序排產；不跳過 Landmark |
 | 「統籌修 Week2 測試問題」 | game-tester 報告 → 依問題類型分派子 agent（見 game-tester 分工表） |
 | 「節奏太慢／太密」 | 對 Ch1_guide_line 時長欄 + 情感曲線；交 story-narrative 調場景數，**不**擅自刪 Landmark |
-| 「開遊戲驗收」 | 確認 `Ch1_Trust/game` 服務已啟動；**系統瀏覽器**開啟（勿 IDE 內嵌） |
+| 「開遊戲驗收」 | 確認 Ren'Py／`Ch1_Trust_Version3/Renpy_game/開啟遊戲.bat`；**勿** IDE 內嵌當唯一驗收 |
 
 ---
 
@@ -207,7 +207,7 @@ description: >-
 
 - [ ] 讀 [`Ch1_guide_line.md`](../../Ch1_Trust/Ch1_guide_line.md) 對應段落
 - [ ] 讀 [`reference.md`](reference.md) 進度表——確認前置週 **G3 PASS**
-- [ ] 確認 playable 路徑為 `Ch1_Trust/game/`
+- [ ] 確認 playable 路徑為 `Ch1_Trust_Version3/Renpy_game/`
 - [ ] 拆成子任務並標註負責 agent
 - [ ] 結束時更新 `reference.md` 進度（若完成新段落）
 

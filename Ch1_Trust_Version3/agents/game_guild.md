@@ -1,8 +1,17 @@
 # Version3｜遊戲故事與信任分支指南
 
-> 對齊：`outline_trilogy_ch1_10sections.md` · `MEMORY.md`  
+> 對齊：`outline_trilogy_ch1_10sections.md` · `MEMORY.md` §3～§4.2 · `MEMORY.md` §14（Playable）  
 > 原則：**沒有養死 Game Over**；低信任＝關係變體／更難靠近，不是懲罰關。  
 > 玩家操作的是**距離、語氣、是否回來、是否修復**——信任是結果，不是刷條。
+
+### 身世半隱（Ch1，2026-08 鎖定）
+
+| 線 | Ch1 只給 | 禁止 |
+|----|----------|------|
+| 現犬 | 半句「曾有別人／舊衣氣味」＋行為（門縫、紙箱、機車） | 前主人全史、收集 UI |
+| 主人 | 伸手又縮、過度緊張、早半拍繃肩 | 車禍閃回、舊債告白、現犬＝贖罪 |
+
+落地：`Renpy_game/game/script.rpy`（S02／S03／S06／S08）· `ch2_seed_dog_had_someone` · section_02／03／06／08。全貌見 MEMORY §4.2。
 
 ---
 

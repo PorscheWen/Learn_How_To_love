@@ -1,33 +1,27 @@
 # Learn How to Love · 學會去愛
 
-敘事向寵物陪伴遊戲系列。本倉庫含 Ch1 Demo《First Steps》與 agent 技能文件。
+敘事向寵物陪伴遊戲系列。世界觀見 [`MEMORY.md`](MEMORY.md)；設計見 [`guide_line.md`](guide_line.md)。
 
-## 快速開始（Demo）
-
-```powershell
-cd Demo
-.\play.bat
-```
-
-瀏覽器開啟後（預設 `http://localhost:8765/`），從開場選「新開始」或「繼續」。
-
-音訊／狗叫素材若缺失，可執行：
+## 快速開始（Ch1 現行）
 
 ```powershell
-cd Demo/tools
-.\download-bgm.ps1
-.\download-dog-sfx.ps1
+cd Ch1_Trust_Version3\Renpy_game
+.\開啟遊戲.bat
 ```
+
+以 **Ren'Py** 開啟；勿用 IDE 內嵌預覽代替系統／Ren'Py 客戶端（細節見該目錄 `README.md`）。
 
 ## 目錄
 
 | 路徑 | 說明 |
 |------|------|
-| 瀏覽器可玩 Demo（HTML / JS / CSS） |
-| `Ch1_Trust/` | **Ch1 正式版第一週**（`game/` 可玩；見 `Ch1_Trust/README.md`） |
+| **`Ch1_Trust_Version3/`** | **Ch1 主程式**（Ren'Py＋assets＋agents） |
+| `Ch2_StillHere/` · `Ch3_Goodbye/` | 後續章（規劃／資產） |
 | `agent/` | 敘事、音效、視覺等 agent skills |
-| `guide_line.md` | 系列設計聖經 |
+| `MEMORY.md` · `guide_line.md` | 世界觀／系列聖經 |
+| `tools/hermes/` | Nous Portal 本地編排 |
+| ~~`Ch1_Trust/game/`~~ · ~~`Demo/`~~ | **舊 Web／Demo — 已不在本倉庫** |
 
 ## 授權與素材
 
-遊戲內 BGM、音效來源見 `Demo/assets/audio/CREDITS.md`、`Demo/assets/dog/sfx/CREDITS.md`。
+BGM、音效來源見 `Ch1_Trust_Version3` 內對應 `CREDITS.md`（及 `assets/audio/`）。

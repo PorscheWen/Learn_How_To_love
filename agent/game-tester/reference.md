@@ -1,6 +1,6 @@
 # 遊戲測試參考（台灣玩家）
 
-> **Playable：`Ch1_Trust/Renpy_game/`**（主）。舊 HTML `Ch1_Trust/game/tools/` 僅對照。  
+> **Playable：`Ch1_Trust_Version3/Renpy_game/`**（主）。舊 HTML `Ch1_Trust/game/` **已不在倉庫**。  
 > **Steam 電子小說玩家視角：** [`steam-vn-players.md`](steam-vn-players.md)  
 > **取名／狗與主人／展現一致：** [`character-consistency.md`](character-consistency.md)  
 > **時間流動／身心變化：** [`time-flow-effects.md`](time-flow-effects.md)

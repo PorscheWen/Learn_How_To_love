@@ -86,7 +86,7 @@ else:
     if grid_h + 140 > frame_h:
         fail(f"章節網格高 {grid_h}+140 > frame {frame_h}（會壓返回）")
     else:
-        ok(f"章節選擇：網格 {grid_h}px + 邊距 ≤ frame {frame_h}")
+        ok(f"chapter_select: grid {grid_h}px + pad <= frame {frame_h}")
 
 # --- 存檔格 ---
 fs = screen_body("file_slots")
@@ -100,7 +100,7 @@ if grid_w > 900:
     fail(f"存檔格寬 {grid_w} > 內容區 900")
 if grid_h > 480:
     fail(f"存檔格高 {grid_h} > 內容區 480")
-ok(f"存讀檔格：{grid_w}×{grid_h} 落在 game_menu 內容區")
+ok(f"save/load grid: {grid_w}x{grid_h} inside game_menu content")
 
 # --- 設定：禁止 nested viewport+yfill（高度變 0 整頁空白）；無 MainMenu ---
 pref = screen_body("preferences")

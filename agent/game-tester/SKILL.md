@@ -23,12 +23,12 @@ description: >-
 **你負責：** 測試計畫、自動化腳本、手動路線、問題分級與報告。  
 **你不負責：** 寫新劇情、改 Trust／Bond、產 PNG／BGM（標註後交對應 agent）。
 
-## Playable 路徑（2026-07 鎖定）
+## Playable 路徑（2026-08 鎖定）
 
 | 優先 | 路徑 |
 |------|------|
-| **主程式** | **`Ch1_Trust/Renpy_game/`**（`game/week1.rpy`、`definitions.rpy`、`screens.rpy`） |
-| 舊 HTML | `Ch1_Trust/game/` 若仍存在僅對照；**新測以 Ren'Py 為準** |
+| **主程式** | **`Ch1_Trust_Version3/Renpy_game/`**（`game/script.rpy`、`screens.rpy`、`endings.rpy`） |
+| 舊 HTML | `Ch1_Trust/game/` — **已不在倉庫**；勿當測標 |
 
 Ren'Py **插圖重疊／字型缺字／字幕怪字** 必查項見 [`reference.md` §Ren'Py 視覺與字幕](reference.md#renpy-視覺與字幕鎖定)。
 
@@ -57,7 +57,7 @@ Ren'Py **插圖重疊／字型缺字／字幕怪字** 必查項見 [`reference.m
 | **流程** | `next`／Jump 斷裂、選項後卡住、小遊戲無法結束、章節選單／存檔 |
 | **系統** | 存檔／讀檔、章節跳關、Memory 解鎖與相簿 |
 
-**主測路徑：`Ch1_Trust/Renpy_game/`**（勿再預設 HTML `Ch1_Trust/game/`）。
+**主測路徑：`Ch1_Trust_Version3/Renpy_game/`**（勿再預設已移除的 HTML `Ch1_Trust/game/`）。
 
 ## 工作流程
 

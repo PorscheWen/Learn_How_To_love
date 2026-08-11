@@ -40,9 +40,12 @@
 3. **Landmark 鎖定** — 重大選擇寫入跨作存檔，不可 S/L 刷完美。  
 4. **眼淚來自默契與告別** — 非廉價彩虹橋、非三作皆催淚。  
 5. **壞結局可重玩該章** — 不清零全系列進度。  
-6. **檔案不從 backup 來** — `Learn_How_To_Love` 所需程式、場景、圖、音等，**一律走正式產線**（`Ch1_Trust/game/`、`art-pose.ps1`、Nous Portal、下載腳本）；**禁止**從工作區 `backup/`（含 `game_version1/`、`version1/`、`Demo/`）或 `Ch1_Trust/backup/` 複製補檔。備份僅供使用者手動封存；Agent 僅在使用者**明確**說「從 backup 還原」時才可複製指定檔案。
+6. **檔案不從 backup 來** — 所需程式、場景、圖、音等，**一律走正式產線**（現用 **`Ch1_Trust_Version3/`**、Nous Portal、下載腳本）；**禁止**從工作區 `backup/` 或已移除的舊 `Ch1_Trust/backup/`／`Demo/` 當來源複製補檔。Agent 僅在使用者**明確**說「從 backup 還原」時才可複製指定檔案。  
+7. **身世跨章拼圖、非蒐集解鎖** — 禁身世進度條／全結局圖鑑；重玩改碎片角度，不改核心真相。  
+8. **現犬不是贖罪對象** — 禁把收養寫成還清幼年舊債或命價對等。
 
-詳細角色、年齡、班表、文案分層 → [`MEMORY.md`](MEMORY.md)。
+詳細角色、年齡、班表、身世鎖定與揭示節奏 → [`MEMORY.md`](MEMORY.md) §3～§4.2。  
+**Playable：** [`MEMORY.md`](MEMORY.md) §14 · 現行 `Ch1_Trust_Version3/Renpy_game/`。
 
 ---
 
@@ -50,15 +53,25 @@
 
 ### Chapter 1 — 信任
 
-意外相遇 → 教與陪、分離焦慮與修復 → 第一次默契。主人：25 歲長髮女性上班族，第一次養寵。
+意外相遇 → 教與陪、分離焦慮與修復 → 第一次默契。主人：25 歲長髮女性上班族，**成年後第一次獨立飼養**（幼年有「他人的狗」意外護死的陰影——Ch1 **半隱**）。現犬曾短暫被愛後被棄；Ch1 僅半句「曾有別人」＋行為症狀。基調仍暖、有笑，不催淚開場。
 
 ### Chapter 2 — 日常
 
-生命快轉（結婚、孩子、父母老去）；狗從被教變成「教這個家怎麼活」；被忽略與再被看見。
+生命快轉（結婚、孩子、父母老去）；狗從被教變成「教這個家怎麼活」；被忽略與再被看見。日常裡**偶然漏出身世碎片**（氣味、他人一句、舊聯想）；忙碌時主人舊恐懼（怕再失去）與狗的分離傷互相摩擦、再修復。
 
 ### Chapter 3 — 告別
 
-老犬照護；氣味閃回前兩作；安樂／治療／在家渡過三線完整；克制送別。
+老犬照護；氣味閃回前兩作（含身世對齊）；安樂／治療／在家渡過三線完整；克制送別。重點是**這次一起走到能好好說再見**，不用幼年舊債道德綁架。
+
+### 身世與懸念（摘要）
+
+| 線 | 核心傷 | 怕什麼 |
+|----|--------|--------|
+| 現犬 | 被好好對待過 → 人消失（典型遺棄，無暴力） | 再信任一次又走人 |
+| 主人 | 幼年被別家狗意外護住、該狗過世（意外，非英雄成仁） | 再靠近就再失去；虧欠 |
+
+共同主題：**「留下」很難，但愛是一起學的，不是誰欠誰。**  
+全貌與 Ch1／2／3 給／不給表 → [`MEMORY.md`](MEMORY.md) §3.1、§4.1、§4.2。
 
 章節場景數、時長、逐日大綱 → 各 `Ch?_*/Ch?_guide_line.md`。
 
@@ -86,10 +99,10 @@
 
 | 項目 | 方向 |
 |------|------|
-| **現行引擎** | Web（HTML/JS/CSS）→ 正式版 **Electron** 封裝 |
-| **視覺** | 2.5D 水彩背景 + 透明 PNG 狗角色（兩層疊加） |
+| **現行引擎** | **Ren'Py**（`Ch1_Trust_Version3/Renpy_game/`）→ 正式版可另封裝／Steam；舊 HTML Web 產線已不在倉庫 |
+| **視覺** | 水彩背景 + 透明 PNG 狗／角色疊層 |
 | **上架** | Steam；成就、Cloud Save、zh-TW／en 字串抽離 |
-| **單章規模** | 主線 3–5h；場景 ~90–110／章 |
+| **單章規模** | Ch1 Version3：十段＋四結局（見 `game_guild.md`） |
 
 技術部署細節 → [`agent/steam-deployment/`](agent/steam-deployment/SKILL.md) · 敘事門檻 → [`agent/story-narrative/steam-release.md`](agent/story-narrative/steam-release.md)
 
@@ -124,9 +137,9 @@
 
 | 項目 | 說明 |
 |------|------|
-| **職責** | Unity／Godot／**Web** 遊戲主邏輯；Text 顯示、按鈕監聽；存檔／讀檔；即時 Debug |
+| **職責** | **Ren'Py** 主邏輯、screens、存檔；即時 Debug；跨檔重構 |
 | **工具** | Agent 模式、Composer、多檔跨檔重構 |
-| **本專案落地** | `Ch1_Trust/game/js/`、`css/`；審稿後整合 Hermes 產出 |
+| **本專案落地** | `Ch1_Trust_Version3/Renpy_game/game/`（`.rpy`）＋`assets/`；審稿後整合 Hermes 產出 |
 | **規範** | [`.cursorrules`](.cursorrules) · `@lhtl-*` skills |
 
 **原則：** Hermes 產草稿與素材；**Cursor 負責引擎整合、UI 手感、架構正確性。**
@@ -138,7 +151,7 @@
 | **職責** | 24h 背景異步大量產出劇情、分支 JSON；自動檢查邏輯漏洞 |
 | **模型** | `deepseek-v4-flash`（透過 [Nous Portal](https://portal.nousresearch.com)） |
 | **上下文** | 一次讀入 [`MEMORY.md`](MEMORY.md) + `agent/` 敘事規範 |
-| **輸出** | Structured JSON／場景包；須通過 `Ch1_Trust/game/tools/validate-*.js` |
+| **輸出** | 場景／分支文案草稿；須通過 `Ch1_Trust_Version3/Renpy_game/tools/validate-*.py` |
 | **啟動** | `hermes setup --portal` · `hermes model deepseek-v4-flash` |
 
 **原則：** 量大在 Hermes；結構化輸出後仍須 **validate 腳本 + Cursor 審稿**，不假設 100% 免修。**
@@ -182,11 +195,11 @@ Cursor Pro（@lhtl-* skills）→ 落地 scenes.js、UI、存檔、整合音圖
 
 | 項目 | 說明 |
 |------|------|
-| **現用路徑** | `Ch1_Trust/game/`（程式、`assets/`、驗證腳本） |
-| **禁止當來源** | 工作區 `ClaudeCode_Project/backup/`（`game_version1/`、`version1/`、`Demo/` 等）· `Learn_How_To_Love/Ch1_Trust/backup/`（若存在） |
-| **缺檔時** | 狗 pose → `game/tools/art-pose.ps1` + Midjourney · 背景 → Nous Portal FLUX · BGM → `download-bgm.ps1` · 劇本 → Hermes + validate |
-| **Agent 禁止** | `Copy-Item`／`xcopy`／`robocopy` 從 backup 補進 `game/`；以 backup 當 baseline 初始化 |
-| **備份定位** | 僅使用者手動封存；清理時**勿刪** backup |
+| **現用路徑** | **`Ch1_Trust_Version3/`**（`Renpy_game/`、`assets/`、`agents/`、`tools/validate-*.py`） |
+| **禁止當來源** | 工作區 `ClaudeCode_Project/backup/` · 已移除的舊 `Ch1_Trust/`／`Demo/` 殘留副本（若在他處） |
+| **缺檔時** | 狗 pose／背景 → Midjourney／Nous Portal FLUX · 劇本 → Hermes + Ren'Py validate |
+| **Agent 禁止** | 從 backup 補進現用目錄；以 backup 當 baseline 初始化 |
+| **備份定位** | 僅使用者手動封存；清理時**勿刪**使用者指定的 backup |
 | **例外** | 使用者**明確**指示「從 backup 還原 XXX」時，才可複製**指定**檔案，且須保留 backup 原檔 |
 
 Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
@@ -219,7 +232,7 @@ Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
 
 在系統提示或任務開頭註明：
 
-> 必讀 `MEMORY.md` 與 `Learn_How_To_Love/agent/<skill>/SKILL.md`；產出須通過 `Ch1_Trust/game/tools/validate-*.js`。
+> 必讀 `MEMORY.md` 與 `Learn_How_To_Love/agent/<skill>/SKILL.md`；產出須通過 `Ch1_Trust_Version3/Renpy_game/tools/validate-*.py`。
 
 ### 任務 → Skill 對照
 
@@ -242,11 +255,11 @@ Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
 ```
 對應 agent skill 產出
         ↓
-validate-*.js 全 OK（branch／班表／時序）
+validate-*.py 全 OK（結構／結局／選單等）
         ↓
 game-tester 審查（必要時）
         ↓
-合併進 Ch1_Trust/game/
+合併進 Ch1_Trust_Version3/Renpy_game/
 ```
 
 **衝突時：** `guide_line.md` > `MEMORY.md` > `story-narrative` > 其餘 skill。
@@ -302,4 +315,4 @@ game-tester 審查（必要時）
 
 ---
 
-*最後更新：2026-07-10（§二·6、§六 備份禁止當來源）。*
+*最後更新：2026-08-11（§二～三身世；§五～七 Playable＝Version3 Ren'Py；對齊 MEMORY）。*

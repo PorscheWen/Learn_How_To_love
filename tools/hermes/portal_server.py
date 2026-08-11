@@ -39,7 +39,7 @@ def _load_dotenv() -> None:
 def _portal_status() -> dict:
     api_key = os.environ.get("CURSOR_API_KEY", "").strip()
     nous_key = os.environ.get("NOUS_API_KEY", "").strip()
-    game_cwd = Path(os.environ.get("HERMES_GAME_CWD", ROOT / "../../Ch1_Trust/game")).resolve()
+    game_cwd = Path(os.environ.get("HERMES_GAME_CWD", ROOT / "../../Ch1_Trust_Version3/Renpy_game")).resolve()
     api_doc = str((ROOT / "../../Ch1_Trust/Nous_Portal.md").resolve())
     cli_path = os.environ.get("HERMES_CLI_PATH", "").strip()
     if not cli_path:

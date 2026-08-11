@@ -39,7 +39,7 @@ def load_config(*, require_api_key: bool = True) -> Config:
         )
 
     game_cwd = Path(
-        os.environ.get("HERMES_GAME_CWD", ROOT / "../../Ch1_Trust/game")
+        os.environ.get("HERMES_GAME_CWD", ROOT / "../../Ch1_Trust_Version3/Renpy_game")
     ).resolve()
     if not game_cwd.is_dir():
         sys.exit(f"HERMES_GAME_CWD 不存在: {game_cwd}")
