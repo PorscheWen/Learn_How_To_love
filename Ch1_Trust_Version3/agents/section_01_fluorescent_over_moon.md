@@ -79,7 +79,7 @@
 - **鉤子時序：** 店員台詞在**結帳前**（非回家後），讓玩家帶著問題離開超商。
 - **風味選擇：** 轉角「繞看／原路」→ `flags.peeked_backdoor`，不動 `trust`。
 - **銜接：** 「直到明天」→ **S02〈後門那一瞥〉**（開場鉤子段，與 S01 合計 ≤15 分）。
-- **回家畫面：** `entrance-night`（進門／換鞋）→ `living-night`＋`yuan sofa`（沙發邊吃便當／備忘）→ `kitchen-night`（開冰箱／搜尋）→ 回 `living-night` 入睡。
+- **回家畫面：** `entrance-night`（進門／換鞋，`yuan commute` 可提便當）→ `living-night`＋`yuan sofa`（沙發邊吃便當／備忘）→ `kitchen-night`＋`yuan home_stand`（開冰箱／搜尋；**勿** commute）→ 回 `living-night` 入睡。
 
 ---
 
