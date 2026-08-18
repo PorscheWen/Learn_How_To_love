@@ -500,7 +500,7 @@ screen section_select():
         ("start_section_06", "Section 06｜樓梯間的第三者", "當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。"),
         ("start_section_07", "Section 07｜她倒下的那天", "予安病得起不了身，小7不懂怎麼照顧人，只知道守在門口，試著等她回應。"),
         ("start_section_08", "Section 08｜走到轉角就好", "第一次出門只為抵達巷口；世界太吵時，予安得決定要拉著牠，還是一起停下。"),
-        ("start_section_09", "Section 09｜差點交給別人", "同事真誠提出接手；在牽繩交出去以前，予安必須承認誰已經選過誰。"),
+        ("start_section_09", "Section 09｜差點交給別人", "預設留下可收集結局 A。同事提出接手；交繩前她得承認誰已經選過誰。"),
         ("start_section_10", "Section 10｜把鑰匙分給心跳", "鑰匙與牽繩掛在同一面牆上；夜深後，睡眠的距離替這段關係留下答案。"),
     ]
 
@@ -525,7 +525,7 @@ screen section_select():
                     size 24
                     color LHTL_TEXT_LIGHT
                     outlines [(2, "#17120F99", 0, 0)]
-                text "選擇章節會以該段的預設狀態開始，不影響既有存檔。":
+                text "選擇章節會以該段預設狀態開始，不影響既有存檔。Section 09 預設較高信任，留下會走到結局 A。":
                     font CJK_FONT
                     size 13
                     color LHTL_TEXT_SOFT
