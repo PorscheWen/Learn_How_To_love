@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "game" / "script.rpy"
 SCREENS = ROOT / "game" / "screens.rpy"
+HIDDEN = ROOT / "game" / "hidden_content.rpy"
 
 
 def fail(message: str) -> None:
@@ -20,7 +21,8 @@ if not SCRIPT.exists():
 
 text = SCRIPT.read_text(encoding="utf-8")
 screens_text = SCREENS.read_text(encoding="utf-8") if SCREENS.exists() else ""
-combined = text + "\n" + screens_text
+hidden_text = HIDDEN.read_text(encoding="utf-8") if HIDDEN.exists() else ""
+combined = text + "\n" + screens_text + "\n" + hidden_text
 
 required = {
     "S01 label": "label section_01_fluorescent_over_moon:",
@@ -144,6 +146,12 @@ required = {
     "secret photo lap id": '"lap_sleep"',
     "secret photo forehead id": '"forehead_nudge"',
     "secret photo water id": '"water_bowl"',
+    "easter egg call": "check_easter_egg_name(dog_label)",
+    "easter egg flag": 'flags["easter_egg_name"]',
+    "common dog names": "COMMON_DOG_NAME_KEYS",
+    "redup helper": "def _has_cjk_reduplication(",
+    "s07 slippers flag": 'flags["s07_fetched_slippers"] = True',
+    "s10 footprint helper": "def s10_footprint_line(",
     "secret photo image": "gallery secret_lap_sleep",
     "secret forehead image": "gallery secret_forehead_nudge",
     "ending still A": "gallery ending_a_back",
@@ -158,6 +166,12 @@ required = {
     "start S09": "label start_section_09:",
     "start S10": "label start_section_10:",
     "reset clears rename": "$ proposed_name = \"\"",
+    "howto screen": "screen how_to_play():",
+    "howto persistent": "persistent.seen_howto",
+    "howto call": "label maybe_show_howto:",
+    "aftercare menu label": "label ending_aftercare_menu:",
+    "hidden unread helper": "def hidden_content_unread_count(",
+    "hidden viewed helper": "def mark_hidden_content_viewed(",
 }
 
 for label, needle in required.items():

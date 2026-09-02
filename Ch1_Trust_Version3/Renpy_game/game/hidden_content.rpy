@@ -265,3 +265,24 @@ init python:
 
     def count_unlocked_hidden_content():
         return len([cid for cid in HIDDEN_CONTENT_ORDER if secret_content_unlocked(cid)])
+
+    def mark_hidden_content_viewed(content_id):
+        """讀過一篇隱藏內容後消去未讀；必須回傳 None，避免 Function 誤開新遊戲。"""
+        cid = str(content_id or "")
+        if not cid:
+            return None
+        viewed = list(persistent.viewed_secret_content or [])
+        if cid not in viewed:
+            viewed.append(cid)
+            persistent.viewed_secret_content = viewed
+        return None
+
+    def hidden_content_unread_count():
+        viewed = set(persistent.viewed_secret_content or [])
+        return len(
+            [
+                cid
+                for cid in HIDDEN_CONTENT_ORDER
+                if secret_content_unlocked(cid) and cid not in viewed
+            ]
+        )

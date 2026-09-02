@@ -137,12 +137,14 @@ else:
     for need in (
         'call screen ending_gallery',
         'call screen hidden_content_gallery',
-        'jump ending_aftercare',
+        'jump ending_aftercare_menu',
         'jump start_section_09',
         'jump start',
     ):
         if need not in ac:
             fail(f"aftercare 缺 {need}")
+    if "label ending_aftercare_menu:" not in SCRIPT:
+        fail("缺 ending_aftercare_menu（圖庫返回不重播評語）")
     ok("aftercare 結局／隱藏／重玩出口齊全")
 
 # --- 章節 Start 標籤存在 ---

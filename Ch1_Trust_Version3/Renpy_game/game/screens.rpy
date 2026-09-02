@@ -166,7 +166,7 @@ screen main_menu():
             textbutton "結局一覽" style "menu_button" action ShowMenu("ending_gallery"):
                 xfill True
             null height 6
-            textbutton "隱藏內容" style "menu_button" action ShowMenu("hidden_content_gallery"):
+            textbutton ("隱藏內容　新" if hidden_content_unread_count() > 0 else "隱藏內容") style "menu_button" action ShowMenu("hidden_content_gallery"):
                 xfill True
 
             null height 16
@@ -436,7 +436,7 @@ screen hidden_content_gallery():
                     for content_id in HIDDEN_CONTENT_ORDER:
                         $ entry = hidden_content_entry(content_id)
                         if entry is not None:
-                            textbutton entry["label"] style "menu_list_button" action Show("hidden_content_reader", content_id=content_id):
+                            textbutton entry["label"] style "menu_list_button" action [Function(mark_hidden_content_viewed, content_id), Show("hidden_content_reader", content_id=content_id)]:
                                 xfill True
 
             textbutton "返回" style "menu_back_button" action Return():
@@ -484,6 +484,47 @@ screen hidden_content_reader(content_id=""):
             textbutton "關閉" style "menu_back_button":
                 action Hide("hidden_content_reader")
                 xalign 0.5
+
+
+screen how_to_play():
+    zorder 200
+    modal True
+    add Solid("#17120FF2")
+    vbox:
+        align (0.5, 0.46)
+        spacing 22
+        xmaximum 720
+        text "怎麼玩" at title_slow_fade(0.0):
+            xalign 0.5
+            font CJK_FONT
+            size 36
+            color LHTL_TEXT_LIGHT
+            kerning 2
+        text "點畫面即可繼續。" at title_slow_fade(0.4):
+            xalign 0.5
+            font CJK_FONT
+            size 22
+            color LHTL_TEXT_SOFT
+            text_align 0.5
+        text "選項會改變牠跟妳的距離，也會改變後來怎麼睡。" at title_slow_fade(0.8):
+            xalign 0.5
+            font CJK_FONT
+            size 22
+            color LHTL_TEXT_SOFT
+            text_align 0.5
+        text "右上角可隨時存檔；遊戲也會自動保存。" at title_slow_fade(1.2):
+            xalign 0.5
+            font CJK_FONT
+            size 22
+            color LHTL_TEXT_SOFT
+            text_align 0.5
+    timer 2.2 action Show("section_title_hint")
+    key "dismiss" action [Hide("section_title_hint"), Return()]
+    button:
+        background None
+        xfill True
+        yfill True
+        action [Hide("section_title_hint"), Return()]
 
 screen section_select():
     tag menu

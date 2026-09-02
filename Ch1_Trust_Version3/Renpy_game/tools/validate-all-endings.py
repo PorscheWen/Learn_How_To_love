@@ -161,6 +161,10 @@ for key in ("back_to_back", "chosen_learning", "handed_over"):
     if key not in ac:
         fail(f"aftercare 缺 {key} 分支風味")
 ok("aftercare 存在且有結局風味")
+if "label ending_aftercare_menu:" not in SCRIPT:
+    fail("缺 ending_aftercare_menu")
+if SCRIPT.split("label ending_aftercare_menu:", 1)[1][:800].count("jump ending_aftercare\n") > 0:
+    fail("aftercare 選單仍跳回評語（應 jump ending_aftercare_menu）")
 
 # --- 防呆 ---
 if "list(persistent.unlocked_secret_content or [])" not in SCRIPT:
