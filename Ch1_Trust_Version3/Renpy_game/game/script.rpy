@@ -38,7 +38,7 @@ init python:
         return fallback
 
     # 立繪來源高度混雜（1024／1536），先歸一化再交給 char_*／dog_* transform。
-    # 畫面定位：腳底落在字幕框上方（約 ypos 0.86），水平依場景；transform zoom 為基線 ×1。
+    # 畫面定位：腳底落在字幕框上方（約 ypos 0.80；字幕框高 148），水平依場景；transform zoom 為基線 ×1。
     # 2026-07-25：狗／人物全量重產後，依 content bbox 重算 DOG_POSE_SCALE（見 tools/recalibrate_sprites.py）。
     CHAR_REF_H = 1280.0   # char_right zoom 0.36（全段 ×0.8 基線）
     DOG_REF_H = 1536.0    # dog_near zoom 0.272（全段 ×0.8 基線）
@@ -1038,44 +1038,86 @@ image dog wag:
     repeat
 
 
-# 腳底錨在字幕框上緣附近（720×108 → y≈0.86），水平依場景分開，避免人狗／兩人糊成一團。
+# 腳底錨在字幕框上緣附近（720×148 → y≈0.80），水平依場景分開，避免人狗／兩人糊成一團。
 # 全段立繪統一 ×0.8 基線（舊 0.45／0.34 → 0.36／0.272），S01～S10／結局同尺，遠近仍用 far／mid／near。
 # 2026-07-25 重產後由 tools/recalibrate_sprites.py 對齊；2026-08-04 全段 ×0.8 統一。
 transform char_center:
     xalign 0.50
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.384
 
 transform char_right:
     xalign 0.74
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.36
 
 transform char_left:
     xalign 0.26
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.36
+
+# 廚房 POV（kitchen-day／night）：鏡頭貼在流理台前景，立繪須比客廳全景大，才對得上櫃面比例。
+transform char_kitchen_near:
+    xalign 0.62
+    yanchor 1.0
+    ypos 0.92
+    zoom 0.52
+
+# 右流理台（倒水／擺碗）：同近景尺，偏右以免擋住門檻上的狗。
+transform char_kitchen_sink:
+    xalign 0.78
+    yanchor 1.0
+    ypos 0.92
+    zoom 0.52
+
+# S04／S10：狗停在中景門檻（拱門中央），勿用客廳 dog_mid 踩進近景地磚。
+transform dog_kitchen_threshold:
+    xalign 0.50
+    yanchor 1.0
+    ypos 0.72
+    zoom 0.19
+
+# S03 公寓大門外側：鐵門／木門約 330–380px，人須低於門框。
+transform char_gate:
+    xalign 0.52
+    yanchor 1.0
+    ypos 0.80
+    zoom 0.27
+
+# S02 急診：站在敞開的玻璃門前，勿畫面正中（馬路）。
+transform char_clinic:
+    xalign 0.78
+    yanchor 1.0
+    ypos 0.80
+    zoom 0.34
+
+# 玄關：門高約 410px，人略縮；對齊右側門墊。
+transform char_right_entrance:
+    xalign 0.74
+    yanchor 1.0
+    ypos 0.80
+    zoom 0.33
 
 # 狗的距離＝畫面上的信任條：near／far 之間用移動表達，不顯示數字。
 transform dog_far:
     xalign 0.58
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.208
 
 transform dog_mid:
     xalign 0.50
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.24
 
 transform dog_near:
     xalign 0.42
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.272
 
 # S02 後門初遇：狗靠紙箱偏左、予安遠在右側；蹲下後才緩緩靠近（勿一開場就貼在一起）。
@@ -1083,61 +1125,61 @@ transform dog_near:
 transform dog_backdoor_far:
     xalign 0.32
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.16
 
 transform dog_backdoor_mid:
     xalign 0.46
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.24
     yzoom 0.24
 
 transform dog_backdoor_near:
     xalign 0.58
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.272
     yzoom 0.272
 
 transform char_backdoor_far:
     xalign 0.90
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.304
 
 transform char_backdoor_squat:
     xalign 0.82
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.32
 
 # S03 梯廳門外狗窩：靠公寓門（左側門墊／牆角；與 day／night 同構圖），勿落在中央樓梯口；狗 far×0.9（0.208×0.9）
 transform dog_far_stair:
     xalign 0.22
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.187
 
 # 予安在右、圖檔狗面朝左時：水平翻轉使人狗互視（抬眼／靠近／鼻尖等）。
 transform dog_far_to_yuan:
     xalign 0.56
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.208
     yzoom 0.208
 
 transform dog_mid_to_yuan:
     xalign 0.48
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.24
     yzoom 0.24
 
 transform dog_near_to_yuan:
     xalign 0.40
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.272
     yzoom 0.272
 
@@ -1159,28 +1201,28 @@ transform char_sofa:
 transform dog_chair_mid:
     xalign 0.46
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.224
     yzoom 0.224
 
 transform dog_chair_near:
     xalign 0.52
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.24
     yzoom 0.24
 
 transform dog_sofa_mid:
     xalign 0.46
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.224
     yzoom 0.224
 
 transform dog_sofa_near:
     xalign 0.52
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.24
     yzoom 0.24
 
@@ -1188,13 +1230,13 @@ transform dog_sofa_near:
 transform dog_follow_start:
     xalign 0.46
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.224
 
 transform dog_follow_from_chair:
     xalign 0.46
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.224
     parallel:
         ease 3.4 xalign 0.16
@@ -1204,14 +1246,14 @@ transform dog_follow_from_chair:
 transform dog_sick_mid:
     xalign 0.36
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.224
     yzoom 0.224
 
 transform dog_sick_far:
     xalign 0.32
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.192
     yzoom 0.192
 
@@ -1219,70 +1261,70 @@ transform dog_sick_far:
 transform dog_far_pair:
     xalign 0.50
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.176
 
 transform dog_mid_pair:
     xalign 0.56
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.184
 
 transform dog_near_pair:
     xalign 0.60
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.192
 
 # S06：予安面向左擋鄰居；狗躲在她身後（更靠右、疊在人下方）。
 transform dog_behind_pair:
     xalign 0.82
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.176
 
 # 頂額：圖檔自帶小腿裁切 → 隱藏予安立繪，單圖靠右對齊腿位。
 transform dog_nudge:
     xalign 0.68
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.224
 
-# 玄關：地墊在門前偏中，避免狗貼進門板。
+# 玄關：地墊在右側門前；狗站門墊左側（0.60–0.66），勿貼進門板（0.75+）。
 transform dog_entrance_far:
-    xalign 0.50
+    xalign 0.60
     yanchor 1.0
     ypos 0.87
     zoom 0.192
 
 transform dog_entrance_mid:
-    xalign 0.54
+    xalign 0.66
     yanchor 1.0
     ypos 0.87
     zoom 0.216
 
-# S08 玄關穿帶（與全段 ×0.8 基線相同）
+# S08 玄關穿帶（人對門框略縮，與 char_right_entrance 同尺）
 transform char_right_s08:
     xalign 0.74
     yanchor 1.0
-    ypos 0.86
-    zoom 0.36
+    ypos 0.80
+    zoom 0.33
 
 transform dog_entrance_far_s08:
-    xalign 0.50
+    xalign 0.60
     yanchor 1.0
     ypos 0.87
     zoom 0.192
 
 transform dog_entrance_mid_s08:
-    xalign 0.58
+    xalign 0.66
     yanchor 1.0
     ypos 0.87
     zoom 0.216
 
 # S08 玄關互視：狗面朝予安（右）
 transform dog_entrance_mid_s08_to_yuan:
-    xalign 0.56
+    xalign 0.64
     yanchor 1.0
     ypos 0.87
     xzoom -0.216
@@ -1293,31 +1335,31 @@ transform dog_entrance_mid_s08_to_yuan:
 transform char_right_walk:
     xalign 0.74
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.32
 
 transform dog_behind_walk:
     xalign 0.88
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.176
 
 transform dog_far_walk:
     xalign 0.56
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.192
 
 transform dog_mid_walk:
     xalign 0.63
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.216
 
 transform dog_near_walk:
     xalign 0.68
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.24
 
 # S08 機車：停放靠左牆（空車）／轉角呼嘯偏中前（×0.8，人物下層）
@@ -1347,7 +1389,7 @@ transform scooter_pass:
 transform char_right_farewell:
     xalign 0.40
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     ## 圖檔面左；翻轉後面右對狗（x／y 同量避免拉寬）
     xzoom -0.36
     yzoom 0.36
@@ -1358,21 +1400,21 @@ transform dog_farewell_near:
     ypos 0.87
     zoom 0.272
 
-# S09 玄關牽繩（對齊全段 entrance／near）
+# S09 玄關牽繩（對齊 entrance 門框尺）
 transform char_right_s09:
     xalign 0.74
     yanchor 1.0
-    ypos 0.86
-    zoom 0.36
+    ypos 0.80
+    zoom 0.33
 
 transform dog_entrance_far_s09:
-    xalign 0.50
+    xalign 0.60
     yanchor 1.0
     ypos 0.87
     zoom 0.208
 
 transform dog_entrance_mid_s09:
-    xalign 0.62
+    xalign 0.66
     yanchor 1.0
     ypos 0.87
     zoom 0.272
@@ -1381,20 +1423,20 @@ transform dog_entrance_mid_s09:
 transform char_left_cafe:
     xalign 0.22
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.36
 
 transform char_right_cafe:
     xalign 0.78
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.36
 
 # 拒絕：貼予安腳邊，面向左側同事（圖檔面右 → 翻轉）
 transform dog_cafe_near_guard:
     xalign 0.64
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     xzoom -0.272
     yzoom 0.272
 
@@ -1402,53 +1444,59 @@ transform dog_cafe_near_guard:
 transform dog_cafe_near_home:
     xalign 0.66
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.272
 
 # 僵住／交繩拉扯：兩人中間，面向予安（圖檔面右）
 transform dog_cafe_mid:
     xalign 0.48
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.24
 
 
-define narrator = Character(
+define narrator = LHTLCharacter(
     None,
+    lhtl_kind="narrator",
     what_font=CJK_FONT,
     what_color="#000000",
     what_size=gui.text_size,
 )
-define ya = Character(
+define ya = LHTLCharacter(
     "予安",
+    lhtl_kind="ya",
     what_font=CJK_FONT,
     who_font=CJK_FONT,
     what_color="#000000",
     who_color=LHTL_ACCENT_DARK,
 )
-define clerk = Character(
+define clerk = LHTLCharacter(
     "超商店員",
+    lhtl_kind="clerk",
     what_font=CJK_FONT,
     who_font=CJK_FONT,
     what_color="#000000",
     who_color="#6E6340",
 )
-define neighbor = Character(
+define neighbor = LHTLCharacter(
     "鄰居",
+    lhtl_kind="neighbor",
     what_font=CJK_FONT,
     who_font=CJK_FONT,
     what_color="#000000",
     who_color="#5F6D57",
 )
-define coworker = Character(
+define coworker = LHTLCharacter(
     "同事",
+    lhtl_kind="coworker",
     what_font=CJK_FONT,
     who_font=CJK_FONT,
     what_color="#000000",
     who_color="#6E5D72",
 )
-define thought = Character(
+define thought = LHTLCharacter(
     None,
+    lhtl_kind="thought",
     what_font=CJK_FONT,
     what_color="#3A2E24",
     what_size=23,
@@ -1684,7 +1732,7 @@ label section_01_fluorescent_over_moon:
     clerk "瘦瘦的。前幾天還會晃到騎樓，今天丟垃圾，牠幾乎沒站起來。我跟店長講了，明天再看要不要叫人來。"
 
     ya "喔。"
-    "標準的「喔」。不承諾、不追問、剛好夠禮貌。台灣便利商店夜班的外交辭令，大概就是這個音節。"
+    "標準的「喔」。不承諾、不追問，剛好夠禮貌。夜班店員慣用的那種「喔」——聽過就算回應了。"
 
     hide clerk
     with dissolve
@@ -1699,20 +1747,20 @@ label section_01_fluorescent_over_moon:
 
     "她提袋出門。夜風從袖口鑽進去。巷口路燈把柏油路照成淺黃，機車一台一台睡死在格子裡......比很多人都準時。"
     "後門在另一側：卸貨區、壓扁紙箱、濕紙箱混隔夜油的氣味。"
-    "這條路她走了兩年。轉角永遠只是轉角......直到有人開始在轉角放一隻狗。"
+    "這條路她走了兩年。轉角永遠只是轉角......直到那邊多了一隻常待著的狗。"
     "腳在轉角前慢半拍，心還在後面。"
 
     menu:
         "繞去看一眼":
             $ flags["peeked_backdoor"] = True
-            "她告訴自己，只看一眼，不算答應什麼。自我說服是免費的，而且常買一送一。"
+            "她告訴自己，只看一眼，不算答應什麼。這種話，她對自己說過不只一次。"
             ## 場景切到後門：只遠望，不放狗立繪（留給 S02 正式相遇）；BGM 維持 night，勿搶 S02 melancholy。
             scene bg backdoor_night
             with Dissolve(1.0)
             show yuan commute at char_right
             with Dissolve(0.5)
             "她繞到轉角邊。卸貨區的燈壞了一盞，紙箱在陰影裡疊成模糊形狀。深處像有什麼動了一下，也可能只是塑膠袋......夜裡這兩種常長得很像。"
-            "她沒有走近。站了兩秒，便轉回原路。兩秒：剛好夠良心癢一下，又剛好不夠做成決定。"
+            "她沒有走近。站了兩秒，便轉回原路。兩秒：剛好夠心裡動一下，又剛好不夠做成決定。"
             thought "便當會涼。"
             scene bg street_night
             with Dissolve(0.8)
@@ -1731,11 +1779,11 @@ label section_01_fluorescent_over_moon:
     scene bg entrance_night
     with Dissolve(1.0)
 
-    show yuan commute at char_right
+    show yuan commute at char_right_entrance
     with dissolve
 
     "公寓門「嘀」一聲。"
-    "她把便當袋換到另一隻手，彎腰換拖鞋。玄關燈只照得到自己進來的那一小塊......剛好夠承認：人回來了。"
+    "她把便當袋換到另一隻手，彎腰換拖鞋。玄關燈只照得到進門那一小塊——至少看得出來：人回來了。"
 
     scene bg living_night
     with Dissolve(1.0)
@@ -1752,8 +1800,8 @@ label section_01_fluorescent_over_moon:
     scene bg kitchen_night
     with Dissolve(1.0)
 
-    ## 開冰箱：空手站姿（勿 commute 便當袋）
-    show yuan home_stand at char_right
+    ## 開冰箱：空手站姿（勿 commute 便當袋）；廚房 POV 用近景尺，勿套客廳 char_right
+    show yuan home_stand at char_kitchen_near
     with Dissolve(0.5)
 
     "她打開冰箱。"
@@ -1782,7 +1830,7 @@ label section_01_fluorescent_over_moon:
     $ flags["ch2_seed_busy_calendar"] = True
     "她點開備忘，打了幾個字又刪掉。刪掉的是：「明天如果還在......」打了又刪，刪比留著輕鬆。"
 
-    thought "還在什麼。"
+    "「還在什麼。」"
 
     ## 入睡：維持 night，不再切曲
     if flags["peeked_backdoor"]:
@@ -1991,7 +2039,7 @@ label section_02_backdoor_glance:
             with Dissolve(0.5)
             "她轉身。走了五步。"
             pause 0.8
-            "第六步停住。五步是逃避，六步開始像後悔。"
+            "第六步停住。多走那一步，腳自己先停了。"
             thought "牠幾乎沒站起來......店員是這樣說的。"
             $ trust += 1
             "她轉回去。"
@@ -2098,6 +2146,8 @@ label section_02_backdoor_glance:
         "狗還是僵住，嗚了一聲，抓痕疊在剛才那道旁邊。"
         "她痛得吸氣，卻沒鬆手，也沒罵。"
 
+    "那一小團比看起來沉。熱氣從袖口滲進來，外套前襟很快濕了一塊。"
+
     ya "抱歉。我也不會。我們……先離開這裡。"
 
     hide yuan
@@ -2123,7 +2173,7 @@ label section_02_backdoor_glance:
         # 急診路線：夜間動物醫院短場 → 再回公寓大門（S03）；勿先演客廳自我介紹。
         scene bg clinic_night
         with Dissolve(1.2)
-        show yuan carry_pup at char_center
+        show yuan carry_pup at char_clinic
         with Dissolve(0.5)
         "夜間動物醫院的燈比巷子冷。玻璃門後空著幾張等候椅，櫃檯燈還亮著。"
         "醫生看了一眼，語氣很平：餓、脫水，外加一身要慢慢養的疲倦。沒有戲劇性的病名，卻有一份要帶走的藥袋。"
@@ -2138,7 +2188,7 @@ label section_02_backdoor_glance:
 
         scene bg entrance_night
         with Dissolve(1.0)
-        show yuan carry_pup at char_right
+        show yuan carry_pup at char_right_entrance
         with Dissolve(0.4)
 
         "公寓門「嘀」一聲。玄關燈亮起。她側身進門，臂彎裡那一小團蜂蜜褐一起跨過門檻。"
@@ -2182,7 +2232,7 @@ label section_03_gate_temp_border:
     if flags.get("vet_first", False):
         "從夜間急診回來時，已經過了午夜。藥袋還在手腕旁輕敲；醫生剛才那幾句，還在耳朵裡繞。"
         "予安抱著牠站在公寓大門前。眼前只剩鐵門、門牌，與門縫底下那條細光......診所的白光，暫時退到記憶裡。"
-        show yuan carry_pup at char_center
+        show yuan carry_pup at char_gate
         with Dissolve(0.4)
     elif flags.get("called_shelter", False):
         "她把留給動保的電話再確認一次，然後把手機收回口袋。明天有人會來。至少在流程上，她已經是個負責的人了。"
@@ -2562,7 +2612,7 @@ label section_04_shared_quiet:
     ## 記憶點短切 tender（第一次主動跟上），收束再回 warm
     scene bg kitchen_day
     with Dissolve(1.0)
-    show dog kitchen_door at dog_mid
+    show dog kitchen_door at dog_kitchen_threshold
     with Dissolve(0.8)
 
     $ play_bgm("tender", fade=1.8)
@@ -2606,7 +2656,7 @@ label section_04_shared_quiet:
     "狗的耳朵朝耳機方向動了一下，又放下......牠顯然還不知道，那條線明天會派上用場。"
 
     thought "明天，會不會有兩種聲音。"
-    "今晚，先只要一種聲音......小的、慢的、夠兩個人耗下去的那種。"
+    "今晚，先只要一種聲音......小的、慢的，夠兩個人待著。"
     "她把耳機線捲好，塞進椅子旁邊看不見的縫。明天再開，也不算晚。"
 
     $ trust = max(0, min(12, trust))
@@ -2892,7 +2942,7 @@ label section_06_corridor_third_person:
             hide yuan
             show yuan carry_pup at char_right
             with Dissolve(0.4)
-            "予安彎身把狗抱起來，動作不重，卻快得像先把可能的事端回屋裡，免得樓梯間再吵。"
+            "予安彎身把狗抱起來。動作不重，手卻很快——抱進門，門在身後關上，免得樓梯間再吵。"
             ya "不好意思，牠怕生。"
             hide yuan
             with dissolve
@@ -2961,10 +3011,10 @@ label section_06_corridor_third_person:
         ya "……不客氣。"
         "她說完才覺得自己有點好笑，跟一隻狗道謝......可這一次，她沒有把話吞回去。"
         hide dog
-        show yuan home_stand at char_right
+        show yuan home_stand at char_right_entrance
         with Dissolve(0.5)
     else:
-        show dog halfstep at dog_far_pair
+        show dog halfstep at dog_entrance_far
         with Dissolve(1.0)
         "狗往前走了半步，鼻尖停在褲管外一點點，最後沒有碰上。予安沒有追，只讓那段距離留到下一次。"
 
@@ -3043,6 +3093,7 @@ label section_07_sick_guard:
             show yuan sick_bed at char_right
             with Dissolve(0.5)
             "予安把手移到床沿，指尖很輕地碰了碰狗背。"
+            "她手心比狗背更燙......像整晚的熱，先從自己身上漏出去。"
             ya "我還在。只是有點不舒服。"
             show dog guard_door at dog_sick_far
             with Dissolve(0.5)
@@ -3080,8 +3131,8 @@ label section_07_sick_guard:
     scene bg kitchen_night
     with Dissolve(0.9)
     hide dog
-    ## 倒水：空手站姿（勿 commute 便當袋）
-    show yuan home_stand at char_right
+    ## 倒水：空手站姿（勿 commute 便當袋）；廚房 POV 用近景尺
+    show yuan home_stand at char_kitchen_sink
     with Dissolve(0.4)
 
     "予安扶著牆去倒水，杯子碰到流理台，比平常更響。水柱濺到手背，她花了兩次才轉緊水龍頭......生病這件事，連水龍頭都跟著添亂。"
@@ -3251,7 +3302,7 @@ label section_08_corner_walk:
         with Dissolve(1.0)
         "牠慢慢跟到她側邊。牽繩仍繃著，卻不是一路往後退......已經算是進步。"
 
-    "他們走過那台空著的機車。車殼還有曬熱的味道，狗伸長鼻子，沒敢靠近輪胎——新環境會怕車；這一退卻偏沉，像記得某種離遠。"
+    "他們走過那台空著的機車。車殼還有曬熱的味道，狗伸長鼻子，沒敢靠近輪胎——新環境會怕車；這一退，耳朵貼平，往她腿後又縮了半步。"
     "一個送餐員從後方快步經過，保溫箱擦過予安手肘。她下意識往旁邊讓，隨即發現牽繩也被帶緊。"
     ya "對不起。是我沒看到。"
     "她停下來，把繩子重新放鬆。[dog_label]沒有回頭，右耳卻短短轉向她。"
@@ -3572,6 +3623,7 @@ label section_09_almost_handoff:
             show yuan leash_pass at char_right_cafe
             with Dissolve(0.5)
             "她的手在抖，還是把牽繩重新繞回自己手腕，一圈都沒少。"
+            "那重量比紙袋輕，卻佔滿袖口。"
             ya "我不是比較會。我只是……想繼續學。"
             ## leash_pass 僅予安握繩；先 hide 同事，切回 cafe 再顯示，避免雙重手
             show yuan cafe at char_right_cafe
@@ -3604,6 +3656,7 @@ label section_09_almost_handoff:
             else:
                 $ flags["landmark_chose_reason_over_bond"] = False
             "予安把紙袋遞過去，再把牽繩握把一圈一圈從手腕鬆開。最後一圈卡在袖口，她多停了一秒，才把它放進同事手裡。"
+            "臂彎空了。袖口那圈還熱著。"
             hide coworker
             show yuan leash_pass at char_right_cafe
             with Dissolve(0.5)
@@ -3671,7 +3724,7 @@ label section_10_share_the_key:
 
         scene bg entrance_night
         with Dissolve(1.0)
-        show yuan home_stand at char_right
+        show yuan home_stand at char_right_entrance
         with Dissolve(0.3)
 
         "鑰匙插進鎖孔，門開得異常順。屋裡沒有水碗被撞得移位，也沒有爪子聽見門聲，從地板上蹦起來。"
@@ -3680,7 +3733,7 @@ label section_10_share_the_key:
 
         scene bg kitchen_night
         with Dissolve(0.9)
-        show yuan home_stand at char_right
+        show yuan home_stand at char_kitchen_sink
         with Dissolve(0.3)
 
         "她先去洗水碗。水龍頭開到一半，手停在半空。碗其實是乾淨的，早上才洗過兩次；她只是還沒準備好，把它收進櫥子。"
@@ -3716,7 +3769,7 @@ label section_10_share_the_key:
 
         scene bg entrance_night
         with Dissolve(1.0)
-        show yuan paper_bag at char_right
+        show yuan paper_bag at char_right_entrance
         show dog parallel at dog_entrance_mid
         with Dissolve(0.5)
 
@@ -3741,9 +3794,9 @@ label section_10_share_the_key:
 
         scene bg kitchen_night
         with Dissolve(0.9)
-        ## 擺碗：紙袋已放下，改空手站姿
-        show yuan home_stand at char_right
-        show dog kitchen_door at dog_mid
+        ## 擺碗：紙袋已放下，改空手站姿；人在流理台近景、狗停門檻（遠近分開）
+        show yuan home_stand at char_kitchen_sink
+        show dog kitchen_door at dog_kitchen_threshold
         with Dissolve(0.4)
 
         "新的水碗被放到舊碗旁邊。一個裝水，一個暫時空著。予安沒急著決定它以後要裝什麼，先讓「並排」這件事成立就好。"

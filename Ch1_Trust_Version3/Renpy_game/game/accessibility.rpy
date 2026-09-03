@@ -17,7 +17,7 @@ init python:
         "interface_text_size": 20,
         "label_text_size": 30,
         "choice_button_text_size": 22,
-        "textbox_height": 108,
+        "textbox_height": 148,
         "menu_btn_yminimum": 46,
         "menu_btn_padding": (22, 11),
         "quick_btn_text_size": 15,

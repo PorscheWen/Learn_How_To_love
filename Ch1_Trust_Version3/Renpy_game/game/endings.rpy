@@ -7,7 +7,7 @@
 transform dog_coda_approach:
     xalign 0.58
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.208
     ease 2.8 xalign 0.50 zoom 0.24
     ease 2.6 xalign 0.42 zoom 0.272
@@ -16,7 +16,7 @@ transform dog_coda_approach:
 transform dog_coda_check:
     xalign 0.50
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.24
     ease 1.6 xalign 0.46 zoom 0.256
     pause 0.8
@@ -28,7 +28,7 @@ transform dog_coda_check:
 transform dog_coda_thin_ice:
     xalign 0.62
     yanchor 1.0
-    ypos 0.86
+    ypos 0.80
     zoom 0.192
     ease 2.2 xalign 0.58 zoom 0.208
     pause 1.2

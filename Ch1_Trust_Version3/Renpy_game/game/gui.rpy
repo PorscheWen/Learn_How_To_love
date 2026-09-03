@@ -42,9 +42,9 @@ define gui.hover_color = LHTL_ACCENT_DARK
 define gui.selected_color = LHTL_ACCENT_DARK
 define gui.insensitive_color = "#8C817777"
 
-define gui.textbox_height = 108
+define gui.textbox_height = 148
 define gui.dialogue_xpos = 54
-define gui.dialogue_ypos = 24
+define gui.dialogue_ypos = 18
 define gui.dialogue_width = 1172
 define gui.name_xpos = 54
 define gui.name_ypos = 18
@@ -70,7 +70,8 @@ style say_window:
     xfill True
     yalign 1.0
     yminimum gui.textbox_height
-    padding (38, 12, 38, 14)
+    ymaximum gui.textbox_height
+    padding (38, 16, 38, 18)
 
 style say_label:
     color LHTL_ACCENT_DARK
@@ -80,7 +81,7 @@ style say_label:
 style say_dialogue:
     color "#000000"
     size gui.text_size
-    line_spacing 8
+    line_spacing 16
     outlines [(2, "#F7EFE4D9", 0, 0)]
 
 style choice_button:

@@ -192,6 +192,27 @@ if s01.count('flags["peeked_backdoor"] = True') != 1:
 if s01.count('flags["peeked_backdoor"] = False') != 1:
     fail("原路分支必須且只能寫入一次 False")
 
+if "「明天如果還在" not in s01 or "「還在什麼。」" not in s01:
+    fail("S01 備忘／自問須用「」完整圈住")
+
+def _visible_say_lines(block: str):
+    lines = []
+    for raw in block.splitlines():
+        stripped = raw.strip()
+        if not stripped or stripped.startswith("#") or stripped.startswith("$"):
+            continue
+        if stripped.startswith("clerk ") or stripped.startswith("ya ") or stripped.startswith("thought "):
+            stripped = stripped.split(" ", 1)[1]
+        if len(stripped) >= 2 and stripped[0] in "\"'" and stripped[-1] == stripped[0]:
+            lines.append(stripped[1:-1])
+    return lines
+
+for line in _visible_say_lines(s01):
+    if line.count("「") != line.count("」"):
+        fail(f"S01 引號未成對：「」 → {line}")
+    if line.count("『") != line.count("』"):
+        fail(f"S01 引號未成對：『』 → {line}")
+
 s02 = text.split(
     "label section_02_backdoor_glance:", 1
 )[1].split("label section_03_gate_temp_border:", 1)[0]
