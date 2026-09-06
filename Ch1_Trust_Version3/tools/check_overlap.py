@@ -10,13 +10,17 @@ TEXTBOX = 108  # gui.textbox_height, yalign 1.0
 CHAR_REF, DOG_REF = 1280.0, 1536.0
 
 POSE_SCALE = {
-    "dog-anxious": 0.786,
+    "dog-anxious": 1.575,
+    "dog-s04-anxious": 0.551,
     "dog-back-sleep": 0.427,
     "dog-behind-legs": 0.535,
     "dog-check-sleep": 0.452,
     "dog-door-edge": 0.434,
     "dog-door-sleep": 0.42,
     "dog-ear-flat": 0.695,
+    "dog-ear-perk": 0.414,
+    "dog-chin-hover": 0.558,
+    "dog-head-turn": 0.369,
     "dog-forehead-nudge": 0.543,
     "dog-guard-door": 0.438,
     "dog-halfstep": 0.687,
@@ -91,7 +95,7 @@ def textbox_cover(r):
 
 
 PAIRS = [
-    ("S02 相遇", ("char-yuan-commute", "char_right", 0), ("dog-anxious", "dog_far", 1)),
+    ("S02 相遇", ("char-yuan-commute", "char_right", 0), ("dog-s04-anxious", "dog_far", 1)),
     ("S02 靠近", ("char-yuan-commute", "char_right", 0), ("dog-halfstep", "dog_mid", 1)),
     ("S06 躲腿後", ("char-yuan-commute", "char_right", 0), ("dog-behind-legs", "dog_near_pair", 1)),
     ("S06 頂額單圖", ("dog-forehead-nudge", "dog_nudge", 1), ("dog-forehead-nudge", "dog_nudge", 1)),
@@ -108,7 +112,7 @@ PAIRS = [
 ]
 
 DOG_SOLO = [
-    ("dog-anxious", "dog_far"), ("dog-halfstep", "dog_mid"),
+    ("dog-s04-anxious", "dog_far"), ("dog-anxious", "dog_far"), ("dog-halfstep", "dog_mid"),
     ("dog-parallel", "dog_mid"), ("dog-kitchen-door", "dog_mid"),
     ("dog-shoe-sleep", "dog_near"), ("dog-back-sleep", "dog_near"),
     ("dog-check-sleep", "dog_mid"), ("dog-door-edge", "dog_far"),

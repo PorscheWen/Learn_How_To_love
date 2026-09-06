@@ -254,18 +254,26 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 | 檔名 | 表情 | 動作 | 主用 |
 |------|------|------|------|
-| `dog-anxious.png` | 擔憂上望 | 低趴、耳貼、夾尾 | S02／低信任 |
+| `dog-anxious.png` | 擔憂上望 | 低趴、耳貼、夾尾 | 低信任備援（S06～） |
+| `dog-s04-anxious.png` | 擔憂上望 | 低趴、下巴近前爪（S04 橫式） | **S02** 後門；**S05** 低信任開場 |
 | `dog-halfstep.png` | 警戒好奇 | 「既不碰你、也不放你走」的半步 | S02 記憶 |
 | `dog-stair-watch.png` | 警戒 | 靠牆、面向電梯方向 | S03 換窩 |
 | `dog-door-sleep.png` | 睏但守門 | 睡在房門外墊上 | S03 鉤子 |
 | `dog-parallel.png` | 放鬆一點 | 兩步遠地板、下巴貼地 | S04 |
+| `dog-ear-perk.png` | 聽見新聲 | 趴著、耳根抬起朝向聲源 | S04 冷氣喀／耳機 |
+| `dog-chin-hover.png` | 被突發大聲嚇到 | 耳平、下巴離地一公分 | S04 電視 |
+| `dog-head-turn.png` | 找誰在吵 | 前身抬起、頭轉向聲源 | S04 手機笑聲 |
+| `dog-head-up.png` | 聽出聲音不一樣 | 趴著、頭抬向椅上的人 | S05 開會尖聲 |
+| `dog-chair-paw.png` | 把伸手當邀請 | 後腳站、前腳搭椅緣 | S05 碰耳機線後 |
+| `dog-chair-stuck.png` | 被回授嚇到 | 後縮、前腳仍卡在椅緣 | S05 選擇高峰 |
+| `dog-chin-floor.png` | 安靜趴定 | 下巴完整貼地 | S04 距離＋ |
 | `dog-kitchen-door.png` | 跟隨觀望 | 停在廚房門檻外 | S04 記憶 |
 | `dog-ear-flat.png` | 被尖聲嚇到 | 耳平、退 | S05 Tone− |
 | `dog-sniff-wire.png` | 好奇 | 嗅耳機線 | S05 鉤子 |
 | `dog-behind-legs.png` | 求護衛 | 躲小腿後（S06 用 `dog_behind_pair`，疊在予安下方） | S06 Guard＋ |
 | `dog-forehead-nudge.png` | 輕謝 | 額頭頂小腿 | S06 記憶 |
 | `dog-guard-door.png` | 不安守門 | 趴房門口 | S07 |
-| `dog-street-tense.png` | 繃緊 | 貼牆／僵住（低信任 S08） | S08 |
+| `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S04 低信任／合照後；S08 低信任 |
 | `dog-leash-wait.png` | 累但信任 | 停步等待後願再走 | S08 高；S09 玄關 |
 | `dog-shoe-sleep.png` | 安心 | 喝完水靠鞋邊睡 | S08 記憶 |
 | `dog-farewell.png` | 告別上望 | 坐姿抬頭看予安（無牽繩） | S09 客廳 |
@@ -281,13 +289,16 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | 檔名 | 內容 |
 |------|------|
 | `char-yuan-commute.png` | 予安夜歸／超商；可戴耳機 |
+| `char-yuan-home-sit.png` | S04 室內坐木椅；寬鬆毛衣＋家居褲＋襪，**不穿鞋** |
+| `char-yuan-home-stand.png` | 室內站姿；同裝＋襪，**不穿鞋** |
+| `char-yuan-headphones-sit.png` | S05 客廳視訊；襯衫＋耳機＋襪，坐木凳 |
 | `char-yuan-squat-side.png` | 側身蹲下等待（S02 A） |
 | `char-yuan-carry-pup.png` | 側抱幼犬上樓 |
-| `char-yuan-headphones.png` | 戴耳機開會（S05 尖）；S09 茶水間 |
+| `char-yuan-headphones.png` | 辦公室站姿戴耳機（S01／S07／S09） |
 | `char-yuan-block.png` | 走廊擋在狗與陌生人中間（S06）；**面向左**擋左側鄰居 |
-| `char-yuan-leash.png` | 牽繩、蹲等（S08 玄關／樹下停等）；S09 **玄關**（×0.8） |
+| `char-yuan-leash.png` | 牽繩、蹲等（S08 玄關／樹下停等）；S09 **玄關** |
 | `char-yuan-walk.png` | 站姿走路握牽繩｜**S08 巷口**（非蹲） |
-| `char-yuan-farewell.png` | 單膝下跪攤手告別（無牽繩）｜S09 客廳 |
+| `char-yuan-farewell.png` | 客廳跪姿告別；室內裝＋襪｜S09 |
 | `char-yuan-cafe.png` | 站姿握牽繩、衝突表情｜S09 咖啡廳 |
 | `char-clerk.png` | 超商店員 |
 | `char-neighbor.png` | 走廊第三者 |
@@ -329,10 +340,10 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | Sec | 主 bg | 關鍵 dogPose | 信任畫面重點 |
 |-----|-------|--------------|--------------|
 | 01 | convenience-night → living-night | —（可無狗） | 空白；不轉後門 |
-| 02 | backdoor-night | halfstep / retreat / anxious | 對視；蹲等可感 |
+| 02 | backdoor-night | s04-anxious / halfstep / sniff-bento | 對視；蹲等可感 |
 | 03 | stairwell-night | stair-watch → door-sleep | 換窩；歸來 |
-| 04 | living-day/night | parallel / kitchen-door | 平行安靜 |
-| 05 | living-day | ear-flat / sniff-wire | Tone 尖↔低 |
+| 04 | living-day | parallel／ear-perk／chin-hover／head-turn → kitchen-door | 聲響反應＋平行安靜 |
+| 05 | living-day | head-up → sniff-wire → chair-paw → chair-stuck → ear-flat / sniff-wire | Tone 尖↔低 |
 | 06 | stairwell-day | behind-legs / forehead-nudge | Guard 擋人 |
 | 07 | living-night | guard-door | 依賴對調 |
 | 08 | alley-day → living | street-tense / leash-wait / shoe-sleep | Dist 停等 |
@@ -343,6 +354,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 - 背景：**永不含狗**（空紙箱／牽繩掛勾可當道具）  
 - 狗／人物：乾淨底 → 去背 RGBA  
 - **禁止**畫面上的信任條／數字
+- **S02／S04–S10 立繪尺：** 數字見 `Renpy_game/game/scale.rpy`（後門人 0.31／狗 0.12；客廳全景人 0.36／狗 0.139）
 
 ---
 
@@ -370,8 +382,15 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 ### 2026-07-28｜S09 專用立繪與劇情朝向
 
 - 新增：`char-yuan-farewell`、`char-yuan-cafe`、`char-coworker-cafe`、`dog-farewell`、`dog-cafe-refuse`、`dog-cafe-tense`（Cursor 生圖＋`remove_ai_bg.py`）。
-- 客廳開頭用**告別圖**（無牽繩）；玄關牽繩立繪 **×0.8**；咖啡廳**不沿用** S08 蹲牽繩／舊同事站姿。
+- 客廳開頭用**告別圖**（無牽繩）；玄關牽繩立繪對齊 entrance 門框；咖啡廳**不沿用** S08 蹲牽繩／舊同事站姿。
 - 朝向以劇情為準：拒絕時狗面向同事；僵住／留下時面向予安。詳見 [`section_09_almost_handoff.md`](section_09_almost_handoff.md)。
+
+### 2026-09-06｜S02／S04 狗 pose
+
+- S02 後門第一次見面改 `dog-s04-anxious`（橫式填滿）；舊 `dog-anxious` 僅 S05～低信任備援。
+- S04 進房聲響三姿：`ear-perk`／`chin-hover`／`head-turn`；Dist＋用 `chin-floor`。
+- 客廳趴姿可見高對齊 `parallel`（見 `image_dog.md` §3.6）；尾隨廚房用 `wag`，不用 `halfstep`。
+- S05 早會三姿：`head-up`／`chair-paw`／`chair-stuck`（見 `image_dog.md` §3.7）；低信任開場改 `s04-anxious`，不用舊 `anxious`。
 
 ---
 
@@ -389,4 +408,4 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ---
 
-*更新：2026-07-28｜S09 告別／咖啡廳專用立繪與劇情朝向；此前 2026-07-25 全量重產見上*
+*更新：2026-09-06｜S05 早會三姿；S02 `s04-anxious`；S04 聲響三姿＋客廳可見高；立繪尺見 `image_scale.md`*

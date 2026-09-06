@@ -40,6 +40,7 @@ Learn_How_To_Love/
 - 主敘事／選項在 `Ch1_Trust_Version3/Renpy_game/game/script.rpy`（及 `endings.rpy`／`hidden_content.rpy` 等）
 - 信任／結局條件對齊 `agents/game_guild.md`
 - 新段必對 section 設計稿 `agents/section_*.md`
+- 人／狗 zoom 必對 `Ch1_Trust_Version3/agents/image_scale.md`（母尺：後門人 0.42／狗 0.44）
 - 狗名：`default dog_label`；`renpy.input` 須保留 `screen input`
 - Ch2 種子旗標：`ch2_seed_*`（含 `ch2_seed_dog_had_someone`）
 
@@ -64,6 +65,7 @@ Learn_How_To_Love/
 |------|------------------|------|
 | 狗 pose | `assets/dog/`（＋子目錄動畫幀） | 獨立疊層，不畫進背景 |
 | 背景 | `assets/bg/bg-{slug}.png` | 對齊 `agents/image_bg.md` |
+| 人／狗尺 | `script.rpy` transforms | 對齊 `agents/image_scale.md` |
 | 角色 | `assets/char/` | 予安局部／不露全臉原則見 visual-art |
 | BGM／SFX | `assets/audio/` | 登記 `CREDITS.md` |
 
@@ -120,6 +122,7 @@ python tools\validate-menus.py
 MEMORY.md（世界觀鎖定）
  → guide_line.md
  → Ch1_Trust_Version3/agents/game_guild.md
+ → Ch1_Trust_Version3/agents/image_scale.md（人／狗 zoom）
  → agent/story-narrative
  → 其餘 agent skills
  → 本 .cursorrules
@@ -127,4 +130,4 @@ MEMORY.md（世界觀鎖定）
 
 ---
 
-*最後更新：2026-08-11 · Playable＝Ch1_Trust_Version3 Ren'Py*
+*最後更新：2026-09-05 · Playable＝Ch1_Trust_Version3 Ren'Py*

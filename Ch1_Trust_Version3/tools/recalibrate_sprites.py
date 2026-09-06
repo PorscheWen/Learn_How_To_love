@@ -29,6 +29,9 @@ TARGETS = {
     "dog-sniff-bento": 175,
     "dog-coat-sniff": 140,
     "dog-chin-floor": 124,
+    "dog-chin-hover": 124,
+    "dog-ear-perk": 124,
+    "dog-head-turn": 124,
     "dog-drink-bowl": 140,
     "dog-nose-fingertip": 148,
     "dog-harness-bite": 148,
@@ -37,6 +40,7 @@ TARGETS = {
     "dog-behind-legs": 132,
     "dog-forehead-nudge": 152,
     "dog-anxious": 136,
+    "dog-s04-anxious": 185,
     "dog-parallel": 124,
     "dog-door-sleep": 120,
     "dog-guard-door": 128,
@@ -178,7 +182,7 @@ def main() -> int:
     print()
 
     pairs = [
-        ("S02_meet", ("char-yuan-commute", "char_right", False), ("dog-anxious", "dog_far", True)),
+        ("S02_meet", ("char-yuan-commute", "char_right", False), ("dog-s04-anxious", "dog_far", True)),
         ("S02_close", ("char-yuan-squat-side", "char_right", False), ("dog-halfstep", "dog_mid", True)),
         ("S02_bento", ("char-yuan-squat-side", "char_right", False), ("dog-sniff-bento", "dog_mid", True)),
         ("S04_sofa", ("char-yuan-sofa", "char_sofa", False), ("dog-parallel", "dog_sofa_mid", True)),

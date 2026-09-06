@@ -1,6 +1,7 @@
 # Version3 背景命名與家族｜image_bg
 
 > 風格／角色外型見 [`image.md`](image.md)；狗外型鎖定見 [`image_dog.md`](image_dog.md)（**Option B｜wiry**）  
+> 人／狗 zoom 比例見 [`image_scale.md`](image_scale.md)；**S02 數字**在 `Renpy_game/game/scale.rpy`（`SCALE_S02`）  
 > 對齊：[`game_guild.md`](game_guild.md) · `outline_trilogy_ch1_10sections.md`  
 > **預設生圖：Cursor `GenerateImage`**；FLUX 2 Pro（`fal-ai/flux-2-pro`）僅備援  
 > 路徑：`Ch1_Trust_Version3/assets/bg/`  
@@ -167,17 +168,20 @@ bg-{place}-{light}.png
 - 海軍／深色沙發、暖燈、落地窗／陽台望城市、書櫃、植栽、米白地毯、木地板
 - **可留空牆掛勾**（S10 鑰匙＋牽繩道具位）
 - day：只改自然光；家具不動
+- **立繪尺：** 人／狗見 [`image_scale.md`](image_scale.md)。全景站 `char_right`／`left` **0.36**；狗 **0.139**（幼犬比，far／mid／near 同尺）。S02 抱狗 `char_living` **0.32**（落地窗；合成圖不另疊狗）
 
 ### convenience
 
 - 台灣超商店內：微波區、冷櫃色溫、高腳椅剪影；**禁可讀招牌文字**
 - 無人無狗
+- **立繪尺：** 店員／予安 **0.29**（櫃面到腰）。無狗；若加狗建議 **0.304**。見 `image_scale.md`
 
 ### backdoor（S02 核心）
 
 - 卸貨後門／機車棚陰影、壓扁紙箱、垃圾桶輪廓、濕紙箱＋隔夜油氣氛
 - **空場景**；狗由疊層表現「紙箱邊」
 - 夜／傍晚冷靛＋一點遠燈
+- **立繪尺（S02 對景）：** 予安 **0.31**（頭低於卸貨門楣）、狗 **0.12**（幼犬≈人×0.28；far／mid／near 同尺，四姿 bbox 對齊）。見 `scale.rpy`
 
 ### gate（S03 核心｜公寓大門）
 
@@ -185,45 +189,62 @@ bg-{place}-{light}.png
 - 構圖朝向大門，巷口／馬路在背景一側
 - 正式檔：`bg-gate-night.png` → `bg gate_night`
 - 無人無狗無字
+- **立繪尺：** S02／S03 抱狗 `char_gate` **0.28**（鐵門／木門框）。見 `image_scale.md`
 
 ### stairwell（舊資產）
 
 - 現代化公寓梯廳：保留檔案，S03 主幹不再使用
 - 可留外套／紙盤水的空間感（道具也可疊層）
 - 無人無狗
+- **立繪尺：** S03 門外狗窩 `dog_far_stair` **0.187**（深度例外：門墊中遠景）。見 `image_scale.md`
 
 ### corridor（S06）
 
 - 公寓走廊：門排、地板、日光或窗光
 - 留「擋在中間」的站位空間（中央偏左／右清空）
 - 日光須保留牆面與地磚筆觸，禁止大面積洗白／過曝
+- **立繪尺：** 人多 `char_right` **0.36**；狗 pair／behind **0.139**（幼犬比，同尺）。見 `image_scale.md`
 
 ### alley（S08）
 
 - 巷口轉角、樹／電杆、機車可能經過的空間感
 - **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，停放空車）；`prop/scooter-pass.png`（轉角呼嘯切過，驚嚇拍短暫出現後 hide；transform **×0.8**）
 - 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 轉角機車嚇退回身後；樹下停等才切 `yuan leash`（蹲）
-- 人物／狗用 `*_walk`／`*_s08` transform（相對一般立繪 **×0.8**）；街上狗 xalign：身後約 0.88、跟上約 0.56～0.68
+- **立繪尺：** `char_right_walk` **0.32**；狗 walk **0.124**（幼犬比；far／mid／near／behind 同尺）。見 `image_scale.md`
 - 柔和日間光、曝光平衡；禁曝白牆面、禁文字
 
 ### cafe（S09）
 
 - 咖啡廳**門口／外觀**為主（交牽繩發生在門外）
 - 禁可讀店名；留牽繩交接的站位空間
-- 疊層：同事左蹲（`char_left_cafe`）、予安右站（`char_right_cafe`）、狗依劇情 near_guard／near_home／mid（見 `section_09_almost_handoff.md`）
+- 疊層：同事左（`char_left_cafe`）、予安右（`char_right_cafe`）、狗依劇情 near_guard／near_home／mid
+- **立繪尺：** 人 **0.36**；狗 **0.139**（幼犬比；guard／home／mid 同尺）。見 `image_scale.md`
 
 ### entrance（S03 門檻；S08／S09 出門）
 
 - 台灣公寓**玄關內側**：門板（貓眼／門把）、地墊、鞋櫃、空牆掛勾
-- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`；S09 用 `*_s09` **×0.8**）
+- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`；S09 用 `*_s09`）
 - night：暖壁燈；day：清晨／日間門縫側光，家具不動
 - **用途：** 門內外過渡（S03）；穿胸背帶、跨門檻、返家解帶（S08）；週六扣帶出門（S09）
 - 無人無狗無字
+- **立繪尺：** 人 `char_right_entrance` **0.33**；狗 **0.128**（幼犬比；far／mid 同尺）。見 `image_scale.md`
 
 ### kitchen（可選）
 
 - 小廚房＋門檻線清晰（S04「只到門口」）
 - 與 living 建材色一致
+- **立繪尺：** 人 `char_kitchen_near`／`sink` **0.52**（POV）；狗門檻 `dog_kitchen_threshold` **0.19**（深度例外，勿套 1.048）。見 `image_scale.md`
+
+### office（S01／S02 加班；S07／S09 可短用）
+
+- 夜間隔間、桌燈、椅背、窗外城市；無人無狗無字
+- **立繪尺：** `char_office` **0.28**（椅背／桌高到腰）。S02 開場 `xalign 0.66` 站桌椅右側走道。無狗；若加狗建議 **0.293**。予安用 `headphones_off`。勿套 `char_center`
+
+### street（S01／S02 巷口過場）
+
+- 台灣住宅巷：左側木門／一樓窗、路寬約一台車、盆栽與路燈
+- 無人無狗無字
+- **立繪尺：** `char_street`／`char_street_carry` **0.23**（頭頂低於左側門框；抱狗合成、不另疊狗）。勿套 `char_center`
 
 ### clinic（S02 `vet_first` 短場）
 
@@ -231,6 +252,7 @@ bg-{place}-{light}.png
 - **必備：** 門楣燈箱招牌（僅醫療十字＋爪印符號，**禁可讀文字／店名**）；木櫃檯＋檯燈；等候椅；體重秤；空牽繩掛勾；不可辨識海報色塊；診療室門縫／不鏽鋼台邊暗示
 - 外：濕石板／騎樓感、街燈、停放機車、盆栽；**無人無狗無動物**
 - 正式檔：`bg-clinic-night.png` → `bg clinic_night`
+- **立繪尺：** S02 抱狗 `char_clinic` **0.27**（窗內木櫃檯：`xalign 0.56`／`ypos 0.64`；勿站右側玻璃門）。見 `image_scale.md`
 
 ---
 
@@ -262,6 +284,8 @@ bg-{place}-{light}.png
 | `bg-gate-night.png` | `bg gate_night` |
 | `bg-stairwell-night.png` | `bg stairwell_night` |
 | `bg-convenience-night.png` | `bg convenience_night` |
+| `bg-street-night.png` | `bg street_night` |
+| `bg-clinic-night.png` | `bg clinic_night` |
 | `bg-stairwell-day.png` | `bg stairwell_day` |
 | `bg-alley-day.png` | `bg alley_day` |
 | `bg-cafe-day.png` | `bg cafe_day` |
@@ -284,6 +308,7 @@ bg-{place}-{light}.png
 - [ ] 無人無狗無字、無信任 HUD
 - [ ] S02 主圖為 **backdoor**（非 V2 雨夜紙箱街）
 - [ ] 軟分軌未為信任高低複製多套 bg
+- [ ] S02 立繪對景尺：巷口／後門／診所／超商未套客廳 `char_center`／`char_left`／`char_right`
 - [ ] 未自動開遊戲
 
 ---
@@ -351,6 +376,27 @@ bg-{place}-{light}.png
 - 舊檔備份：`assets/_backup_unused/bg/_backup_clinic_20260804_015626/`
 - 畫布對齊其他 V3 夜景：`2048×1152`
 
+### 2026-09-06｜S02 改對景（每場固定一把尺）
+
+完整表見 **[`image_scale.md`](image_scale.md)**。數字只改 `Renpy_game/game/scale.rpy`（S02＝`SCALE_S02`；S04–S10＝`SCALE`）。人對齊該場門框／椅／櫃；幼犬可見高 ≈ 人 ×0.28～0.37（`dog = char × 0.12/0.31`）。機車道具維持 ×0.8。
+
+| place | 人 zoom | 狗 | 對齊 |
+|-------|---------|----|------|
+| office | **0.28** | — | 椅／桌到腰 |
+| convenience | **0.29** | — | 櫃面到腰 |
+| street | **0.23** | 合成 | 左側門框；遇狗前＝抱走 |
+| backdoor | **0.31** | **0.12** | 幼犬≈人×0.28；四姿同高 |
+| clinic | **0.27** | 合成 | 玻璃門 |
+| entrance 抱走 | **0.33** | 合成 | 大門／鞋櫃 |
+| living 抱走 | **0.32** | 合成 | 落地窗 |
+| gate | **0.28** | 合成 | 鐵門／木門 |
+| living 全景 | **0.36** | **0.139** | S04–S10 對景；遠近同尺 |
+| kitchen POV | **0.52** | **0.19** | 深度例外 |
+| stairwell | — | **0.187** | 深度例外 |
+| entrance 日常 | **0.33** | **0.128** | 幼犬比 |
+| alley 散步 | **0.32** | **0.124** | 幼犬比 |
+| cafe | **0.36** | **0.139** | 幼犬比 |
+
 ---
 
-*更新：2026-08-04｜clinic-night 招牌／櫃檯／診療擺設重產*
+*更新：2026-09-06｜S04–S10 對景收入 scale.rpy `SCALE`；狗幼犬比*

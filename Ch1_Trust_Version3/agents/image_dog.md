@@ -127,13 +127,20 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | 檔名 | 表情 | 動作 | 主用 | 錨點 |
 |------|------|------|------|------|
 | `dog-ref-canonical.png` | 中性側臉 | 全身側立母版 | 外型基準 | `refs/ref-side-profile` |
-| `dog-anxious.png` | 擔憂上望 | 低趴、下巴貼前爪 | S02／低信任 | `refs/ref-anxious-*` |
+| `dog-anxious.png` | 擔憂上望 | 低趴、下巴貼前爪 | 低信任備援（S06～） | `refs/ref-anxious-*` |
+| `dog-s04-anxious.png` | 擔憂上望 | 低趴、下巴近前爪（S04 橫式填滿畫風） | **S02** 後門；**S05** 低信任開場 | 生成 |
 | `dog-halfstep.png` | 警戒好奇 | 「既不碰你、也不放你走」的半步 | S02 記憶 | 生成 |
 | `dog-sniff-bento.png` | 小心試探 | 聞米粒／便當味 | S02 距離＋ | 生成 |
 | `dog-stair-watch.png` | 警戒 | 靠牆、面向門口方向 | S03 | 生成 |
 | `dog-door-sleep.png` | 睏但守門 | 睡在房門外 | S03 鉤子 | 生成 |
 | `dog-coat-sniff.png` | 借溫 | 聞／靠外套 | S03 外套 | 生成 |
 | `dog-parallel.png` | 放鬆一點 | 兩步遠地板、下巴貼地 | S04 | 生成 |
+| `dog-ear-perk.png` | 聽見新聲 | 趴著、耳根抬起朝向聲源 | S04 冷氣喀／耳機 | 生成 |
+| `dog-chin-hover.png` | 被突發大聲嚇到 | 耳平、下巴離地一公分 | S04 電視 | 生成 |
+| `dog-head-turn.png` | 找誰在吵 | 前身抬起、頭轉向聲源 | S04 手機笑聲 | 生成 |
+| `dog-head-up.png` | 聽出聲音不一樣 | 趴著、頭抬向椅上的人 | **S05** 開會尖聲 | 生成 |
+| `dog-chair-paw.png` | 把伸手當邀請 | 後腳站、前腳搭上椅緣短木邊 | **S05** 碰耳機線後 | 生成 |
+| `dog-chair-stuck.png` | 被回授嚇到 | 後縮、前腳仍卡在椅緣 | **S05** 選擇高峰 | 生成 |
 | `dog-chin-floor.png` | 安靜趴定 | 下巴完整貼地 | S04 距離＋ | 生成 |
 | `dog-kitchen-door.png` | 跟著觀望 | 停在廚房門檻外 | S04 記憶 | 生成 |
 | `dog-ear-flat.png` | 被尖聲嚇到 | 耳朵平、往後退 | S05 語氣− | 生成 |
@@ -142,7 +149,7 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | `dog-forehead-nudge.png` | 輕輕道謝 | 額頭輕頂小腿 | S06 記憶 | 生成 |
 | `dog-guard-door.png` | 不安守門 | 趴在房門口 | S07 | 生成 |
 | `dog-nose-fingertip.png` | 輕觸 | 鼻尖碰指尖 | S07 記憶 | 生成 |
-| `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S08 低信任 | 生成 |
+| `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | S04 低信任開場／合照後；S08 低信任 | 生成 |
 | `dog-leash-wait.png` | 累但仍信任 | 穿胸背帶、停步等待 | S08 高信任；S09 玄關 | 生成 |
 | `dog-harness-bite.png` | 適應裝備 | 咬胸背帶布邊 | S08 穿胸背帶 | 生成 |
 | `dog-drink-bowl.png` | 急喝水 | 低頭喝水碗 | S08 回家；結局 A | 生成 |
@@ -177,7 +184,7 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 
 | 動作 | 幀 | 首幀來源 | 用處 |
 |------|----|-----------|------|
-| `dog wag`（搖尾巴） | `wag/dog-wag-01~05.png`（ping-pong） | `dog-ref-canonical.png` | S05 取名後 |
+| `dog wag`（搖尾巴） | `wag/dog-wag-01~05.png`（ping-pong） | `dog-ref-canonical.png` | **S04** 尾隨廚房；S05 取名後 |
 | `dog door_sleep`（熟睡呼吸，pause 0.35） | `door-sleep/dog-door-sleep-01~05.png` | `dog-door-sleep.png` | S03 大門外／玄關 |
 | `dog back_sleep`（深勻呼吸，pause 0.38） | `back-sleep/dog-back-sleep-01~05.png` | `dog-back-sleep.png` | 結局 A |
 | `dog check_sleep`（淺呼吸＋眼微睜，pause 0.32） | `check-sleep/dog-check-sleep-01~05.png` | `dog-check-sleep.png` | 結局 B |
@@ -192,6 +199,37 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 第二批挑幀策略：`sniff_wire` 取「碰線→抬起→再碰線」完整週期**順播**（首尾同相位、無縫）；`farewell` 依 content bbox **寬度**排序（＝尾巴掃地位置）ping-pong；`drink_bowl`／`guard_door` 取連續幀 ping-pong。
 
 2026-08-01 尺寸修正：八個動畫姿勢的幀已全部裁回原圖框架（修正浮空），縮放沿用靜態原值；`sniff_wire` 模型延長到原圖框外的耳機線以窄幅 alpha 淡出收尾（y 1030→1075、左緣 60px）。修正前原幀備份於 `Renpy_game/tools/output/seedance/prenorm-backup/`。
+
+### 3.6 S04 客廳可見高（2026-09-06 鎖定）
+
+客廳趴姿切換時，**可見內容高度**對齊 `dog-parallel`（`DOG_POSE_SCALE` 在 `script.rpy`）。不要為了「圖比較滿」再加大 zoom。
+
+| 檔名 | `DOG_POSE_SCALE` | 主用 |
+|------|------------------|------|
+| `dog-parallel.png` | **0.524**（母尺） | 兩步遠地板 |
+| `dog-chin-floor.png` | 0.424 | Dist＋下巴貼地 |
+| `dog-ear-perk.png` | 0.414 | 冷氣喀／耳機耳動 |
+| `dog-chin-hover.png` | 0.558 | 電視突然大聲 |
+| `dog-head-turn.png` | **0.369** | 手機笑聲找聲源 |
+| `wag/dog-wag-01~05.png` | **0.750** | 尾隨廚房（勿用 `halfstep`，會突然變大） |
+
+低信任開場／合照後仍可用 `street-tense`（站姿，略高於趴姿）。廚房門檻 `kitchen-door` 用 `dog_kitchen_threshold`（深度例外，不套客廳趴姿尺）。
+
+S02 後門第一次見面用 `dog-s04-anxious`（**0.551**），不用舊 `dog-anxious`（1.575，留白尺，客廳會大一倍）。
+
+### 3.7 S05 早會姿（2026-09-06）
+
+早會切姿時，**全部可見高對齊 `parallel`**。搭椅／卡住不再加高。S02／S03 共用 pose 用 `s05_*` 別名，勿改全域 `DOG_POSE_SCALE`。予安在左、狗在右且面左。椅緣可留一小段木邊，不要整張椅子。
+
+| 檔名 | `DOG_POSE_SCALE` | 主用 |
+|------|------------------|------|
+| `dog-head-up.png` | **0.332** | 開會尖聲抬頭（趴姿，對齊 parallel；圖檔面左） |
+| `dog-chair-paw.png` | **0.334** | 前腳搭椅緣（與 parallel 同可見高） |
+| `dog-chair-stuck.png` | **0.394** | 回授後縮、前腳卡住（與 parallel 同可見高） |
+| `s05_anxious`／`s05_ear_flat`／`s05_stair_watch` | 0.369／0.341／0.477 | 僅 S05 客廳同高；不改後門／梯廳／走廊 |
+| `sniff-wire` 幀 | **0.605** | S05 專用動畫；對齊 parallel |
+
+落地：予安坐左（`char_chair_left`，面右看狗）；狗用 `dog_near`／`mid`／`far`（不翻轉，面左）。低信任開場 `s05_anxious`；尖聲→`head_up`（圖檔已水平翻轉面左）；跟線／嗅線→`sniff_wire`；搭椅→`chair_paw`；卡住→`chair_stuck`；選擇後 `s05_ear_flat`；門外 `s05_stair_watch`。以上客廳可見高對齊 `parallel`，不改 S02／S03／S06 的全域 scale。
 
 ---
 
@@ -213,7 +251,7 @@ No text, no logo, no purebred markers, no trust meter UI.
 ### Cursor GenerateImage 注意
 
 - `reference_image_paths` 必含：`assets/dog/dog-ref-canonical.png`，建議再加 `assets/dog/refs/ref-anxious-b.png`
-- `aspect_ratio`：直式 pose 用 `"3:4"`；橫躺可用 `"4:3"`
+- `aspect_ratio`：直式 pose 用 `"3:4"`；S04 客廳趴姿／`s04-anxious`／S05 `head-up` 用 `"4:3"`；S05 搭椅／卡住用 `"3:4"`
 - 產完 → `python tools/remove_ai_bg.py …` → 覆蓋 `assets/dog/dog-{pose}.png`
 
 ---
@@ -246,6 +284,7 @@ No text, no logo, no purebred markers, no trust meter UI.
 | **本檔 `image_dog.md`** | 小7 **外型鎖定＋pose 一致性** |
 | `image.md` | 總美術規範、人物／背景／STYLE |
 | `image_bg.md` | 背景地點／光線；**背景不要有人、也不要有狗** |
+| `image_scale.md` | 每場人／狗 zoom（S02＝`SCALE_S02`；S04–S10＝`SCALE`） |
 | `game_guild.md` | 信任用距離／睡姿讓人感覺得到，不顯示數字 |
 
 `image.md` 的狗章節以本檔為準；衝突時以 **本檔 Option B** 為準。
@@ -263,7 +302,12 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 2026-08-01 | 落地四個睡姿呼吸動畫：`door_sleep`／`back_sleep`／`check_sleep`／`door_edge`（各 5 幀，S03＋結局 A／B／D）；fast 模型 i2v 不送 `camerafixed` |
 | 2026-08-01 | 落地第二批動作動畫：`sniff_wire`（S05）／`guard_door`（S07）／`drink_bowl`（S08）／`farewell`（S09）；中繼檔保留於 `Renpy_game/tools/output/seedance/` |
 | 2026-08-01 | 修正八個動畫姿勢浮空（S03／S05／S07／S08／S09／結局）：幀裁回原圖框架、scale 沿用靜態原值；產線新增「裁回原框」必做步驟 |
+| 2026-09-06 | S04 進房聲響三姿：`ear-perk`／`chin-hover`／`head-turn` |
+| 2026-09-06 | S02 後門 anxious 改用 `dog-s04-anxious`（S04 橫式畫風）；舊 `dog-anxious` 留作後段低信任備援 |
+| 2026-09-06 | S04 客廳狗可見高對齊 `parallel`：`head-turn` 0.369；尾隨改 `wag`；`wag` 幀 0.750 |
+| 2026-09-06 | S05 早會三姿：`head-up`／`chair-paw`／`chair-stuck`；低信任開場改 `s04-anxious` |
+| 2026-09-06 | S05 予安改坐左、狗一律面左；客廳可見高全對齊 parallel（`s05_*` 別名） |
 
 ---
 
-*更新：2026-08-01｜動畫序列幀產線＋`dog wag`；Option B 錨點鎖定見 2026-07-25*
+*更新：2026-09-06｜S05 早會三姿；S04 聲響三姿＋客廳可見高；S02 改 `s04-anxious`*

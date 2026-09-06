@@ -52,7 +52,7 @@ required = {
     "slow title transform": "transform title_slow_fade",
     "S01 title call": 'show_section_title("Section 01", "螢幕光比月亮亮")',
     "S02 title call": 'show_section_title("Section 02", "後門那一瞥")',
-    "dog anxious sprite": "show dog anxious",
+    "dog anxious sprite": "show dog s04_anxious",
     "dog halfstep sprite": "show dog halfstep",
     "S02 path flag shelter": 'flags["called_shelter"] = True',
     "S02 path flag vet": 'flags["vet_first"] = True',
@@ -270,6 +270,12 @@ if not re.search(r"\$\s*trust\s*-=\s*2", s05):
     fail("S05 尖聲喝止必須有 trust -2")
 if "$ tone += 1" not in s05 or "$ tone -= 1" not in s05:
     fail("S05 必須同時存在 Tone 升／降")
+if "show dog head_up" not in s05:
+    fail("S05 開會尖聲必須切 head_up")
+if "show dog chair_paw" not in s05:
+    fail("S05 前腳搭椅必須切 chair_paw")
+if "show dog chair_stuck" not in s05:
+    fail("S05 回授卡住必須切 chair_stuck")
 if "jump section_06_corridor_third_person" not in s05:
     fail("S05 所有軟分軌都必須進 S06")
 

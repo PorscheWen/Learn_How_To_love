@@ -535,15 +535,15 @@ screen section_select():
 
     default section_entries = [
         ("start_section_01", "Section 01｜螢幕光比月亮亮", "予安習慣獨自度過加班的夜，直到店員提起後門那隻沒力氣的小狗。"),
-        ("start_section_02", "Section 02｜後門那一瞥", "她終於轉進後門，看見小7，也第一次試著在害怕面前放慢腳步。"),
+        ("start_section_02", "Section 02｜後門那一瞥", "她終於轉進後門。紙箱邊那一瞥，讓腳步自己慢了下來。"),
         ("start_section_03", "Section 03｜大門的臨時國界", "牠在大門外睡著；她不忍心，開門把牠帶回屋內直到天明。"),
         ("start_section_04", "Section 04｜共享同一種安靜", "沙發與地板隔著兩步，他們不急著靠近，只練習在同一份安靜裡留下。"),
         ("start_section_05", "Section 05｜你的聲音有兩種", "戴上耳機後，予安的聲音變得又快又尖；小7開始分辨，哪一種聲音會為牠慢下來。"),
-        ("start_section_06", "Section 06｜樓梯間的第三者", "當陌生人的手伸向小7，予安第一次發現，自己已經站進了「我們」這一邊。"),
+        ("start_section_06", "Section 06｜樓梯間的第三者", "鄰居伸手要摸；她得決定，自己要站在哪裡。"),
         ("start_section_07", "Section 07｜她倒下的那天", "予安病得起不了身，小7不懂怎麼照顧人，只知道守在門口，試著等她回應。"),
         ("start_section_08", "Section 08｜走到轉角就好", "第一次出門只為抵達巷口；世界太吵時，予安得決定要拉著牠，還是一起停下。"),
         ("start_section_09", "Section 09｜差點交給別人", "同事真誠提出接手；交繩前，她得承認誰已經選過誰。"),
-        ("start_section_10", "Section 10｜把鑰匙分給心跳", "鑰匙與牽繩掛在同一面牆上；夜深後，睡眠的距離替這段關係留下答案。"),
+        ("start_section_10", "Section 10｜把鑰匙分給心跳", "鑰匙與牽繩掛在同一面牆上；夜深後，牠願不願意靠近，會把答案留在地板上。"),
     ]
 
     frame:
@@ -567,7 +567,7 @@ screen section_select():
                     size 24
                     color LHTL_TEXT_LIGHT
                     outlines [(2, "#17120F99", 0, 0)]
-                text "選擇章節會以該段預設狀態開始，不影響既有存檔。Section 09 預設較高信任，留下會走到結局 A。":
+                text "選擇章節會從該段開始，不影響既有存檔。從後面進來，有些距離已經先走完了。":
                     font CJK_FONT
                     size 13
                     color LHTL_TEXT_SOFT

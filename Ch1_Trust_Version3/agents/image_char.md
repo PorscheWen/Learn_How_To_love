@@ -61,27 +61,30 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 
 | 檔名 | 表情／動作 | 服裝／道具 | 主用 |
 |------|------------|------------|------|
-| `char-yuan-commute.png` | 疲憊垂眼、略駝 | 奶油開襟針織＋灰 T＋深褐寬褲；**耳機掛脖**；右手提便當塑膠袋 | **僅** S01 夜歸／超商／巷口／玄關進門、S02 後門相遇前；**禁**開冰箱、倒水、白天門邊、S10 空屋／擺碗、結局 |
-| `char-yuan-home-stand.png` | 進屋後空手站 | 同 commute 服裝；**無袋、無牽繩**；一手插袋一手自然下垂 | S01 開冰箱；S06 門邊（護衛前）；S07 倒水；S10 空屋／擺碗 |
-| `char-yuan-paper-bag.png` | 提紙袋回家 | 同 commute 服裝；右手提**牛皮紙購物袋**（非透明便當袋） | S10 買水碗／掛勾回程（街／玄關／客廳貼勾） |
-| `char-yuan-sofa.png` | 平行安靜 | **木椅坐姿**滑手機（對齊 `bg-living-day` 右前景矮凳；transform `char_chair`）；手垂下 | **S04** 人狗同框；S10 停電前可短用 |
-| `char-yuan-squat-side.png` | 側身蹲等 | 米白襯衫＋橄欖褲；側蹲不伸手；**無牽繩** | **S02** Dist＋ |
-| `char-yuan-carry-pup.png` | 側抱幼犬 | 通勤服；側抱小7 | S02 帶走／硬抱失敗一瞬；S06 抱回屋內 |
-| `char-yuan-headphones.png` | 專注／疏離 | 淺灰藍長袖襯衫袖捲起＋深褐褲；**耳機戴上**；雙手插口袋 | S05 Tone 尖；辦公室夜景 |
-| `char-yuan-headphones-off.png` | Tone 切換 | 同服裝；**耳機掛脖／剛摘下** | **S05** 關麥克風後 |
+| `char-yuan-commute.png` | 疲憊垂眼、略駝 | 奶油開襟針織＋灰 T＋深褐寬褲；**耳機掛脖**；右手提便當塑膠袋；外出皮鞋 | **僅** 外出：S01 夜歸／超商／巷口／玄關進門、S02 後門前、S10 送走後巷口；**禁**開冰箱、倒水、白天門邊、客廳坐、S10 空屋／擺碗 |
+| `char-yuan-home-stand.png` | 進屋後空手站 | **室內裝**：燕麥寬鬆毛衣＋炭灰家居褲＋淺色襪；**不穿鞋** | S01 開冰箱；S06 門邊（護衛前）；S07 倒水；S10 脫鞋後客廳／廚房／擺碗 |
+| `char-yuan-paper-bag.png` | 提紙袋回家 | 通勤服＋皮鞋；右手提**牛皮紙購物袋** | **僅** S10 街／玄關進門（尚未脫鞋） |
+| `char-yuan-sofa.png` | 室內沙發坐 | **室內裝**＋襪；坐姿**無椅**（疊左沙發）；滑手機 | S01 客廳吃便當；S09／S10 夜客廳（`char_left_sit`） |
+| `char-yuan-home-sit.png` | 室內坐椅 | **室內裝**＋襪；坐在小木凳上滑手機；面向左 | **S04** 書櫃前木椅（`yuan home_sit`／`char_chair`） |
+| `char-yuan-squat-side.png` | 側身蹲等 | 米白襯衫＋橄欖褲；側蹲不伸手；**無牽繩** | **S02** Dist＋；`char_backdoor_squat` zoom **0.31**（卸貨門對景） |
+| `char-yuan-carry-pup.png` | 側抱幼犬 | 通勤服；側抱小7 | S02 帶走／硬抱失敗一瞬（後門 `char_backdoor_carry` **0.31**、巷口 `char_street_carry` **0.23**、急診 `char_clinic` **0.27**、客廳 `char_living` **0.32**）；S06 抱回屋內 |
+| `char-yuan-headphones.png` | 專注／疏離 | 淺灰藍長袖襯衫袖捲起＋深褐褲；**耳機戴上**；外出皮鞋；**站姿** | S01／S07／S09 **辦公室** |
+| `char-yuan-headphones-off.png` | Tone 切換／下班 | 同服裝；**耳機掛脖**；站姿 | **S02** 辦公室關螢幕（`char_office`） |
+| `char-yuan-headphones-sit.png` | 視訊開會 | 同襯衫；耳機戴上；**室內襪**；坐木凳 | **S05** 客廳左坐（`yuan headphones_sit`／`char_chair_left`） |
+| `char-yuan-headphones-off-sit.png` | 關麥／散會 | 同襯衫；耳機掛脖；**室內襪**；坐木凳 | **S05** 客廳左坐（`yuan headphones_off_sit`／`char_chair_left`） |
 | `char-yuan-sick-bed.png` | 發燒虛弱 | 床沿垂手 | **S07** |
 | `char-yuan-block.png` | 冷靜擋在中間 | 米白襯衫袖捲；**面向左**；一臂前伸開掌擋／護（對左側鄰居） | **僅** S06 選「往前半步擋住」；勿再當空手站姿暫代 |
-| `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲；側蹲；手握**棕色皮牽繩**下垂；**面向左** | S08 玄關穿帶／返家；S08 樹下停等；S09 玄關（×0.8） |
+| `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲；側蹲；手握**棕色皮牽繩**下垂；**面向左** | S08 玄關穿帶／返家；S08 樹下停等；S09 玄關 |
 | `char-yuan-walk.png` | 巷口散步 | 米白襯衫＋橄欖褲；**站姿走路**握牽繩；**面向左**；無狗同框 | **S08 巷口**（非蹲） |
 | `char-yuan-leash-pass.png` | 交繩／收回 | 站姿；**僅予安雙手**握牽繩握把（**禁**對方伸入畫面的手） | **S09** 硬分歧（期間勿疊同事全身） |
-| `char-yuan-farewell.png` | 告別／攤手 | 米白襯衫＋橄欖褲；單膝下跪；手掌攤開**無牽繩**；圖檔**面向左**（遊戲內 `xzoom` 翻成面右對狗） | S09 客廳（×0.8） |
+| `char-yuan-farewell.png` | 告別／攤手 | **室內裝**＋襪；單膝下跪；手掌攤開**無牽繩**；圖檔**面向左**（遊戲內 `xzoom` 翻成面右對狗） | S09 客廳 |
 | `char-yuan-cafe.png` | 交接衝突 | 米白襯衫＋橄欖褲；**站姿**握牽繩；**面向左**（對同事／狗） | S09 咖啡廳 |
-| `char-clerk.png` | 禮貌微笑 | 年輕男店員；深藍短袖＋深色圍裙＋深褲 | S01／S02 |
+| `char-clerk.png` | 禮貌微笑 | 年輕男店員；深藍短袖＋深色圍裙＋深褲 | S01／S02；`char_convenience` zoom 0.29（勿套客廳 `char_left`） |
 | `char-neighbor.png` | 熱心伸手 | 中年女鄰居；綠卡迪＋米上衣；**面向右**伸手（對右側予安／狗） | S06 |
 | `char-coworker.png` | 真誠提議 | 年輕女同事；淡紫開襟＋米內搭＋炭灰褲；一手前伸 | S09 茶水間 |
 | `char-coworker-cafe.png` | 蹲等聞狗 | 同上服裝；**蹲姿側身**；手留膝上／低伸；**面向右**（對女主／狗） | S09 咖啡廳 |
 
-**站位慣例：** 予安多在 `char_right`／`char_chair`（S04 面左看狗）；需人狗互視時，狗用 `dog_*_to_yuan` 或 `dog_chair_*`（水平翻轉面右）。合成圖（`carry_pup`／`leash_pass`／`nose_tip`）同框時先 `hide` 另一層，避免雙重手／雙重狗。
+**站位慣例：** 予安多在 `char_right`／`char_chair`（S04 面左看狗）；**S05** 予安在 `char_chair_left`（面右），狗用 `dog_near`／`mid`／`far`（不翻轉、面左）。其餘需人狗互視時，狗用 `dog_*_to_yuan` 或 `dog_chair_*`（水平翻轉面右）。合成圖（`carry_pup`／`leash_pass`／`nose_tip`）同框時先 `hide` 另一層，避免雙重手／雙重狗。S02 對景尺（門／機車／路）見 `image_bg.md` §5／§9。
 
 ---
 
@@ -153,7 +156,9 @@ No text, no logo, no trust meter UI, no scenery.
 | 2026-07-25 | 建立本檔；備份 `assets/_backup_unused/_backup_20260725_193450/`；以現有 7 張為錨重寫 IDENTITY／STYLE；全量重產 |
 | 2026-07-28 | 新增 `char-yuan-farewell`／`char-yuan-cafe`／`char-coworker-cafe`；S09 朝向寫入 pose 表 |
 | 2026-08-13 | 新增 `char-yuan-home-stand`／`char-yuan-paper-bag`；`leash-pass` 重產去除對方伸入的手 |
+| 2026-09-06 | 室內裝統一：`home-sit`／`home-stand`／`sofa`／`farewell` 不穿鞋；S05 另產 `headphones-sit`；辦公室站姿耳機圖保留 |
+| 2026-09-06 | S05 改 `char_chair_left`（坐左、面右看狗） |
 
 ---
 
-*更新：2026-08-13｜home-stand／paper-bag／leash-pass 去對方手；建立稿 2026-07-25*
+*更新：2026-09-06｜S05 坐左；室內不穿鞋；辦公室仍用站姿耳機*
