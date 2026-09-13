@@ -28,6 +28,12 @@ init -1 python:
         "living":        {"char": 0.36,  "dog": _puppy(0.36),  "fit": "落地窗全景（S04–S10 站）"},
         "living_center": {"char": 0.384, "dog": _puppy(0.36),  "fit": "客廳置中"},
         "living_chair":  {"char": 0.304, "dog": _puppy(0.36),  "fit": "矮凳坐姿；狗同客廳平面"},
+        # 人沿床躺（頭在右枕）；小於客廳站姿 0.36；狗在地板，沿用客廳平面 0.139
+        "bedroom":       {"char": 0.18,  "dog": _puppy(0.36),  "fit": "S07 沿床躺／看向門邊的狗；狗同客廳地板"},
+        # 指尖特寫：頭距對齊 guard_door 後再近一檔（約地板尺 ×2.16）；勿用 visH 把全身縮小
+        "bedroom_nose":  {"char": None,  "dog": 0.30,          "fit": "S07 鼻尖碰指尖；頭距母尺再靠近"},
+        "living_wire":   {"char": None,  "dog": 0.30,          "fit": "S05 會後嗅線特寫；頭距再靠近"},
+        "entrance_nudge":{"char": None,  "dog": 0.28,          "fit": "S06 額碰頭特寫；頭距再靠近"},
         "kitchen":       {"char": 0.52,  "dog": 0.19,          "fit": "POV；門檻深度例外"},
         "entrance":      {"char": 0.33,  "dog": _puppy(0.33),  "fit": "大門／鞋櫃（日常）"},
         "alley":         {"char": 0.32,  "dog": _puppy(0.32),  "fit": "巷口散步"},

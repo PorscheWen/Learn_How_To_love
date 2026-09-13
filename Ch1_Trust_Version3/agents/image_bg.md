@@ -54,7 +54,7 @@ bg-{place}-{light}.png
 
 | 段 | 含義 | Version3 允許值 |
 |----|------|-----------------|
-| `place` | 地點／空間 | `living` · `convenience` · `backdoor` · `gate` · `entrance` · `stairwell` · `corridor` · `alley` · `cafe` · `kitchen` · `office` · `street` |
+| `place` | 地點／空間 | `living` · `bedroom` · `convenience` · `backdoor` · `gate` · `entrance` · `stairwell` · `corridor` · `alley` · `cafe` · `kitchen` · `office` · `street` |
 | `light` | 日夜／光暗 | `day` · `night` · `dusk` · `rain`（僅外景需天氣時） |
 
 **範例：** `bg-living-night.png` · `bg-backdoor-night.png` · `bg-stairwell-night.png` · `bg-cafe-day.png`
@@ -74,7 +74,7 @@ bg-{place}-{light}.png
 | 勿用 | 原因 |
 |------|------|
 | `bg-apartment-night-living` | 一律 `place` 在前、`light` 在後 |
-| `bg-bedroom-night` 當客廳主戰場 | 臥室戲可併 `living` 或另建 `bedroom` 家族；Ch1 優先 living |
+| `bg-bedroom-night` 當客廳主戰場 | 臥室戲用 `bedroom` 家族（S07 病床／門線）；客廳仍用 `living` |
 | `bg-pet-shop`／`bg-petshop-*` 當主線 | V3 **主線非寵物店**（見切割表） |
 | 同一 place 各 light 獨立重畫整套家具 | 必須從該 place **基準圖** img2img |
 | `bg-trust-high-living` 這類信任後綴 | 信任不進檔名 |
@@ -102,7 +102,7 @@ bg-{place}-{light}.png
 
 | 檔名 | Place | Light | 角色 | 用途（Section） |
 |------|-------|-------|------|-----------------|
-| **`bg-living-night.png`** | living | night | **living 基準** | S01 回家；S04／S07／S10 |
+| **`bg-living-night.png`** | living | night | **living 基準** | S01 回家；S04／S10；S07 選 B 關客廳 |
 | `bg-living-day.png` | living | day | 自 night 變體 | S04 平行安靜；S05 視訊 |
 | **`bg-backdoor-night.png`** | backdoor | night | **後門基準** | **S02** 卸貨後門／機車棚／紙箱邊 |
 | **`bg-gate-night.png`** | gate | night | **大門基準** | **S03** 公寓大門外 |
@@ -121,6 +121,7 @@ bg-{place}-{light}.png
 | `bg-entrance-day.png` | entrance | day | S03 清晨；S04 `delayed_entry`；**S08** 穿帶／出門／返家；**S09** 週六扣帶出門 |
 | `bg-kitchen-day.png` | kitchen | day | S04 門口記憶點（**已落地**） |
 | `bg-kitchen-night.png` | kitchen | night | **S01** 開冰箱（自 day 夜化；**已落地**） |
+| **`bg-bedroom-night.png`** | bedroom | night | **S07** 病床／房門線（空場景；人狗疊層） |
 
 ### 3.3 P2（可省略／已補）
 
@@ -152,8 +153,8 @@ bg-{place}-{light}.png
 | 04 | `living-day`（主）／`kitchen-day`（門口） | 日；夜安靜可用 living-night |
 | 05 | `living-day` | 日 |
 | 06 | `stairwell-day` → `entrance-day` | 日；與 S03 夜梯廳同構圖 |
-| 07 | `living-night` → **`kitchen-night`（倒水）** → `living-night` → `office-night` | 病中夜；倒水切廚房 |
-| 08 | **`entrance-day`** → **`alley-day`** → `entrance-day` → `living-day` → **`office-night`（週一）** | 外出日；尾鉤切辦公室 |
+| 07 | **`bedroom-night`（病床／門線）** → **`kitchen-night`（倒水）** → 選 B 回 **`living-night`（沙發）**／其餘回 **`bedroom-night`** → `office-night` | 病中夜；開場不再用客廳代理床場 |
+| 08 | **`entrance-day`**（穿帶／門檻）→ **`alley-day`** → `entrance-day`（解帶／鞋邊）→ **`entrance-day`（下午聞帶）** → **`office-night`（週一）** | 外出日；尾鉤切辦公室；下午予安不入鏡 |
 | 09 | `office-night` → **`living-night`（三晚）** → `living-day` → **`entrance-day`** → `cafe-day` | 猶豫夜回客廳 |
 | 10 | 送走：`alley-night` → `entrance-night` → `kitchen-night` → `living-night`；留下：`street-night` → `entrance-night` → `living-night` → `kitchen-night` → `living-night` | 停電／颱風夜在客廳 |
 
@@ -203,14 +204,14 @@ bg-{place}-{light}.png
 - 公寓走廊：門排、地板、日光或窗光
 - 留「擋在中間」的站位空間（中央偏左／右清空）
 - 日光須保留牆面與地磚筆觸，禁止大面積洗白／過曝
-- **立繪尺：** 人多 `char_right` **0.36**；狗 pair／behind **0.139**（幼犬比，同尺）。見 `image_scale.md`
+- **立繪尺：** 人 `char_s06_neighbor`／`char_s06_yuan` **0.36**（xalign 0.22／0.60）；狗 pair／behind **0.139**（幼犬比，同尺；頭距見 `image_dog.md` §3.8）。予安**外出襯衫＋樂福鞋**（`door_hold`／`block`／`carry_pup`）；進屋才室內襪。見 `image_scale.md`／`image_char.md`
 
 ### alley（S08）
 
 - 巷口轉角、樹／電杆、機車可能經過的空間感
 - **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，停放空車）；`prop/scooter-pass.png`（轉角呼嘯切過，驚嚇拍短暫出現後 hide；transform **×0.8**）
-- 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 轉角機車嚇退回身後；樹下停等才切 `yuan leash`（蹲）
-- **立繪尺：** `char_right_walk` **0.32**；狗 walk **0.124**（幼犬比；far／mid／near／behind 同尺）。見 `image_scale.md`
+- 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 空機車 `far_walk` 伸鼻再嚇退回身後 → 轉角機車嚇退回身後；樹下停等才切 `yuan leash`（蹲）。硬拖維持 behind，勿 far 走到人前。
+- **立繪尺：** `char_right_walk` **0.32**；狗 walk **0.124**（幼犬比；far／mid／near／behind 同尺）。樹下蹲 `leash` 仍 0.32。人／狗 visH 見 `image_scale.md` §S08 確認。
 - 柔和日間光、曝光平衡；禁曝白牆面、禁文字
 
 ### cafe（S09）
@@ -223,11 +224,11 @@ bg-{place}-{light}.png
 ### entrance（S03 門檻；S08／S09 出門）
 
 - 台灣公寓**玄關內側**：門板（貓眼／門把）、地墊、鞋櫃、空牆掛勾
-- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`；S09 用 `*_s09`）
+- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`／**S08 near 0.70**；S09 用 `*_s09`）
 - night：暖壁燈；day：清晨／日間門縫側光，家具不動
 - **用途：** 門內外過渡（S03）；穿胸背帶、跨門檻、返家解帶（S08）；週六扣帶出門（S09）
 - 無人無狗無字
-- **立繪尺：** 人 `char_right_entrance` **0.33**；狗 **0.128**（幼犬比；far／mid 同尺）。見 `image_scale.md`
+- **立繪尺：** 人 `char_right_entrance`／S08 `leash` **0.33**；狗 **0.128**（幼犬比；far／mid／near 同尺）。S08 visH 見 `image_scale.md` §S08 確認。
 
 ### kitchen（可選）
 
@@ -235,10 +236,18 @@ bg-{place}-{light}.png
 - 與 living 建材色一致
 - **立繪尺：** 人 `char_kitchen_near`／`sink` **0.52**（POV）；狗門檻 `dog_kitchen_threshold` **0.19**（深度例外，勿套 1.048）。見 `image_scale.md`
 
+### bedroom（S07 病床／門線）
+
+- 台灣小公寓臥室：左木門**微微開啟**（暖光從門縫漏進來）、中央空地板、右單人床（被摺向床尾、右側留坐墊）、床頭櫃空水杯＋暖燈、窗見冷靛夜空
+- **空場景**；予安／狗皆疊層。床頭少畫搶眼枕頭（`sick-bed` 立繪自帶靠枕與薄被）
+- 構圖留門檻空地給狗 far／mid／near／shift（xalign **0.20／0.30／0.46／0.34**）；掀開的床單給 `char_bedroom` 蓋被對齊
+- 狗跟旁白走，不新產 pose：爪子 `s07_low`＠far → 進房 `halfstep` → 被角 `ear_perk` → 回門 `guard_door`。完整拍點見 `section_07_sick_guard.md`、`image_dog.md` §3.9
+- **立繪尺：** 人 `char_bedroom` **0.18**（沿床躺、看向門邊的狗）；狗地板 **0.139**；指尖特寫只留 bg＋放大層 `bedroom_nose` **0.30**（解鎖回憶 `nose_touch`）。見 `image_scale.md` §0.2
+
 ### office（S01／S02 加班；S07／S09 可短用）
 
 - 夜間隔間、桌燈、椅背、窗外城市；無人無狗無字
-- **立繪尺：** `char_office` **0.28**（椅背／桌高到腰）。S02 開場 `xalign 0.66` 站桌椅右側走道。無狗；若加狗建議 **0.293**。予安用 `headphones_off`。勿套 `char_center`
+- **立繪尺：** `char_office` **0.28**（椅背／桌高到腰）。S02 開場 `xalign 0.66` 站桌椅右側走道。無狗；若加狗建議 **0.293**。S02 予安用 `headphones_off`。S07 尾鉤**不顯示予安**，改 overlay 手機門邊照。勿套 `char_center`
 
 ### street（S01／S02 巷口過場）
 
@@ -293,6 +302,7 @@ bg-{place}-{light}.png
 | `bg-entrance-day.png` | `bg entrance_day` |
 | `bg-kitchen-day.png` | `bg kitchen_day` |
 | `bg-kitchen-night.png` | `bg kitchen_night` |
+| `bg-bedroom-night.png` | `bg bedroom_night` |
 | `bg-living-dusk.png` | `bg living_dusk` |
 | `bg-alley-night.png` | `bg alley_night` |
 
@@ -390,13 +400,31 @@ bg-{place}-{light}.png
 | entrance 抱走 | **0.33** | 合成 | 大門／鞋櫃 |
 | living 抱走 | **0.32** | 合成 | 落地窗 |
 | gate | **0.28** | 合成 | 鐵門／木門 |
-| living 全景 | **0.36** | **0.139** | S04–S10 對景；遠近同尺 |
+| living 全景 | **0.36** | **0.139**／會後嗅線 **0.30** | S04–S10 對景；遠近同尺；S05 會後特寫 `living_wire` |
+| bedroom 病床 | **0.18** | **0.139**／指尖 **0.30** | 沿床躺看狗；狗同客廳地板；指尖頭距特寫 |
 | kitchen POV | **0.52** | **0.19** | 深度例外 |
 | stairwell | — | **0.187** | 深度例外 |
-| entrance 日常 | **0.33** | **0.128** | 幼犬比 |
+| entrance 日常 | **0.33** | **0.128**／S06 頂額 **0.28** | 幼犬比；護衛後特寫 `entrance_nudge` |
 | alley 散步 | **0.32** | **0.124** | 幼犬比 |
 | cafe | **0.36** | **0.139** | 幼犬比 |
 
+### 2026-09-10｜S07 新增 bedroom-night
+
+- `bg-bedroom-night.png`：左開門＋客廳暖光、右單人床、空地板給狗疊層；無人無狗
+- 畫布 **2048×1152**；風格對齊 `ref-living-night`
+- S07 開場／門線改此場；選 B 關客廳仍用 `living-night`
+
+### 2026-09-13｜S07 門微開＋床單留坐墊
+
+- `bg-bedroom-night.png` 重產：左門只留一條縫，暖光從門縫漏入；被摺向床尾，右側掀開給蓋被立繪對齊
+- 舊大開門稿：`assets/_backup_unused/bg/bg-bedroom-night_open-door.png`
+- 狗移動對齊旁白：far／mid／near／shift 只改 xalign，見 `section_07_sick_guard.md`
+
+### 2026-09-13｜S08 狗跟旁白走
+
+- 巷口硬拖維持 `dog_behind_walk`；空機車 far→behind；下午改 `entrance-day` 聞帶（予安不入鏡）
+- 玄關補 near **0.70**；完整拍點見 `section_08_corner_walk.md`
+
 ---
 
-*更新：2026-09-06｜S04–S10 對景收入 scale.rpy `SCALE`；狗幼犬比*
+*更新：2026-09-13｜S07／S08 狗跟旁白走；指尖特寫 bedroom_nose 0.30*

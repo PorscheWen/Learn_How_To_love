@@ -102,6 +102,7 @@ python tools\validate-menus.py
 | 角色／身世邊界 | `agent/character-bible/` |
 | 美術 PNG | `agent/visual-art/` |
 | 音效 | `agent/audio-sound/` |
+| 設計建議／體驗優化／產線順序 | `agent/game-designer/` · `Ch1_Trust_Version3/agents/designer.md` |
 | 測試 | `agent/game-tester/` · `Ch1_Trust_Version3/agents/tester.md` |
 | 背景批次產 | Hermes + Nous Portal |
 | 引擎／UI 精修 | **Cursor**（本 IDE） |
@@ -130,4 +131,4 @@ MEMORY.md（世界觀鎖定）
 
 ---
 
-*最後更新：2026-09-05 · Playable＝Ch1_Trust_Version3 Ren'Py*
+*最後更新：2026-09-06 · Playable＝Ch1_Trust_Version3 Ren'Py*

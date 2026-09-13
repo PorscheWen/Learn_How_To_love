@@ -41,7 +41,7 @@
 
 「走到轉角就好。」予安說。
 
-巷口的世界比玄關密。早餐店的油煙、樓上曬過的衣服、排水溝、機車輪胎，全部擠在同一口呼吸裡。
+巷口的世界比玄關吵。早餐店的油煙、樓上曬過的衣服、排水溝、機車輪胎，全部擠進來。像捷運車廂門一開，很多人的味道一次湧進來。
 
 若信任仍在薄冰，小7一出門便貼著牆，四隻腳像各自忘了下一步。若已磨合，牠能走到巷子一半，每幾步便回頭確認。若信任較高，牠會跟到接近轉角的位置，牽繩仍繃著，卻不是一路往後退。
 
@@ -93,3 +93,36 @@
 - **結局伏筆：** `s08_forced_walk` 會影響 S10 是否可進最高信任結局。
 - **BGM：** `corner_walk` 或低信任 `calm` → 機車驚嚇 `tense` → 停等／提早回家 `tender`、硬拖維持 `tense`；返家鞋邊睡 `warm`，硬拖收回 `calm`。
 - **銜接 S09：** 同事的提議必須真誠，不把對方寫成搶狗的壞人。
+- **落地畫面（2026-09-13）：** 狗跟旁白走，不新產 pose。人／狗尺已確認：玄關 `leash` **0.33**／狗 **0.128**；巷口 `walk` **0.32**／狗 **0.124**（樹下蹲仍 alley 尺）。狗頭距 `leash_wait` 0.556／`s08_tense` 0.572；躺 `s04_low` 0.369 勿改成 `s07_low`。數字見 `image_scale.md` §S08 確認。
+
+### 旁白 × 狗移動（2026-09-13 鎖定｜不新產 pose）
+
+玄關遠近只改 `xalign`（far **0.60**／mid **0.66**／near **0.70**）；巷口（behind **0.88**／far **0.56**／mid **0.63**／near **0.68**）。**禁**扣帶前 `leash_wait`；**禁**巷口 `street_tense`、無背帶 `halfstep`／`s04_low`／`ear_perk`。
+
+| 旁白拍 | pose | 位置 | SFX |
+|--------|------|------|-----|
+| 兩步看牽繩 | `s04_low` | `dog_entrance_far_s08` | — |
+| 鼻尖靠近、立刻退開 | `halfstep`→`s04_low` | mid_to_yuan→far | — |
+| 聞布邊／扣環 | `halfstep` | mid_to_yuan | — |
+| 前腳踏進胸背帶 | `halfstep`→`harness_bite` | mid_to_yuan | — |
+| 咬完、四腳放穩 | `leash_wait` | mid | — |
+| 前腳跨出門檻 | `leash_wait` | mid→near | — |
+| 第一次縮回來 | `leash_wait` | near→mid | — |
+| 自己把後腳帶出去 | `leash_wait` | mid→near | — |
+| 巷口不願走 | `s08_tense` | `dog_behind_walk` | — |
+| 低信任貼牆挪半腳 | `s08_tense` | behind→mid | — |
+| 中信任兩步停等 | `s08_tense`→`leash_wait` | mid→near | — |
+| 高信任聞空機車再跟上 | `leash_wait` | far_walk→near | — |
+| 走過空機車、縮回腿後 | `s08_tense` | far_walk→behind | — |
+| 轉角機車呼嘯 | `s08_tense` | behind | `whimper` |
+| 選 A 葉邊退半步、自己走一公尺 | `s08_tense`→`leash_wait` | behind→mid→near | `soft` |
+| 選 B 硬拖 | `s08_tense` | **維持 behind** | `whimper` |
+| 選 C 折返聞地面 | `leash_wait` | behind→mid→near | `soft` |
+| 衝向水碗 | `drink_bowl` | mid | — |
+| 硬拖解帶後停門邊 | `s04_low` | far | — |
+| 繞腳轉半圈、靠鞋睡 | `halfstep`→`shoe_sleep` | mid；先 `hide yuan` | `sigh` |
+| 下午聞地上胸背帶 | `halfstep` | entrance mid | — |
+
+---
+
+*更新：2026-09-13｜鎖定旁白×狗移動表；人／狗尺確認見 `image_scale.md`*

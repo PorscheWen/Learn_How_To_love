@@ -44,6 +44,7 @@ Ren'Py **插圖重疊／字型缺字／字幕怪字** 必查項見 [`reference.m
 | 動畫缺失、轉場突兀、breathMs 節奏問題 | [`motion-animation`](../motion-animation/SKILL.md) |
 | BGM 情緒不符、需新曲 brief | [`music-composition`](../music-composition/SKILL.md) |
 | BGM／狗叫 cue 突兀或缺失 | [`audio-sound`](../audio-sound/SKILL.md) |
+| 能玩但悶、假選擇、產線順序、圖文不同向（非壞檔） | [`game-designer`](../game-designer/SKILL.md) · Version3 `agents/designer.md` |
 
 ## 測試範圍（玩家會碰到的一切）
 

@@ -78,7 +78,7 @@
 - **選 B／C：** 仍進 S05；軟分軌用更遠的距離、更貼平的耳表現，不卡關。
 - **Tone 預告：** 耳機與早會提醒 → **S05〈你的聲音有兩種〉**。
 - **場次 A 收束：** S01～S04 約 20～25 分；段末以記憶點與標題卡銜接 S05。
-- **落地畫面：** 遊戲內是書櫃前**木椅**（`yuan home_sit`），不是沙發。聲響切 `ear_perk` → `chin_hover` → `parallel` → `head_turn`；Dist＋用 `chin_floor`；尾隨用 `wag`（勿 `halfstep`）；門檻用 `kitchen_door`。可見高見 `image_dog.md` §3.6。
+- **落地畫面（2026-09-07）：** 遊戲內是書櫃前**木椅**（`yuan home_sit`），不是沙發。聲響 `ear_perk` → `chin_hover` → `parallel` → `head_turn`，選前回到 `parallel`（不再多切一次耳動）。Dist＋用 `chin_floor`＠near。選 B `street_tense`＠far。選 C `s04_low`＠far（客廳 0.369，勿用後門 0.551）。尾隨用 `wag`（勿 `halfstep`）；門檻用 `kitchen_door`。可見高見 `image_dog.md` §3.6。
 
 ### 建議 trust 結算
 
@@ -98,4 +98,4 @@
 ---
 
 *Section 04 敘事稿｜第三人稱｜約五分鐘閱讀｜依 game_guild.md §0 對齊*  
-*更新：2026-09-06｜落地聲響三姿＋客廳可見高；遊戲內為木椅非沙發*
+*更新：2026-09-07｜切姿收斂＋選 C 用 s04_low；遊戲內為木椅非沙發*

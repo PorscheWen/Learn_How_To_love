@@ -59,8 +59,8 @@
 | `stair_border` | `melancholy` | `melancholy.ogg` @0.92 | 舊別名（仍可用） |
 | `shared_quiet` | `warm` | `warm.ogg` | S04 平行安靜 |
 | `two_voices` | `calm` → `tender` | 兩曲 | S05 尖→低 |
-| `guard_corridor` | `tender`／`calm` | | S06 護衛／尷尬 |
-| `sick_guard` | 深夜 ambient → `tender` | `sick-guard.ogg` | S07 |
+| `guard_corridor` | `calm` | `calm.ogg` | S06 走廊被看見；擋下／進門後轉 `tender` |
+| `sick_guard` | 深夜 ambient（**全段不切** `tender`） | `sick-guard.ogg` | S07 |
 | `corner_walk` | `warm`／`calm` | | S08；硬拖用 `calm`@0.88 |
 | `almost_gave` | 沉靜 ambient → 分歧 | `almost-gave.ogg` | S09 |
 | `ending_back` | `tender` | `tender.ogg` | 結局 A |
@@ -110,7 +110,7 @@
 | 會議尖聲／甩開 | `calm` | S05 Tone− |
 | 脫耳機、嗅線 | `tender` | S05 鉤子 |
 | 走廊擋人、額頭頂腿 | `tender` | S06 |
-| 生病守門 | `calm` → `tender` | S07 |
+| 生病守門 | `sick_guard`（全段不切） | S07 |
 | 牽繩停等／鞋邊睡 | `warm`／`tender` | S08 |
 | 留下 | `tender` | S09 |
 | 送走 | `melancholy` | 結局 C |
@@ -181,14 +181,14 @@
 
 ### S06｜樓梯間的第三者
 
-弧線：**靜音（走廊）** → `tender`（進門玄關）
+弧線：`calm`（`guard_corridor`）→ `tender`（護衛／進門玄關）
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 被搭話／伸手摸 | stairwell-day | **無 BGM**（停樂） |
-| 推車輪卡縫「喀、喀」 | stairwell-day | 維持靜音；文字記憶點，不新增環境 SFX |
-| 擋在中間、婉拒 | stairwell-day | 維持靜音 |
-| 塞回屋／給摸 | stairwell-day | 維持靜音 |
+| 被搭話／伸手摸 | stairwell-day | `guard_corridor`（`calm.ogg`） |
+| 推車輪卡縫「喀、喀」 | stairwell-day | 維持；文字記憶點，不新增環境 SFX |
+| 擋在中間、婉拒 | stairwell-day | `tender` |
+| 塞回屋／給摸 | stairwell-day | 維持 `guard_corridor` |
 | 進門後、額頭頂腿 | entrance-day | `tender` |
 
 ### S07｜她倒下的那天
@@ -200,6 +200,17 @@
 | 發燒／狗守門 | `sick_guard` |
 | 耳鳴／狗叫穿進來 | 維持 `sick_guard`；耳鳴只寫體感，不加高頻音效 |
 | 「吵死了」／「我還在」／門縫 | 維持 `sick_guard`（不切 `tender`／`tense`） |
+
+幼犬 SFX（one-shot，對旁白、不循環）：
+
+| 旁白拍 | cue |
+|--------|-----|
+| 低信任門口來回那一聲 | `bark` |
+| 「現在幾點……」又叫 | `bark` |
+| 耳鳴裡穿進來 | `bark` |
+| 選 A 趴回門線 | `soft` |
+| 選 B 退到沙發 | `whimper` |
+| 選 C 停在縫外 | `murmur` |
 
 ### S08｜走到轉角就好
 
@@ -255,7 +266,7 @@
 | 被尖聲嚇到 | whimper 短 | S05 尖聲分支 |
 | 嗅耳機線 | soft | S05 開場＋鉤子 |
 | 躲腿後／頂額 | murmur／soft | S06 |
-| 守門輕吠 | bark（一次）＋分支 soft／whimper／murmur | S07 |
+| 守門輕吠 | `bark` 對旁白每一聲（門口來回／現在幾點／耳鳴）＋選項 `soft`／`whimper`／`murmur` | S07 |
 | 巷口僵住 | whimper | S08 機車驚嚇 |
 | 停等／提早回家 | soft；鞋邊睡 sigh | S08 |
 | 拒絕陌生人 | growl／murmur（依信任） | S09 |
@@ -316,4 +327,4 @@ stop_bgm()
 
 ---
 
-*更新：2026-07-17｜對齊 game_guild.md＋image_bg.md（十段 BGM、四結局、軟分軌）*
+*更新：2026-09-13｜S07 全段 `sick_guard`；輕吠對旁白 one-shot；選項 soft／whimper／murmur*

@@ -2,11 +2,11 @@
 name: lhtl-ch1-agent
 description: >-
   《Learn How to Love》Chapter 1 統籌 agent：掌握 Ch1 全章節奏（第一週→週年弧）、
-  對照 Ch1_guide_line.md 規劃與驗收進度，依任務調度 story-narrative、tw-narrative-voice、
-  visual-art、motion-animation、music-composition、audio-sound、branch-engine、character-bible、game-tester 等子 agent 與 lhtl-* skills。
+  對照 Ch1_guide_line.md 規劃與驗收進度，  依任務調度 story-narrative、tw-narrative-voice、
+  visual-art、motion-animation、music-composition、audio-sound、branch-engine、character-bible、game-designer、game-tester 等子 agent 與 lhtl-* skills。
   當使用者要「做 Ch1」「落地 Week4」「照 guide_line 推進」「統籌整章」「章節節奏」、
   「下一步該做什麼」「Ch1 進度」「協調各 agent」、Ch1 產圖／dog pose／Midjourney 定稿、
-  或一次任務跨劇情／美術／音效／測試時，務必使用此 skill。
+  或一次任務跨劇情／美術／音效／設計建議／測試時，務必使用此 skill。
   本 skill 不取代子 agent 的專業產出，負責拆任務、排順序、對表、收斂驗收。
 ---
 
@@ -43,6 +43,7 @@ description: >-
 | 動畫 | [`motion-animation`](../motion-animation/SKILL.md) · `@lhtl-motion-animation` | pose keyframes、轉場、breathMs 實作、撫摸視覺回饋 |
 | 作曲 | [`music-composition`](../music-composition/SKILL.md) · `@lhtl-music-composition` | BGM brief、選曲、AI 作曲 prompt、授權 |
 | 音效整合 | [`audio-sound`](../audio-sound/SKILL.md) · `@lhtl-audio-sound` | SCENE_CUES、choice cue、BGM manifest 落地、deploy |
+| 遊戲設計 | [`game-designer`](../game-designer/SKILL.md) · `@lhtl-game-designer` | 節奏／選擇回聲／圖文對齊／產線先後；Version3 `agents/designer.md` |
 | 遊戲測試 | [`game-tester`](../game-tester/SKILL.md) · `@lhtl-game-tester` | 自動化、playtest、P0–P2、時序／角色一致 |
 
 **驗收清單（每週落地必對）：** [`chapter-landing-checklist.md`](../chapter-landing-checklist.md)
@@ -113,9 +114,12 @@ description: >-
 2. tw-narrative-voice ⫽（架構穩定後）
    → text/sub/choices/smell 潤字；Week2 起禁 Day N；選項 key 一致
 3. visual-art ⫽ audio-sound ⫽（依架構資產表）
+   → 拍點未鎖先 `game-designer`，勿批次產圖
    → **必經 §Ch1 產圖路由**（visual-art 為主 + midjourney-guide 輔 + art-pose.ps1）
    → 背景、pose PNG、SCENE_CUES
 4. 程式落地 → `Ch1_Trust_Version3/Renpy_game/game/`（`.rpy`）＋必要時 `agents/section_*.md`
+4.5. game-designer（改體驗／節奏／產線時）
+   → Version3 `agents/designer.md`：D0–D2 建議，先鎖拍點再產圖
 5. game-tester
    → `Renpy_game/tools/validate-*.py` · Version3 `agents/tester.md`
    → chapter-landing-checklist（若適用）
@@ -123,7 +127,8 @@ description: >-
 ```
 
 **僅改語氣：** 走 `tw-narrative-voice` 改 `.rpy`／section 稿。  
-**僅測試：** 直接 `game-tester`／Version3 tester，不經完整產線。
+**僅測試：** 直接 `game-tester`／Version3 tester，不經完整產線。  
+**僅設計建議：** 直接 `game-designer`／Version3 `agents/designer.md`，未要求落地則只出報告。
 
 ---
 
@@ -135,7 +140,8 @@ description: >-
 | 「實作 Week4／週年弧」 | 啟動 §標準產線；先 story-narrative 架構，再並行 visual/audio |
 | 「照 guide_line 發展整章」 | 對照 §全章總覽表；未落地週依序排產；不跳過 Landmark |
 | 「統籌修 Week2 測試問題」 | game-tester 報告 → 依問題類型分派子 agent（見 game-tester 分工表） |
-| 「節奏太慢／太密」 | 對 Ch1_guide_line 時長欄 + 情感曲線；交 story-narrative 調場景數，**不**擅自刪 Landmark |
+| 「節奏太慢／太密」 | 先 `game-designer`（`designer.md`）給最小改動；再交 story-narrative 調場景密度，**不**擅自刪 Landmark |
+| 「設計建議／優化／先做哪」 | 調 `game-designer`；產出 D0–D2 後再分派落地 |
 | 「開遊戲驗收」 | 確認 Ren'Py／`Ch1_Trust_Version3/Renpy_game/開啟遊戲.bat`；**勿** IDE 內嵌當唯一驗收 |
 
 ---

@@ -64,8 +64,8 @@
 - S04 完整實作平行安靜／硬抱合照／關浴室三種質地，以及「只到廚房門口」記憶點。
 - S05 完整實作 Tone 軸、視訊早會、耳機回授／主管點名高峰、拔插頭「喀」聲回收，以及正式改名 UI；可保留「小7」或輸入最多 12 字的新名字，空白輸入沿用原名。早會狗姿：`head_up` → `sniff_wire` → `chair_paw` → `chair_stuck`；低信任開場用 `s04_anxious`。名字落定後播放 `dog wag` 搖尾巴循環動畫（`assets/dog/wag/` 5 幀 ping-pong）；門外腳步聲起切回 `stair_watch`。
 - S06 完整實作 Guard 軸、鄰居持續伸手說服、推車輪「喀、喀」壓力、選擇站位、「我們」與額頭輕碰記憶點。
-- S07 完整實作發燒守門、起身失敗／耳鳴體感高峰、Tone 延續與「我還在」，並以兩道呼吸收束；禁止把小7寫成會拿藥或預知病情的靈犬。
-- S08 完整實作胸背帶穿戴、低／中／高信任外出軟分軌、Dist 停等／硬拖／提早回家，以及鞋邊睡記憶點。巷口狗一開始在身後不願前進，再慢慢跟上；轉角機車呼嘯嚇退回身後。停等 `behind／far → mid → near`、提早回家 `mid` 鬆弧或硬拖全程緊張距離，最後用返家距離及同事提議收束四拍。
+- S07 完整實作發燒守門、起身失敗／耳鳴體感高峰、Tone 延續與「我還在」，並以兩道呼吸收束；禁止把小7寫成會拿藥或預知病情的靈犬。狗跟旁白走：爪子＠門縫 → 高信任 `halfstep` 進房／`ear_perk` 被角／`guard_door` 回門；低信任 `s07_low` 門口來回；遠近只改 xalign，不新產 pose。
+- S08 完整實作胸背帶穿戴、低／中／高信任外出軟分軌、Dist 停等／硬拖／提早回家，以及鞋邊睡記憶點。巷口狗一開始在身後不願前進，再慢慢跟上；轉角機車呼嘯嚇退回身後。停等 `behind／far → mid → near`、提早回家 `mid` 鬆弧或硬拖全程緊張距離（維持身後，不走到人前面），最後用返家距離及同事提議收束四拍。狗跟旁白走：玄關靠近又退、門檻進出、空機車縮回腿後；遠近只改 xalign，不新產 pose。
 - S09 完整實作 G2 被選中、Guard 留下／送走硬分歧；同事維持真誠，送走不責罵玩家。
 - S10 不再修改 trust，依 `gave_away`、trust 區間與 `s08_forced_walk` 分流 A～D 四結局。
 - 本版維持純敘事選項，不加入小遊戲、牽繩微互動或快問快答；S08 張力由 Dist 選項與狗姿勢表達。
@@ -77,7 +77,7 @@
 - 隱藏內容：各結局解鎖狗日記／予安心境／朋友視角全文（`hidden_content.rpy`）；主選單「隱藏內容」可閱讀。
 - 結局收束：`endings.rpy` 的 `ending_coda_finish`（安靜睡姿節拍 → 標題卡 → 解鎖提示 → `ending_aftercare`）；`process_ending_unlock` 寫入日記／心境／朋友視角（A 另含紀念照＋Ch2 提示）；`sync_unlocked_ending_rewards` **必須回傳 `None`**（禁放進主選單 `action` 清單，否則 `True` 會開新遊戲）。
 - 人物立繪：S08 玄關用 `char-yuan-leash`（蹲）、巷口用 `char-yuan-walk`（走路；樹下停等才切回蹲）；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。立繪尺見 `game/scale.rpy`。
-- 狗立繪：S07～S10 依守門、牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。S03 `door_sleep` 與結局 A／B／D 三種睡姿為 5 幀呼吸循環動畫（`assets/dog/{door-sleep,back-sleep,check-sleep,door-edge}/`），幀缺失時落回靜態圖。第二批動作動畫：S05 `sniff_wire` 嗅耳機線、S07 `guard_door` 守門呼吸、S08 `drink_bowl` 舔水、S09 `farewell` 尾巴掃地（各 5 幀，同 fallback 機制）。
+- 狗立繪：S07 臥室依旁白切 `s07_low`／`halfstep`／`ear_perk`／`chin_hover`／`guard_door`／`nose_tip`（遠近只改 xalign）；S08～S10 依牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。S03 `door_sleep` 與結局 A／B／D 三種睡姿為 5 幀呼吸循環動畫（`assets/dog/{door-sleep,back-sleep,check-sleep,door-edge}/`），幀缺失時落回靜態圖。第二批動作動畫：S05 `sniff_wire` 嗅耳機線、S07 `guard_door` 守門呼吸、S08 `drink_bowl` 舔水、S09 `farewell` 尾巴掃地（各 5 幀，同 fallback 機制）。
 - BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
 - 狗 SFX：`dog_sfx()` 以低音量播放稀疏 one-shot；S02／S03／S05／S06／S07／S08／S09 使用 `soft`、`whimper`、`murmur`、`bark`、`growl`，S01 與結局 C 空屋不播放。音源授權見 `assets/audio/sfx/CREDITS.md`。
 
@@ -119,12 +119,14 @@
 │  ├─ char-yuan-headphones.png
 │  ├─ char-yuan-commute.png
 │  ├─ char-yuan-block.png
+│  ├─ char-yuan-door-hold.png
 │  ├─ char-yuan-leash.png
 │  ├─ char-yuan-walk.png
 │  ├─ char-yuan-farewell.png
 │  ├─ char-yuan-cafe.png
 │  ├─ char-clerk.png
 │  ├─ char-neighbor.png
+│  ├─ char-neighbor-idle.png／char-neighbor-lower.png／char-neighbor-withdraw.png
 │  ├─ char-coworker.png
 │  └─ char-coworker-cafe.png
 ├─ dog/
@@ -142,9 +144,12 @@
 │  ├─ dog-ear-flat.png
 │  ├─ dog-sniff-wire.png
 │  ├─ dog-behind-legs.png
+│  ├─ dog-s06-retreat.png（S06 貼牆後退）
+│  ├─ dog-s06-flinch.png／dog-s06-watch-hand.png／dog-s06-freeze.png（S06 鄰居動作反應）
 │  ├─ dog-forehead-nudge.png
 │  ├─ dog-guard-door.png
 │  ├─ dog-street-tense.png
+│  ├─ dog-s08-tense.png
 │  ├─ dog-leash-wait.png
 │  ├─ dog-shoe-sleep.png
 │  ├─ dog-farewell.png
@@ -170,6 +175,7 @@
 │  ├─ ending-c-handover.png
 │  ├─ ending-d-thin-ice.png
 │  ├─ secret-lap-sleep.png
+│  ├─ secret-door-sleep.png
 │  └─ secret-back-to-back.png
 └─ audio/
    ├─ calm.ogg

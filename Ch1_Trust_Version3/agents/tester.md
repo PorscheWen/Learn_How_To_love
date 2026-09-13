@@ -234,6 +234,7 @@ python tools/validate-menu-layout.py
 |------|-----|
 | S05 選擇出現在耳機回授、主管點名、狗卡在椅緣的即時高峰；會後拔插頭「喀」聲完成回聲 | ☐ |
 | S06 鄰居伸手後仍持續說服，推車輪「喀、喀」讓狗繼續縮；玩家此時才選擇站位 | ☐ |
+| S06 鄰居動作有切姿：idle→伸手→放下手；狗有看手／膠帶彈一下／讓摸僵住 | ☐ |
 | S07 起身失敗後耳鳴蓋住房間，狗叫穿進來才進 Tone 選擇；天亮由兩道呼吸收束 | ☐ |
 | 三段仍各只有一組 trust 選擇，沒有新增小遊戲、快問快答或新數值 | ☐ |
 
@@ -305,7 +306,8 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 |--------|--------------|----------|
 | 超商／卸貨後門／機車棚 | S01～S02 | 夜／傍晚 |
 | 公寓大門 | S03、G1 | 夜／清晨 |
-| 客廳／沙發與地板 | S04、S05、S07、S10 | day／night |
+| 客廳／沙發與地板 | S04、S05、S10；S07 選 B | day／night |
+| 臥室／床與門線 | **S07** | night |
 | 走廊 | S06 | 日 |
 | 巷口轉角 | S08 | 日 |
 | 巷口轉角／牽繩 | S08 | day／dusk；機車 `prop/scooter-*.png` 疊層 |
@@ -315,11 +317,32 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 
 - [ ] 狗與人物不嚴重糊成一團；對話框不切臉／爪／眼
 - [ ] 換 pose 無殘影雙狗
+- [ ] 同場換狗 pose：**頭大小接近**（對齊該場母尺），不像換了一隻；遠近只改位置。不比全身 visH
 - [ ] zorder：背景 ＜ 立繪 ＜ 字幕／選項 ＜ modal
 - [ ] 選項不永久擋關鍵插圖
 - [ ] **重產資產後**先跑 `python tools/recalibrate_sprites.py` 與 `python tools/check_overlap.py`；報告見 `tester_overlap_report.md`
-- [ ] S06 頂額：`forehead_nudge` 期間不應同時顯示予安全身立繪（圖含小腿裁切）
-- [ ] S06 擋人：`char-yuan-block` 朝左對鄰居；狗在 `dog_behind_pair`、疊在予安身後（勿蓋在鄰居身上）
+- [ ] S05 會後嗅線：`sniff_wire`＠`dog_living_wire_cu`（只留 bg＋特寫）；開會中 sniff 仍全景 `dog_near`；解鎖回憶 `sniff_wire`
+- [ ] S06 頂額：僅 `s06_protected`；hide 予安、`forehead_nudge`＠`dog_entrance_nudge_cu`；B／C 即使信任高也只停在褲管外
+- [ ] S06 擋人：`char-yuan-block` 朝左對鄰居；狗在 `dog_behind_pair`（xalign≈0.66）、疊在予安身後（勿蓋在鄰居身上、勿出右緣）
+- [ ] S06 同場狗頭距接近：開場 stair_watch 與 retreat／watch_hand 不像換了一隻；遠近只改位置
+- [ ] S06 選前：鄰居 idle→stand→lower；高 Tone 選前看手偏後，選 A 才躲腿；喀喀後有停拍
+- [ ] S06 梯廳予安外出襯衫＋樂福鞋（`door_hold`／`block`／`carry_pup`）；進屋後才 `home_stand` 襪
+- [ ] S06 鄰居與予安站姿可見高接近（`lower` 彎腰可略矮）
+- [ ] S06 選 C 問養寵時予安在門邊（`door_hold`），不是空走廊對白
+- [ ] S07 開場 `bedroom_night`（門微開）＋病床予安沿床躺、面向左看狗；倒水仍 `home_stand` 襪；**辦公室尾鉤不顯示予安**；先空辦公室，旁白點進相簿後才淡入門邊照
+- [ ] S07 高信任：爪子＠far → `halfstep` 進房 → `ear_perk` 被角 → `guard_door` 回門線（不是開場就趴床邊）
+- [ ] S07 低信任：`s07_low` far↔mid 來回，輕吠後停 far；頭距接近 `guard_door`，不是舊 `anxious`、不是 S04 的 0.369
+- [ ] S07 床墊下沉 `halfstep`、咳嗽 `chin_hover`、耳鳴 `ear_perk`＠far **之後**才進 Tone 選單
+- [ ] S07 選 A：先 near 摸背，再 far→mid 守門；選 C：`chin_hover` 停縫外
+- [ ] S07 選 B：客廳 `s05_ear_flat`＠`dog_sick_far`→`dog_sick_sofa`；**回臥室改 `s07_low`**，頭不再縮小
+- [ ] S07 倒水後非關客廳：`halfstep`＠far → `guard_door`＠mid；天亮 `dog_bedroom_shift`
+- [ ] S07 指尖：`nose_tip`＠`dog_bedroom_nose_cu`（只留 bg＋特寫）；頭不比 `guard_door` 小；解鎖回憶 `nose_touch`
+- [ ] S08 扣帶前狗身上無胸背帶（`s04_low`／`halfstep`）；扣上後才 `harness_bite`／`leash_wait`
+- [ ] S08 玄關：鼻尖靠近再退 far；門檻 `leash_wait` near→mid→near（不是開縫就站在門外）
+- [ ] S08 巷口：開場 `s08_tense`＠behind；空機車 far_walk→縮回 behind；硬拖**維持 behind**，不是 `far_walk` 走到人前面
+- [ ] S08 人／狗尺：玄關 leash 0.33／狗 0.128；巷口 walk 0.32／狗 0.124。躺姿可比站姿矮，頭不縮成另一隻；樹下蹲不比走姿小臉。勿用 `s07_low`、勿用 `street_tense`
+- [ ] S08 鞋邊睡：繞腳 `halfstep` 後予安先 hide，畫面只有一雙鞋；`leash` 與 `walk` 同為外出襯衫＋棕色鞋
+- [ ] S08 下午：狗在玄關 `halfstep` 聞地上胸背帶（予安不入鏡），不是空客廳
 
 發現重疊時寫：
 
@@ -344,9 +367,9 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 - [ ] S02 三個距離選項各自只觸發一個對應 cue：靠近 `soft`／硬抓 `whimper`／趕開 `murmur`
 - [ ] S03 大門外不安使用一次 `murmur`；S04 平行安靜保持無狗聲
 - [ ] S05 只有尖銳聲分支播放 `whimper`；S06 額頭輕碰使用 `soft`
-- [ ] **S06 走廊開場停樂（無 BGM）**；進門玄關 `entrance_day` 後才起 `tender`
+- [ ] **S06 走廊開場 `guard_corridor`**；選 A 擋下或進門玄關後起 `tender`
 - [ ] **S07 全段維持開場 `sick_guard`**，選擇後不切 `tender`／`tense`
-- [ ] S07 守門確認只播放一次短 `bark`
+- [ ] S07 旁白每聲輕吠對一次 one-shot `bark`（不循環、不重疊）
 - [ ] S08 機車驚嚇使用一次 `whimper`，不循環、不連續哀鳴
 - [ ] S09 高信任拒絕接牽繩使用一次低音量 `growl`；結局 C 空屋完全不播放狗聲
 - [ ] 狗聲不蓋過 BGM／對白，音效音量設定可正常控制
@@ -457,9 +480,10 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 | `agents/game_guild.md` | 信任規格、軟分軌、閘門、四結局、姓名鎖定（本手冊主對齊） |
 | `agents/outline_trilogy_ch1_10sections.md` | 十段大綱與弧線 |
 | `agents/section_*.md` | 各段敘事稿與選擇 |
-| `agents/image.md`／`image_bg.md`／`image_dog.md` | 美術、時段 bg、小7 外型（B wiry） |
+| `agents/image.md`／`image_bg.md`／`image_dog.md`／`image_char.md`／`image_scale.md` | 美術、時段 bg、小7、予安衣櫃、人／狗尺 |
 | `agents/audio.md` | BGM／SFX |
+| `agents/designer.md` | 製作過程與體驗優化建議（非 bug 單） |
 
 ---
 
-*更新：2026-07-19｜全段最短閱讀 5 分鐘；S08／S09 互動高潮 8 分鐘；S10 四結局逐路線驗證；新增稀疏狗 SFX 測項*
+*更新：2026-09-13｜同場狗頭距；S05 嗅線／S06 頂額／S07 指尖特寫＋回憶；S07／S08 旁白×移動*

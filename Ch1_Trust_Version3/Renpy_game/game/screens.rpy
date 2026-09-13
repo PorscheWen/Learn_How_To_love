@@ -280,6 +280,8 @@ screen ending_gallery():
 
                     textbutton "紀念｜躺在大腿" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-lap-sleep.png", "紀念照片｜躺在大腿"):
                         xfill True
+                    textbutton "紀念｜線關了" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-sniff-wire.png", "紀念照片｜線關了"):
+                        xfill True
                     textbutton "紀念｜額頭輕碰" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-forehead-nudge.png", "紀念照片｜額頭輕碰"):
                         xfill True
                     textbutton "紀念｜擋在身後" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-behind-legs.png", "紀念照片｜擋在身後"):
@@ -287,6 +289,8 @@ screen ending_gallery():
                     textbutton "紀念｜鞋邊小睡" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-shoe-sleep.png", "紀念照片｜鞋邊小睡"):
                         xfill True
                     textbutton "紀念｜指尖碰鼻" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-nose-touch.png", "紀念照片｜指尖碰鼻"):
+                        xfill True
+                    textbutton "紀念｜門邊小睡" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-door-sleep.png", "紀念照片｜門邊小睡"):
                         xfill True
                     textbutton "紀念｜新水碗" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-water-bowl.png", "紀念照片｜新水碗"):
                         xfill True
@@ -387,6 +391,21 @@ screen secret_photo_view(photo="lap_sleep"):
     textbutton "關閉" style "menu_back_button" action ShowMenu("ending_gallery"):
         xalign 0.5
         yalign 0.96
+
+
+## S07 辦公室尾鉤：不顯示予安，改看手機裡的門邊照
+screen s07_phone_photo():
+    zorder 40
+    add Solid("#17120F55")
+    frame:
+        background Solid("#1C1612F2")
+        padding (12, 12, 12, 18)
+        xalign 0.5
+        yalign 0.34
+        add "gallery/secret-door-sleep.png":
+            xysize (680, 454)
+            fit "contain"
+            xalign 0.5
 
 
 screen hidden_content_gallery():

@@ -23,6 +23,13 @@ text = SCRIPT.read_text(encoding="utf-8")
 screens_text = SCREENS.read_text(encoding="utf-8") if SCREENS.exists() else ""
 hidden_text = HIDDEN.read_text(encoding="utf-8") if HIDDEN.exists() else ""
 combined = text + "\n" + screens_text + "\n" + hidden_text
+scale_text = (ROOT / "game" / "scale.rpy").read_text(encoding="utf-8")
+if '"bedroom_nose"' not in scale_text:
+    fail("scale.rpy 必須有 bedroom_nose（S07 指尖特寫頭距 zoom）")
+if '"living_wire"' not in scale_text:
+    fail("scale.rpy 必須有 living_wire（S05 會後嗅線特寫 zoom）")
+if '"entrance_nudge"' not in scale_text:
+    fail("scale.rpy 必須有 entrance_nudge（S06 額碰頭特寫 zoom）")
 
 required = {
     "S01 label": "label section_01_fluorescent_over_moon:",
@@ -86,7 +93,7 @@ required = {
     "S05 memory pose": "show dog sniff_wire",
     "S05 rename UI": 'renpy.input("想怎麼叫牠？"',
     "S06 title call": 'show_section_title("Section 06", "樓梯間的第三者")',
-    "S06 BGM silent start": 'renpy.music.stop(channel="music"',
+    "S06 BGM": 'play_bgm("guard_corridor"',
     "S06 BGM after enter": 'play_bgm("tender"',
     "S06 entrance after door": "scene bg entrance_day",
     "S06 protect flag": 'flags["s06_protected"] = True',
@@ -107,7 +114,7 @@ required = {
     "S08 wait flag": 'flags["s08_waited"] = True',
     "S08 force flag": 'flags["s08_forced_walk"] = True',
     "S08 return flag": 'flags["s08_returned_early"] = True',
-    "S08 tense pose": "show dog street_tense",
+    "S08 tense pose": "show dog s08_tense",
     "S08 wait pose": "show dog leash_wait",
     "S08 walk pose": "show yuan walk",
     "S08 behind pose": "dog_behind_walk",
@@ -278,6 +285,12 @@ if "show dog chair_stuck" not in s05:
     fail("S05 回授卡住必須切 chair_stuck")
 if "jump section_06_corridor_third_person" not in s05:
     fail("S05 所有軟分軌都必須進 S06")
+if "show dog sniff_wire at dog_near" not in s05:
+    fail("S05 開會中嗅線須維持全景 dog_near，不得改特寫")
+if "show dog sniff_wire at dog_living_wire_cu" not in s05:
+    fail("S05 會後嗅線須用 dog_living_wire_cu（只留 bg＋特寫）")
+if 'unlock_secret_photo("sniff_wire")' not in s05:
+    fail("S05 會後嗅線特寫必須解鎖回憶 sniff_wire")
 
 s06 = text.split(
     "label section_06_corridor_third_person:", 1
@@ -289,13 +302,55 @@ if not re.search(r"\$\s*trust\s*-=\s*2", s06):
     fail("S06 勉強讓摸必須有 trust -2")
 if "$ guard += 1" not in s06 or "$ guard -= 1" not in s06:
     fail("S06 必須同時存在 Guard 升／降")
+if "show neighbor idle" not in s06 or "show neighbor lower" not in s06:
+    fail("S06 鄰居必須切 idle／lower 動作")
+if "show neighbor withdraw" not in s06:
+    fail("S06 擋人之後鄰居必須收手")
+if "show yuan door_hold" not in s06:
+    fail("S06 開場予安必須扶門")
+if "show dog s06_flinch" not in s06:
+    fail("S06 膠帶聲必須切 flinch")
+if "show dog s06_watch_hand" not in s06:
+    fail("S06 鄰居伸手必須切 watch_hand")
+if "show dog s06_freeze" not in s06:
+    fail("S06 讓摸必須切 freeze")
+if re.search(r"trust\s*>=\s*5", s06):
+    fail("S06 頂額只看護衛，不得用 trust >= 5 放寬")
+if 'play_bgm("guard_corridor"' not in s06:
+    fail("S06 走廊開場必須 play_bgm guard_corridor")
+if "renpy.music.stop" in s06:
+    fail("S06 走廊不得停樂")
+if 'play_bgm("tender"' not in s06:
+    fail("S06 擋下或進門後必須 tender")
+if "s06_sent_inside" not in s06:
+    fail("S06 選 C 必須寫入 s06_sent_inside")
 if "jump section_07_sick_guard" not in s06:
     fail("S06 所有軟分軌都必須進 S07")
+if "show dog forehead_nudge at dog_entrance_nudge_cu" not in s06:
+    fail("S06 頂額須用 dog_entrance_nudge_cu（只留 bg＋特寫）")
+if "show dog forehead_nudge at dog_entrance_mid" in s06:
+    fail("S06 頂額禁地板 dog_entrance_mid")
+if "show dog forehead_nudge at dog_nudge" in s06:
+    fail("S06 頂額禁客廳 dog_nudge")
 
 s07 = text.split(
     "label section_07_sick_guard:", 1
 )[1].split("label section_08_corner_walk:", 1)[0]
 
+if "show dog anxious" in s07:
+    fail("S07 客廳禁舊 anxious（1.575）；低信任用 s07_low")
+if re.search(r"show dog ear_flat\b", s07):
+    fail("S07 選 B 須用客廳 s05_ear_flat，勿用後門 ear_flat")
+if "show dog s07_low" not in s07:
+    fail("S07 臥室低信任／選 B 回房必須 s07_low（頭距對齊 guard_door）")
+if "show dog s05_ear_flat at dog_bedroom" in s07:
+    fail("S07 臥室禁 s05_ear_flat（站姿頭距縮小）；回房用 s07_low")
+if "show dog s05_ear_flat" not in s07:
+    fail("S07 關到客廳必須 s05_ear_flat")
+if "show yuan sick_bed at char_bedroom" not in s07:
+    fail("S07 開場須顯示病床予安（臥室尺）")
+if "scene bg bedroom_night" not in s07:
+    fail("S07 病床場須用 bedroom_night，勿再用 living 代理")
 if not re.search(r"\$\s*trust\s*\+=\s*2", s07):
     fail("S07「我還在」必須提供 trust +2")
 if not re.search(r"\$\s*trust\s*-=\s*2", s07):
@@ -304,6 +359,24 @@ if "$ tone += 1" not in s07 or "$ tone -= 1" not in s07:
     fail("S07 必須同時存在 Tone 升／降")
 if "jump section_08_corner_walk" not in s07:
     fail("S07 所有軟分軌都必須進 S08")
+if "show dog nose_tip at dog_bedroom_nose_cu" not in s07:
+    fail("S07 指尖須用 dog_bedroom_nose_cu（頭距＋特寫 zoom），勿用地板 near_to_yuan")
+if "show dog nose_tip at dog_bedroom_near_to_yuan" in s07:
+    fail("S07 指尖禁地板尺 dog_bedroom_near_to_yuan（頭會縮小）")
+if '", 0.65' not in text.split("image dog nose_tip", 1)[-1][:240]:
+    fail("S07 image dog nose_tip 必須覆寫 0.65（頭距對齊 guard_door）")
+if 'unlock_secret_photo("nose_touch")' not in s07:
+    fail("S07 指尖特寫必須解鎖回憶 nose_touch")
+if "scene bg office_night" not in s07:
+    fail("S07 尾鉤必須切辦公室")
+_office = s07.split("scene bg office_night", 1)[1]
+if "show yuan" in _office:
+    fail("S07 辦公室尾鉤不顯示予安")
+if "s07_phone_photo" not in _office or 'unlock_secret_photo("door_sleep")' not in _office:
+    fail("S07 辦公室須顯示門邊照並加入回憶")
+_before_photo = _office.split("show screen s07_phone_photo", 1)[0]
+if "點進手機相簿" not in _before_photo:
+    fail("S07 門邊照須在旁白提到相簿之後才顯示")
 
 s08 = text.split(
     "label section_08_corner_walk:", 1
@@ -323,6 +396,15 @@ if "牠走了兩步又停" not in s08 or "等繩子垂回鬆弧" not in s08:
     fail("S08 中信任軟分軌必須有可見的停等與鬆弧回聲")
 if "一張門邊的照片" not in s08 or "靠著鞋睡著的照片" not in s08:
     fail("S08 週一鉤子必須區分硬拖門邊照與非硬拖鞋邊睡照")
+if "show dog street_tense" in s08:
+    fail("S08 巷口須用 s08_tense（有胸背帶）；解帶後用 s04_low，勿用客廳 street_tense")
+if "show dog s08_tense" not in s08:
+    fail("S08 巷口受驚必須 s08_tense")
+_pre_harness = s08.split("show dog harness_bite", 1)[0]
+if "show dog leash_wait" in _pre_harness:
+    fail("S08 扣帶前禁 leash_wait（已穿胸背帶）")
+if "hide yuan" not in s08.split("show dog shoe_sleep", 1)[0][-80:]:
+    fail("S08 鞋邊睡須先 hide yuan，避免雙重鞋")
 
 s09 = text.split(
     "label section_09_almost_handoff:", 1

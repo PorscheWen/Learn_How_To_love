@@ -109,6 +109,8 @@ if 'unlock_secret_photo("back_to_back")' in SCRIPT:
     fail("A 不應再解鎖 back_to_back 紀念照")
 if "forehead_nudge" not in SCRIPT or "water_bowl" not in SCRIPT:
     fail("A 應解鎖新紀念照 id（forehead_nudge／water_bowl 等）")
+if "sniff_wire" not in SCRIPT:
+    fail("A 應解鎖 S05 會後紀念照 sniff_wire")
 
 order = re.findall(r'"(dog_diary_[abcd]|character_aftercare_[abcd]|friend_perspective_[abcd])"', HIDDEN)
 need = []

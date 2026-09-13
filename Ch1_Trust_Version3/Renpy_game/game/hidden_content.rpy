@@ -16,10 +16,12 @@ init python:
     ## 結局 A 解鎖；順序＝結局一覽列表順序
     SECRET_PHOTO_ORDER = [
         "lap_sleep",
+        "sniff_wire",
         "forehead_nudge",
         "behind_legs",
         "shoe_sleep",
         "nose_touch",
+        "door_sleep",
         "water_bowl",
         "back_to_back",
     ]
@@ -31,6 +33,14 @@ init python:
             "image": "gallery secret_lap_sleep",
             "path": "gallery/secret-lap-sleep.png",
             "button": "✓  紀念照片｜躺在大腿",
+        },
+        ## S05 會後嗅線特寫解鎖；構圖對齊現場 CU（image_scale.md §0.2）
+        "sniff_wire": {
+            "title": "紀念照片｜線關了",
+            "hint": "那個尖銳的聲音，真的關掉了。",
+            "image": "gallery secret_sniff_wire",
+            "path": "gallery/secret-sniff-wire.png",
+            "button": "✓  紀念照片｜線關了",
         },
         "forehead_nudge": {
             "title": "紀念照片｜額頭輕碰",
@@ -53,12 +63,20 @@ init python:
             "path": "gallery/secret-shoe-sleep.png",
             "button": "✓  紀念照片｜鞋邊小睡",
         },
+        ## S07 指尖特寫解鎖；構圖對齊現場 CU（image_scale.md §0.2）
         "nose_touch": {
             "title": "紀念照片｜指尖碰鼻",
             "hint": "伸手時，牠沒有退開。",
             "image": "gallery secret_nose_touch",
             "path": "gallery/secret-nose-touch.png",
             "button": "✓  紀念照片｜指尖碰鼻",
+        },
+        "door_sleep": {
+            "title": "紀念照片｜門邊小睡",
+            "hint": "睡在房門邊，一隻耳朵還翻著。",
+            "image": "gallery secret_door_sleep",
+            "path": "gallery/secret-door-sleep.png",
+            "button": "✓  紀念照片｜門邊小睡",
         },
         "water_bowl": {
             "title": "紀念照片｜新水碗",

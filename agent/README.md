@@ -14,6 +14,7 @@
 | **聲音設計** | [`audio-sound/`](audio-sound/) | OGG BGM、幼犬樣本、SCENE_CUES；**音訊管線**見 `audio-pipeline.md` | [`SKILL.md`](audio-sound/SKILL.md) |
 | **音樂作曲** | [`music-composition/`](music-composition/) | BGM brief、AI 作曲 prompt | [`SKILL.md`](music-composition/SKILL.md) |
 | **Steam 部署** | [`steam-deployment/`](steam-deployment/) | Electron、Steamworks、CI 上傳、成就／雲端存檔 | [`SKILL.md`](steam-deployment/SKILL.md) · [`reference.md`](steam-deployment/reference.md) |
+| **遊戲設計** | [`game-designer/`](game-designer/) | 製作過程與體驗細節的調整建議、優化優先序 | [`SKILL.md`](game-designer/SKILL.md) · [`designer.md`](../Ch1_Trust_Version3/agents/designer.md) |
 | **遊戲測試** | [`game-tester/`](game-tester/) | 台灣玩家視角 playtest | [`SKILL.md`](game-tester/SKILL.md) · [`reference.md`](game-tester/reference.md) |
 
 ## 任務對照（快速選 skill）
@@ -31,11 +32,12 @@
 | BGM 作曲 brief、AI 作曲 | [`music-composition`](music-composition/SKILL.md) |
 | 美術自動匯出、圖集、壓縮管線 | [`visual-art/art-asset-pipeline.md`](visual-art/art-asset-pipeline.md) |
 | Steam 建置上傳、成就、Cloud Save | [`steam-deployment`](steam-deployment/SKILL.md) |
+| 設計建議、體驗優化、先做哪、產線順序 | [`game-designer`](game-designer/SKILL.md) · Version3 [`designer.md`](../Ch1_Trust_Version3/agents/designer.md) |
 | 測試 Week1–3、playtest、圖文審查 | [`game-tester`](game-tester/SKILL.md) |
 
 **章節落地驗收：** [`chapter-landing-checklist.md`](chapter-landing-checklist.md)
 
-**組合範例：**「依 [`Ch1_agent`](Ch1_agent/SKILL.md) 落地 Week4，調 story + visual + game-tester」
+**組合範例：**「依 [`Ch1_agent`](Ch1_agent/SKILL.md) 落地 Week4，調 story + visual + game-designer + game-tester」
 
 ## 使用方式
 
@@ -50,11 +52,12 @@
    - `@lhtl-audio-sound` — 音效
    - `@lhtl-music-composition` — BGM 作曲
    - `@lhtl-steam-deployment` — Steam 建置與部署
+   - `@lhtl-game-designer` — 設計建議與體驗優化
    - `@lhtl-game-tester` — 測試與報告
 
 2. **直接指定路徑**：例——「請依照 `agent/Ch1_agent/SKILL.md` 規劃 Week4 產線」。
 
-3. **組合使用**：Ch1_agent 拆任務 → 子 skill 執行 → game-tester 驗收。
+3. **組合使用**：Ch1_agent 拆任務 → 子 skill 執行 → game-designer 建議（可選）→ game-tester 驗收。
 
 ### 建議工作流（Ch1 新週）
 
@@ -69,7 +72,9 @@ tw-narrative-voice → 四層文案
        ↓
 visual-art ⫽ audio-sound
        ↓
-Ch1_Trust/game/js/ …
+Ch1_Trust_Version3/Renpy_game/game/ …
+       ↓
+game-designer（體驗／產線建議，可選）
        ↓
 game-tester + chapter-landing-checklist
        ↓
@@ -107,12 +112,14 @@ agent/
 │   └── audio-pipeline.md            ← 資料夾、FMOD、AI 音樂
 ├── music-composition/
 ├── steam-deployment/                ← Steamworks、CI 部署
+├── game-designer/                 ← 製作過程／體驗優化建議
 └── game-tester/
 ```
 
 ## 權責邊界
 
 - **Ch1_agent**：不取代子 agent 專業產出；負責排程、對表、驗收閘門與進度文件。
+- **game-designer**：製作過程與體驗建議；不開 bug 單、不寫新主幹。
 - **story-narrative**～**game-tester**：見各 `SKILL.md`；衝突時 **`guide_line.md` > `Ch1_guide_line.md` > story-narrative > 其餘**。
 
 詳見 [`guide_line.md` §九 Agent Skills](../guide_line.md#agent-skills-與-cursor-協作)。

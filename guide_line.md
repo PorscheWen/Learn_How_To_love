@@ -221,10 +221,11 @@ Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
 | 分支不經 `branch-engine` | choice-reactions 鍵不一致、假選擇 |
 | 美術不經 `visual-art` | 狗年齡 tier 錯、版面回退、硬描邊 |
 | 落地不經 `game-tester` | 流程卡住、圖文不符未發現 |
+| 優化不經 `game-designer` | 重產順序反了、假選擇、節奏悶卻加系統 |
 
 ### Cursor 呼叫方式
 
-1. **@ skill**（已同步至 `.cursor/skills/`）：`@lhtl-ch1-agent`、`@lhtl-story-narrative`、`@lhtl-branch-engine`、`@lhtl-tw-narrative-voice`、`@lhtl-visual-art`、`@lhtl-audio-sound`、`@lhtl-game-tester` 等  
+1. **@ skill**（已同步至 `.cursor/skills/`）：`@lhtl-ch1-agent`、`@lhtl-story-narrative`、`@lhtl-branch-engine`、`@lhtl-tw-narrative-voice`、`@lhtl-visual-art`、`@lhtl-audio-sound`、`@lhtl-game-designer`、`@lhtl-game-tester` 等  
 2. **直接路徑**：`agent/story-narrative/SKILL.md`  
 3. **Ch1 大任務**：先 `@lhtl-ch1-agent` 拆週 → 再 @ 子 skill
 
@@ -246,6 +247,7 @@ Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
 | 狗圖、背景、UI | [`visual-art`](agent/visual-art/SKILL.md) |
 | BGM、狗叫、cue | [`audio-sound`](agent/audio-sound/SKILL.md) |
 | playtest、驗收 | [`game-tester`](agent/game-tester/SKILL.md) |
+| 設計建議、體驗優化、產線順序 | [`game-designer`](agent/game-designer/SKILL.md) |
 | Steam 建置上傳 | [`steam-deployment`](agent/steam-deployment/SKILL.md) |
 
 完整一覽與組合範例 → [`agent/README.md`](agent/README.md) · 章節落地勾選 → [`agent/chapter-landing-checklist.md`](agent/chapter-landing-checklist.md)
@@ -254,6 +256,8 @@ Cursor 規則：`.cursor/rules/lhtl-ch1-backup-protected.mdc`。
 
 ```
 對應 agent skill 產出
+        ↓
+game-designer 建議（改體驗／產線時，見 designer.md）
         ↓
 validate-*.py 全 OK（結構／結局／選單等）
         ↓
@@ -275,6 +279,7 @@ game-tester 審查（必要時）
 | `character-bible` | 角色一致性 |
 | `visual-art` / `audio-sound` / `music-composition` | 美術、音效、作曲 |
 | `game-tester` | playtest |
+| `game-designer` | 製作過程與體驗細節建議、優化優先序 |
 | `steam-deployment` | Electron、Steamworks、CI |
 
 ---

@@ -12,10 +12,12 @@ GAME = ROOT / "game"
 
 GALLERY_FILES = [
     "gallery/secret-lap-sleep.png",
+    "gallery/secret-sniff-wire.png",
     "gallery/secret-forehead-nudge.png",
     "gallery/secret-behind-legs.png",
     "gallery/secret-shoe-sleep.png",
     "gallery/secret-nose-touch.png",
+    "gallery/secret-door-sleep.png",
     "gallery/secret-water-bowl.png",
     "gallery/secret-back-to-back.png",
     "gallery/ending-a-back.png",
@@ -26,10 +28,12 @@ GALLERY_FILES = [
 
 IMAGE_DEFS = [
     "image gallery secret_lap_sleep",
+    "image gallery secret_sniff_wire",
     "image gallery secret_forehead_nudge",
     "image gallery secret_behind_legs",
     "image gallery secret_shoe_sleep",
     "image gallery secret_nose_touch",
+    "image gallery secret_door_sleep",
     "image gallery secret_water_bowl",
     "image gallery secret_back_to_back",
     "image gallery ending_a_back",
@@ -40,10 +44,12 @@ IMAGE_DEFS = [
 
 SECRET_IDS = (
     "lap_sleep",
+    "sniff_wire",
     "forehead_nudge",
     "behind_legs",
     "shoe_sleep",
     "nose_touch",
+    "door_sleep",
     "water_bowl",
     "back_to_back",
 )
@@ -107,6 +113,10 @@ def main() -> int:
             fail(f"screens.rpy missing {needle}")
     if "胸口同睡" in screens or "open_memo_chest" in screens:
         fail("screens still reference chest/back-to-back memorial")
+    if "門邊小睡" not in screens or "secret-door-sleep.png" not in screens:
+        fail("screens.rpy missing door_sleep memorial")
+    if "線關了" not in screens or "secret-sniff-wire.png" not in screens:
+        fail("screens.rpy missing sniff_wire memorial")
     ok("screens.rpy ending/hidden menu wiring")
 
     hc = (GAME / "hidden_content.rpy").read_text(encoding="utf-8")
