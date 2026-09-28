@@ -169,6 +169,9 @@ screen main_menu():
             null height 6
             textbutton ("隱藏內容　新" if hidden_content_unread_count() > 0 else "隱藏內容") style "menu_button" action ShowMenu("hidden_content_gallery"):
                 xfill True
+            null height 6
+            textbutton "製作群／授權" style "menu_button" action ShowMenu("credits"):
+                xfill True
 
             null height 16
 
@@ -181,15 +184,9 @@ screen main_menu():
                 textbutton "離開" style "menu_back_button" action Quit(confirm=False):
                     xminimum 170
 
-    key "K_F8" action Function(dev_unlock_all_gallery)
-    key "shift_K_u" action Function(dev_unlock_all_gallery)
-
 
 screen ending_gallery():
     tag menu
-
-    key "K_F8" action Function(dev_unlock_all_gallery)
-    key "shift_K_u" action Function(dev_unlock_all_gallery)
 
     add "lhtl_menu_bg"
     add Solid("#17120F33")
@@ -262,14 +259,15 @@ screen ending_gallery():
                         spacing 8
                         xfill True
 
-                        textbutton "結局 A｜背靠" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-a-back.png", "結局 A｜背靠"):
-                            xsize 340
-                        textbutton "結局 B｜選定但還在學" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-b-learning.png", "結局 B｜選定但還在學"):
-                            xsize 340
-                        textbutton "結局 C｜送走之後" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-c-handover.png", "結局 C｜送走之後"):
-                            xsize 340
-                        textbutton "結局 D｜薄冰同住" style "menu_list_button" action Function(open_gallery_image, "gallery/ending-d-thin-ice.png", "結局 D｜薄冰同住"):
-                            xsize 340
+                        for _eid, _title, _path, _view_title in (
+                            ("A", "結局 A｜背靠", "gallery/ending-a-back.png", "結局 A｜背靠"),
+                            ("B", "結局 B｜選定但還在學", "gallery/ending-b-learning.png", "結局 B｜選定但還在學"),
+                            ("C", "結局 C｜送走之後", "gallery/ending-c-handover.png", "結局 C｜送走之後"),
+                            ("D", "結局 D｜薄冰同住", "gallery/ending-d-thin-ice.png", "結局 D｜薄冰同住"),
+                        ):
+                            $ _ending_open = ending_unlocked(_eid)
+                            textbutton ("尚未解鎖｜" + _title if not _ending_open else _title) style "menu_list_button" sensitive _ending_open action (Function(open_gallery_image, _path, _view_title) if _ending_open else NullAction()):
+                                xsize 340
 
                     null height 4
 
@@ -278,24 +276,12 @@ screen ending_gallery():
                         size 14
                         color LHTL_TEXT_SOFT
 
-                    textbutton "紀念｜躺在大腿" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-lap-sleep.png", "紀念照片｜躺在大腿"):
-                        xfill True
-                    textbutton "紀念｜線關了" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-sniff-wire.png", "紀念照片｜線關了"):
-                        xfill True
-                    textbutton "紀念｜額頭輕碰" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-forehead-nudge.png", "紀念照片｜額頭輕碰"):
-                        xfill True
-                    textbutton "紀念｜擋在身後" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-behind-legs.png", "紀念照片｜擋在身後"):
-                        xfill True
-                    textbutton "紀念｜鞋邊小睡" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-shoe-sleep.png", "紀念照片｜鞋邊小睡"):
-                        xfill True
-                    textbutton "紀念｜指尖碰鼻" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-nose-touch.png", "紀念照片｜指尖碰鼻"):
-                        xfill True
-                    textbutton "紀念｜門邊小睡" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-door-sleep.png", "紀念照片｜門邊小睡"):
-                        xfill True
-                    textbutton "紀念｜新水碗" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-water-bowl.png", "紀念照片｜新水碗"):
-                        xfill True
-                    textbutton "紀念｜背對背" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-back-to-back.png", "紀念照片｜背對背"):
-                        xfill True
+                    for _photo_id in SECRET_PHOTO_ORDER:
+                        $ _photo_meta = SECRET_PHOTO_META.get(_photo_id, {})
+                        $ _photo_label = _photo_meta.get("title", _photo_id).replace("紀念照片｜", "紀念｜")
+                        $ _photo_open = secret_photo_unlocked(_photo_id) and _photo_meta.get("path")
+                        textbutton ("尚未解鎖｜" + _photo_label if not _photo_open else _photo_label) style "menu_list_button" sensitive _photo_open action (Function(open_gallery_image, _photo_meta["path"], _photo_meta.get("title", _photo_label)) if _photo_open else NullAction()):
+                            xfill True
 
             textbutton "返回" style "menu_back_button" action Return():
                 xalign 0.5
@@ -425,9 +411,6 @@ screen s08_phone_photo():
 
 screen hidden_content_gallery():
     tag menu
-
-    key "K_F8" action Function(dev_unlock_all_gallery)
-    key "shift_K_u" action Function(dev_unlock_all_gallery)
 
     add "lhtl_menu_bg"
     add Solid("#17120F33")

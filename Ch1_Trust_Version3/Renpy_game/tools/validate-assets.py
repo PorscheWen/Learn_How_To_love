@@ -15,7 +15,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT = Path(__file__).resolve().parents[1]
 GAME = ROOT / "game"
-## options.rpy 會把 Version3/assets 加進 config.searchpath
+## 正式版資產在 game/images、game/audio（Version3/assets 為產線來源，可選同步）
 ASSETS = (ROOT / ".." / "assets").resolve()
 SCRIPT = (GAME / "script.rpy").read_text(encoding="utf-8")
 SCREENS = (GAME / "screens.rpy").read_text(encoding="utf-8")
@@ -42,12 +42,8 @@ def ok(msg: str) -> None:
 
 
 def loadable(rel: str) -> bool:
-    """模擬 renpy.loadable：game/、game/images/ 與 Version3/assets 搜尋路徑。"""
-    return (
-        (GAME / rel).exists()
-        or (GAME / "images" / rel).exists()
-        or (ASSETS / rel).exists()
-    )
+    """模擬 renpy.loadable：game/ 與 game/images/。"""
+    return (GAME / rel).exists() or (GAME / "images" / rel).exists()
 
 
 # ---------- 1. image 定義 vs scene/show 使用 ----------

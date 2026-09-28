@@ -71,17 +71,21 @@ def ok(msg: str) -> None:
     print(f"[OK] {msg}")
 
 
+def loadable(rel: str) -> bool:
+    path = GAME.joinpath(*rel.split("/"))
+    alt = GAME.joinpath("images", *rel.split("/"))
+    return path.is_file() or alt.is_file()
+
+
 def main() -> int:
-    if not ASSETS.is_dir():
-        fail(f"assets missing: {ASSETS}")
-
     options = (GAME / "options.rpy").read_text(encoding="utf-8")
-    if "config.searchpath.append" not in options or "assets" not in options:
-        fail("options.rpy must append Version3/assets to searchpath")
-    ok("options.rpy searchpath -> Version3/assets")
-
+    if "config.searchpath.append" in options:
+        fail("options.rpy must not rely on external assets searchpath")
+    ok("options.rpy ships assets from game/")
     for rel in GALLERY_FILES:
-        path = ASSETS.joinpath(*rel.split("/"))
+        path = GAME.joinpath(*rel.split("/"))
+        if not path.is_file():
+            path = GAME.joinpath("images", *rel.split("/"))
         if not path.is_file():
             fail(f"missing {rel}")
         if path.stat().st_size < 1000:
@@ -111,12 +115,10 @@ def main() -> int:
     ):
         if needle not in screens:
             fail(f"screens.rpy missing {needle}")
-    if "胸口同睡" in screens or "open_memo_chest" in screens:
-        fail("screens still reference chest/back-to-back memorial")
-    if "門邊小睡" not in screens or "secret-door-sleep.png" not in screens:
-        fail("screens.rpy missing door_sleep memorial")
-    if "線關了" not in screens or "secret-sniff-wire.png" not in screens:
-        fail("screens.rpy missing sniff_wire memorial")
+    if "SECRET_PHOTO_ORDER" not in screens or "secret_photo_unlocked" not in screens:
+        fail("ending_gallery must gate secret photos by unlock state")
+    if "尚未解鎖" not in screens:
+        fail("ending_gallery must show locked labels")
     ok("screens.rpy ending/hidden menu wiring")
 
     hc = (GAME / "hidden_content.rpy").read_text(encoding="utf-8")

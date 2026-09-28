@@ -601,6 +601,8 @@ init python:
         禁止在此呼叫 renpy.restart_interaction()：會沖掉選單按鈕。
         任何例外都吞掉，避免擋住 ShowMenu。
         """
+        if not config.developer:
+            return None
         try:
             before = (
                 tuple(persistent.unlocked_endings or []),
@@ -614,6 +616,7 @@ init python:
             for pid in (
                 "lap_sleep", "sniff_wire", "forehead_nudge", "behind_legs",
                 "shoe_sleep", "nose_touch", "door_sleep", "water_bowl",
+                "back_to_back",
             ):
                 if pid not in photos:
                     photos.append(pid)
@@ -2267,7 +2270,7 @@ label section_01_fluorescent_over_moon:
 
     "她坐在沙發邊緣吃便當。電視沒開，螢幕黑著。"
 
-    "吃到一半，手機亮起。備忘錄搜尋建議浮出三個月前的舊項目：「週六早上10點，動保處......領養須知影印本。」"
+    "吃到一半，手機亮起。備忘錄搜尋建議浮出三個月前的舊待辦：「週六早上10點，動保處......領養須知影印本。」"
     "日期已經灰掉，後面沒有完成的勾。她盯了兩秒，把通知往旁邊滑掉......像沒看過就不存在。"
     "店員那句「幾乎沒站起來」卻還掛在耳朵邊，像沒撕乾淨的標價貼紙：明明該丟掉，偏偏黏著。"
 
@@ -3244,7 +3247,7 @@ label section_05_two_voices:
 
     "同事問了一句進度，予安一邊回答，一邊用腳把滑落的充電線勾回桌下......一邊開會，一邊顧家。"
     "[dog_label]的鼻尖跟著那條線移動，前腳才剛往前，螢幕裡又有人同時開口。三種聲音疊在一起，牠立刻把腳收回去。"
-    "予安看見了，卻不能停下來解釋。她對鏡頭點頭、記下修改項目，右手仍懸在桌邊、掌心朝下，像想把整間屋子的節奏放慢一點。"
+    "予安看見了，卻不能停下來解釋。她對鏡頭點頭、記下修改要點，右手仍懸在桌邊、掌心朝下，像想把整間屋子的節奏放慢一點。"
     thought "牠不知道哪一句不是在對牠說。"
 
     "同事臨時請她開鏡頭。她按下按鈕，螢幕裡出現自己，也多了一截從椅腳旁探出來的耳朵......會議室從沒這麼可愛過。"
