@@ -114,12 +114,12 @@ init python:
         "dog/dog-sniff-bento.png": 0.647,
         "dog/dog-sniff-wire.png": 0.401,
         "dog/dog-stair-watch.png": 0.615,
-        "dog/dog-s08-sniff-harness.png": 0.416,
+        "dog/dog-s08-sniff-harness.png": 0.457,
         "dog/dog-s08-tense.png": 0.903,
         "dog/dog-s08-explore.png": 0.903,
         "dog/dog-s08-startle.png": 0.903,
         "dog/dog-s08-resist.png": 0.903,
-        "dog/dog-s08-threshold.png": 0.410,
+        "dog/dog-s08-threshold.png": 0.449,
         "dog/dog-street-tense.png": 0.808,
         "dog/dog-farewell.png": 0.468,
         "dog/dog-cafe-refuse.png": 1.523,
@@ -1055,14 +1055,14 @@ image dog harness_bite = dog_sprite(
     "dog/dog-harness-bite.png", "dog/dog-leash-wait.png"
 )
 # S08 玄關門檻：站姿半跨（前腳在外、後腳在墊）；遠近只改 xalign
-# 864×1152 無繩尺維持 0.410（牽繩族 2026-09-20 已 +15%，勿抄 harness_bite）
+# 864×958（裁底緣透明）；倍率 0.449＝原目標 0.54×958/1152，對齊 leash_wait→threshold 連鏡
 image dog s08_threshold = dog_sprite(
-    "dog/dog-s08-threshold.png", "dog/dog-harness-bite.png", 0.410
+    "dog/dog-s08-threshold.png", "dog/dog-harness-bite.png", 0.449
 )
 # S08 聞帶：扣帶前／下午聞地板上的胸背帶（身上無背帶）
-# 864×1152 無繩尺維持 0.416；勿抄 halfstep 0.580、勿跟牽繩族 +15%
+# 864×958（裁掉底緣透明）；倍率 0.457＝原目標 0.55×958/1152
 image dog s08_sniff_harness = dog_sprite(
-    "dog/dog-s08-sniff-harness.png", "dog/dog-halfstep.png", 0.416
+    "dog/dog-s08-sniff-harness.png", "dog/dog-halfstep.png", 0.457
 )
 # S08 玄關站姿：同 PNG，無繩尺 0.529；勿改全域 halfstep 0.580（S02／S07／S10）
 # leash_wait 0.677 頭距對齊此張

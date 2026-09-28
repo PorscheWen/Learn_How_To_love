@@ -95,7 +95,7 @@
 - **結局伏筆：** `s08_forced_walk` 會影響 S10 是否可進最高信任結局。
 - **BGM：** `corner_walk` 或低信任 `calm` → **機車出現前**切 `tense`（`tense-2.ogg`／Suno 備用）→ 停等／提早回家 `tender`、硬拖維持 `tense`；返家鞋邊睡維持 `tender`，硬拖收回 `calm`（不另切 `warm`）。
 - **銜接 S09：** 同事的提議必須真誠，不把對方寫成搶狗的壞人。
-- **落地畫面（2026-09-20）：** 聞帶改 `s08_sniff_harness`；門檻改 `s08_threshold`（站姿半跨）；巷口 `s08_tense` 重畫為側身縮、牽繩往後。探路用 `s08_explore`（原 flinch 走步圖改名）。機車衝出：狗 `s08_startle`（驚嚇）再 `s08_resist`（抗拒走、牽繩往左繃）、人 `leash_yank`（站姿被帶半步）再切 `leash` 蹲。人／狗尺：玄關 `leash` **0.33**×pose **0.70**（蹲，人／門≈0.60）／狗 **0.128**；巷口 `walk`／`leash_yank` **0.32**／狗 **0.124**。頭距 `leash_wait` **0.677**（對齊開場 `s08_halfstep`）／`s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` **0.903**。無繩 `s08_threshold` **0.410**／聞帶 **0.416**／玄關站 `s08_halfstep` **0.529**（勿改全域 0.580）。躺 `s04_low` 0.369 勿改成 `s07_low`。喝水／鞋邊睡維持 visH 族（0.564／0.414），勿用兩眼距拉大縮小。數字見 `image_scale.md` §S08 確認。週一：停等才 overlay `gallery/secret-shoe-sleep.png`（重用）；提早回家只寫大門／轉角；硬拖只寫門邊距離與牽繩。其餘不新產 PNG。
+- **落地畫面（2026-09-20）：** 聞帶改 `s08_sniff_harness`；門檻改 `s08_threshold`（站姿半跨）；巷口 `s08_tense` 重畫為側身縮、牽繩往後。探路用 `s08_explore`（原 flinch 走步圖改名）。機車衝出：狗 `s08_startle`（驚嚇）再 `s08_resist`（抗拒走、牽繩往左繃）、人 `leash_yank`（站姿被帶半步）再切 `leash` 蹲。人／狗尺：玄關 `leash` **0.33**×pose **0.70**（蹲，人／門≈0.60）／狗 **0.128**；巷口 `walk`／`leash_yank` **0.32**／狗 **0.124**。頭距 `leash_wait` **0.677**（對齊開場 `s08_halfstep`）／`s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` **0.903**。無繩 `s08_threshold` **0.449**／聞帶 **0.457**／玄關站 `s08_halfstep` **0.529**（勿改全域 0.580）。864×958 裁底留白見 `image_scale.md`。躺 `s04_low` 0.369 勿改成 `s07_low`。喝水／鞋邊睡維持 visH 族（0.564／0.414），勿用兩眼距拉大縮小。數字見 `image_scale.md` §S08 確認。週一：停等才 overlay `gallery/secret-shoe-sleep.png`（重用）；提早回家只寫大門／轉角；硬拖只寫門邊距離與牽繩。其餘不新產 PNG。
 
 ### 旁白 × 狗移動（2026-09-19 鎖定｜threshold／sniff 已補；其餘不新產 pose）
 

@@ -70,7 +70,7 @@
 | **S05 早會** | chair-paw／stuck／ear_flat／stair_watch | **0.401／0.472／0.409／0.615** | 站姿約 76px（趴 63px 的 1.2 倍）；head-up 0.332／s05_anxious 0.369；sniff-wire 幀 0.605、靜態 0.401。會後特寫 zoom `living_wire` **0.30**。S06 開場 `s05_stair_watch` 另用 **0.82**（走廊頭距） |
 | **S06 走廊人** | `carry_pup` | **1.056** | 對齊鄰居 idle 可見高（約 435px＠0.36）；`door_hold`／`block` 重產後約 1.0。彎腰 `neighbor lower` 可略矮 |
 | **S07 臥室狗** | `s07_low`／`guard_door`／`nose_tip` | **0.43／0.438／0.65** | 頭距母尺 guard_door；指尖特寫 zoom **0.30**（`bedroom_nose`）。禁 `s05_ear_flat` 回房 |
-| **S08 巷口狗** | `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist`／`leash_wait`／`s08_threshold`／`s08_sniff_harness` | **0.903／0.903／0.903／0.903／0.677／0.410／0.416** | `leash_wait` 頭距對齊玄關開場 `s08_halfstep`。門檻／聞帶維持無繩尺。遠近只改 xalign。禁 `street_tense` 0.808。聞帶禁巷口。人／狗 visH 見 §S08 確認 |
+| **S08 巷口狗** | `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist`／`leash_wait`／`s08_threshold`／`s08_sniff_harness` | **0.903／0.903／0.903／0.903／0.677／0.449／0.457** | `leash_wait` 頭距對齊玄關開場 `s08_halfstep`。門檻／聞帶 864×958 裁底留白後重算倍率。遠近只改 xalign。禁 `street_tense` 0.808。聞帶禁巷口。人／狗 visH 見 §S08 確認 |
 
 **同場遠近禁止換 zoom**，只用 `xalign`。
 
@@ -230,8 +230,8 @@ dog_zoom = round(char_zoom * 0.12 / 0.31, 3)   # ≈ char × 0.387；可見高 �
 | `halfstep` | **0.580** | （S02／S07／S10） | S08 不用此尺 |
 | `harness_bite`／`leash_wait`／`drink_bowl` | **0.658／0.677／0.564** | 78／90／66 | `leash_wait` 頭對齊 halfstep；喝水低頭 visH 略矮（**不**用兩眼距拉大） |
 | `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` | **0.903** | 巷口站 **87** | 864 畫布；牽繩族 +15%。`s08_explore` 探路；`s08_startle` 驚嚇、`s08_resist` 抗拒走。**禁** `street_tense` 0.808 |
-| `s08_threshold` | **0.410** | 玄關站半跨 | 864×1152 無繩尺；只改 xalign |
-| `s08_sniff_harness` | **0.416** | 低頭聞帶 | 864×1152 無繩尺；**禁**巷口 |
+| `s08_threshold` | **0.449** | 玄關站半跨 | 864×958（裁底緣透明）；倍率 0.54×958/1152 |
+| `s08_sniff_harness` | **0.457** | 低頭聞帶 | 864×958（裁底緣透明）；倍率 0.55×958/1152；**禁**巷口 |
 | `shoe_sleep` | **0.414** | 躺 **55** | 對齊 `s04_low` 橫躺 visH；先 hide yuan |
 
 **人：** `walk` 站姿 `CHAR_POSE_SCALE` **1.0**。`leash_yank` 864 畫布站姿 **0.75**。蹲姿 `leash`／`squat_side` **0.70**（864 畫布幾乎填滿，1.0 會讓 visH 接近大門）。樹下切蹲仍 alley 0.32，但吃 0.70。
