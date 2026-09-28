@@ -292,9 +292,9 @@ S02 後門第一次見面用 `dog-s04-anxious`（**0.551**），不用舊 `dog-a
 | 檔名／標籤 | `DOG_POSE_SCALE` | 主用 |
 |------------|------------------|------|
 | `s04_low`／`s08_halfstep` | **0.369／0.529** | 扣帶前玄關；躺 visH≈58、站≈102。站姿同 PNG `halfstep`，無繩尺不跟牽繩族 +15%。解帶後硬拖 `s04_low`＠far。**禁**改全域 halfstep 0.580；**禁** `s07_low` 0.43 進玄關 |
-| `s08_sniff_harness` | **0.416** | 扣帶前聞布邊／扣環；下午聞地上胸背帶。身上無背帶。864 畫布無繩尺。**禁**巷口 |
+| `s08_sniff_harness` | **0.457** | 扣帶前聞布邊／扣環；下午聞地上胸背帶。864×958 裁底留白。**禁**巷口 |
 | `harness_bite`／`leash_wait` | **0.658／0.677** | 扣上之後；四腳放穩／跟上／選 A·C。`leash_wait` 頭距對齊開場 `s08_halfstep` |
-| `s08_threshold` | **0.410** | 門檻半跨；near→mid→near 只改 xalign。864 畫布無繩尺 |
+| `s08_threshold` | **0.449** | 門檻半跨；near→mid→near 只改 xalign。864×958 裁底留白 |
 | `s08_tense` | **0.903** | 巷口受驚／硬拖；側身縮、牽繩往後。864 畫布；牽繩族 +15%。禁 `street_tense` 0.808 |
 | `s08_explore` | **0.903** | 巷口探路／探索散步＠`far_walk`；頭距對齊 `s08_tense` |
 | `s08_startle` | **0.903** | 機車衝出當下驚嚇＠behind；頭距對齊 `s08_tense` |
@@ -406,6 +406,7 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 2026-09-13 | S07 臥室頭距：`s07_low` 0.43 對齊 `guard_door`；選 B 回房不再用 `s05_ear_flat` |
 | 2026-09-13 | S07 狗移動對齊旁白：halfstep／ear_perk／chin_hover／far-mid-near；客廳 sofa 退開 |
 | 2026-09-10 | S08 巷口改 `s08_tense`（有胸背帶 0.572）；扣帶前無背帶；`street_tense` 只留 S04 |
+| 2026-09-28 | S08 `s08_threshold` **0.449**／`s08_sniff_harness` **0.457**：864×958 裁底緣透明後重算（原 0.410／0.416 @1152） |
 | 2026-09-19 | S08 `s08_threshold` 0.410／`s08_sniff_harness` 0.416：864 畫布兩眼距對齊 `leash_wait` |
 | 2026-09-20 | S08 玄關狗改站鞋櫃與予安之間（far 0.54／mid 0.62）；`leash_wait` 0.677 頭距對齊開場 halfstep |
 | 2026-09-20 | S08 機車拍拆成 `s08_startle`（原 flinch）＋`s08_resist`（抗拒走）；頭距仍 0.903 |

@@ -15,7 +15,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT = Path(__file__).resolve().parents[1]
 GAME = ROOT / "game"
-## options.rpy 會把 Version3/assets 加進 config.searchpath
+## 正式版資產在 game/images、game/audio（Version3/assets 為產線來源，可選同步）
 ASSETS = (ROOT / ".." / "assets").resolve()
 SCRIPT = (GAME / "script.rpy").read_text(encoding="utf-8")
 SCREENS = (GAME / "screens.rpy").read_text(encoding="utf-8")
@@ -42,12 +42,8 @@ def ok(msg: str) -> None:
 
 
 def loadable(rel: str) -> bool:
-    """模擬 renpy.loadable：game/、game/images/ 與 Version3/assets 搜尋路徑。"""
-    return (
-        (GAME / rel).exists()
-        or (GAME / "images" / rel).exists()
-        or (ASSETS / rel).exists()
-    )
+    """模擬 renpy.loadable：game/ 與 game/images/。"""
+    return (GAME / rel).exists() or (GAME / "images" / rel).exists()
 
 
 # ---------- 1. image 定義 vs scene/show 使用 ----------
@@ -68,13 +64,28 @@ if missing_defs:
 else:
     ok(f"scene/show 引用 {len(used_images)} 個 image 全部有定義")
 
-# ---------- 2. transform 定義 vs at 使用 ----------
+# ---------- 2. transform 定義 vs at 使用（略過字串內誤判，如 credits「Peace at last」） ----------
 BUILTIN_TF = {
     "left", "right", "center", "truecenter", "top", "topleft", "topright",
     "default", "reset",
 }
+
+
+def collect_at_transforms(text: str) -> set[str]:
+    names: set[str] = set()
+    for line in text.splitlines():
+        if line.strip().startswith("#"):
+            continue
+        for m in re.finditer(
+            r"(?:^|\s)(?:show|hide|frame|text|add|image|side)\b[^\n#]*?\bat\s+([a-zA-Z_]\w*)",
+            line,
+        ):
+            names.add(m.group(1))
+    return names
+
+
 defined_tf = set(re.findall(r"^transform (\w+)", ALL_RPY, re.M))
-used_tf = set(re.findall(r"\bat ([a-z]\w+)", ALL_RPY))
+used_tf = collect_at_transforms(ALL_RPY)
 missing_tf = sorted(t for t in used_tf if t not in defined_tf and t not in BUILTIN_TF)
 if missing_tf:
     for t in missing_tf:
@@ -103,20 +114,21 @@ if missing_sfx:
 else:
     ok(f"dog_sfx {len(used_sfx)} 個 cue 全部在對照表")
 
-# ---------- 4. 實體檔案存在性（缺檔=警告：引擎退 fallback） ----------
+# ---------- 4. 實體檔案存在性（缺檔=FAIL） ----------
 ref_paths = set()
 for pat in (
     r'optional_background\(\s*\n?\s*"([^"]+)"',
+    r'optional_displayable\(\s*\n?\s*"([^"]+)"',
     r'dog_sprite\("([^"]+)"',
     r'char_sprite\("([^"]+)"',
-    r'"((?:audio|gallery|theme|bg|dog|char)/[^"]+\.(?:png|jpg|webp|ogg|wav|mp3))"',
+    r'"((?:audio|gallery|theme|bg|dog|char|prop)/[^"]+\.(?:png|jpg|webp|ogg|wav|mp3|flac))"',
 ):
     ref_paths.update(re.findall(pat, ALL_RPY))
     ref_paths.update(re.findall(pat, SCREENS))
 
 by_kind: dict[str, list[str]] = {}
 for rel in sorted(ref_paths):
-    if "%" in rel:  # python 樣板字串，非實際路徑
+    if "%" in rel:
         continue
     if not loadable(rel):
         kind = rel.split("/", 1)[0]
@@ -125,13 +137,13 @@ for rel in sorted(ref_paths):
 present = len(ref_paths) - sum(len(v) for v in by_kind.values())
 ok(f"引用實體檔案 {len(ref_paths)} 個，存在 {present} 個")
 for kind, lst in sorted(by_kind.items()):
-    warn(f"{kind}/ 缺 {len(lst)} 個檔（引擎退 fallback）：{', '.join(Path(p).name for p in lst[:8])}"
-         + ("…" if len(lst) > 8 else ""))
+    for rel in lst:
+        fail(f"缺檔（發行包會退 fallback）：{rel}")
 
 # ---------- 結果 ----------
 print()
 if fails:
     print(f"共 {len(fails)} 項 FAIL、{len(warns)} 項 WARN")
     raise SystemExit(1)
-print(f"[OK] 引用一致性全部通過（{len(warns)} 項缺檔警告）")
+print(f"[OK] 引用一致性全部通過（{len(warns)} 項 WARN）")
 raise SystemExit(0)

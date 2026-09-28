@@ -4,16 +4,6 @@ define config.name = _("Learn How to Love")
 define config.version = "1.0.0-ch1"
 define config.window_title = "Learn How to Love｜Ch1 Trust"
 
-init python:
-    import os
-
-    # 正式資產放在 Version3/assets；game/assets 也可覆寫。
-    _version3_assets = os.path.abspath(
-        os.path.join(config.gamedir, "..", "..", "assets")
-    )
-    if os.path.isdir(_version3_assets):
-        config.searchpath.append(_version3_assets)
-
 define config.has_sound = True
 define config.has_music = True
 define config.has_voice = False
@@ -37,10 +27,45 @@ define config.autosave_on_quit = True
 define config.autosave_frequency = 20
 define config.history_length = 250
 
-## 開發用：Shift+U 全解鎖結局／隱藏內容（僅 config.developer）
+## 視窗圖示（由 game/window-icon.png 產生，來源：theme/title-main.png）
+define config.window_icon = "window-icon.png"
+
 init python:
-    if "_dev_unlock_hotkey" not in config.always_shown_screens:
-        config.always_shown_screens.append("_dev_unlock_hotkey")
+    import os
+
+    ## 發行建置：排除開發工具與規劃文件（資產已置於 game/ 內）
+    build.name = "LearnHowToLove-Ch1Trust"
+    build.directory_name = "LearnHowToLove-Ch1Trust-{}".format(config.version)
+
+    _build_exclude = (
+        "tools/**",
+        "**/dialogue_editor/**",
+        "**/output/seedance/**",
+        "**/*.ps1",
+        "**/*.bat",
+        "**/*.md",
+        "**/.git/**",
+        "**/.github/**",
+        "**/__pycache__/**",
+        "**/*.pyc",
+        "../agents/**",
+        "../tools/**",
+        "../../agent/**",
+        "../../MEMORY.md",
+        "../../guide_line.md",
+        "../../.cursorrules",
+    )
+    for _pattern in _build_exclude:
+        build.classify(_pattern, None)
+
+    ## 字型授權須隨正式版發行
+    build.classify("game/SourceHanSansLite.ttf", "all")
+    build.classify("game/OFL.txt", "all")
+
+    ## 開發用：Shift+U／F8 全解鎖（僅 config.developer）
+    if config.developer:
+        if "_dev_unlock_hotkey" not in config.always_shown_screens:
+            config.always_shown_screens.append("_dev_unlock_hotkey")
 
 default preferences.text_cps = 30
 default preferences.afm_time = 18

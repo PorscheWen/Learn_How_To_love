@@ -114,12 +114,12 @@ init python:
         "dog/dog-sniff-bento.png": 0.647,
         "dog/dog-sniff-wire.png": 0.401,
         "dog/dog-stair-watch.png": 0.615,
-        "dog/dog-s08-sniff-harness.png": 0.416,
+        "dog/dog-s08-sniff-harness.png": 0.457,
         "dog/dog-s08-tense.png": 0.903,
         "dog/dog-s08-explore.png": 0.903,
         "dog/dog-s08-startle.png": 0.903,
         "dog/dog-s08-resist.png": 0.903,
-        "dog/dog-s08-threshold.png": 0.410,
+        "dog/dog-s08-threshold.png": 0.449,
         "dog/dog-street-tense.png": 0.808,
         "dog/dog-farewell.png": 0.468,
         "dog/dog-cafe-refuse.png": 1.523,
@@ -601,6 +601,8 @@ init python:
         禁止在此呼叫 renpy.restart_interaction()：會沖掉選單按鈕。
         任何例外都吞掉，避免擋住 ShowMenu。
         """
+        if not config.developer:
+            return None
         try:
             before = (
                 tuple(persistent.unlocked_endings or []),
@@ -614,6 +616,7 @@ init python:
             for pid in (
                 "lap_sleep", "sniff_wire", "forehead_nudge", "behind_legs",
                 "shoe_sleep", "nose_touch", "door_sleep", "water_bowl",
+                "back_to_back",
             ):
                 if pid not in photos:
                     photos.append(pid)
@@ -1052,14 +1055,14 @@ image dog harness_bite = dog_sprite(
     "dog/dog-harness-bite.png", "dog/dog-leash-wait.png"
 )
 # S08 玄關門檻：站姿半跨（前腳在外、後腳在墊）；遠近只改 xalign
-# 864×1152 無繩尺維持 0.410（牽繩族 2026-09-20 已 +15%，勿抄 harness_bite）
+# 864×958（裁底緣透明）；倍率 0.449＝原目標 0.54×958/1152，對齊 leash_wait→threshold 連鏡
 image dog s08_threshold = dog_sprite(
-    "dog/dog-s08-threshold.png", "dog/dog-harness-bite.png", 0.410
+    "dog/dog-s08-threshold.png", "dog/dog-harness-bite.png", 0.449
 )
 # S08 聞帶：扣帶前／下午聞地板上的胸背帶（身上無背帶）
-# 864×1152 無繩尺維持 0.416；勿抄 halfstep 0.580、勿跟牽繩族 +15%
+# 864×958（裁掉底緣透明）；倍率 0.457＝原目標 0.55×958/1152
 image dog s08_sniff_harness = dog_sprite(
-    "dog/dog-s08-sniff-harness.png", "dog/dog-halfstep.png", 0.416
+    "dog/dog-s08-sniff-harness.png", "dog/dog-halfstep.png", 0.457
 )
 # S08 玄關站姿：同 PNG，無繩尺 0.529；勿改全域 halfstep 0.580（S02／S07／S10）
 # leash_wait 0.677 頭距對齊此張
@@ -2267,7 +2270,7 @@ label section_01_fluorescent_over_moon:
 
     "她坐在沙發邊緣吃便當。電視沒開，螢幕黑著。"
 
-    "吃到一半，手機亮起。備忘錄搜尋建議浮出三個月前的舊項目：「週六早上10點，動保處......領養須知影印本。」"
+    "吃到一半，手機亮起。備忘錄搜尋建議浮出三個月前的舊待辦：「週六早上10點，動保處......領養須知影印本。」"
     "日期已經灰掉，後面沒有完成的勾。她盯了兩秒，把通知往旁邊滑掉......像沒看過就不存在。"
     "店員那句「幾乎沒站起來」卻還掛在耳朵邊，像沒撕乾淨的標價貼紙：明明該丟掉，偏偏黏著。"
 
@@ -3244,7 +3247,7 @@ label section_05_two_voices:
 
     "同事問了一句進度，予安一邊回答，一邊用腳把滑落的充電線勾回桌下......一邊開會，一邊顧家。"
     "[dog_label]的鼻尖跟著那條線移動，前腳才剛往前，螢幕裡又有人同時開口。三種聲音疊在一起，牠立刻把腳收回去。"
-    "予安看見了，卻不能停下來解釋。她對鏡頭點頭、記下修改項目，右手仍懸在桌邊、掌心朝下，像想把整間屋子的節奏放慢一點。"
+    "予安看見了，卻不能停下來解釋。她對鏡頭點頭、記下修改要點，右手仍懸在桌邊、掌心朝下，像想把整間屋子的節奏放慢一點。"
     thought "牠不知道哪一句不是在對牠說。"
 
     "同事臨時請她開鏡頭。她按下按鈕，螢幕裡出現自己，也多了一截從椅腳旁探出來的耳朵......會議室從沒這麼可愛過。"
