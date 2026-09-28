@@ -211,7 +211,7 @@ bg-{place}-{light}.png
 - 巷口轉角、樹／電杆、機車可能經過的空間感
 - **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，停放空車）；`prop/scooter-pass.png`（引擎聲先到就疊上層，呼嘯拍後 hide；transform **×0.8**）。閃避拍狗 `s08_startle`→`s08_resist`、人 `leash_yank`→`leash`。
 - 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 空機車：低信任 mid→behind（不進 far_walk）；中信任 near→behind；高信任 `s08_explore` far_walk 聞一次再 near→behind → 空車後公共拍 `s08_explore`＠`far_walk` 探路 → 引擎拉回 `s08_tense`＠behind、疊車、狗 `s08_startle`→`s08_resist`、人 `leash_yank`→`leash` 蹲下才出字。硬拖維持 behind，勿再 far 走到人前。
-- **立繪尺：** `char_right_walk` **0.32**；狗 walk **0.124**（幼犬比；far／mid／near／behind 同尺）。樹下蹲 `leash` 仍 0.32。人／狗 visH 見 `image_scale.md` §S08 確認。
+- **立繪尺（2026-09-28 改透視）：** 地平線 y≈430、鏡頭高≈0.68 m；人 zoom＝0.001989×(腳y−430)、狗＝人×0.3346；站位點 `S08_ALLEY_PT`，沿路往右上 ease 走位。空車在畫面左下角，予安從那一側走出來。有人的摩托車從右中車道出現，順著路面往前；兩台車不同圖層，空車不會被換掉（2026-09-28j）。見 `image_scale.md` §S08 巷口透視。
 - 柔和日間光、曝光平衡；禁曝白牆面、禁文字
 
 ### cafe（S09）

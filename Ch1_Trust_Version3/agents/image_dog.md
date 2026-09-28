@@ -161,6 +161,7 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | `dog-s08-resist.png` | 抗拒走 | 瞇眼後坐、四腳釘住、牽繩往左繃（朝予安）；**有胸背帶** | **S08** 驚嚇後＠behind | 2026-09-20 新產 |
 | `dog-s08-threshold.png` | 試探 | 穿胸背帶、前腳跨半步、後腳仍在墊上 | **S08** 玄關門檻進出 | 生成 |
 | `dog-s08-sniff-harness.png` | 小心試探 | 鼻尖對地板上的胸背帶／扣環（身上無背帶） | **S08** 扣帶前聞帶；下午再聞 | 生成 |
+| `dog-s08-walk.png` | 願意走 | 穿胸背帶、抬頭正常走姿、牽繩往後上方 | **S08** 巷口走位（到她側邊、選 A、選 C） | 生成（綠幕去背） |
 | `dog-leash-wait.png` | 累但仍信任 | 穿胸背帶、停步等待 | S08 扣帶後／跟上／選 A·C；S09 玄關 | 生成 |
 | `dog-harness-bite.png` | 適應裝備 | 咬胸背帶布邊 | S08 穿胸背帶 | 生成 |
 | `dog-drink-bowl.png` | 急喝水 | 低頭喝水碗 | S08 回家；結局 A | 生成 |
@@ -287,24 +288,25 @@ S02 後門第一次見面用 `dog-s04-anxious`（**0.551**），不用舊 `dog-a
 
 ### 3.10 S08 胸背帶／巷口（2026-09-13）
 
-扣帶前禁 `leash_wait`／`s08_threshold`。巷口同尺 0.124，遠近只改 xalign。閃避前公共拍用 `s08_explore`＠`far_walk` 探路；硬拖維持 `dog_behind_walk`，**禁**再 `far_walk` 走到予安前面。**禁**巷口無背帶 `halfstep`／`s04_low`／`ear_perk`／`s08_sniff_harness`、禁客廳 `street_tense`。
+扣帶前禁 `leash_wait`／`s08_threshold`。巷口 2026-09-28 起改背景透視（狗 zoom＝人 zoom×0.3346，隨腳底 y 變；站位點 `S08_ALLEY_PT`，見 `image_scale.md` §S08 巷口透視）。閃避前公共拍 `s08_explore`＠`dog_explore` 探路；硬拖狗維持在予安身後，**禁**走到她前面。**禁**巷口無背帶 `halfstep`／`s04_low`／`ear_perk`／`s08_sniff_harness`、禁客廳 `street_tense`。
 
 | 檔名／標籤 | `DOG_POSE_SCALE` | 主用 |
 |------------|------------------|------|
 | `s04_low`／`s08_halfstep` | **0.369／0.529** | 扣帶前玄關；躺 visH≈58、站≈102。站姿同 PNG `halfstep`，無繩尺不跟牽繩族 +15%。解帶後硬拖 `s04_low`＠far。**禁**改全域 halfstep 0.580；**禁** `s07_low` 0.43 進玄關 |
-| `s08_sniff_harness` | **0.416** | 扣帶前聞布邊／扣環；下午聞地上胸背帶。身上無背帶。864 畫布無繩尺。**禁**巷口 |
+| `s08_sniff_harness` | **0.457** | 扣帶前聞布邊／扣環；下午聞地上胸背帶。864×958 裁底留白。**禁**巷口 |
 | `harness_bite`／`leash_wait` | **0.658／0.677** | 扣上之後；四腳放穩／跟上／選 A·C。`leash_wait` 頭距對齊開場 `s08_halfstep` |
-| `s08_threshold` | **0.410** | 門檻半跨；near→mid→near 只改 xalign。864 畫布無繩尺 |
+| `s08_threshold` | **0.449** | 門檻半跨；near→mid→near 只改 xalign。864×958 裁底留白 |
 | `s08_tense` | **0.903** | 巷口受驚／硬拖；側身縮、牽繩往後。864 畫布；牽繩族 +15%。禁 `street_tense` 0.808 |
-| `s08_explore` | **0.903** | 巷口探路／探索散步＠`far_walk`；頭距對齊 `s08_tense` |
+| `s08_explore` | **0.903** | 巷口探路／探索散步＠`far_walk`；頭距對齊 `s08_tense`。2026-09-28c 起走位改用 `s08_walk`，explore 只留探路／聞空機車 |
+| `s08_walk` | **1.22**（1024×1536，內容高約 705，`foot=1501`） | 巷口走姿：到她側邊、選 A 走一公尺→樹影、選 C 在前帶路。2026-09-28e 重產，外型對齊 `s08_explore`／`s08_tense`（蜜金短腿幼犬，無白襪）。抬頭正常走、同卡其胸背帶；原圖面左，牽繩往右上（翻面後朝左上＝朝身後的她） |
 | `s08_startle` | **0.903** | 機車衝出當下驚嚇＠behind；頭距對齊 `s08_tense` |
 | `s08_resist` | **0.903** | 驚嚇後抗拒走、牽繩往左繃＠behind；頭距對齊 `s08_tense` |
-| `drink_bowl` | **0.564** | 返家衝水碗＠mid（低頭 visH 略矮；Loop C 不拿兩眼距改 scale） |
+| `drink_bowl` | **0.84** | 返家衝水碗＠mid（側身全身；玄關 visH≈98，對齊站姿。碗底 `foot=1238`） |
 | `shoe_sleep` | **0.414** | 橫躺 visH≈55，對齊 `s04_low`；先 hide yuan；Loop C 不拿兩眼距改 scale |
 
-人：玄關 `leash` **0.33**×pose **0.70**（visH≈258，人／門≈0.60）；巷口 `walk` **0.32**（≈386），閃避後切蹲仍 alley 0.32 但 leash **0.70**。完整 visH 表見 `image_scale.md` §S08 確認。
+人：玄關 `leash` **0.33**×pose **0.70**（visH≈258，人／門≈0.60）；巷口改透視：`walk` 353px＠腳578→284px＠548；閃避後蹲 `leash_street`（同 leash PNG、裁腳下透明）pose **0.70**；`leash_yank` pose **0.95**。完整 visH 表見 `image_scale.md` §S08 確認。
 
-玄關 xalign（S08）：far **0.54**／to_yuan **0.58**／mid **0.62**／near **0.66**（鞋櫃與予安之間、靠近牽繩）。巷口：behind **0.88**／far **0.56**／mid **0.63**／near **0.68**。
+玄關 xalign（S08）：far **0.54**／to_yuan **0.58**／mid **0.62**／near **0.66**（鞋櫃與予安之間、靠近牽繩）。巷口：舊 xalign（behind 0.88／far 0.56／mid 0.63／near 0.68）已廢，改 `S08_ALLEY_PT` 站位點＋ease 走位。
 
 **旁白對位（與 `section_08_corner_walk.md` 同表）：** 兩步看 `s04_low`＠far → 鼻尖 `s08_halfstep` 再退 → 聞帶 `s08_sniff_harness` → 扣上 `harness_bite`／`leash_wait`。門檻 `s08_threshold` near→mid→near。巷口 behind；高信任空機車 `far_walk`→near 只一次；低／中從現位縮回 behind。空車後公共拍 `s08_explore`＠`far_walk` 探路。閃避拍：引擎一句後 `window hide`，拉回 `s08_tense`＠behind，疊 `scooter-pass`，狗 `s08_startle`→`s08_resist`，人 `leash_yank`→`leash` 再出字（旁白寫收到鞋邊／前腳收回，不寫貼地／夾尾／再退半步）。選 A 維持蹲，狗 `s08_tense`＠behind→`leash_wait` mid→near；選 B 留 behind；選 C mid→near。鞋邊 `s08_halfstep`→`shoe_sleep`（C 不播 sigh）；下午 `s08_sniff_harness`＠mid。
 
@@ -318,7 +320,7 @@ S02 後門第一次見面用 `dog-s04-anxious`（**0.551**），不用舊 `dog-a
 | `parallel` | **0.524** | 退半步讓脫鞋；客廳監工；聞繩 far→near；coda A 開場 |
 | `kitchen_door` | **0.577** | 廚房門檻看並排碗 |
 | `halfstep`／`back_sleep` | **0.580／0.427** | 結局 A 靠近→背靠＠near |
-| `drink_bowl`／`check_sleep` | **0.564／0.452** | 結局 B 聞碗＠mid → 回頭睡＠mid；退開先 `check_sleep`＠far |
+| `drink_bowl`／`check_sleep` | **0.84／0.452** | 結局 B 聞碗＠mid → 回頭睡＠mid；退開先 `check_sleep`＠far |
 | `door_edge` | **0.434** | 結局 D 門邊＠far |
 
 **旁白對位（與 `section_10_share_the_key.md` 同表）：** 留下玄關 `paper_bag`＠mid → 退半步 `parallel`＠far → 客廳監工 `parallel`＠mid → 聞繩 far→near → 廚房 `kitchen_door`。結局 A `halfstep`→`back_sleep`＠near。結局 B `check_sleep`＠far → `drink_bowl`＠mid → `check_sleep`＠mid。結局 D `door_edge`＠far。C 無狗。coda A 開場 `parallel`。
@@ -406,6 +408,7 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 2026-09-13 | S07 臥室頭距：`s07_low` 0.43 對齊 `guard_door`；選 B 回房不再用 `s05_ear_flat` |
 | 2026-09-13 | S07 狗移動對齊旁白：halfstep／ear_perk／chin_hover／far-mid-near；客廳 sofa 退開 |
 | 2026-09-10 | S08 巷口改 `s08_tense`（有胸背帶 0.572）；扣帶前無背帶；`street_tense` 只留 S04 |
+| 2026-09-28 | S08 `s08_threshold` **0.449**／`s08_sniff_harness` **0.457**：864×958 裁底緣透明後重算（原 0.410／0.416 @1152） |
 | 2026-09-19 | S08 `s08_threshold` 0.410／`s08_sniff_harness` 0.416：864 畫布兩眼距對齊 `leash_wait` |
 | 2026-09-20 | S08 玄關狗改站鞋櫃與予安之間（far 0.54／mid 0.62）；`leash_wait` 0.677 頭距對齊開場 halfstep |
 | 2026-09-20 | S08 機車拍拆成 `s08_startle`（原 flinch）＋`s08_resist`（抗拒走）；頭距仍 0.903 |
@@ -413,7 +416,12 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 2026-09-19 | S10 聞袋重用 `paper_bag`；結局 B 加 `drink_bowl`；coda A 改 `parallel`，禁舊 anxious |
 | 2026-09-07 | S05 站姿族收到約 76px：`chair-paw` 0.401／`chair-stuck` 0.472／`s05_ear_flat` 0.409／`s05_stair_watch` 0.572；切姿收斂（一次抬頭、一次嗅線） |
 | 2026-09-07 | S04 切姿收斂（選前回到 parallel）；選 C 客廳用 `s04_low` 0.369；勿把後門 anxious 0.551 拿進客廳 |
+| 2026-09-28b | S08 巷口走位不再用坐姿 `leash_wait` 滑行，暫用 `s08_explore`；待產 `dog-s08-walk.png`（同狗同胸背帶、抬頭走姿、面左） |
+| 2026-09-28c | 落地 `dog-s08-walk.png`（`dog s08_walk`，pose 1.204，foot 1501），取代走位中的 `s08_explore` 暫代 |
+| 2026-09-28e | 重產 `dog-s08-walk.png`：舊圖腿長、白襪、嘴微張，與探路／縮步不是同一隻。新圖對齊 explore／tense；內容高約 705，pose 仍 1.22，foot 1501。舊圖在 `assets/_raw/dog-s08-walk-prev.png` |
 
 ---
 
-*更新：2026-09-20｜S08 玄關站位＋`leash_wait` 頭距對齊 halfstep*
+*更新：2026-09-28e｜重產 `dog-s08-walk.png`，外型對齊探路／縮步*  
+*前次：2026-09-28b｜S08 巷口走位暫用 `s08_explore`*  
+*前次：2026-09-20｜S08 玄關站位＋`leash_wait` 頭距對齊 halfstep*

@@ -231,11 +231,11 @@ def silent_beat_hints(nn: str, body: str) -> list[str]:
         wait = wait.split("既然都出門了，拉著牠把一圈走完", 1)[0]
         if "s08_tense" not in wait:
             hints.append("S08 選 A 應先 s08_tense＠behind 再 leash_wait")
-        after = body.split("轉角那邊先傳來引擎聲", 1)[-1]
+        after = body.split("路口那邊先傳來引擎聲", 1)[-1]
         spoken = after.split("window auto", 1)[-1].split("menu:", 1)[0]
         if "前腳抬起來" in spoken or "再退半步" in spoken:
-            hints.append("S08 無字拍後旁白應對齊 resist（前腳收回），勿抬腳／再退")
-        dodge = body.split("轉角那邊先傳來引擎聲", 1)[-1]
+            hints.append("S08 無字拍後旁白應對齊往前拉，勿抬腳／再退")
+        dodge = body.split("路口那邊先傳來引擎聲", 1)[-1]
         silent = dodge.split("window auto", 1)[0]
         if "window hide" in dodge and "s08_startle" not in silent:
             hints.append("S08 s08_startle 應在 window auto 前")

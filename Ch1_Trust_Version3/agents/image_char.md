@@ -78,6 +78,7 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | `char-yuan-door-hold.png` | 扶門、還沒擋 | 米白襯衫袖捲＋橄欖褲＋**棕色樂福鞋**；**面向左**；一手抬到胸前像扶著門沿，低頭看狗；**不畫狗** | **S06 梯廳**開場～選前／選 C 回到門邊；外出裝＋鞋。勿用室內襪／拖鞋 |
 | `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲＋**棕色平底鞋／樂福**；側蹲；手握**棕色皮牽繩**下垂；**面向左** | S08 玄關穿帶／返家／閃避後蹲下安慰；S09 玄關。與 `walk` 同衣櫃＋鞋。尺：玄關 **0.33**×pose **0.70**、巷口蹲仍 alley **0.32**×0.70（畫布幾乎填滿，1.0 會跟人／門同高）。舊中跟稿在 `assets/char/_work/` |
 | `char-yuan-walk.png` | 巷口散步 | 米白襯衫＋橄欖褲；**站姿走路**握牽繩；**面向左**；無狗同框 | **S08 巷口**（非蹲）；`char_right_walk` **0.32** |
+| `char-yuan-walk-leash-behind.png` | 牽狗、狗在身後 | 同 `walk` 衣櫃＋鞋；站姿走路；手在髖側握繩，**牽繩往身後斜下拖**；**面向左**（原生成圖面右，已鏡像） | **S08 巷口**狗在身後各拍（進場、往前半步、低信任跟、三條經過空機車、引擎拉回鞋邊、選 B 硬拖）；`image yuan walk_behind`，pose **1.0**、`foot=1476`；內容高 1436 與 `walk` 相同。2026-09-28c 綠幕去背；生成圖牽繩只到半空、角度太平，已擦掉手以下並依巷口狗位（胸背帶扣約在她身後 0.4–0.6 m、離地 0.25 m）重畫一條往下斜的牽繩。原檔 `_raw/char-yuan-walk-leash-behind_raw.png` |
 | `char-yuan-leash-yank.png` | 被牽繩帶半步 | 同 `walk` 衣櫃＋鞋；**站姿**；牽繩繃直；肩收、視線放低；**面向左**；不伸手 | **S08** 機車衝出後、蹲下前；`CHAR_POSE_SCALE` **0.75**（864 畫布對齊 walk） |
 | `char-yuan-leash-pass.png` | 交繩／收回 | 站姿；**僅予安雙手**握牽繩握把（**禁**對方伸入畫面的手） | **S09** 硬分歧（期間勿疊同事全身） |
 | `char-yuan-farewell.png` | 告別／攤手 | **室內裝**＋襪；單膝下跪；手掌攤開**無牽繩**；圖檔**面向左**（遊戲內 `xzoom` 翻成面右對狗） | S09 客廳 |
@@ -169,6 +170,9 @@ No text, no logo, no trust meter UI, no scenery.
 | 2026-09-13 | S08 人尺確認：`walk` CHAR_POSE_SCALE 1.0；玄關 0.33、巷口 0.32 |
 | 2026-09-19 | S08 蹲姿 leash／squat_side CHAR_POSE_SCALE **0.70**（1.0 幾乎跟門一樣高） |
 
+| 2026-09-28c | S08 新增 `char-yuan-walk-leash-behind.png`（`yuan walk_behind`）：狗在身後時用；狗在身前／側前時仍用 `walk` |
+
 ---
 
-*更新：2026-09-13｜S07 病床沿床躺看狗；`char_bedroom` 0.18／ypos 0.76*
+*更新：2026-09-28c｜S08 `walk_behind` 牽繩往身後*  
+*前次：2026-09-13｜S07 病床沿床躺看狗；`char_bedroom` 0.18／ypos 0.76*

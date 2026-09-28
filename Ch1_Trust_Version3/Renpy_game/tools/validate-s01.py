@@ -128,12 +128,12 @@ required = {
     "S08 wait pose": "show dog leash_wait",
     "S08 sniff pose": "show dog s08_sniff_harness",
     "S08 threshold pose": "show dog s08_threshold",
-    "S08 explore pose": "show dog s08_explore at dog_far_walk",
+    "S08 explore pose": 'show dog s08_explore at s08_dog_move("dog_explore"',
     "S08 startle pose": "show dog s08_startle",
     "S08 resist pose": "show dog s08_resist",
     "S08 yank pose": "show yuan leash_yank",
     "S08 walk pose": "show yuan walk",
-    "S08 behind pose": "dog_behind_walk",
+    "S08 behind pose": 's08_dog("dog_behind_start"',
     "S08 entrance bg": "scene bg entrance_day",
     "S08 alley bg": "scene bg alley_day",
     "S08 scooter parked": "show scooter parked",
@@ -461,8 +461,8 @@ if "show dog s08_resist" not in s08:
     fail("S08 機車衝出後須 s08_resist（抗拒走、牽繩繃緊）")
 if "show yuan leash_yank" not in s08:
     fail("S08 機車衝出後須 leash_yank（被帶半步）再切 leash")
-if "show dog s08_explore at dog_far_walk" not in s08:
-    fail("S08 巷口探路須 s08_explore＠far_walk")
+if 'show dog s08_explore at s08_dog_move("dog_explore"' not in s08:
+    fail("S08 巷口探路須 s08_explore＠dog_explore（走到一半、在她前方）")
 _pre_harness = s08.split("show dog harness_bite", 1)[0]
 if "show dog leash_wait" in _pre_harness:
     fail("S08 扣帶前禁 leash_wait（已穿胸背帶）")
@@ -495,7 +495,7 @@ if "走到樹下側身蹲著" in s08:
     fail("S08 選 A 須維持蹲，不得再走到樹下才蹲")
 if "把視線移開，繼續蹲著等牠自己決定下一步" not in s08:
     fail("S08 選 A 須繼續蹲著等")
-_dodge = s08.split("轉角那邊先傳來引擎聲", 1)[-1]
+_dodge = s08.split("路口那邊先傳來引擎聲", 1)[-1]
 _silent = _dodge.split("window auto", 1)[0]
 if "window hide" not in _silent:
     fail("S08 引擎後須 window hide，window auto 後才出對不起")
@@ -515,12 +515,12 @@ if "再退半步" in _after_dodge.split("menu:", 1)[0]:
 _wait = _after_dodge.split("把視線移開，繼續蹲著等牠自己決定下一步", 1)[-1].split(
     "既然都出門了，拉著牠把一圈走完", 1
 )[0]
-if "show dog s08_tense at dog_behind_walk" not in _wait:
-    fail("S08 選 A 須先 s08_tense＠behind 再 leash_wait")
-if _wait.find("show dog s08_tense at dog_behind_walk") > _wait.find(
-    "show dog leash_wait at dog_mid_walk"
-):
-    fail("S08 選 A 須先 tense＠behind 再 leash_wait＠mid")
+if 'show dog s08_tense at s08_dog("dog_heel")' not in _wait:
+    fail("S08 選 A 須先停在鞋邊（s08_tense＠dog_heel）")
+if 's08_dog_move("dog_wait_mid"' not in _wait or 's08_dog_move("dog_wait_shade"' not in _wait:
+    fail("S08 選 A 須自己走到樹影（dog_wait_mid → dog_wait_shade）")
+if _wait.find('s08_dog("dog_heel")') > _wait.find('s08_dog_move("dog_wait_mid"'):
+    fail("S08 選 A 須先鞋邊再往樹影走")
 
 s09 = text.split(
     "label section_09_almost_handoff:", 1

@@ -52,10 +52,14 @@ init python:
             return scaled_sprite(fallback, Solid("#00000000"), ref_h)
         return fallback
 
-    def char_sprite(path, fallback=Solid("#00000000"), pose_scale=None):
+    # foot：PNG 內腳底所在列（alpha bbox 底）。給了就把腳下透明列裁掉，讓 yanchor 1.0＝腳底；
+    # zoom 仍以原畫布高計算（pose scale 語意不變）。目前只有 S08 巷口透視立繪使用。
+    def char_sprite(path, fallback=Solid("#00000000"), pose_scale=None, foot=None):
         scale = pose_scale if pose_scale is not None else CHAR_POSE_SCALE.get(path, 1.0)
         if renpy.loadable(path):
             w, h = renpy.image_size(Image(path))
+            if foot:
+                return Transform(path, crop=(0, 0, w, foot), zoom=(CHAR_REF_H * scale) / float(h))
             return Transform(path, zoom=(CHAR_REF_H * scale) / float(h))
         if isinstance(fallback, str) and renpy.loadable(fallback):
             return char_sprite(fallback)
@@ -68,8 +72,9 @@ init python:
         "char/char-yuan-carry-pup.png": 1.056,
         "char/char-yuan-leash.png": 0.70,
         "char/char-yuan-squat-side.png": 0.70,
-        # 864 畫布站姿；對齊 walk 1024×1536＠1.0（1152/1536）
-        "char/char-yuan-leash-yank.png": 0.75,
+        # 864 畫布站姿。2026-09-28：舊 0.75 只對齊畫布（1152/1536），內容高 1118/1152 比 walk 1437/1536 滿，
+        # 實測被扯那拍人矮 22%（298 vs 384px）。改用內容高對齊 walk（×0.985，被帶半步略前傾）→ 0.95。僅 S08 使用。
+        "char/char-yuan-leash-yank.png": 0.95,
     }
 
     # 各 pose 內容高度佔畫布比例不同。
@@ -88,7 +93,9 @@ init python:
         "dog/dog-coat-sniff.png": 0.656,
         "dog/dog-door-edge.png": 0.434,
         "dog/dog-door-sleep.png": 0.42,
-        "dog/dog-drink-bowl.png": 0.564,
+        # 2026-09-28：側身低頭喝水。舊 0.564 用 visH 鎖成玄關約 66px，比同場站姿 102 小一截。
+        # 拉到 0.84 → 動畫幀可見高約 98（頭低下，不高過 s08_halfstep）。腳底另裁，見 drink_bowl。
+        "dog/dog-drink-bowl.png": 0.84,
         "dog/dog-ear-flat.png": 0.653,
         "dog/dog-ear-perk.png": 0.414,
         "dog/dog-forehead-nudge.png": 0.578,
@@ -114,12 +121,16 @@ init python:
         "dog/dog-sniff-bento.png": 0.647,
         "dog/dog-sniff-wire.png": 0.401,
         "dog/dog-stair-watch.png": 0.615,
-        "dog/dog-s08-sniff-harness.png": 0.416,
+        "dog/dog-s08-sniff-harness.png": 0.457,
         "dog/dog-s08-tense.png": 0.903,
         "dog/dog-s08-explore.png": 0.903,
+        # 2026-09-28c 走姿：1024×1536 畫布，內容以 explore 畫布同像素尺放入 → 0.903×1536/1152＝1.204
+        # 2026-09-28d 曾依舊圖頭長微調 1.204→1.22。2026-09-28e 重產對齊 explore／tense（蜜金、短腿、無白襪）；
+        #   內容高仍約 705、foot=1501，倍率維持 1.22。
+        "dog/dog-s08-walk.png": 1.22,
         "dog/dog-s08-startle.png": 0.903,
         "dog/dog-s08-resist.png": 0.903,
-        "dog/dog-s08-threshold.png": 0.410,
+        "dog/dog-s08-threshold.png": 0.449,
         "dog/dog-street-tense.png": 0.808,
         "dog/dog-farewell.png": 0.468,
         "dog/dog-cafe-refuse.png": 1.523,
@@ -142,7 +153,7 @@ init python:
         "check-sleep": 0.452,
         "door-edge": 0.434,
         "sniff-wire": 0.605,
-        "drink-bowl": 0.564,
+        "drink-bowl": 0.84,
         "farewell": 0.468,
         "guard-door": 0.438,
     }
@@ -152,11 +163,14 @@ init python:
             for i in range(1, 6)
         })
 
-    def dog_sprite(path, fallback=Solid("#00000000"), pose_scale=None):
+    def dog_sprite(path, fallback=Solid("#00000000"), pose_scale=None, foot=None):
         scale = pose_scale if pose_scale is not None else DOG_POSE_SCALE.get(path, 1.0)
         if renpy.loadable(path):
             w, h = renpy.image_size(Image(path))
             zoom = (DOG_REF_H * scale) / float(h)
+            if foot:
+                # 同 char_sprite：裁掉腳下透明列，腳底＝ypos（S08 牽繩族）
+                return Transform(path, crop=(0, 0, w, foot), zoom=zoom)
             # 腳底清字幕改由 transform ypos≈0.86 負責；方形畫布不再額外下沉補償。
             return Transform(path, zoom=zoom)
         if isinstance(fallback, str):
@@ -860,12 +874,22 @@ image yuan leash = char_sprite(
     "char/char-yuan-leash.png", "char/char-yuan-commute.png"
 )
 ## S08 巷口散步：站／走握牽繩（勿用蹲姿 leash）
+## foot＝腳底列（1475/1536），巷口透視腳底才會踩在同一條地面線
 image yuan walk = char_sprite(
-    "char/char-yuan-walk.png", "char/char-yuan-cafe.png"
+    "char/char-yuan-walk.png", "char/char-yuan-cafe.png", foot=1475
 )
-## S08 機車衝出：站姿被牽繩帶半步（勿用散步 walk／蹲姿 leash）
+## S08 巷口：狗在身後時用——牽繩從手往身後斜下拖（2026-09-28c 新圖；牽繩下段依巷口狗位重畫）
+## 原圖面左（同 walk），face="r" 翻面；foot＝腳底列 1476/1536，內容高 1436 與 walk 相同
+image yuan walk_behind = char_sprite(
+    "char/char-yuan-walk-leash-behind.png", "char/char-yuan-walk.png", foot=1476
+)
+## S08 機車衝出：站姿被牽繩帶半步（勿用散步 walk／蹲姿 leash）；腳已貼畫布底
 image yuan leash_yank = char_sprite(
     "char/char-yuan-leash-yank.png", "char/char-yuan-walk.png"
+)
+## S08 巷口蹲下安慰：同 leash PNG，裁腳下 89 列（1063/1152）；玄關／S09 仍用 yuan leash
+image yuan leash_street = char_sprite(
+    "char/char-yuan-leash.png", "char/char-yuan-commute.png", foot=1063
 )
 image yuan farewell = char_sprite(
     "char/char-yuan-farewell.png", "char/char-yuan-leash.png"
@@ -883,6 +907,10 @@ image coworker cafe = char_sprite(
 ## S08 巷口機車道具（停放／轉角切過）
 image scooter parked = optional_displayable(
     "prop/scooter-parked.png", Solid("#00000000")
+)
+## 側面騎士（面左；S08 從身後同向騎走時以負 xzoom 翻成朝右）
+image scooter pass_side = optional_displayable(
+    "prop/scooter-pass-side.png", Solid("#00000000")
 )
 image scooter pass = optional_displayable(
     "prop/scooter-pass.png", Solid("#00000000")
@@ -1033,56 +1061,63 @@ image dog leash_wait = dog_sprite(
 # S08 巷口受驚：有胸背帶；頭距對齊 leash_wait／harness_bite，勿用客廳 street_tense 0.808
 # 2026-09-19 重畫：重心後移、側身縮；864 畫布頭框對齊 leash_wait
 # 2026-09-20 牽繩族 +15%（0.785→0.903）；無繩 halfstep／threshold／聞帶不跟
+# 2026-09-28 foot＝腳底列（裁腳下透明）；巷口透視同地面線
 image dog s08_tense = dog_sprite(
-    "dog/dog-s08-tense.png", "dog/dog-harness-bite.png", 0.903
+    "dog/dog-s08-tense.png", "dog/dog-harness-bite.png", 0.903, foot=1128
 )
 # S08 巷口探路／探索散步：抬前腳走；頭距對齊 s08_tense
 image dog s08_explore = dog_sprite(
-    "dog/dog-s08-explore.png", "dog/dog-s08-tense.png", 0.903
+    "dog/dog-s08-explore.png", "dog/dog-s08-tense.png", 0.903, foot=1019
+)
+# S08 巷口走姿：抬頭正常走、同胸背帶；牽繩往身後上方（面左原圖→翻面後繩朝左上＝朝她）
+# 2026-09-28e 重產，外型對齊 s08_explore／s08_tense。1024×1536，內容高約 705，foot=1501，pose 1.22
+image dog s08_walk = dog_sprite(
+    "dog/dog-s08-walk.png", "dog/dog-s08-explore.png", 1.22, foot=1501
 )
 # S08 機車衝出：驚嚇（原 flinch 改名）；頭距對齊 s08_tense
 image dog s08_startle = dog_sprite(
-    "dog/dog-s08-startle.png", "dog/dog-s08-tense.png", 0.903
+    "dog/dog-s08-startle.png", "dog/dog-s08-tense.png", 0.903, foot=1101
 )
 # S08 機車衝出：抗拒走、後坐、牽繩往左繃（朝予安）；頭距對齊 s08_tense
 image dog s08_resist = dog_sprite(
-    "dog/dog-s08-resist.png", "dog/dog-s08-startle.png", 0.903
+    "dog/dog-s08-resist.png", "dog/dog-s08-startle.png", 0.903, foot=1039
 )
 image dog harness_bite = dog_sprite(
     "dog/dog-harness-bite.png", "dog/dog-leash-wait.png"
 )
 # S08 玄關門檻：站姿半跨（前腳在外、後腳在墊）；遠近只改 xalign
-# 864×1152 無繩尺維持 0.410（牽繩族 2026-09-20 已 +15%，勿抄 harness_bite）
+# 864×958（裁底緣透明）；倍率 0.449＝原目標 0.54×958/1152，對齊 leash_wait→threshold 連鏡
 image dog s08_threshold = dog_sprite(
-    "dog/dog-s08-threshold.png", "dog/dog-harness-bite.png", 0.410
+    "dog/dog-s08-threshold.png", "dog/dog-harness-bite.png", 0.449
 )
 # S08 聞帶：扣帶前／下午聞地板上的胸背帶（身上無背帶）
-# 864×1152 無繩尺維持 0.416；勿抄 halfstep 0.580、勿跟牽繩族 +15%
+# 864×958（裁掉底緣透明）；倍率 0.457＝原目標 0.55×958/1152
 image dog s08_sniff_harness = dog_sprite(
-    "dog/dog-s08-sniff-harness.png", "dog/dog-halfstep.png", 0.416
+    "dog/dog-s08-sniff-harness.png", "dog/dog-halfstep.png", 0.457
 )
 # S08 玄關站姿：同 PNG，無繩尺 0.529；勿改全域 halfstep 0.580（S02／S07／S10）
 # leash_wait 0.677 頭距對齊此張
 image dog s08_halfstep = dog_sprite(
     "dog/dog-halfstep.png", "dog/dog-halfstep.png", 0.529
 )
-# S08 回家／結局 A 前：低頭舔水（ping-pong 一圈約 0.8 秒）
+# S08 回家／結局 B：低頭舔水（ping-pong 一圈約 0.8 秒）
+# 畫布 1024×1536，碗底列 1237；foot=1238 裁掉腳下透明，碗沿貼 ypos（否則會浮起約 20px）
 image dog drink_bowl:
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-01.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-01.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-02.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-02.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-03.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-03.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-04.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-04.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-05.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-05.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-04.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-04.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-03.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-03.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
-    dog_sprite("dog/drink-bowl/dog-drink-bowl-02.png", "dog/dog-drink-bowl.png")
+    dog_sprite("dog/drink-bowl/dog-drink-bowl-02.png", "dog/dog-drink-bowl.png", foot=1238)
     pause 0.10
     repeat
 # S09 告別：坐著抬頭，尾巴貼地左右輕掃......不確定的搖，比 S05 wag 收斂
@@ -1769,60 +1804,60 @@ transform dog_entrance_mid_s08_to_yuan:
     xzoom sc_dog("entrance", True)
     yzoom sc_dog("entrance")
 
-# S08 巷口散步：SCALE alley 人 0.32／狗 0.124。樹下切 leash 用 CHAR_POSE_SCALE 0.70（蹲，勿 1.0）。
-# 前進方向偏左；身後＝予安右側（不願走）；近／中／遠＝逐漸跟上（同尺，只改 xalign）。
-transform char_right_walk:
-    xalign 0.74
+# S08 巷口散步（bg alley_day）｜2026-09-28 依背景透視重排（數字見 scale.rpy S08_ALLEY）
+# 地平線 y=430（左側兩扇木門等高反推；鏡頭高約 0.68 m）。同一條腳底線 y 上：
+#   人 1.62 m 可見高 = 2.382×(y−430) px；狗（坐姿 leash_wait）≈ 人 ×0.195。
+# 越遠（y 越小）越小，zoom 跟 y 線性，所以 ease 同時改 ypos 與 zoom 就是正確透視。
+# 2026-09-28h：從左下角往路口走（原圖面左，face="r" 翻成朝右）。
+# 人／狗移動只改位置，zoom 鎖在 size_y，不要一邊走一邊變大變小。
+# 呼嘯從上方中央往下衝，zoom 同樣鎖死。
+# 站位點名見 S08_ALLEY_PT；只在同一 tag 已顯示時用 *_move（ATL 會承接前一個位置）。
+transform s08_yuan(pt, face="r"):
+    xanchor 0.5
     yanchor 1.0
-    ypos 0.80
+    xpos s08_pt(pt)[0]
+    ypos s08_pt(pt)[1]
     zoom 1.0
-    xzoom sc_char("alley")
-    yzoom sc_char("alley")
+    xzoom s08_char_xz(pt, face)
+    yzoom s08_char_z(pt)
 
-transform dog_behind_walk:
-    xalign 0.88
+transform s08_yuan_move(pt, face="r", t=1.2):
+    xanchor 0.5
     yanchor 1.0
-    ypos 0.80
-    zoom 1.0
-    xzoom sc_dog("alley")
-    yzoom sc_dog("alley")
+    ease t xpos s08_pt(pt)[0] ypos s08_pt(pt)[1] xzoom s08_char_xz(pt, face) yzoom s08_char_z(pt)
 
-transform dog_far_walk:
-    xalign 0.56
+transform s08_dog(pt, face="r"):
+    xanchor 0.5
     yanchor 1.0
-    ypos 0.80
+    xpos s08_pt(pt)[0]
+    ypos s08_pt(pt)[1]
     zoom 1.0
-    xzoom sc_dog("alley")
-    yzoom sc_dog("alley")
+    xzoom s08_dog_xz(pt, face)
+    yzoom s08_dog_z(pt)
 
-transform dog_mid_walk:
-    xalign 0.63
+transform s08_dog_move(pt, face="r", t=1.0):
+    xanchor 0.5
     yanchor 1.0
-    ypos 0.80
-    zoom 1.0
-    xzoom sc_dog("alley")
-    yzoom sc_dog("alley")
+    ease t xpos s08_pt(pt)[0] ypos s08_pt(pt)[1] xzoom s08_dog_xz(pt, face) yzoom s08_dog_z(pt)
 
-transform dog_near_walk:
-    xalign 0.68
-    yanchor 1.0
-    ypos 0.80
-    zoom 1.0
-    xzoom sc_dog("alley")
-    yzoom sc_dog("alley")
-
-# S08 機車：停放靠左牆（空車）／轉角呼嘯偏中前（×0.8，人物下層）
+# S08 機車：停放空車在畫面左下角，顯示再小兩成（×0.8）；yanchor＝輪胎著地列 871/1024
 transform scooter_parked:
-    xalign 0.14
-    yanchor 1.0
-    ypos 0.90
-    zoom 0.38
+    xanchor 0.5
+    yanchor 0.851
+    xpos s08_pt("scooter_parked")[0]
+    ypos s08_pt("scooter_parked")[1]
+    zoom s08_prop_z("parked", s08_pt("scooter_parked")[1]) * 0.8
 
+# 呼嘯（2026-09-28j）：從右中車道出現，順著路面往前。zoom 鎖住。
+# 必須用獨立 tag（pass_scooter），否則會換成同一張 scooter 圖層，空車跟著消失。
 transform scooter_pass:
-    xalign 0.38
+    xanchor 0.5
     yanchor 1.0
-    ypos 0.88
-    zoom 0.368
+    xpos s08_pt("scooter_pass_from")[0]
+    ypos s08_pt("scooter_pass_from")[1]
+    zoom s08_prop_z("pass", S08_ALLEY["size_y"])
+    linear 1.15 xpos s08_pt("scooter_pass_mid")[0] ypos s08_pt("scooter_pass_mid")[1]
+    linear 1.25 xpos s08_pt("scooter_pass_to")[0] ypos s08_pt("scooter_pass_to")[1]
 
 # ------------------------------------------------------------
 # S09 朝向／位置；人／狗 zoom 見 scale.rpy SCALE（對景；幼犬比）
@@ -3971,119 +4006,141 @@ label section_08_corner_walk:
 
     scene bg alley_day
     with Dissolve(1.5)
-    ## 巷口進場：予安走路；狗一開始在身後不願前進；停放空車
-    show scooter parked at scooter_parked
-    show yuan walk at char_right_walk
-    show dog s08_tense at dog_behind_walk
+    ## 巷口進場：空車在左下角（parked_scooter，勿和呼嘯車同一圖層）。
+    ## 予安從空車右側走出來。有人的車從右中車道出來、順著路面往前，過後只 hide pass_scooter。
+    ## 空車用 parked_scooter，和後面的 pass_scooter 分開，車衝過後空車還在
+    show scooter parked as parked_scooter at scooter_parked
+    show yuan walk_behind at s08_yuan("yuan_start")
+    show dog s08_tense at s08_dog("dog_behind_start")
     with dissolve
 
     "大門一推開，外面的味道一下全擠進來。早餐店的油煙、樓上曬過的衣服、排水溝、機車輪胎，全部擠在同一口氣裡......像捷運車廂門一開，很多人的味道一次湧進來。"
     pause 0.7
     "遠處有人拉鐵門，金屬聲沿著巷子傳過來。塑膠袋貼著地面滾了兩圈，卡在盆栽下。"
-    "左側停著一台機車，座位空著，只有曬熱的塑膠和輪胎味......平常路過沒什麼，此刻牠卻不肯靠近。"
+    "左下角停著一台機車，座位空著，只有曬熱的塑膠和輪胎味......平常路過沒什麼，此刻牠卻不肯靠近。"
     "[dog_label]停在她身後半步，四隻腳像釘在地上。牽繩被那半步距離拉得筆直。"
+    show yuan walk_behind at s08_yuan_move("yuan_halfstep", t=0.9)
     "予安把握把從手掌移到手腕，另一手只扶著繩身。她往前半步，停住，再等。"
 
     if trust <= 3:
         pause 0.6
+        show dog s08_tense at s08_dog_move("dog_shuffle", t=1.0)
         "[dog_label]貼著牆挪了半腳，又停。鼻子還沒決定先聞哪裡，呼吸已經又快又淺。"
-        show dog s08_tense at dog_mid_walk
-        with Dissolve(1.2)
+        show yuan walk_behind at s08_yuan_move("yuan_step", t=1.2)
+        show dog s08_tense at s08_dog_move("dog_follow", t=1.8)
         "予安再往前一點。繩子緊了又鬆。牠跟了半步，又幾乎立刻想退回她腳後......外面對牠來說，像衣服大了一號，走起來不合身。"
-        ## 低信任：從 mid 縮回 behind，勿 far_walk 走到人前面
+        ## 低信任：經過空車時縮回她身後（勿走到人前面）
+        show yuan walk_behind at s08_yuan_move("yuan_pass", t=2.0)
+        show dog s08_tense at s08_dog_move("dog_behind_pass", t=2.2)
         "他們經過那台空著的機車。車殼還有曬熱的味道，牠沒有伸鼻子，只貼著牆側過去。"
-        show dog s08_tense at dog_behind_walk
-        with Dissolve(0.6)
     elif trust <= 6:
         pause 0.5
-        show dog s08_tense at dog_mid_walk
-        with Dissolve(1.0)
+        show dog s08_tense at s08_dog_move("dog_follow", t=1.6)
         "過了一會兒，[dog_label]才自己挪出兩步。每走一步就停，右耳轉向她，確認她沒有忽然消失。"
         "牠走了兩步又停。予安也停，把手腕往前送一點，等繩子垂回鬆弧。"
-        show dog leash_wait at dog_near_walk
-        with Dissolve(1.0)
+        ## 走位用走姿 s08_walk（勿讓坐姿 leash_wait 滑過去）
+        show dog s08_walk at s08_dog_move("dog_beside", t=1.0)
+        ## 狗到她側邊偏前：予安換回牽繩垂在身前的 walk
+        show yuan walk at s08_yuan("yuan_halfstep")
+        with Dissolve(0.5)
         "右耳轉向她之後，牠才再往前半個身位......多靠近一點，都要再確認一次。"
+        show yuan walk_behind at s08_yuan_move("yuan_pass", t=2.0)
+        show dog s08_tense at s08_dog_move("dog_behind_pass", t=2.2)
+        with Dissolve(0.5)
         "他們走過那台空著的機車。車殼還有曬熱的味道，牠側一下身，沒敢靠近輪胎。"
-        show dog s08_tense at dog_behind_walk
-        with Dissolve(0.6)
     else:
         pause 0.4
-        show dog s08_explore at dog_far_walk
-        with Dissolve(0.8)
+        show dog s08_explore at s08_dog_move("dog_sniff_scooter", face="l", t=1.4)
+        show yuan walk at s08_yuan("yuan_halfstep")
+        with Dissolve(0.5)
         "[dog_label]先把鼻子伸向空著的機車，退半寸，又再探。牽繩一下鬆、一下緊。"
-        show dog leash_wait at dog_near_walk
-        with Dissolve(1.0)
+        show dog s08_walk at s08_dog_move("dog_beside", t=1.2)
+        with Dissolve(0.5)
         "牠慢慢跟到她側邊。牽繩仍繃著，卻不是一路往後退。"
         ## 高信任：空機車只聞一次，走過時不再探鼻
+        show yuan walk_behind at s08_yuan_move("yuan_pass", t=2.0)
+        show dog s08_tense at s08_dog_move("dog_behind_pass", t=2.2)
+        with Dissolve(0.5)
         "走過那台空著的機車時，牠沒有再探一次鼻子，只把自己收回她腿後。"
-        show dog s08_tense at dog_behind_walk
-        with Dissolve(0.6)
 
     "後方一陣送餐的油味，混進風裡，很快就過去了。"
 
-    ## 閃避前公共拍：路中、狗在前探路（s08_explore；禁巷口 sniff_harness）
-    show dog s08_explore at dog_far_walk
-    with Dissolve(0.8)
+    ## 閃避前公共拍：狗往路中／樹影探路（s08_explore；禁巷口 sniff_harness），予安隨後離開牆邊
+    show dog s08_explore at s08_dog_move("dog_explore", t=2.0)
+    with Dissolve(0.5)
     if trust <= 3:
         "巷子中央比牆邊空。牠只把鼻子往塑膠袋的方向點一下，前腳才伸出半寸就收回來。"
+        show yuan walk at s08_yuan_move("yuan_center", t=1.6)
+        with Dissolve(0.4)
         "予安跟著往路中挪半步，沒有把繩子再往前送。"
     elif trust <= 6:
-        "巷子中央比牆邊空。牠把鼻子湊向卡在盆栽下的塑膠袋，聞一下，抬頭看她，才再往樹影挪半步。"
+        "巷子中央比牆邊空。牠把鼻子湊向卡在盆栽下的塑膠袋，聞一下，抬頭看她，才再往左挪半步。"
+        show yuan walk at s08_yuan_move("yuan_center", t=1.6)
+        with Dissolve(0.4)
         "予安也離開牆邊，讓牽繩在兩人之間垂成鬆弧。"
     else:
         "巷子中央比牆邊空。牠把鼻子湊向卡在盆栽下的塑膠袋，再循油煙往前探，牽繩在她手腕上一下鬆、一下緊。"
-        "予安跟著走到路中間。前方的樹影只有幾步。"
+        show yuan walk at s08_yuan_move("yuan_center", t=1.6)
+        with Dissolve(0.4)
+        "予安跟著往路口走。轉角就在前面。"
 
     "予安沒有說「加油」。那兩個字一出口，就會變成催促。"
     ## 機車出現前先切備用曲 tense-2.ogg（引擎先到、車才入畫）
     $ play_bgm("tense", fade=1.2)
-    "轉角那邊先傳來引擎聲。"
-    ## 無字拍：拉回 → 車切過 → 不肯走 → 蹲下安慰；之後才出旁白與對不起
+    "路口那邊先傳來引擎聲。"
+    ## 無字拍：車經過時狗先驚嚇 → 她趕快往後拉 → 狗才抗拒 → 晃一下 → 蹲下去看
     window hide
-    pause 0.3
-    show dog s08_tense at dog_behind_walk
+    pause 0.15
+    ## 右中再偏右、順著路面往前；獨立圖層，不要 hide 左下角那台空車
+    show scooter pass as pass_scooter at scooter_pass
     with Dissolve(0.25)
-    pause 0.2
-    show scooter pass at scooter_pass
-    with Dissolve(0.35)
-    pause 0.55
+    pause 0.5
+    ## 車還在經過：狗露出驚嚇
+    show dog s08_startle at s08_dog("dog_explore")
+    with Dissolve(0.2)
     $ dog_sfx("whimper", 0.28)
-    pause 0.45
-    hide scooter pass
-    with Dissolve(0.45)
-    pause 0.35
-    show dog s08_startle at dog_behind_walk
-    with Dissolve(0.25)
     pause 0.4
-    show dog s08_resist at dog_behind_walk
-    with Dissolve(0.25)
-    pause 0.4
-    show yuan leash_yank at char_right_walk
-    with Dissolve(0.35)
-    pause 0.45
-    show yuan leash at char_right_walk
-    with Dissolve(0.6)
-    pause 0.9
+    ## 予安趕快往後拉；狗仍是驚嚇，被拉近，仍停在她前面
+    show dog s08_startle at s08_dog_move("dog_heel", t=0.28)
+    show yuan leash_yank at s08_yuan_move("yuan_yanked", t=0.28)
+    with Dissolve(0.12)
+    pause 0.32
+    hide pass_scooter
+    with Dissolve(0.3)
+    pause 0.15
+    ## 拉定之後，狗才換成抗拒：原圖繩朝左、身體往右蹬，人在牠左後方，不要翻面
+    show dog s08_resist at s08_dog("dog_heel", face="l")
+    with Dissolve(0.2)
+    ## 晃神：人還站著，繩子沒鬆
+    show yuan leash_yank at s08_yuan("yuan_yanked")
+    pause 1.1
+    ## 才趕快蹲下去看牠
+    show yuan leash_street at s08_yuan("yuan_yanked")
+    with Dissolve(0.28)
+    pause 0.7
     window auto
 
-    "繩子收到她鞋邊。[dog_label]的耳朵還貼著。"
-    "前腳收回來，踩下去的位置比剛才更後。四隻腳釘在她身後，胸背帶一下下頂著呼吸。牠沒有叫。"
+    "繩子被她一把往後帶。[dog_label]被拉離剛才探出去的那一步，耳朵還貼著。"
+    "前腳跟著繩子收回來，落點比剛才更近，卻還停在她前面。四隻腳蹬著不走，胸背帶一下下頂著呼吸。牠沒有叫。"
     if flags.get("s06_protected", False):
-        "落點不是路中間，是她小腿後——跟樓梯間同一側。"
+        "落點收回來一點，卻還在她前面。這回是她先把繩子往後帶。"
     elif flags.get("s06_allowed_touch", False):
-        "退回來時，牠沒有貼她的腿。距離留得比那天走廊更開。"
-    "予安也被帶了半步。手腕被猛地扯痛，一口氣卡在胸口，肩膀一直沒放下來。"
-    "她視線放低，手還握著繩，沒有伸過去。"
+        "被拉住時，牠沒有貼她的腿。距離留得比那天走廊更開。"
+    "她沒有馬上動。眼睛還停在車離開的那一頭，肩膀僵著，過了一拍才眨一下。"
+    "然後她蹲下去。視線從牠的前腳移到胸口，再確認四隻腳都還踏在地上。手抬到一半，又停住，沒有摸下去。"
     ya "[dog_label]......對不起。"
     pause 0.4
     "聲音比剛才那陣風小很多。拇指在繩帶上鬆了又握。"
     ya "我沒看到......我以為巷子是空的。"
-    "[dog_label]的眼睛先對上她，又立刻轉開。鼻子動了一下，又停住......好像還在等那輛車會不會再轉進來。"
+    ## 安撫之後，狗回到車來之前的探路樣子（仍停在被拉近的位置）
+    show dog s08_explore at s08_dog("dog_heel")
+    with Dissolve(0.5)
+    "[dog_label]的眼睛先對上她，又立刻轉開。前腳又抬起半寸，跟車來之前那一步差不多。鼻子動了一下，又停住......好像還在等那輛車會不會再轉進來。"
     "她想說走慢一點就好，話到嘴邊又嚥回去。"
     "她看了一眼手機。才過六分鐘。步數很少，可今天的聲音，牠好像已經裝不下了。"
     pause 0.6
-    "樹影就在旁邊。轉角只剩幾公尺，近得讓人很想再走完那幾步......牠卻還停著。"
-    "剛才那一下，是她先收到鞋邊，還是牠自己退回來——她一時分不清楚。"
+    "路口就在前面。轉角只剩幾公尺，近得讓人很想再走完那幾步......牠卻還停著。"
+    "剛才那一下，是她先把繩子往後帶，還是牠自己縮回來——她一時分不清楚。"
 
     # ▷ 信任選擇（Dist）...... 本段唯一動 trust 的選項組
     # 驚嚇 tense 後由選項直接定下一首（勿先回開場再切，避免多一次換曲）
@@ -4094,8 +4151,8 @@ label section_08_corner_walk:
             $ flags["s08_waited"] = True
             $ flags["s08_forced_walk"] = False
             $ flags["s08_returned_early"] = False
-            ## 已在 leash，勿再走到樹下才蹲；狗 tense＠behind → leash_wait mid→near
-            show dog s08_tense at dog_behind_walk
+            ## 已蹲（leash_street），勿再走到樹下才蹲；狗 tense＠身後 → 自己往前走 → 樹影下
+            show dog s08_tense at s08_dog("dog_heel")
             with Dissolve(0.6)
             "予安把視線移開，也把自己的呼吸放慢。"
             pause 0.8
@@ -4103,15 +4160,15 @@ label section_08_corner_walk:
             "一片乾葉被風吹到牠腳邊。牠耳朵動了一下，等葉子停下，才把鼻子湊近葉緣。予安仍看著別處。"
             "她讓自己的手垂在膝旁，不拍腿、不拿零食......什麼都不做，比做點什麼還難。"
             $ play_bgm("tender", fade=2.2)
-            show dog leash_wait at dog_mid_walk
-            with Dissolve(0.8)
+            ## 走姿 s08_walk（2026-09-28c 新圖）
+            show dog s08_walk at s08_dog_move("dog_wait_mid", t=1.8)
+            with Dissolve(0.5)
             $ dog_sfx("soft")
             "過了一會兒，牠自己往前走了一公尺。"
-            show dog leash_wait at dog_near_walk
-            with Dissolve(1.0)
-            "走到樹影下面，牠停下來甩了一次身體。胸背帶跟著晃，從頭到尾巴都鬆了一點。"
+            show dog s08_walk at s08_dog_move("dog_wait_shade", t=1.4)
+            "走到路口邊，牠停下來甩了一次身體。胸背帶跟著晃，從頭到尾巴都鬆了一點。"
             ya "好。我有跟上。"
-            "她低頭看自己的手。剛才收到鞋邊的那一下，指節還是白的。"
+            "她低頭看自己的手。剛才往後帶繩的那一下，指節還是白的。"
 
         "既然都出門了，拉著牠把一圈走完":
             $ trust -= 2
@@ -4119,16 +4176,20 @@ label section_08_corner_walk:
             $ flags["s08_waited"] = False
             $ flags["s08_forced_walk"] = True
             $ flags["s08_returned_early"] = False
-            ## 從蹲起身；狗維持身後
-            show yuan walk at char_right_walk
+            ## 從蹲起身、朝轉角往前走；狗維持身後
+            show yuan walk_behind at s08_yuan("yuan_yanked")
+            with Dissolve(0.4)
+            show yuan walk_behind at s08_yuan_move("yuan_drag1", t=1.6)
             "予安把牽繩收短，往前走。"
             ya "一下就好，走完就回家。"
             "話一出口，她聽見自己的聲音比剛才的引擎還急。手卻沒有把繩子放回去。"
-            ## 硬拖：狗維持身後（0.88），勿用 far_walk 走到人前面
-            show dog s08_tense at dog_behind_walk
-            with Dissolve(0.7)
+            ## 硬拖：狗維持身後、被繩子拖著滑過去（勿走到人前面）
+            show dog s08_tense at s08_dog_move("dog_drag1", t=1.8)
+            with Dissolve(0.4)
             $ dog_sfx("whimper")
-            "牽繩繃成一條直線。[dog_label]被拉過樹影，四隻腳只好跟著胸口那股力走。轉彎時來不及聞地面，就被帶到下一段。"
+            show yuan walk_behind at s08_yuan_move("yuan_drag2", t=2.4)
+            show dog s08_tense at s08_dog_move("dog_drag2", t=2.6)
+            "牽繩繃成一條直線。[dog_label]被拉過那段牆影，四隻腳只好跟著胸口那股力走。轉彎時來不及聞地面，就被帶到下一段。"
             "予安每走幾步就說一次「快到了」。同一句話說到後來，連她自己都不信。"
             "牠確實跟完了一圈，卻一路沒再聞地面。手機計步數字很漂亮，可牠什麼都沒聞過。"
             "回到大門前，牠沒有立刻進去，只貼著牆喘氣。予安這才把牽繩放長。晚了，可最後那一步，還是讓牠自己走。"
@@ -4141,21 +4202,25 @@ label section_08_corner_walk:
             $ flags["s08_waited"] = False
             $ flags["s08_forced_walk"] = False
             $ flags["s08_returned_early"] = True
-            ## 從蹲起身，沿原路折返
-            show yuan walk at char_right_walk
+            ## 從蹲起身、轉身朝左（回到左下角）；等狗先走再跟
+            show yuan walk at s08_yuan("yuan_yanked", face="l")
+            with Dissolve(0.4)
             "予安把牽繩留鬆，沿原路慢慢折返。"
             ya "好，今天到這裡。"
             "她自己也跟著把肩膀放下來一點。剛才那半步，先不要了。"
             $ play_bgm("tender", fade=2.0)
             "回家的每一步，都還是牠自己走的......沒走完的轉角，改天再說。"
-            show dog leash_wait at dog_mid_walk
-            with Dissolve(0.8)
+            ## 狗走在前面帶路，予安跟上；經過中景那台空車
+            show yuan walk at s08_yuan_move("yuan_home1", face="l", t=2.4)
+            ## 折返面朝左，狗走在她前面（更左側）
+            show dog s08_walk at s08_dog_move("dog_home1", face="l", t=2.0)
+            with Dissolve(0.5)
             $ dog_sfx("soft")
             "經過剛才那台停著的機車時，[dog_label]仍繞開半個身位，卻肯停下來聞一次地面。"
             "予安也跟著停。回程因此比去程更久，但牽繩大多垂成一個鬆鬆的弧。"
             pause 0.6
-            show dog leash_wait at dog_near_walk
-            with Dissolve(0.7)
+            show yuan walk at s08_yuan_move("yuan_home2", face="l", t=2.4)
+            show dog s08_walk at s08_dog_move("dog_home2", face="l", t=2.0)
             "抵達大門，狗先看裡面，再回頭看那個沒有走到的轉角。牠沒有再往轉角看很久，便跟她一起進門。"
 
     scene bg entrance_day

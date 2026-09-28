@@ -95,11 +95,11 @@
 - **結局伏筆：** `s08_forced_walk` 會影響 S10 是否可進最高信任結局。
 - **BGM：** `corner_walk` 或低信任 `calm` → **機車出現前**切 `tense`（`tense-2.ogg`／Suno 備用）→ 停等／提早回家 `tender`、硬拖維持 `tense`；返家鞋邊睡維持 `tender`，硬拖收回 `calm`（不另切 `warm`）。
 - **銜接 S09：** 同事的提議必須真誠，不把對方寫成搶狗的壞人。
-- **落地畫面（2026-09-20）：** 聞帶改 `s08_sniff_harness`；門檻改 `s08_threshold`（站姿半跨）；巷口 `s08_tense` 重畫為側身縮、牽繩往後。探路用 `s08_explore`（原 flinch 走步圖改名）。機車衝出：狗 `s08_startle`（驚嚇）再 `s08_resist`（抗拒走、牽繩往左繃）、人 `leash_yank`（站姿被帶半步）再切 `leash` 蹲。人／狗尺：玄關 `leash` **0.33**×pose **0.70**（蹲，人／門≈0.60）／狗 **0.128**；巷口 `walk`／`leash_yank` **0.32**／狗 **0.124**。頭距 `leash_wait` **0.677**（對齊開場 `s08_halfstep`）／`s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` **0.903**。無繩 `s08_threshold` **0.410**／聞帶 **0.416**／玄關站 `s08_halfstep` **0.529**（勿改全域 0.580）。躺 `s04_low` 0.369 勿改成 `s07_low`。喝水／鞋邊睡維持 visH 族（0.564／0.414），勿用兩眼距拉大縮小。數字見 `image_scale.md` §S08 確認。週一：停等才 overlay `gallery/secret-shoe-sleep.png`（重用）；提早回家只寫大門／轉角；硬拖只寫門邊距離與牽繩。其餘不新產 PNG。
+- **落地畫面（2026-09-20）：** 聞帶改 `s08_sniff_harness`；門檻改 `s08_threshold`（站姿半跨）；巷口 `s08_tense` 重畫為側身縮、牽繩往後。探路用 `s08_explore`（原 flinch 走步圖改名）。機車衝出：狗 `s08_startle`（驚嚇）再 `s08_resist`（抗拒走、牽繩往左繃）、人 `leash_yank`（站姿被帶半步）再切 `leash` 蹲。人／狗尺：玄關 `leash` **0.33**×pose **0.70**（蹲，人／門≈0.60）／狗 **0.128**；巷口改背景透視（2026-09-28，見下方「巷口走位」與 `image_scale.md` §S08 巷口透視）；`leash_yank` pose **0.95**。頭距 `leash_wait` **0.677**（對齊開場 `s08_halfstep`）／`s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` **0.903**。無繩 `s08_threshold` **0.449**／聞帶 **0.457**／玄關站 `s08_halfstep` **0.529**（勿改全域 0.580）。864×958 裁底留白見 `image_scale.md`。躺 `s04_low` 0.369 勿改成 `s07_low`。喝水 pose **0.84**（玄關可見高約 98，對齊站姿；舊 0.564 偏小）。鞋邊睡維持 0.414。數字見 `image_scale.md` §S08 確認。週一：停等才 overlay `gallery/secret-shoe-sleep.png`（重用）；提早回家只寫大門／轉角；硬拖只寫門邊距離與牽繩。其餘不新產 PNG。
 
 ### 旁白 × 狗移動（2026-09-19 鎖定｜threshold／sniff 已補；其餘不新產 pose）
 
-玄關遠近只改 `xalign`（far **0.54**／to_yuan **0.58**／mid **0.62**／near **0.66**；鞋櫃與予安之間、靠近牽繩）；巷口（behind **0.88**／far **0.56**／mid **0.63**／near **0.68**）。**禁**扣帶前 `leash_wait`／`s08_threshold`；**禁**巷口 `street_tense`、`s08_sniff_harness`、無背帶 `halfstep`／`s04_low`／`ear_perk`。
+玄關遠近只改 `xalign`（far **0.54**／to_yuan **0.58**／mid **0.62**／near **0.66**；鞋櫃與予安之間、靠近牽繩）；巷口改用 `S08_ALLEY_PT` 站位點＋透視 zoom（舊 behind 0.88／far 0.56／mid 0.63／near 0.68 已廢），對照見下方「巷口走位」。**禁**扣帶前 `leash_wait`／`s08_threshold`；**禁**巷口 `street_tense`、`s08_sniff_harness`、無背帶 `halfstep`／`s04_low`／`ear_perk`。
 
 | 旁白拍 | pose | 位置 | SFX |
 |--------|------|------|-----|
@@ -132,6 +132,47 @@
 | 選 C 靠鞋、呼吸未沉 | `s08_halfstep`→`shoe_sleep` | mid；先 `hide yuan`；**不播** sigh | — |
 | 下午聞地上胸背帶 | `s08_sniff_harness` | entrance mid | — |
 
+### 巷口走位（2026-09-28｜依背景道路透視重排）
+
+**為什麼改：** 舊版人 384px 比背景大約 24%、狗／人 0.22 偏大；予安踩在右側花台弧緣、狗站進花台盆栽；人狗腳底差 12–18px；`leash_yank` 那拍人突然矮 22%；而且兩人朝左走，樹影與轉角反而在身後，空機車也從來沒有被「經過」。
+
+**空間設定：** 予安從左下角起步，面朝右往路口走；狗在身後時在她左邊。人、狗、呼嘯車移動時 zoom 鎖住，不要變大變小。空車停在左下角。騎士從右中車道出現，順著路面往前。折返走回左下角。
+
+| 旁白拍 | 予安 | 狗 | 移動 |
+|--------|------|----|------|
+| 巷口進場、狗身後半步 | `walk`＠`yuan_start`（朝右） | `s08_tense`＠`dog_behind_start` | — |
+| 「往前半步，停住，再等」 | → `yuan_halfstep` | 不動（牽繩拉直） | ease 0.9 |
+| 低：貼牆挪半腳 | — | → `dog_shuffle` | ease 1.0 |
+| 低：再往前一點、跟半步 | → `yuan_step` | → `dog_follow` | ease 1.2／1.8 |
+| 中：自己挪出兩步 | — | → `dog_follow` | ease 1.6 |
+| 中：再往前半個身位 | — | `s08_walk`（走姿）→ `dog_beside` | ease＋Dissolve 0.5 |
+| 高：鼻子伸向空機車 | — | `s08_explore` → `dog_sniff_scooter` | ease 1.4＋Dissolve 0.5 |
+| 高：慢慢跟到她側邊 | — | `s08_walk`（走姿）→ `dog_beside` | ease 1.2 |
+| 三條：經過空機車 | → `yuan_pass` | `s08_tense` → `dog_behind_pass` | ease 2.0／2.2（在旁白前起步） |
+| 公共拍：走到一半、狗在前約一步 | — | `s08_explore` → `dog_explore` | ease 2.0 |
+| 予安走到路的一半 | → `yuan_center` | — | ease 1.6 |
+| 騎士從身後騎走 | — | — | `pass_side` 翻朝右：(220,690) → 身側 (640,620) → 前方 (1120,470) |
+| 把狗快速往前拉 | `leash_yank` → `yuan_yanked`（往前） | `s08_tense` → `dog_heel`（身前） | ease 0.28 |
+| 看車騎走的方向 | — | `s08_startle`＠`dog_heel`（朝右） | Dissolve 0.25 |
+| 抗拒、牽繩繃回她 | — | `s08_resist`＠`dog_heel`（朝左，繩連回她） | Dissolve 0.25 |
+| 蹲下 | `leash_street`＠`yuan_yanked`（朝左看狗） | — | Dissolve 0.6 |
+| 選 A 自己走一公尺 → 樹影下 | 維持蹲 | `s08_walk`（走姿）→ `dog_wait_mid` → `dog_wait_shade` | ease 1.8／1.4（從她身前經過） |
+| 選 B 硬拖 | 起身 `walk_behind`（牽繩往身後）→ `yuan_drag1` → `yuan_drag2` | `s08_tense` → `dog_drag1` → `dog_drag2`（仍在身後，像被拖著滑） | ease 1.6／2.4／2.6 |
+| 選 C 折返 | 起身轉身 `walk`（朝左）→ `yuan_home1` → `yuan_home2` | `s08_walk`（走姿、朝左）→ `dog_home1` → `dog_home2`（在前帶路、再次經過空車） | ease 2.4／2.0 |
+
+**予安圖選用規則（2026-09-28c）：** 狗在她身後 → `walk_behind`（牽繩往身後斜下）；狗在她側前／前方 → `walk`（牽繩垂在身前）。進場、往前半步、低信任全程、三條「經過空機車」、選 B 硬拖用 `walk_behind`；騎士竄出後的拉退用 `leash_yank`；中信任「到她側邊」、高信任「聞空機車／跟到側邊」、公共拍（狗往樹影探路）、選 C 折返用 `walk`。換圖時跟著既有 Dissolve；公共拍另加 Dissolve 0.4。
+
+**仍受限：** `s08_tense` 只有扣環沒有繩，牽繩末端與狗之間靠位置對上（見報告）；`s08_startle` 牽繩固定往右上。
+
+**新圖（2026-09-28b 提需求，2026-09-28c 綠幕生成＋去背落地）：**
+
+| 檔名 | 內容 | 用途 | 參考圖 |
+|--------------|------|------|--------|
+| `assets/char/char-yuan-walk-leash-behind.png` | 予安朝右走、牽繩往身後拖（狗在後） | 選 B 硬拖、狗在身後各拍 | `char-yuan-walk.png`、`char-yuan-leash-yank.png` |
+| `assets/dog/dog-s08-walk.png` | 同一隻幼犬、同胸背帶，抬頭正常走姿（面左，程式翻面） | 選 A 走一公尺、選 C 帶路、到她側邊 | `dog-s08-explore.png`、`dog-s08-tense.png`、`dog-leash-wait.png` |
+| `assets/prop/scooter-pass-side.png` | 騎士＋車側面、右→左 | 已落地為 `image scooter pass_side`（1280×1024，高 1000px），**目前不用**：A05 路線是從巷道遠端往左前迎面而來，側面車身會像橫著滑；3/4 正面 `scooter-pass` 較符合 | `scooter-pass.png`、`scooter-parked.png` |
+
 ---
 
-*更新：2026-09-20｜閃避前路中探路；引擎拉回後蹲下才出字；選 A 不重複蹲*
+*更新：2026-09-28｜巷口依背景透視重排、加走位；`leash_yank` 0.95*  
+*前次：2026-09-20｜閃避前路中探路；引擎拉回後蹲下才出字；選 A 不重複蹲*
