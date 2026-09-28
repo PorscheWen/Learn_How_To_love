@@ -8,7 +8,9 @@
 | 檔案 | Profile | 來源 | 授權 |
 |------|---------|------|------|
 | `warm.ogg` | warm, hopeful, sunny | [Peaceful Intro (Looping)](https://opengameart.org/content/peaceful-intro-looping) — Eric Matyas | CC-BY（需署名） |
-| `calm.ogg` | calm, night, rain, tense | [Peace at last](https://opengameart.org/content/peace-at-last) — bart | CC-BY（需署名） |
+| `calm.ogg` | calm, night, rain | [Peace at last](https://opengameart.org/content/peace-at-last) — bart | CC-BY（需署名） |
+| `tense.ogg` | almost_gave（S09 差點交給別人；原 S08 機車曲） | AceData Suno `chirp-v5-5` instrumental take 1｜`SUNO_TENSE.md` | Suno via AceData；2026-09-19 匯入 |
+| `tense-2.ogg` | tense（S08 機車出現前；衝突短拍） | AceData Suno `chirp-v5-5` instrumental take 2｜`SUNO_TENSE.md` | Suno via AceData；2026-09-20 改掛 S08 |
 | `tender.ogg` | tender, sunset | [Thoughtful Piano Theme](https://opengameart.org/content/thoughtful-piano-theme) — Trinnox | CC-BY（需署名） |
 | `melancholy.ogg` | melancholy（開場雨天） | [Emotional Piano](https://opengameart.org/content/emotional-piano-0) — Centurion_of_war（solo 版） | CC0（建議仍署名） |
 | `sick-guard.ogg` | sick_guard | [The Budding of Consciousness](https://opengameart.org/content/the-budding-of-consciousness-%E2%80%93-cc0-ambient-minimalist-theme-yoiyami-blue-series-%E2%80%93-no4) — Yoiyami | CC0 |

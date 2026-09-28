@@ -203,7 +203,7 @@ label ending_beat_back_to_back:
     scene bg living_night
     with Dissolve(0.9)
 
-    show dog anxious at dog_far
+    show dog parallel at dog_far
     with Dissolve(1.0)
     $ ending_coda_pause(1.1)
 

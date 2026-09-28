@@ -43,29 +43,9 @@ def load_env_value(key):
     return ""
 
 
-def report_balance():
-    platform_token = load_env_value("ACEDATA_PLATFORM_TOKEN")
-    if not platform_token:
-        print("[餘額] 未設定 ACEDATA_PLATFORM_TOKEN，無法查詢剩餘積分")
-        return
-    req = urllib.request.Request(
-        "https://platform.acedata.cloud/api/v1/applications/?user_id=me&limit=100",
-        headers={"accept": "application/json",
-                 "authorization": f"Bearer {platform_token}"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-    except Exception as e:
-        print(f"[餘額] 查詢失敗（不影響生成結果）：{e}")
-        return
-    items = data.get("items") or data.get("results") or []
-    total = 0.0
-    for app in items:
-        amt = app.get("remaining_amount")
-        if isinstance(amt, (int, float)):
-            total += amt
-    print(f"[餘額] 剩餘積分：{total:.2f} Credits（約 ${total * 0.095215:.2f} USD）")
+def report_balance(when=""):
+    from acedata_account import report_account
+    report_account(when)
 
 
 def image_to_data_url(path):
@@ -114,6 +94,7 @@ def main():
     if not token:
         print("錯誤：找不到 ACEDATA_API_TOKEN（環境變數或 tools\\.env）")
         sys.exit(1)
+    report_balance("開始")
 
     payload = {
         "action": "edit" if args.image else "generate",
@@ -137,28 +118,30 @@ def main():
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=600) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", "replace")
-        print(f"HTTP {e.code}: {body}")
-        sys.exit(1)
+        try:
+            with urllib.request.urlopen(req, timeout=600) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", "replace")
+            print(f"HTTP {e.code}: {body}")
+            sys.exit(1)
 
-    urls = find_image_urls(data)
-    if not urls:
-        print("回應中找不到圖片 URL：")
-        print(json.dumps(data, ensure_ascii=False, indent=2)[:2000])
-        sys.exit(1)
+        urls = find_image_urls(data)
+        if not urls:
+            print("回應中找不到圖片 URL：")
+            print(json.dumps(data, ensure_ascii=False, indent=2)[:2000])
+            sys.exit(1)
 
-    out = os.path.abspath(args.output)
-    os.makedirs(os.path.dirname(out), exist_ok=True)
-    urllib.request.urlretrieve(urls[0], out)
-    print(f"[完成] 已存檔：{out}")
-    if len(urls) > 1:
-        print(f"[提示] 回應共 {len(urls)} 張，其餘 URL：")
-        for u in urls[1:]:
-            print("  " + u)
-    report_balance()
+        out = os.path.abspath(args.output)
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        urllib.request.urlretrieve(urls[0], out)
+        print(f"[完成] 已存檔：{out}")
+        if len(urls) > 1:
+            print(f"[提示] 回應共 {len(urls)} 張，其餘 URL：")
+            for u in urls[1:]:
+                print("  " + u)
+    finally:
+        report_balance("完成")
 
 
 if __name__ == "__main__":

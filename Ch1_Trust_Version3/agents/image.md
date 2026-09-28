@@ -282,8 +282,10 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `dog-guard-door.png` | 不安守門 | 趴房門口 | **S07** 門線／選 A 摸背後／天亮換腳 |
 | `dog-nose-fingertip.png` | 輕觸 | 鼻尖碰指尖 | **S07** 清晨指尖＠`dog_bedroom_nose_cu` |
 | `dog-street-tense.png` | 繃緊 | 貼牆／僵住 | **僅 S04** 客廳 |
-| `dog-s08-tense.png` | 繃緊 | 有胸背帶；巷口受驚／硬拖＠behind | **S08** |
-| `dog-leash-wait.png` | 累但信任 | 停步等待後願再走 | S08 扣帶後／門檻／跟上／選 A·C；S09 玄關 |
+| `dog-s08-tense.png` | 繃緊 | 有胸背帶；側身縮、牽繩往後；巷口受驚／硬拖＠behind | **S08** |
+| `dog-s08-threshold.png` | 試探 | 穿胸背帶、前腳跨半步、後腳在墊上 | **S08** 玄關門檻 |
+| `dog-s08-sniff-harness.png` | 小心試探 | 鼻尖對地板上的胸背帶（身上無背帶） | **S08** 扣帶前／下午 |
+| `dog-leash-wait.png` | 累但信任 | 停步等待後願再走 | S08 扣帶後／跟上／選 A·C；S09 玄關 |
 | `dog-shoe-sleep.png` | 安心 | 喝完水靠鞋邊睡 | S08 記憶 |
 | `dog-farewell.png` | 告別上望 | 坐姿抬頭看予安（無牽繩） | S09 客廳 |
 | `dog-cafe-refuse.png` | 拒絕警告 | 胸背帶＋牽繩、貼腳對同事僵／低鳴 | S09 咖啡廳 |
@@ -307,7 +309,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `char-yuan-sick-bed.png` | S07 病床；沿床躺看向狗；睡衣蓋被 |
 | `char-yuan-block.png` | 走廊擋人（S06）；外出襯衫＋樂福鞋；面向左 |
 | `char-yuan-door-hold.png` | S06 梯廳扶門（外出襯衫＋樂福鞋；圖檔不畫狗） |
-| `char-yuan-leash.png` | 牽繩、蹲等（S08 玄關／樹下停等）；外出襯衫＋棕色平底鞋；S09 **玄關** |
+| `char-yuan-leash.png` | 牽繩、蹲等（S08 玄關／閃避後安慰）；外出襯衫＋棕色平底鞋；S09 **玄關** |
 | `char-yuan-walk.png` | 站姿走路握牽繩｜**S08 巷口**（非蹲） |
 | `char-yuan-farewell.png` | 客廳跪姿告別；室內裝＋襪｜S09 |
 | `char-yuan-cafe.png` | 站姿握牽繩、衝突表情｜S09 咖啡廳 |
@@ -424,16 +426,28 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 - 指尖 `nose_tip` **0.65**＠`dog_bedroom_nose_cu`（只留 bg＋特寫放大；解鎖回憶 `nose_touch`）。規格見 `image_scale.md` §0.2。
 - S05 會後 `sniff_wire`＠`dog_living_wire_cu`（解鎖回憶 `sniff_wire`）；S06 護衛後 `forehead_nudge`＠`dog_entrance_nudge_cu`。
 
-### 2026-09-13｜S08 狗跟旁白走
+### 2026-09-20｜S08 機車拍拆驚嚇／抗拒
 
-- 不新產 pose：玄關 `s04_low`／`halfstep`／`harness_bite`／`leash_wait`；巷口 `s08_tense`／`leash_wait`。遠近只改 xalign。
-- 硬拖維持 `dog_behind_walk`，勿 `far_walk` 走到人前面。下午改玄關聞帶，不空切客廳。
+- `dog-s08-flinch` 改名 `s08_startle`（瞪眼後坐）。
+- 另產 `s08_resist`（瞇眼釘住、牽繩往左繃朝予安）。無字拍：`startle`→`resist`→`leash_yank`→`leash`。
+
+### 2026-09-19｜S08 聞帶／門檻／巷口受驚
+
+- 聞帶 `s08_sniff_harness`（身上無背帶、地上胸背帶）；門檻 `s08_threshold`（站姿半跨）；巷口 `s08_tense` 重畫為側身縮。
+- 硬拖維持 `dog_behind_walk`，勿再 `far_walk` 走到人前面。空車後公共拍用 `s08_explore`＠`far_walk` 探路。低信任空機車不進 `far_walk`；高信任空車只聞一次。下午改玄關聞帶，不空切客廳。
 - 完整拍點表見 `section_08_corner_walk.md`、`image_dog.md` §3.10。
 
 ### 2026-09-10｜S08 胸背帶時序
 
 - 扣帶前無背帶；巷口 `s08_tense` 有胸背帶。
 - `leash` 蹲姿棕色平底鞋；鞋邊睡先 hide yuan。
+
+### 2026-09-19｜S10 聞袋／睡姿重用
+
+- 留下玄關聞紙袋重用 `paper_bag`（S09）；不新產。
+- 結局 B 聞碗重用 `drink_bowl`；A 停電後不在客廳喝水。
+- 結局 coda A 開場改 `parallel`，禁舊 `anxious` 1.575。
+- 完整拍點見 `section_10_share_the_key.md`、`image_dog.md` §3.11。
 
 ---
 
@@ -451,4 +465,4 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 
 ---
 
-*更新：2026-09-13｜特寫鏡頭可重用＋回憶 sniff_wire／forehead_nudge／nose_touch；狗頭距母尺*
+*更新：2026-09-19｜S10 聞袋／B 聞碗重用既有 pose；coda A 禁舊 anxious*

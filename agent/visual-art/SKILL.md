@@ -58,6 +58,17 @@ description: >-
 
 **工具（生圖鎖定 FLUX）：** `tools/hermes` → `python hermes.py agent --job lhtl-flux-…`（`fal-ai/flux-2-pro`）；去背 `remove_dog_bg.py`。見 [`Nous_Portal.md`](../../Ch1_Trust/Nous_Portal.md) §4。MJ／`art-pose.ps1` 僅備援。
 
+## Loop C（產圖前必跑）
+
+Ch1 Version3 要產／重畫 pose 或背景前：
+
+```powershell
+cd Ch1_Trust_Version3\Renpy_game
+python tools\loop-c.py S0N
+```
+
+exit 2（拍點未鎖）→ **停**，只出待鎖定清單。已鎖且稿寫「不新產 pose」→ 看腳本「產圖建議」：不新產就只重用／改 `DOG_POSE_SCALE`；考慮新產就把理由交給使用者，**未說「產這張」仍不要** Hermes／Cursor GenerateImage。禁止 Cursor GenerateImage 當定稿。
+
 ## 美術資產管線（art-asset-pipeline）
 
 > 完整規格：[`art-asset-pipeline.md`](art-asset-pipeline.md)

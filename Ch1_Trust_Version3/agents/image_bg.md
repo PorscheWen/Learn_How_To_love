@@ -209,8 +209,8 @@ bg-{place}-{light}.png
 ### alley（S08）
 
 - 巷口轉角、樹／電杆、機車可能經過的空間感
-- **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，停放空車）；`prop/scooter-pass.png`（轉角呼嘯切過，驚嚇拍短暫出現後 hide；transform **×0.8**）
-- 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 空機車 `far_walk` 伸鼻再嚇退回身後 → 轉角機車嚇退回身後；樹下停等才切 `yuan leash`（蹲）。硬拖維持 behind，勿 far 走到人前。
+- **道具疊層（已接）：** `prop/scooter-parked.png`（進巷即顯示，停放空車）；`prop/scooter-pass.png`（引擎聲先到就疊上層，呼嘯拍後 hide；transform **×0.8**）。閃避拍狗 `s08_startle`→`s08_resist`、人 `leash_yank`→`leash`。
+- 巷口進場：`yuan walk`（走路）＋狗 `dog_behind_walk`（身後不願前進）→ 依信任慢慢前移 → 空機車：低信任 mid→behind（不進 far_walk）；中信任 near→behind；高信任 `s08_explore` far_walk 聞一次再 near→behind → 空車後公共拍 `s08_explore`＠`far_walk` 探路 → 引擎拉回 `s08_tense`＠behind、疊車、狗 `s08_startle`→`s08_resist`、人 `leash_yank`→`leash` 蹲下才出字。硬拖維持 behind，勿再 far 走到人前。
 - **立繪尺：** `char_right_walk` **0.32**；狗 walk **0.124**（幼犬比；far／mid／near／behind 同尺）。樹下蹲 `leash` 仍 0.32。人／狗 visH 見 `image_scale.md` §S08 確認。
 - 柔和日間光、曝光平衡；禁曝白牆面、禁文字
 
@@ -224,11 +224,11 @@ bg-{place}-{light}.png
 ### entrance（S03 門檻；S08／S09 出門）
 
 - 台灣公寓**玄關內側**：門板（貓眼／門把）、地墊、鞋櫃、空牆掛勾
-- 構圖朝向大門，留地墊旁空地給狗疊層（`dog_entrance_far`／`mid`／**S08 near 0.70**；S09 用 `*_s09`）
+- 構圖朝向大門，留地墊旁空地給狗疊層（S08：far **0.54**／mid **0.62**／near **0.66**，鞋櫃與予安之間；S09 用 `*_s09` far 0.60／mid 0.66／near 0.70）
 - night：暖壁燈；day：清晨／日間門縫側光，家具不動
 - **用途：** 門內外過渡（S03）；穿胸背帶、跨門檻、返家解帶（S08）；週六扣帶出門（S09）
 - 無人無狗無字
-- **立繪尺：** 人 `char_right_entrance`／S08 `leash` **0.33**；狗 **0.128**（幼犬比；far／mid／near 同尺）。S08 visH 見 `image_scale.md` §S08 確認。
+- **立繪尺：** 人 `char_right_entrance`／S08 `leash` **0.33**×pose **0.70**（蹲）；狗 **0.128**（幼犬比；far／mid／near 同尺）。S08 visH 見 `image_scale.md` §S08 確認。
 
 ### kitchen（可選）
 

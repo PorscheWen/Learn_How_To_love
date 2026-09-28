@@ -46,7 +46,9 @@
 | `tender.ogg` | `tender` | 柔軟、靠近 | 蹲等半步、護衛後、留下確認、結局 A／B |
 | `melancholy.ogg` | `melancholy` | 低沉、孤獨 | **S02 後門一瞥**、結局 C 送走；勿整章濫用 |
 | `sick-guard.ogg` | `sick_guard` | 深夜、脆弱、守候 | S07 生病守門，避免與 S03／S05 共用同一首 |
-| `almost-gave.ogg` | `almost_gave` | 沉靜、猶豫、情緒高峰 | S09 理性清單與咖啡廳交接前 |
+| `almost-gave.ogg` | `blank_night`／`night` | 沉靜、空白加班 | S01 螢幕光／巷口／入睡 |
+| `tense.ogg` | `almost_gave` | 沉靜緊繃、猶豫 | S09 差點交給別人（原 S08 機車曲） |
+| `tense-2.ogg` | `tense` | 巷口短拍、禁 jump scare | S08 機車出現前（Suno 備用 take 2） |
 | `first-light.ogg` | `hopeful` | 淡光、承認留下 | 結局 A／B「再試一年」 |
 
 ### Profile 別名（劇本 → 實體）
@@ -62,7 +64,7 @@
 | `guard_corridor` | `calm` | `calm.ogg` | S06 走廊被看見；擋下／進門後轉 `tender` |
 | `sick_guard` | 深夜 ambient（**全段不切** `tender`） | `sick-guard.ogg` | S07 |
 | `corner_walk` | `warm`／`calm` | | S08；硬拖用 `calm`@0.88 |
-| `almost_gave` | 沉靜 ambient → 分歧 | `almost-gave.ogg` | S09 |
+| `almost_gave` | 沉靜 → 分歧 | `tense.ogg`（原 S08 機車曲） | S09 |
 | `ending_back` | `tender` | `tender.ogg` | 結局 A |
 | `ending_learning` | `warm`／`tender` | | 結局 B |
 | `ending_handover` | `melancholy` | `melancholy.ogg` | 結局 C |
@@ -73,7 +75,7 @@
 | Profile | OGG | 用途 |
 |---------|-----|------|
 | `night` | `blank_night` 略降／升 | `almost-gave.ogg` @0.93 | S01 巷口／入睡（與加班同曲，勿切 calm） |
-| `tense` | `calm.ogg` @0.88 | 衝突當下（短；禁 jump scare） |
+| `tense` | `tense-2.ogg` @0.92（未落地退 `tense.ogg`，再退 `calm.ogg` @0.88） | 衝突當下／S08 機車呼嘯（短；禁 jump scare；Suno 備用 take 2） |
 | `sunset` | `tender.ogg` | 傍晚帶回／進門 |
 | `hopeful` | `first-light.ogg` | S10 掛勾／「再試一年」 |
 
@@ -94,8 +96,8 @@
 | `bg-kitchen-day` | 門口跟隨 | 繼承 living；靠近用 `tender` | — |
 | `bg-entrance-night` | 進門過渡 | `tender`／`warm` | `tender`／`warm` |
 | `bg-stairwell-day` | S06 被看見 | `calm`；擋下後 `tender` | `calm`／`tender` |
-| `bg-alley-day` | S08 巷口 | `warm`；僵住／硬拖 `calm`（`tense`） | `warm`／`calm` |
-| `bg-cafe-day` | S09 差點送走 | `calm`；留下→`tender`；送走→`melancholy` | 分歧 |
+| `bg-alley-day` | S08 巷口 | `warm`；機車出現前 `tense`（`tense-2.ogg`）；硬拖收 `calm` | `warm`／`tense`／`calm` |
+| `bg-cafe-day` | S09 差點送走 | `almost_gave`（`tense.ogg`）；留下→`tender`；送走→`melancholy` | 分歧 |
 | `bg-street-night` | 通勤（若用） | `calm`／`melancholy` | 勿搶 S02 後門主軸 |
 
 ### 情緒覆寫規則
@@ -214,24 +216,24 @@
 
 ### S08｜走到轉角就好
 
-弧線：`warm`／`calm` → 驚嚇 `tense` 短 → 選項直接定 `tender` 或 `calm` → 返家不再切曲
+弧線：`warm`／`calm` → **機車出現前**切 `tense`（`tense-2.ogg`）→ 選項直接定 `tender` 或 `calm` → 返家不再切曲
 
 | 節點 | bg | Profile |
 |------|-----|---------|
 | 巷口出發 | alley-day | `warm`；低信任貼牆用 `calm` |
-| 機車呼嘯 | alley-day | `tense` 短 |
+| 機車呼嘯 | alley-day | 出現前切 `tense`（`tense-2.ogg`／Suno 備用） |
 | 停等／提早回家 | alley → living | `tender`（維持至鞋邊睡） |
-| 硬拖達標 | alley-day | `calm`（與 tense 同檔，只調音量） |
+| 硬拖達標 | alley-day | 過程維持 `tense`；大門前收 `calm` |
 | 靠鞋睡 | living | 維持 `tender`（勿再切 `warm`） |
 | 場次 B 存檔收束 | living | 繼承上列 |
 
 ### S09｜差點交給別人
 
-弧線：`calm` → 分歧
+弧線：`almost_gave`（`tense.ogg` 原曲）→ 分歧
 
 | 節點 | bg | Profile |
 |------|-----|---------|
-| 咖啡廳前、理智清單 | cafe-day | `calm`（`almost_gave`） |
+| 咖啡廳前、理智清單 | cafe-day | `almost_gave`（`tense.ogg`） |
 | 狗拒絕陌生人 | cafe-day | `tender` 緊張感（勿恐怖） |
 | **留下** | → living | `tender` |
 | **送走（結局 C）** | cafe-day → living 空 | `melancholy` |

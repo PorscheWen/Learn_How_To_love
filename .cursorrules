@@ -71,16 +71,42 @@ Learn_How_To_Love/
 
 ---
 
-## 6. 驗證（章節落地必跑）
+## 6. 驗證（Loop A：改完才跑）
+
+章節落地或改完 `Renpy_game`：**同一手**跑入口，無計時器、不自動開遊戲。
 
 ```powershell
 cd Ch1_Trust_Version3\Renpy_game
-python tools\validate-s01.py
-python tools\validate-s10.py
-python tools\validate-all-endings.py
-python tools\validate-menus.py
-# 依變更再加：validate-assets／validate-narration／validate-menu-layout
+$env:PYTHONIOENCODING = "utf-8"
+python tools\validate-a.py --files <本次改的檔>
 ```
+
+入口預設：`validate-s01`／`validate-s10`／`validate-all-endings`／`validate-menus`；再依檔案加 assets／narration／menu-layout。本次 FAIL 修同一件；既有紅燈只回報。
+無字拍／S08 閃避四拍／S09 禁鞋邊 overlay 已寫入 `validate-s01.py`。
+
+## 6.1 Loop B（單段 Designer：指定才跑）
+
+一次一段。預設只出最多 5 條 D0–D2，不改檔、不開遊戲。
+
+```powershell
+cd Ch1_Trust_Version3\Renpy_game
+$env:PYTHONIOENCODING = "utf-8"
+python tools\loop-b.py S07
+```
+
+封包只列現場與 HINT。Agent 對 `designer.md` 出報告；使用者說「照這個改」再落地，然後跑 Loop A。
+
+## 6.2 Loop C（產線守門：產圖前／指定才跑）
+
+一次一段。拍點未鎖就**停產圖**。無計時器、不開遊戲。
+
+```powershell
+cd Ch1_Trust_Version3\Renpy_game
+$env:PYTHONIOENCODING = "utf-8"
+python tools\loop-c.py S07
+```
+
+exit 2＝未鎖、不要 Hermes／GenerateImage；exit 1＝缺檔只補同名或重用；已鎖且稿寫不新產＝出產圖建議（不新產／考慮新產），未說「產這張」不要 Hermes／GenerateImage。頭距仍只改 `DOG_POSE_SCALE`。
 
 ---
 

@@ -114,5 +114,5 @@
 | 選 B | 仍在門邊 | `s06_freeze` → `s06_retreat` |
 | 選 C | `carry_pup` → 門邊 `door_hold` | 抱走、不另疊狗 |
 
-*更新：2026-09-13｜梯廳外出裝＋樂福鞋；頂額特寫 hide 予安；選 C 問養寵時回到門邊*
+- **無字拍（2026-09-20）：** 膠帶／伸手後 `window hide` `s06_flinch`；選 A 先出 `block`＋`behind_legs` 再「還在適應」；選 B 手先落下再寫僵住。不新產 PNG。
 

@@ -76,9 +76,9 @@
 - 隱藏紀念照：結局 A 解鎖 `gallery/secret-lap-sleep.png` 與 `secret-back-to-back.png`；未解鎖顯示「？？？」與軟提示，不顯示親密％。
 - 隱藏內容：各結局解鎖狗日記／予安心境／朋友視角全文（`hidden_content.rpy`）；主選單「隱藏內容」可閱讀。
 - 結局收束：`endings.rpy` 的 `ending_coda_finish`（安靜睡姿節拍 → 標題卡 → 解鎖提示 → `ending_aftercare`）；`process_ending_unlock` 寫入日記／心境／朋友視角（A 另含紀念照＋Ch2 提示）；`sync_unlocked_ending_rewards` **必須回傳 `None`**（禁放進主選單 `action` 清單，否則 `True` 會開新遊戲）。
-- 人物立繪：S08 玄關用 `char-yuan-leash`（蹲）、巷口用 `char-yuan-walk`（走路；樹下停等才切回蹲）；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。立繪尺見 `game/scale.rpy`。
+- 人物立繪：S08 玄關用 `char-yuan-leash`（蹲）、巷口用 `char-yuan-walk`（走路；閃避後蹲下安慰才出字）；S09 客廳用 `char-yuan-farewell`、玄關用 `char-yuan-leash`、咖啡廳用 `char-yuan-cafe`＋`char-coworker-cafe`；缺檔有 fallback。立繪尺見 `game/scale.rpy`。
 - 狗立繪：S07 臥室依旁白切 `s07_low`／`halfstep`／`ear_perk`／`chin_hover`／`guard_door`／`nose_tip`（遠近只改 xalign）；S08～S10 依牽繩、告別、咖啡廳拒絕／僵住與三種睡姿切換；缺檔不阻擋遊戲。S03 `door_sleep` 與結局 A／B／D 三種睡姿為 5 幀呼吸循環動畫（`assets/dog/{door-sleep,back-sleep,check-sleep,door-edge}/`），幀缺失時落回靜態圖。第二批動作動畫：S05 `sniff_wire` 嗅耳機線、S07 `guard_door` 守門呼吸、S08 `drink_bowl` 舔水、S09 `farewell` 尾巴掃地（各 5 幀，同 fallback 機制）。
-- BGM：S07 使用專屬 `sick-guard.ogg`；S09 使用 `almost-gave.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
+- BGM：S07 使用專屬 `sick-guard.ogg`；S08 機車出現前切 `tense-2.ogg`；S09 使用原 `tense.ogg`；結局依 A～D 切換，所有新增音源皆已登記於 `assets/audio/CREDITS.md`。
 - 狗 SFX：`dog_sfx()` 以低音量播放稀疏 one-shot；S02／S03／S05／S06／S07／S08／S09 使用 `soft`、`whimper`、`murmur`、`bark`、`growl`，S01 與結局 C 空屋不播放。音源授權見 `assets/audio/sfx/CREDITS.md`。
 
 ### 選單 UI 契約（`screens.rpy`）
@@ -208,7 +208,7 @@ python .\tools\seedance-generate.py --image ..\assets\dog\dog-ref-canonical.png 
 python .\tools\video-to-frames.py 影片.mp4 ..\assets\dog\wag --frames 8
 ```
 
-- Token 放 `tools/.env`（`ACEDATA_API_TOKEN`／`ACEDATA_PLATFORM_TOKEN`，已被 gitignore）；每次生成後會回報剩餘積分。
+- Token 放 `tools/.env`（`ACEDATA_API_TOKEN`／`ACEDATA_PLATFORM_TOKEN`，已被 gitignore）；**每次** Seedance／Suno／NanoBanana 開始與結束都會印剩餘積分與使用期限。
 - **抽幀後必做**：依 pad 幾何把每幀裁回原圖框架（否則貼底錨點下狗會浮空），參考 `tools/output/seedance/normalize-frames.py`；裁回後 `DOG_POSE_SCALE` 直接沿用靜態 pose 原值。
 - 規範（動作純度、亮度、縮放、ping-pong 播放）見 `../agents/image_dog.md` §3.5。
 - 幀落地後在 `script.rpy` 補 `DOG_POSE_SCALE` 與 ATL `image dog {動作}` 定義。

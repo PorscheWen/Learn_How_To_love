@@ -45,6 +45,14 @@ description: >-
 5. **未要求落地就停在報告。** 使用者說「照這個改」再改檔或轉交子 agent。
 6. **不要自動開遊戲。**
 
+## Loop B（單段指定才跑）
+
+使用者說「驗 B」「Loop B」並指定 S0N 時：先 `python Ch1_Trust_Version3/Renpy_game/tools/loop-b.py S0N` 拿封包，再依本手冊出最多 5 條 D0–D2。一次一段；沒指定不要掃 S01～S10。HINT 供判斷，不是 tester FAIL。
+
+## Loop C（產圖前／指定才跑）
+
+使用者說「驗 C」或要產新 PNG 時：先 `python Ch1_Trust_Version3/Renpy_game/tools/loop-c.py S0N`。exit 2（拍點未鎖）就停產圖，只出待鎖定清單。已鎖且稿寫不新產：看「產圖建議」要不要新圖；不新產就重用 pose、改 `DOG_POSE_SCALE`；考慮新產先問使用者。未說「產這張」不要 Hermes／GenerateImage。
+
 ## 預設優化順序
 
 1. S02 相遇鉤子（15 分內想留下）

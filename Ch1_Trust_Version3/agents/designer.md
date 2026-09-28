@@ -74,6 +74,12 @@ pose／bg／cue 對表（image.md、audio.md、image_scale.md）
 designer 看體感 → tester 驗契約
 ```
 
+腳本／選單落地後走 **Loop A**（`Renpy_game/tools/validate-a.py`）：**改完才驗**，無計時器、不開遊戲。Designer 仍只出體感建議；自動化過不過交 tester／Cursor 同一手跑完。
+
+單段體感走 **Loop B**（`Renpy_game/tools/loop-b.py S0N`）：指定才跑，一次一段。封包對齊 `section_*.md` × `script.rpy`（含 `window hide` 次數、S08 閃避／S09 鞋邊照 HINT）；**未說「照這個改」只出最多 5 條 D0–D2**，不改檔、不產圖。落地後再跑 Loop A。
+
+產圖／改 pose 前走 **Loop C**（`Renpy_game/tools/loop-c.py S0N`）：指定才跑。拍點未鎖就停產圖；已鎖則查缺檔、孤兒、寫死 zoom、**對景（門／窗）人狗尺、同場兩眼距**。稿寫不新產 pose 時改出「要不要新圖」建議：現有 pose 讀得出就重用，讀不出蹲等／退縮／背對／探路（或稿表 pose 沒有 `image dog`）才考慮新產。S08 閃避拍不新產（`s08_explore`／`s08_startle`／`s08_resist`／`leash_yank`）。頭忽大忽小只改 `DOG_POSE_SCALE`。未說「產這張」不要重畫。
+
 | 現況 | 建議 |
 |------|------|
 | 文案還在改距離／睡姿 | **先停產圖**；pose 名稱會跟著變 |
@@ -99,7 +105,7 @@ designer 看體感 → tester 驗契約
 - **稿與程式漂移：** `section_*.md` 寫「側身穿胸背帶」，畫面已戴好牽繩——標為設計 P1，轉 visual-art＋script。
 - **資產孤兒：** `assets/` 有圖、`script.rpy` 沒 show；或 show 了缺檔。建議「用或刪」，不要留幽靈 pose。
 - **同場換 zoom：** `image_scale.md` 禁止用 zoom 假裝遠近。遠近只用 `far／mid／near` 與 `xalign`。
-- **旁白寫移動、畫面還站著：** 先拆拍與 pause，現有 pose 夠用就不產圖。S07：爪子 `s07_low`＠far → 走到床邊 `halfstep` → 被角 `ear_perk` → 回門 `guard_door`。S08：聞帶 `halfstep` → 門檻 `leash_wait` near／mid → 巷口 behind；硬拖留身後，勿走到人前面。
+- **旁白寫移動、畫面還站著：** 先拆拍與 pause，現有 pose 夠用就不產圖。S07：爪子 `s07_low`＠far → 走到床邊 `halfstep` → 被角 `ear_perk` → 回門 `guard_door`。S08：聞帶 `s08_sniff_harness` → 門檻 `s08_threshold` near／mid → 空車後 `s08_explore`＠`far_walk` 探路；引擎拉回 behind；硬拖留身後，勿再走到人前面。
 - **狗換 pose 像換了一隻：** 用頭當比例尺（§3.5），不要對齊 PNG 外框或全身 visH。
 - **文字寫外型：** 蜂蜜褐／長髮全章最多點一次（S02）。之後只寫碰到、聞到、停住。
 - **未鎖就平行開工：** 故事拍點未定，美術／音效應先出「待鎖定清單」，不要當定稿。
@@ -109,6 +115,7 @@ designer 看體感 → tester 驗契約
 - [ ] 這段只做**一件事**，信任拍只有一組
 - [ ] 選項前有蓄壓，選項後有狗身體回聲（不是內心結算）
 - [ ] 旁白每一個移動拍，畫面有對應 pose／`xalign`（見該段 `section_*.md`）；現有 pose 夠用就不新產
+- [x] **無字拍：** 突然靠近／出聲只留一句 cue，`window hide` 演完再 `window auto`（S02／S05／S06／S07／S08／S09）
 - [ ] 離場有鉤子，沒有第二件完整事件
 - [ ] 需要的 pose／bg／cue 已列名；缺的標「可暫用／必須新產」
 - [ ] 人／狗尺對 `image_scale.md`，沒在 `script.rpy` 寫死 zoom
@@ -178,6 +185,8 @@ S06 已落地：護衛後 `forehead_nudge`＠`dog_entrance_nudge_cu` → 回憶 
 
 S02、S08 是樣板。套到其他段時，仍守「一件事＋一個信任拍＋一個鉤子」。
 
+**無字拍（S08 閃避樣板｜2026-09-20 已落地 S02／S05／S06／S07／S09）：** 威脅只留一句 cue，接著 `window hide`：拉回／退縮／蹲下安慰，再 `window auto` 才出旁白與對白。不要在畫面還在動時先講「對不起／嚇到了嗎」。
+
 ### 4.4 圖文音同向
 
 | 查 | 不合格時建議 |
@@ -185,7 +194,7 @@ S02、S08 是樣板。套到其他段時，仍守「一件事＋一個信任拍�
 | 時段 bg | 夜戲誤用 day → 換 `image_bg.md` 對應檔，不調色混用 |
 | 狗距離 vs 文案 | 寫「走到床邊」卻開場就 `dog_near` → 拆拍、改 far／mid／near，不重寫整段、不新產 pose |
 | 同場狗大小 | 換 pose 頭變大／變小 → 改 `DOG_POSE_SCALE` 對齊頭距，不對 visH、不重畫「變大」 |
-| S08 人蹲／走 | 樹下切 `leash` 頭已接近 `walk`（visH 357／386）→ **不要**再縮蹲姿；狗躺／站 visH 差一倍是姿勢 |
+| S08 人蹲／走 | 閃避後切 `leash` 用 pose **0.70**（玄關 visH≈258，人／門≈0.60）；**不要**讓蹲姿跟人／門同高 |
 | 予安局部／不露全臉 | 對 `image_char.md`；勿為「看清楚」改成正臉大頭 |
 | 室內／室外衣櫃 | 梯廳／巷口／街／咖啡廳／後門＝樂福鞋；進屋後才襪。S06 禁毛衣＋襪、禁拖鞋 |
 | SFX | 一拍一次；S01 無狗聲；缺檔可靜默，不要合成 whimper |
@@ -193,7 +202,9 @@ S02、S08 是樣板。套到其他段時，仍守「一件事＋一個信任拍�
 
 **S07 圖文同向樣板：** 旁白寫爪子／走到床邊／咳嗽停住，畫面就拆 far→mid→near 與既有 pose（`s07_low`／`halfstep`／`ear_perk`／`chin_hover`／`guard_door`）；pause 只放轉折。完整拍點見 `section_07_sick_guard.md`。
 
-**S08 圖文同向樣板：** 旁白寫靠近又退、跨門檻、縮回腿後，畫面就拆玄關 far／mid／near 與巷口 behind／far／mid／near。扣帶前只用 `s04_low`／`halfstep`；巷口只用有背帶的 `s08_tense`／`leash_wait`。硬拖維持 `dog_behind_walk`。完整拍點見 `section_08_corner_walk.md`。
+**S08 圖文同向樣板：** 旁白寫靠近又退、聞帶、跨門檻、縮回腿後，畫面就拆玄關 far／mid／near 與巷口 behind／far／mid／near。扣帶前用 `s04_low`／`s08_halfstep`／`s08_sniff_harness`；門檻用 `s08_threshold`；巷口有背帶用 `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist`／`leash_wait`。閃避前：空車後 `s08_explore`＠`far_walk` 探路（低信任探得短）。引擎一句後 `window hide`：拉回 `s08_tense`＠behind、疊 `scooter-pass`、狗 `s08_startle`→`s08_resist`、人 `leash_yank`→`leash` 蹲下，再 `window auto` 出對不起。選 A 維持蹲。硬拖維持 `dog_behind_walk`。低信任空機車不進 `far_walk`；高信任空車只聞一次。完整拍點見 `section_08_corner_walk.md`。
+
+**S10 圖文同向樣板：** 留下玄關聞袋用 `paper_bag`（不新產）；客廳監工／聞繩用 `parallel` far→near；廚房 `kitchen_door`。結局 A `halfstep`→`back_sleep`，禁客廳喝水。結局 B `check_sleep`＠far → `drink_bowl` → `check_sleep`＠mid。C 空屋。D `door_edge`＠far。coda A 用 `parallel`，禁舊 `anxious`。完整拍點見 `section_10_share_the_key.md`。
 
 ### 4.5 第一印象與存檔節奏
 

@@ -94,6 +94,7 @@
 - B：`dog-check-sleep.png`
 - D：`dog-door-edge.png`
 - C 以空客廳與空掛勾為主，不強制顯示狗。
+- 玄關聞袋重用 S09 `dog-paper-bag-sniff.png`；結局 coda A 用 `parallel`，**禁**舊 `anxious` 1.575。
 
 ## 驗證
 
@@ -102,3 +103,30 @@
 - C 必須優先於所有 trust 判定。
 - 四結局皆經 `call ending_coda_finish(...)`（節拍 → 標題 → 解鎖提示 → aftercare），不顯示 Game Over。
 - 自動化：`python Renpy_game/tools/validate-s10.py`、`validate-all-endings.py`；報告見 `tester_s10_report.md`、`tester_all_endings_report.md`。
+- 結局 B／D 睡姿須在旁白說退開／回門邊時就 show；A 停電後不在客廳喝水。
+- 稿內直白餘韻只進隱藏內容，不貼進結局主場。
+
+### 旁白 × 狗移動（2026-09-19 鎖定｜不新產 pose）
+
+遠近只用具名 transform；**禁**新 PNG。C 空屋不 show 狗。扣帶／睡姿頭距沿用既有 scale。
+
+| 旁白拍 | pose | 位置 | SFX |
+|--------|------|------|-----|
+| 送走走回／空玄關／空客廳 | — | 無狗 | — |
+| 留下玄關聞紙袋 | `paper_bag` | `dog_entrance_mid` | `soft` |
+| 退半步讓脫鞋 | `parallel` | `dog_entrance_far` | — |
+| 客廳監工貼掛勾 | `parallel` | `dog_mid` | — |
+| 牽繩垂下後退、再靠近聞 | `parallel` | far→near | `sigh` |
+| 廚房門檻看新碗 | `kitchen_door` | `dog_kitchen_threshold` | —（解鎖回憶 `water_bowl`） |
+| 停電前客廳 | `parallel` | `dog_mid` | — |
+| 結局 A 靠近→背靠 | `halfstep`→`back_sleep` | mid→near | — |
+| 結局 B 退到沙發另一側 | `check_sleep` | `dog_far`（旁白前就 show） | — |
+| 結局 B 聞新水碗 | `drink_bowl` | `dog_mid` | — |
+| 結局 B 靠近睡、回頭看 | `check_sleep` | `dog_mid` | — |
+| 結局 D 立刻回到門邊 | `door_edge` | `dog_far`（旁白前就 show） | — |
+| 結局 C 停電空鏡 | — | 空掛勾；`pause` 在停電拍 | — |
+| 結局 coda A 開場 | `parallel` | `dog_far` | — |
+
+---
+
+*更新：2026-09-19｜聞袋重用 `paper_bag`；B 加 `drink_bowl`；coda A 改 `parallel`；禁舊 anxious*

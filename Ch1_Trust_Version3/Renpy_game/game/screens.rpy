@@ -408,6 +408,21 @@ screen s07_phone_photo():
             xalign 0.5
 
 
+## S08 週一鉤子：停等路徑，旁白提到鞋邊照後才淡入（重用既有回憶圖，不新產）
+screen s08_phone_photo():
+    zorder 40
+    add Solid("#17120F55")
+    frame:
+        background Solid("#1C1612F2")
+        padding (12, 12, 12, 18)
+        xalign 0.5
+        yalign 0.34
+        add "gallery/secret-shoe-sleep.png":
+            xysize (680, 454)
+            fit "contain"
+            xalign 0.5
+
+
 screen hidden_content_gallery():
     tag menu
 

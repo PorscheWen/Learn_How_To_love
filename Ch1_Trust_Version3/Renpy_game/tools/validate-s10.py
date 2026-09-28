@@ -215,14 +215,28 @@ c = label_slice(script, "ending_ch1_handed_over", ["ending_ch1_thin_ice"])
 d = label_slice(script, "ending_ch1_thin_ice", ["ending_aftercare"])
 if "show dog back_sleep at dog_near" not in a:
     fail("結局 A 缺 back_sleep@dog_near")
+if "show dog drink_bowl" in a:
+    fail("結局 A 停電後不在客廳喝水（碗在廚房）")
+if "show dog anxious" in endings_rpy:
+    fail("結局 coda 禁舊 anxious（1.575）；coda A 用 parallel")
+if "show dog drink_bowl" not in b:
+    fail("結局 B 聞新水碗須 drink_bowl（重用，不新產）")
 if "show dog check_sleep at dog_mid" not in b:
     fail("結局 B 缺 check_sleep@dog_mid")
+if "show dog check_sleep at dog_far" not in b:
+    fail("結局 B 退開時須先 check_sleep@far")
+if b.find("show dog check_sleep") > b.find("退到沙發另一側"):
+    fail("結局 B 睡姿須在旁白說退開時已在場")
 if re.search(r"^\s*show dog\b", c, re.M):
     fail("結局 C 敘事不應 show dog（空屋契約）")
 if "show dog door_edge at dog_far" not in d:
     fail("結局 D 缺 door_edge@dog_far")
+if d.find("show dog door_edge") > d.find("立刻回到門邊"):
+    fail("結局 D 睡姿須在旁白說回門邊時已在場")
 if "s08_forced_walk" not in b:
     fail("結局 B 缺 s08_forced_walk 回聲分支")
+if "睡不近" in (s10 + a + b + d) or "薄冰沒有忽然變厚" in (s10 + a + b + d + script):
+    fail("S10 玩家可見旁白禁直說睡姿／薄冰結算句")
 ok("睡姿／距離／C 無狗／B 硬拖回聲契約通過")
 
 # --- 共通句 ---
@@ -265,6 +279,8 @@ else:
 # --- 閱讀時間（分路徑，不含雙分支灌水）---
 stay = extract_s10_paths(s10)[1]
 give = extract_s10_paths(s10)[0]
+if "show dog paper_bag" not in stay:
+    fail("S10 留下玄關須 paper_bag 聞紙袋（重用 S09，不新產）")
 routes = {
     "S10-A": (stay, a),
     "S10-B": (stay, b),

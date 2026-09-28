@@ -49,32 +49,9 @@ def load_token():
     return load_env_value("ACEDATA_API_TOKEN")
 
 
-def report_balance():
-    """查詢並顯示剩餘積分。需要平台 Token（ACEDATA_PLATFORM_TOKEN，
-    與 API Token 不同，於控制台「平台令牌」頁建立）。查不到時靜默略過。"""
-    platform_token = load_env_value("ACEDATA_PLATFORM_TOKEN")
-    if not platform_token:
-        print("[餘額] 未設定 ACEDATA_PLATFORM_TOKEN，無法查詢剩餘積分"
-              "（到 platform.acedata.cloud 控制台建立平台令牌後寫入 tools\\.env）")
-        return
-    req = urllib.request.Request(
-        "https://platform.acedata.cloud/api/v1/applications/?user_id=me&limit=100",
-        headers={"accept": "application/json",
-                 "authorization": f"Bearer {platform_token}"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-    except Exception as e:  # 查餘額失敗不影響主流程
-        print(f"[餘額] 查詢失敗（不影響生成結果）：{e}")
-        return
-    items = data.get("items") or data.get("results") or []
-    total = 0.0
-    for app in items:
-        amt = app.get("remaining_amount")
-        if isinstance(amt, (int, float)):
-            total += amt
-    print(f"[餘額] 剩餘積分：{total:.2f} Credits（約 ${total * 0.095215:.2f} USD）")
+def report_balance(when=""):
+    from acedata_account import report_account
+    report_account(when)
 
 
 def image_to_data_url(path):
@@ -186,6 +163,7 @@ def main():
     if not token:
         sys.exit("[錯誤] 未設定 ACEDATA_API_TOKEN。請設環境變數，或在 tools\\.env 寫入：\n"
                  "  ACEDATA_API_TOKEN=你的token")
+    report_balance("開始")
 
     role_map = {"first": "first_frame", "reference": "reference_image", "last": "last_frame"}
     pad_ratio = args.ratio if args.pad else None
@@ -214,30 +192,32 @@ def main():
     print(f"[送出] model={args.model} duration={args.duration}s resolution={args.resolution}")
     print("[等待] 生成約需 1~2 分鐘，請稍候…")
     t0 = time.time()
-    result = post_json(API_URL, payload, token, timeout=600)
+    try:
+        result = post_json(API_URL, payload, token, timeout=600)
 
-    if not result.get("success"):
-        sys.exit(f"[錯誤] 生成失敗：{json.dumps(result, ensure_ascii=False)}")
+        if not result.get("success"):
+            sys.exit(f"[錯誤] 生成失敗：{json.dumps(result, ensure_ascii=False)}")
 
-    data = result.get("data", {})
-    video_url = data.get("video_url")
-    if not video_url:
-        sys.exit(f"[錯誤] 回應中沒有 video_url：{json.dumps(result, ensure_ascii=False)}")
+        data = result.get("data", {})
+        video_url = data.get("video_url")
+        if not video_url:
+            sys.exit(f"[錯誤] 回應中沒有 video_url：{json.dumps(result, ensure_ascii=False)}")
 
-    out_path = args.out
-    if not out_path:
-        out_dir = os.path.join(TOOLS_DIR, "output", "seedance")
-        os.makedirs(out_dir, exist_ok=True)
-        out_path = os.path.join(out_dir, time.strftime("%Y%m%d-%H%M%S") + ".mp4")
-    else:
-        os.makedirs(os.path.dirname(os.path.abspath(out_path)) or ".", exist_ok=True)
+        out_path = args.out
+        if not out_path:
+            out_dir = os.path.join(TOOLS_DIR, "output", "seedance")
+            os.makedirs(out_dir, exist_ok=True)
+            out_path = os.path.join(out_dir, time.strftime("%Y%m%d-%H%M%S") + ".mp4")
+        else:
+            os.makedirs(os.path.dirname(os.path.abspath(out_path)) or ".", exist_ok=True)
 
-    print(f"[下載] {video_url}")
-    download(video_url, out_path)
-    elapsed = time.time() - t0
-    print(f"[完成] {out_path}（耗時 {elapsed:.0f} 秒）")
-    print("[提醒] 影片連結 24 小時後失效，檔案已下載到本地。")
-    report_balance()
+        print(f"[下載] {video_url}")
+        download(video_url, out_path)
+        elapsed = time.time() - t0
+        print(f"[完成] {out_path}（耗時 {elapsed:.0f} 秒）")
+        print("[提醒] 影片連結 24 小時後失效，檔案已下載到本地。")
+    finally:
+        report_balance("完成")
 
 
 if __name__ == "__main__":

@@ -22,10 +22,19 @@
 | 存檔 | 各 Section 信任選擇前後、閘門前後、S09 留下／送走前各存一檔；讀檔確認 `trust`／三軸／flags |
 | 章節 | 若有選章：S01～S10 皆可進；跳關後信任預設須合理（勿直接滿 12） |
 
-### 自動化腳本（落地後必跑）
+### 自動化腳本（落地後必跑＝Loop A）
+
+改完才跑，無計時器。入口：
 
 ```powershell
 cd Renpy_game
+$env:PYTHONIOENCODING = "utf-8"
+python tools/validate-a.py --files <本次改的檔>
+```
+
+核心四支由入口代跑；閱讀時長另加 `--reading`。也可單支：
+
+```powershell
 python tools/validate-s01.py
 python tools/validate-reading-time.py
 python tools/validate-s10.py
@@ -337,12 +346,17 @@ S03～S10 對照各自 `section_*.md`；四結局條件以 `game_guild.md` §3 �
 - [ ] S07 選 B：客廳 `s05_ear_flat`＠`dog_sick_far`→`dog_sick_sofa`；**回臥室改 `s07_low`**，頭不再縮小
 - [ ] S07 倒水後非關客廳：`halfstep`＠far → `guard_door`＠mid；天亮 `dog_bedroom_shift`
 - [ ] S07 指尖：`nose_tip`＠`dog_bedroom_nose_cu`（只留 bg＋特寫）；頭不比 `guard_door` 小；解鎖回憶 `nose_touch`
-- [ ] S08 扣帶前狗身上無胸背帶（`s04_low`／`halfstep`）；扣上後才 `harness_bite`／`leash_wait`
-- [ ] S08 玄關：鼻尖靠近再退 far；門檻 `leash_wait` near→mid→near（不是開縫就站在門外）
-- [ ] S08 巷口：開場 `s08_tense`＠behind；空機車 far_walk→縮回 behind；硬拖**維持 behind**，不是 `far_walk` 走到人前面
-- [ ] S08 人／狗尺：玄關 leash 0.33／狗 0.128；巷口 walk 0.32／狗 0.124。躺姿可比站姿矮，頭不縮成另一隻；樹下蹲不比走姿小臉。勿用 `s07_low`、勿用 `street_tense`
-- [ ] S08 鞋邊睡：繞腳 `halfstep` 後予安先 hide，畫面只有一雙鞋；`leash` 與 `walk` 同為外出襯衫＋棕色鞋
-- [ ] S08 下午：狗在玄關 `halfstep` 聞地上胸背帶（予安不入鏡），不是空客廳
+- [ ] S08 扣帶前狗身上無胸背帶（`s04_low`／`halfstep`／`s08_sniff_harness`）；扣上後才 `harness_bite`／`leash_wait`／`s08_threshold`
+- [ ] S08 玄關：鼻尖靠近再退 far；聞帶 `s08_sniff_harness`；門檻 `s08_threshold` near→mid→near（不是開縫就站在門外、不是坐等）
+- [ ] S08 巷口：開場 `s08_tense`＠behind（側身縮、有胸背帶）；低信任空機車 mid→behind、**不進** `far_walk`；高信任只聞一次再 near→behind；硬拖**維持 behind**，不是 `far_walk` 走到人前面；巷口不用 `s08_sniff_harness`
+- [ ] S08 機車無字拍：`s08_startle`（驚嚇）→ `s08_resist`（抗拒走）→ `leash_yank` → `leash`；兩邊都面左，狗＠behind 0.88、人＠0.74
+- [ ] S08 人／狗尺：玄關 leash 0.33×0.70（蹲，不可幾乎跟門一樣高）／狗 0.128；巷口 walk 0.32／狗 0.124。躺姿可比站姿矮，頭不縮成另一隻。勿用 `s07_low`、勿用 `street_tense`
+- [ ] S08 鞋邊睡：繞腳 `s08_halfstep` 後予安先 hide，畫面只有一雙鞋；`leash` 與 `walk` 同為外出襯衫＋棕色鞋
+- [ ] S08 下午：狗在玄關 `s08_sniff_harness` 聞地上胸背帶（予安不入鏡），不是空客廳
+- [ ] S10 留下玄關：聞紙袋用 `paper_bag`（重用 S09），再 `parallel`＠far 讓脫鞋；聞垂下牽繩 far→near
+- [ ] S10 結局 A：`halfstep`→`back_sleep`＠near；**不**在客廳 `drink_bowl`；coda 開場 `parallel`，不用舊 `anxious`
+- [ ] S10 結局 B：旁白「退到沙發另一側」前已 `check_sleep`＠far；聞碗 `drink_bowl`＠mid；再 `check_sleep`＠mid
+- [ ] S10 結局 C 無狗；D `door_edge`＠far 在旁白回門邊前已在場
 
 發現重疊時寫：
 

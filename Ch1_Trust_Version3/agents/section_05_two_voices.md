@@ -88,4 +88,5 @@
 - **Ren'Py 契約：** `dog_label`／`proposed_name` 使用 `default`；`renpy.input()` 對應 `screen input(prompt)` 與 `input id "input"`，避免取名時 crash。
 - **BGM：** `calm`（早會）→ `tender`（拿下耳機／嗅線）。
 - **銜接 S06：** 本段不開門見鄰居；第三者第一次看見養狗在樓梯間。
+- **無字拍（2026-09-20）：** 選 B「下去。」後 `window hide` 看 `s05_ear_flat`＠far，再旁白。不新產 PNG。
 

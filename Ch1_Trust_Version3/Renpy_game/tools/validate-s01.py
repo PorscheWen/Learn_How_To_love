@@ -16,6 +16,16 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def _hide_before(block: str, cue: str, until: str, message: str) -> None:
+    """無字拍：cue 之後、until 之前必須有 window hide。"""
+    if cue not in block:
+        fail(message + f"（找不到「{cue}」）")
+    chunk = block.split(cue, 1)[1]
+    head = chunk.split(until, 1)[0] if until in chunk else chunk
+    if "window hide" not in head:
+        fail(message)
+
+
 if not SCRIPT.exists():
     fail(f"找不到 {SCRIPT}")
 
@@ -116,6 +126,12 @@ required = {
     "S08 return flag": 'flags["s08_returned_early"] = True',
     "S08 tense pose": "show dog s08_tense",
     "S08 wait pose": "show dog leash_wait",
+    "S08 sniff pose": "show dog s08_sniff_harness",
+    "S08 threshold pose": "show dog s08_threshold",
+    "S08 explore pose": "show dog s08_explore at dog_far_walk",
+    "S08 startle pose": "show dog s08_startle",
+    "S08 resist pose": "show dog s08_resist",
+    "S08 yank pose": "show yuan leash_yank",
     "S08 walk pose": "show yuan walk",
     "S08 behind pose": "dog_behind_walk",
     "S08 entrance bg": "scene bg entrance_day",
@@ -136,7 +152,7 @@ required = {
     "S09 stay flag": 'flags["s09_stayed"] = True',
     "S09 handover flag": 'flags["gave_away"] = True',
     "S09 refuse pose": "show dog cafe_refuse at dog_cafe_near_guard",
-    "S09 entrance out": "這次開門，不是散步，是去見另一個人",
+    "S09 entrance out": "這次開門，前面不是巷口的樹。門把貼著掌心發涼。",
     "S10 title call": 'show_section_title("Section 10", "把鑰匙分給心跳")',
     "ending A": "label ending_ch1_back_to_back:",
     "ending B": "label ending_ch1_chosen_learning:",
@@ -145,6 +161,7 @@ required = {
     "ending A pose": "show dog back_sleep",
     "ending B pose": "show dog check_sleep",
     "ending D pose": "show dog door_edge",
+    "S10 bag pose": "show dog paper_bag",
     "ending unlock A": 'process_ending_unlock("A"',
     "ending unlock B": 'process_ending_unlock("B"',
     "ending unlock C": 'process_ending_unlock("C"',
@@ -244,6 +261,14 @@ if 'play_bgm("melancholy"' in _s02_after_tender:
     fail("S02 BGM 收束不得在 tender 後切回 melancholy（避免反覆換曲）")
 if 'elif flags.get("s02_conscience_return", False):' not in s02:
     fail("S02 良心回頭必須有獨立的距離／喝水反應鏡頭")
+_hide_before(
+    s02, "蹲下，側身等待", 'ya "嚇到了嗎。"',
+    "S02 蹲等須 window hide 後才出「嚇到了嗎」",
+)
+_hide_before(
+    s02, "手臂伸過去", "狗整隻縮成一團",
+    "S02 硬抓須 window hide 後才寫牠縮",
+)
 
 s03 = text.split(
     "label section_03_gate_temp_border:", 1
@@ -291,6 +316,10 @@ if "show dog sniff_wire at dog_living_wire_cu" not in s05:
     fail("S05 會後嗅線須用 dog_living_wire_cu（只留 bg＋特寫）")
 if 'unlock_secret_photo("sniff_wire")' not in s05:
     fail("S05 會後嗅線特寫必須解鎖回憶 sniff_wire")
+_hide_before(
+    s05, 'ya "下去。"', "兩個字又快又直",
+    "S05 「下去。」後須 window hide 再旁白",
+)
 
 s06 = text.split(
     "label section_06_corridor_third_person:", 1
@@ -332,6 +361,18 @@ if "show dog forehead_nudge at dog_entrance_mid" in s06:
     fail("S06 頂額禁地板 dog_entrance_mid")
 if "show dog forehead_nudge at dog_nudge" in s06:
     fail("S06 頂額禁客廳 dog_nudge")
+_hide_before(
+    s06, "離狗又近了一點", "膠帶撕開",
+    "S06 伸手／膠帶須 window hide 後才旁白",
+)
+_hide_before(
+    s06, "無字拍：先站到中間", "不好意思，牠還在適應",
+    "S06 選 A 須 window hide 擋人後才出「還在適應」",
+)
+_hide_before(
+    s06, "輕一點就好", "手掌落下時",
+    "S06 選 B 須 window hide 後才寫僵住",
+)
 
 s07 = text.split(
     "label section_07_sick_guard:", 1
@@ -377,6 +418,18 @@ if "s07_phone_photo" not in _office or 'unlock_secret_photo("door_sleep")' not i
 _before_photo = _office.split("show screen s07_phone_photo", 1)[0]
 if "點進手機相簿" not in _before_photo:
     fail("S07 門邊照須在旁白提到相簿之後才顯示")
+_hide_before(
+    s07, "又因她突然咳嗽停住", "低頭聞自己的腳",
+    "S07 咳嗽後須 window hide 再旁白",
+)
+_hide_before(
+    s07, "伸手，讓牠聞得到", 'ya "我還在。只是有點不舒服。"',
+    "S07 選 A 須 window hide 後才出「我還在」",
+)
+_hide_before(
+    s07, "吵死了", "門闔上的聲音不大",
+    "S07 選 B 須 window hide 換場後再旁白",
+)
 
 s08 = text.split(
     "label section_08_corner_walk:", 1
@@ -395,16 +448,79 @@ if "jump section_09_almost_handoff" not in s08:
 if "牠走了兩步又停" not in s08 or "等繩子垂回鬆弧" not in s08:
     fail("S08 中信任軟分軌必須有可見的停等與鬆弧回聲")
 if "一張門邊的照片" not in s08 or "靠著鞋睡著的照片" not in s08:
-    fail("S08 週一鉤子必須區分硬拖門邊照與非硬拖鞋邊睡照")
+    fail("S08 週一鉤子必須區分硬拖門邊照與停等鞋邊睡照")
+if "一張大門前的照片" not in s08:
+    fail("S08 週一鉤子必須區分提早回家的大門／轉角照")
 if "show dog street_tense" in s08:
     fail("S08 巷口須用 s08_tense（有胸背帶）；解帶後用 s04_low，勿用客廳 street_tense")
 if "show dog s08_tense" not in s08:
     fail("S08 巷口受驚必須 s08_tense")
+if "show dog s08_startle" not in s08:
+    fail("S08 機車衝出後須 s08_startle（驚嚇）")
+if "show dog s08_resist" not in s08:
+    fail("S08 機車衝出後須 s08_resist（抗拒走、牽繩繃緊）")
+if "show yuan leash_yank" not in s08:
+    fail("S08 機車衝出後須 leash_yank（被帶半步）再切 leash")
+if "show dog s08_explore at dog_far_walk" not in s08:
+    fail("S08 巷口探路須 s08_explore＠far_walk")
 _pre_harness = s08.split("show dog harness_bite", 1)[0]
 if "show dog leash_wait" in _pre_harness:
     fail("S08 扣帶前禁 leash_wait（已穿胸背帶）")
+if "show dog s08_threshold" in _pre_harness:
+    fail("S08 扣帶前禁 s08_threshold（已穿胸背帶）")
+_alley = s08.split("scene bg alley_day", 1)[-1].split("scene bg entrance_day", 1)[0]
+if "show dog s08_sniff_harness" in _alley:
+    fail("S08 巷口禁 s08_sniff_harness（地上胸背帶道具，身上無背帶）")
 if "hide yuan" not in s08.split("show dog shoe_sleep", 1)[0][-80:]:
     fail("S08 鞋邊睡須先 hide yuan，避免雙重鞋")
+if "show dog s08_tense at dog_far_walk" in s08:
+    fail("S08 空機車公共拍勿把 s08_tense 拉到 far_walk（低信任須留身後）")
+if 'play_bgm("tense"' not in s08.split("show scooter pass", 1)[0]:
+    fail("S08 機車出現前必須 play_bgm tense")
+if not re.search(r'"tense":\s*\("audio/tense-2\.ogg"', text):
+    fail("S08 tense 須用備用曲 tense-2.ogg")
+if not re.search(r'"almost_gave":\s*\("audio/tense\.ogg"', text):
+    fail("S09 almost_gave 須用原 tense.ogg")
+_s08_office = s08.split("scene bg office_night", 1)[-1]
+if "靠著鞋睡著的照片" in _s08_office:
+    _after_shoe = _s08_office.split("靠著鞋睡著的照片", 1)[1]
+    if "s08_phone_photo" not in _after_shoe:
+        fail("S08 停等鞋邊照須在旁白提到後才顯示")
+    _before_shoe = _s08_office.split("靠著鞋睡著的照片", 1)[0]
+    if "s08_returned_early" in _before_shoe:
+        _early = _before_shoe.split("s08_returned_early", 1)[1]
+        if "s08_phone_photo" in _early:
+            fail("S08 提早回家週一鉤子不顯示鞋邊睡 overlay")
+if "走到樹下側身蹲著" in s08:
+    fail("S08 選 A 須維持蹲，不得再走到樹下才蹲")
+if "把視線移開，繼續蹲著等牠自己決定下一步" not in s08:
+    fail("S08 選 A 須繼續蹲著等")
+_dodge = s08.split("轉角那邊先傳來引擎聲", 1)[-1]
+_silent = _dodge.split("window auto", 1)[0]
+if "window hide" not in _silent:
+    fail("S08 引擎後須 window hide，window auto 後才出對不起")
+if "show dog s08_startle" not in _silent:
+    fail("S08 s08_startle 須在無字拍內（window auto 前）")
+if "show dog s08_resist" not in _silent:
+    fail("S08 s08_resist 須在無字拍內（window auto 前）")
+if _silent.find("show dog s08_startle") > _silent.find("show dog s08_resist"):
+    fail("S08 無字拍須先 s08_startle 再 s08_resist")
+if "show yuan leash_yank" not in _silent or "show yuan leash" not in _silent:
+    fail("S08 無字拍內須 leash_yank 再切 leash")
+_after_dodge = _dodge.split("window auto", 1)[-1]
+if "前腳抬起來" in _after_dodge.split("menu:", 1)[0]:
+    fail("S08 無字拍後旁白須對齊 s08_resist（前腳收回），勿再寫抬腳")
+if "再退半步" in _after_dodge.split("menu:", 1)[0]:
+    fail("S08 狗已在 behind，旁白禁再退半步")
+_wait = _after_dodge.split("把視線移開，繼續蹲著等牠自己決定下一步", 1)[-1].split(
+    "既然都出門了，拉著牠把一圈走完", 1
+)[0]
+if "show dog s08_tense at dog_behind_walk" not in _wait:
+    fail("S08 選 A 須先 s08_tense＠behind 再 leash_wait")
+if _wait.find("show dog s08_tense at dog_behind_walk") > _wait.find(
+    "show dog leash_wait at dog_mid_walk"
+):
+    fail("S08 選 A 須先 tense＠behind 再 leash_wait＠mid")
 
 s09 = text.split(
     "label section_09_almost_handoff:", 1
@@ -418,6 +534,29 @@ if 'flags["gave_away"] = False' not in s09 or 'flags["gave_away"] = True' not in
     fail("S09 必須完整寫入留下／送走旗標")
 if "jump section_10_share_the_key" not in s09:
     fail("S09 所有硬分歧都必須進 S10")
+_living_day = s09.split("scene bg living_day", 1)[-1]
+_kneel = "臨走前，她在客廳地板蹲下來"
+if _kneel not in _living_day:
+    fail("S09 週六須有臨走前告別拍")
+if _living_day.find("show yuan farewell") < _living_day.find(_kneel):
+    fail("S09 告別跪姿須在臨走前攤手之後")
+if "show yuan home_stand" not in _living_day.split(_kneel, 1)[0]:
+    fail("S09 週六打包須先室內站，不得開場就是 farewell")
+_give = s09.split("照原先的安排", 1)[-1]
+if _give.find("show yuan leash_pass") > _give.find("放進同事手裡"):
+    fail("S09 送走 leash_pass 須與交繩同拍，不可在繩已交出之後")
+if "s08_phone_photo" in s09 or "show dog shoe_sleep" in s09:
+    fail("鞋邊睡圖只在 S08 尾（返家 pose／週一手機）；S09 不得再 overlay")
+if "s09_stay_from_tense" not in s09 or "dog_cafe_mid" not in s09.split("s09_stay_from_tense", 1)[-1]:
+    fail("S09 低信任留下須先 mid 停拍再貼鞋")
+_hide_before(
+    s09, "把手留在膝上", "貼住予安的鞋",
+    "S09 同事伸手須 window hide 再旁白",
+)
+_hide_before(
+    s09, "照原先的安排", "放進同事手裡",
+    "S09 交繩須 window hide 後才寫放進手裡",
+)
 
 s10 = text.split("label section_10_share_the_key:", 1)[1]
 if re.search(r"\$\s*(trust|dist|tone|guard)\s*[+\-*/]?=", s10):

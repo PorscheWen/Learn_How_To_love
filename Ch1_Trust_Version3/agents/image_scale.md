@@ -23,7 +23,7 @@
 同場、同一 `dog_zoom` 下，玩家認的是臉。**新 pose、新場、重校：用頭當參考，不要對齊 PNG 外框、content bbox、胸寬、或 visH px。**
 
 1. 先鎖該場**母尺 pose**（在場最久、或該場標準站／趴）。
-2. 截同 zoom 畫面，比**耳根到下巴**或**兩耳之間頭寬**（整場只用一種）。
+2. 截同 zoom 畫面，比**耳根到下巴**或**兩耳之間頭寬**（整場只用一種）。Loop C 在兩眼都抓到時用**兩眼距**當頭距；畫布不同但臉畫一樣大、螢幕頭卻跳 → 只改該 pose 的 `DOG_POSE_SCALE`。
 3. 只改該 pose 的 `DOG_POSE_SCALE`。遠近仍只改 `xalign`。
 4. 同 PNG、不同裁切 → 另開標籤，勿改他場數字（S07 `s07_low` 0.43 vs S04 `s04_low` 0.369）。
 5. **禁止**把站姿 visH 硬拉齊趴姿 visH（頭會縮小，或整隻變巨犬）。
@@ -33,7 +33,7 @@
 | S02 後門 | `s04-anxious` **0.551** | 新 pose 用頭對齊此張 |
 | S06 走廊 | `s06-retreat` **0.557** | 已頭距 |
 | S07 臥室 | `guard_door` **0.438** | `s07_low` 0.43；指尖 `nose_tip` 0.65＠`bedroom_nose` 0.30；禁 `s05_ear_flat` 回房 |
-| S08 巷口 | `leash_wait`／`s08_tense` | 已頭距；visH 見 §S08 確認；硬拖維持 behind |
+| S08 巷口 | `leash_wait`／`s08_tense` | `leash_wait` **0.677**／`s08_tense` **0.903**；visH 見 §S08 確認；硬拖維持 behind |
 | S09／S10 等 | 該場先鎖母尺 pose | **新 pose／重校一律頭距** |
 | S04／S05 客廳 | 未重校前暫沿舊 visH 表 | **新建議禁止再開 63／76px 標靶** |
 
@@ -70,7 +70,7 @@
 | **S05 早會** | chair-paw／stuck／ear_flat／stair_watch | **0.401／0.472／0.409／0.615** | 站姿約 76px（趴 63px 的 1.2 倍）；head-up 0.332／s05_anxious 0.369；sniff-wire 幀 0.605、靜態 0.401。會後特寫 zoom `living_wire` **0.30**。S06 開場 `s05_stair_watch` 另用 **0.82**（走廊頭距） |
 | **S06 走廊人** | `carry_pup` | **1.056** | 對齊鄰居 idle 可見高（約 435px＠0.36）；`door_hold`／`block` 重產後約 1.0。彎腰 `neighbor lower` 可略矮 |
 | **S07 臥室狗** | `s07_low`／`guard_door`／`nose_tip` | **0.43／0.438／0.65** | 頭距母尺 guard_door；指尖特寫 zoom **0.30**（`bedroom_nose`）。禁 `s05_ear_flat` 回房 |
-| **S08 巷口狗** | `s08_tense`／`leash_wait`／`harness_bite` | **0.572／0.556／0.572** | 頭距；站 visH 可低於坐。遠近只改 xalign。禁 `street_tense` 0.808。人／狗 visH 見 §S08 確認 |
+| **S08 巷口狗** | `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist`／`leash_wait`／`s08_threshold`／`s08_sniff_harness` | **0.903／0.903／0.903／0.903／0.677／0.410／0.416** | `leash_wait` 頭距對齊玄關開場 `s08_halfstep`。門檻／聞帶維持無繩尺。遠近只改 xalign。禁 `street_tense` 0.808。聞帶禁巷口。人／狗 visH 見 §S08 確認 |
 
 **同場遠近禁止換 zoom**，只用 `xalign`。
 
@@ -195,7 +195,7 @@ dog_zoom = round(char_zoom * 0.12 / 0.31, 3)   # ≈ char × 0.387；可見高 �
 
 | 人現行 | 狗現行 | 備註 |
 |--------|--------|------|
-| 日常 `char_right_entrance` **0.33** | **0.128**；S06 頂額 `entrance_nudge` **0.28** | S08／S09 同尺。S08 狗 xalign：far **0.60**／mid **0.66**／near **0.70**。人蹲 `leash`，見 §S08 確認。S06 護衛後 `forehead_nudge`＠`dog_entrance_nudge_cu`（hide 予安） |
+| 日常 `char_right_entrance` **0.33** | **0.128**；S06 頂額 `entrance_nudge` **0.28** | S08 狗 xalign：far **0.54**／to_yuan **0.58**／mid **0.62**／near **0.66**（鞋櫃與予安之間、靠近牽繩）。S09 仍 far **0.60**／mid **0.66**／near **0.70**。人蹲 `leash`，見 §S08 確認。S06 護衛後 `forehead_nudge`＠`dog_entrance_nudge_cu`（hide 予安） |
 | S02 抱走 `char_entrance_carry` **0.33** | 合成 | 大門／鞋櫃 |
 
 ### 走廊／護衛 `corridor`
@@ -216,30 +216,33 @@ dog_zoom = round(char_zoom * 0.12 / 0.31, 3)   # ≈ char × 0.387；可見高 �
 
 | 場 | 人 | 狗場景尺 | 人 visH | 狗 visH（代表 pose） | 幼犬／人 |
 |----|----|----------|---------|----------------------|----------|
-| 玄關 | `leash` 蹲＠`char_right_s08` **0.33** | **0.128**；腳 `ypos 0.87`（人 0.80） | **368** | 躺 `s04_low` **58**／站 `halfstep` **111**／坐 `leash_wait` **74** | 站 ≈ **0.30**（幼犬比 0.28～0.37） |
-| 巷口 | `walk`＠`char_right_walk` **0.32** | **0.124**；人狗腳同 `ypos 0.80` | 走 **386** | `s08_tense` **64**／`leash_wait` **72** | 站／坐頭距已對 |
-| 巷口樹下 | 切回 `leash`，**仍 alley 0.32** | 同上 | 蹲 **357** | 跟上 `leash_wait` **72** | 蹲／走頭 **136～147**，`CHAR_POSE_SCALE` **1.0** |
+| 玄關 | `leash` 蹲＠`char_right_s08` **0.33**×pose **0.70** | **0.128**；腳 `ypos 0.87`（人 0.80） | **258** | 躺 `s04_low` **58**／站 `s08_halfstep` **102**／坐 `leash_wait` **90** | `leash_wait` 頭對齊 halfstep；蹲人／門 ≈ **0.60** |
+| 巷口 | `walk`／`leash_yank`＠`char_right_walk` **0.32** | **0.124**；人狗腳同 `ypos 0.80` | 走 **386** | `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` **87**／`leash_wait` **87** | `leash_wait` 頭對齊玄關 halfstep；`leash_yank` pose **0.75** |
+| 巷口樹下 | 切回 `leash`，**仍 alley 0.32**×pose **0.70** | 同上 | 蹲 **250** | 跟上 `leash_wait` **87** | 蹲人矮於站姿 walk；頭仍可讀 |
 | 辦公室週一 | `headphones` **0.28** | 無狗 | **331** | — | — |
 
-**狗 pose（頭距母尺＝`leash_wait` 0.556／`s08_tense` 0.572）：**
+**狗 pose（頭距母尺＝開場 `s08_halfstep`；`leash_wait` **0.677** 對齊此張／`s08_tense` 0.903）：**
 
 | 標籤 | scale | visH＠該場 | 鎖定 |
 |------|-------|------------|------|
-| `s04_low` | **0.369** | 玄關躺 **58** | 與 `shoe_sleep` 0.414 同為橫躺 visH≈55～58。**禁**改客廳 `s04_low`；**禁**拿 S07 `s07_low` 0.43 進玄關 |
-| `halfstep` | **0.580** | 玄關站 **111** | 躺→站 visH 約一半是姿勢，不是縮放跳號 |
-| `harness_bite`／`leash_wait`／`drink_bowl` | **0.572／0.556／0.564** | 74／74／64 | 扣帶後族；喝水低頭 visH 略矮 |
-| `s08_tense` | **0.572** | 巷口站 **64** | 可低於坐姿 `leash_wait` 72（頭距優先）。**禁**把站 visH 拉齊坐姿、禁 `street_tense` 0.808 |
-| `shoe_sleep` | **0.414** | 躺 **55** | 先 hide yuan |
+| `s04_low` | **0.369** | 玄關躺 **58** | 橫躺 visH≈58。**禁**改客廳 `s04_low`；**禁**拿 S07 `s07_low` 0.43 進玄關 |
+| `s08_halfstep` | **0.529** | 玄關站 **102** | 同 PNG `halfstep`；S08 開場頭距母尺。**禁**改全域 0.580 |
+| `halfstep` | **0.580** | （S02／S07／S10） | S08 不用此尺 |
+| `harness_bite`／`leash_wait`／`drink_bowl` | **0.658／0.677／0.564** | 78／90／66 | `leash_wait` 頭對齊 halfstep；喝水低頭 visH 略矮（**不**用兩眼距拉大） |
+| `s08_tense`／`s08_explore`／`s08_startle`／`s08_resist` | **0.903** | 巷口站 **87** | 864 畫布；牽繩族 +15%。`s08_explore` 探路；`s08_startle` 驚嚇、`s08_resist` 抗拒走。**禁** `street_tense` 0.808 |
+| `s08_threshold` | **0.410** | 玄關站半跨 | 864×1152 無繩尺；只改 xalign |
+| `s08_sniff_harness` | **0.416** | 低頭聞帶 | 864×1152 無繩尺；**禁**巷口 |
+| `shoe_sleep` | **0.414** | 躺 **55** | 對齊 `s04_low` 橫躺 visH；先 hide yuan |
 
-**人：** `leash`／`walk` 皆 `CHAR_POSE_SCALE` **1.0**。樹下蹲 visH 只少約 8%，頭幾乎同大——保持可讀，**不要**為「蹲比較矮」再縮人。
+**人：** `walk` 站姿 `CHAR_POSE_SCALE` **1.0**。`leash_yank` 864 畫布站姿 **0.75**。蹲姿 `leash`／`squat_side` **0.70**（864 畫布幾乎填滿，1.0 會讓 visH 接近大門）。樹下切蹲仍 alley 0.32，但吃 0.70。
 
-**禁止：** 用 zoom 假裝遠近；為玄關去改客廳 `s04_low`；巷口用無背帶 pose。
+**禁止：** 用 zoom 假裝遠近；為玄關去改客廳 `s04_low`；巷口用無背帶 pose；蹲姿跟人／門同一高度。
 
 ### 咖啡廳 `cafe`
 
 | 人現行 | 狗現行 | 備註 |
 |--------|--------|------|
-| **0.36** | **0.139** | guard／home／mid 同尺 |
+| **0.36** | **0.139** | guard／home／mid 同尺。`cafe_refuse` **1.523**／`cafe_tense` **1.026**（頭框對齊後牽繩族 +15%） |
 
 ---
 
@@ -271,4 +274,4 @@ dog_zoom = round(char_zoom * 0.12 / 0.31, 3)   # ≈ char × 0.387；可見高 �
 
 ---
 
-*更新：2026-09-13｜特寫鏡頭可重用（§0.2）＋回憶 sniff_wire／forehead_nudge／nose_touch；狗 pose 主尺＝頭距*
+*更新：2026-09-20｜S08 玄關狗 far 0.54／mid 0.62（鞋櫃與予安之間）；`leash_wait` 0.677 頭距對齊開場 halfstep*
