@@ -454,8 +454,13 @@ screen hidden_content_gallery():
                     for content_id in HIDDEN_CONTENT_ORDER:
                         $ entry = hidden_content_entry(content_id)
                         if entry is not None:
-                            textbutton entry["label"] style "menu_list_button" action [Function(mark_hidden_content_viewed, content_id), Show("hidden_content_reader", content_id=content_id)]:
-                                xfill True
+                            $ _hc_open = secret_content_unlocked(content_id)
+                            if _hc_open:
+                                textbutton entry["label"] style "menu_list_button" action [Function(mark_hidden_content_viewed, content_id), Show("hidden_content_reader", content_id=content_id)]:
+                                    xfill True
+                            else:
+                                textbutton "尚未解鎖｜？？？" style "menu_list_button" sensitive False action NullAction():
+                                    xfill True
 
             textbutton "返回" style "menu_back_button" action Return():
                 xalign 0.5
@@ -464,44 +469,60 @@ screen hidden_content_gallery():
 screen hidden_content_reader(content_id=""):
     modal True
     zorder 210
-    add Solid("#17120FEE")
 
-    $ entry = hidden_content_entry(content_id) or {"label": "（空）", "body": ""}
-
-    frame:
-        ## 長文閱讀用實色米白底（玻璃底會讓深棕內文沉進深色背景）
-        background Solid("#F3E9D9F2")
-        padding (36, 24)
-        xalign 0.5
-        yalign 0.5
-        xsize 860
-        ysize 560
-
-        side "t c b":
-            xfill True
-            yfill True
-            spacing 12
-
-            text entry["label"]:
+    if not secret_content_unlocked(content_id):
+        add Solid("#17120FEE")
+        frame:
+            background Solid(LHTL_PANEL_GLASS)
+            padding (36, 24)
+            xalign 0.5
+            yalign 0.5
+            text "尚未解鎖":
                 font CJK_FONT
                 size 22
                 color LHTL_ACCENT_DARK
+        textbutton "關閉" style "menu_back_button" action Hide("hidden_content_reader"):
+            xalign 0.5
+            yalign 0.92
+    else:
+        add Solid("#17120FEE")
 
-            viewport:
-                scrollbars "vertical"
-                mousewheel True
-                draggable True
+        $ entry = hidden_content_entry(content_id) or {"label": "（空）", "body": ""}
+
+        frame:
+            ## 長文閱讀用實色米白底（玻璃底會讓深棕內文沉進深色背景）
+            background Solid("#F3E9D9F2")
+            padding (36, 24)
+            xalign 0.5
+            yalign 0.5
+            xsize 860
+            ysize 560
+
+            side "t c b":
                 xfill True
                 yfill True
-                text entry["body"]:
-                    font CJK_FONT
-                    size 18
-                    color LHTL_TEXT
-                    line_spacing 8
+                spacing 12
 
-            textbutton "關閉" style "menu_back_button":
-                action Hide("hidden_content_reader")
-                xalign 0.5
+                text entry["label"]:
+                    font CJK_FONT
+                    size 22
+                    color LHTL_ACCENT_DARK
+
+                viewport:
+                    scrollbars "vertical"
+                    mousewheel True
+                    draggable True
+                    xfill True
+                    yfill True
+                    text entry["body"]:
+                        font CJK_FONT
+                        size 18
+                        color LHTL_TEXT
+                        line_spacing 8
+
+                textbutton "關閉" style "menu_back_button":
+                    action Hide("hidden_content_reader")
+                    xalign 0.5
 
 
 screen how_to_play():
@@ -987,8 +1008,7 @@ screen skip_indicator():
         yalign 0.10
 
 
-## 開發用快捷鍵：F8／Shift+U → 全解鎖（不強制跳轉，避免沖掉目前畫面）
+## 開發用快捷鍵：Shift+U → 全解鎖（F8 保留給 Ren'Py 內建 developer profile）
 screen _dev_unlock_hotkey():
     zorder 2500
-    key "K_F8" action Function(dev_unlock_all_gallery)
     key "shift_K_u" action Function(dev_unlock_all_gallery)

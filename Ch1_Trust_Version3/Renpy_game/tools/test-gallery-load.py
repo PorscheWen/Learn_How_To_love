@@ -117,8 +117,8 @@ def main() -> int:
             fail(f"screens.rpy missing {needle}")
     if "SECRET_PHOTO_ORDER" not in screens or "secret_photo_unlocked" not in screens:
         fail("ending_gallery must gate secret photos by unlock state")
-    if "尚未解鎖" not in screens:
-        fail("ending_gallery must show locked labels")
+    if "尚未解鎖" not in screens or "secret_content_unlocked" not in screens:
+        fail("ending/hidden galleries must gate by unlock state")
     ok("screens.rpy ending/hidden menu wiring")
 
     hc = (GAME / "hidden_content.rpy").read_text(encoding="utf-8")
