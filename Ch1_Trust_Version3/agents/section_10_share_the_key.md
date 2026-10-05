@@ -117,7 +117,9 @@
 | 退半步讓脫鞋 | `parallel` | `dog_entrance_far` | — |
 | 客廳監工貼掛勾 | `parallel` | `dog_mid` | — |
 | 牽繩垂下後退、再靠近聞 | `parallel` | far→near | `sigh` |
+| 留下掛勾 | — | 特寫蓋滿，hide 人／狗 | —（解鎖回憶 `key_collar`：鑰匙與項圈同一掛勾） |
 | 廚房門檻看新碗 | `kitchen_door` | `dog_kitchen_threshold` | —（解鎖回憶 `water_bowl`） |
+| 結局 C 第二次照片 | — | 特寫蓋滿；不 show 狗立繪 | —（解鎖回憶 `coat_sleep`：舊外套上睡著） |
 | 停電前客廳 | `parallel` | `dog_mid` | — |
 | 結局 A 靠近→背靠 | `halfstep`→`back_sleep` | mid→near | — |
 | 結局 B 退到沙發另一側 | `check_sleep` | `dog_far`（旁白前就 show） | — |

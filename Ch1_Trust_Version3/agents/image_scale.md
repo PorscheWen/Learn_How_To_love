@@ -166,6 +166,8 @@ S09 現值：
 | S07 清晨 | `nose_tip` | `bedroom_nose` **0.30** | `dog_bedroom_nose_cu` | `nose_touch`／`gallery/secret-nose-touch.png` |
 | S09 留下 | 握繩靜幀 | — | `s09_mem` 蓋滿 | `leash_grip`／`gallery/secret-leash-grip.png`。hide 同事／狗／予安 |
 | S09 送走 | 交繩靜幀 | — | `s09_mem` 蓋滿 | `leash_handover`／`gallery/secret-leash-handover.png`。無字拍內；不進結局 A 整組 |
+| S10 留下 | 鑰匙與項圈 | — | `s10_mem` 蓋滿 | `key_collar`／`gallery/secret-key-collar.png`。hide 予安／狗；不進結局 A 整組 |
+| S10 送走 | 第二次照片 | — | `s10_mem` 蓋滿 | `coat_sleep`／`gallery/secret-coat-sleep.png`。結局 C 空屋內；不進結局 A 整組 |
 
 | 場 | pose | scale | 備註 |
 |----|------|-------|------|

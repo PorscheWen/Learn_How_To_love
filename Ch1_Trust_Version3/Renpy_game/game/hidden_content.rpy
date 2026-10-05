@@ -24,6 +24,8 @@ init python:
         "door_sleep",
         "leash_grip",
         "leash_handover",
+        "key_collar",
+        "coat_sleep",
         "water_bowl",
         "back_to_back",
     ]
@@ -95,6 +97,22 @@ init python:
             "image": "gallery secret_leash_handover",
             "path": "gallery/secret-leash-handover.png",
             "button": "✓  紀念照片｜交付牽繩",
+        },
+        ## S10 留下：鑰匙與項圈同一掛勾。不進結局 A 整組。
+        "key_collar": {
+            "title": "紀念照片｜鑰匙與項圈",
+            "hint": "兩個環靠在同一個掛勾上。",
+            "image": "gallery secret_key_collar",
+            "path": "gallery/secret-key-collar.png",
+            "button": "✓  紀念照片｜鑰匙與項圈",
+        },
+        ## S10 送走：同事第二次傳來的照片。不進結局 A 整組。
+        "coat_sleep": {
+            "title": "紀念照片｜外套上的睡",
+            "hint": "舊外套還墊在身下。",
+            "image": "gallery secret_coat_sleep",
+            "path": "gallery/secret-coat-sleep.png",
+            "button": "✓  紀念照片｜外套上的睡",
         },
         "water_bowl": {
             "title": "紀念照片｜新水碗",

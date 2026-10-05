@@ -296,6 +296,10 @@ screen ending_gallery():
                         xfill True
                     textbutton "紀念｜交付牽繩" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-leash-handover.png", "紀念照片｜交付牽繩"):
                         xfill True
+                    textbutton "紀念｜鑰匙與項圈" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-key-collar.png", "紀念照片｜鑰匙與項圈"):
+                        xfill True
+                    textbutton "紀念｜外套上的睡" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-coat-sleep.png", "紀念照片｜外套上的睡"):
+                        xfill True
                     textbutton "紀念｜新水碗" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-water-bowl.png", "紀念照片｜新水碗"):
                         xfill True
                     textbutton "紀念｜背對背" style "menu_list_button" action Function(open_gallery_image, "gallery/secret-back-to-back.png", "紀念照片｜背對背"):

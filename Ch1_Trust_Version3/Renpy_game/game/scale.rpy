@@ -216,9 +216,10 @@ init -1 python:
         "s09_cafe_cw_reach":  ("cafe", 540, 600),
         "s09_cafe_yuan":      ("cafe", 980, 590),
         "s09_cafe_by_yuan":   ("cafe", 880, 596),
-        "s09_cafe_hand":      ("cafe", 640, 596),
-        "s09_cafe_hand_low":  ("cafe", 700, 596),
-        "s09_cafe_hand_give": ("cafe", 625, 596),
+        # 聞手：鼻尖貼同事右掌（掌心約 x546）。翻面後鼻尖在腳點左約 54px，所以腳點比掌心再右一點。
+        "s09_cafe_hand":      ("cafe", 575, 596),
+        "s09_cafe_hand_low":  ("cafe", 620, 596),
+        "s09_cafe_hand_give": ("cafe", 575, 596),
         "s09_cafe_guard":     ("cafe", 900, 596),
         "s09_cafe_mid":       ("cafe", 735, 596),
         "s09_cafe_home":      ("cafe", 900, 596),

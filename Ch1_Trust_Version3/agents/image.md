@@ -347,6 +347,8 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `gallery/secret-door-sleep.png` | 結局 A／S07 辦公室 | 門邊特寫：微開門縫＋地板，狗睡在門檻 |
 | `gallery/secret-leash-grip.png` | **S09 留下**（不進結局 A 整組） | 自己的手把牽繩繞回手腕 |
 | `gallery/secret-leash-handover.png` | **S09 送走**（不進結局 A 整組） | 牽繩交到另一雙手 |
+| `gallery/secret-key-collar.png` | **S10 留下**（不進結局 A 整組） | 鑰匙與項圈靠在同一個掛勾 |
+| `gallery/secret-coat-sleep.png` | **S10 送走**（不進結局 A 整組） | 同事第二次傳來的照片：狗趴在舊外套上睡著 |
 | `gallery/secret-water-bowl.png` | 結局 A | 第一次喝新水碗 |
 
 - **已移除**背對背／胸口同睡紀念照（結局 A 靜幀 `ending-a-back` 仍保留）。

@@ -743,6 +743,7 @@ init python:
                 "lap_sleep", "sniff_wire", "forehead_nudge", "behind_legs",
                 "shoe_sleep", "nose_touch", "door_sleep", "water_bowl",
                 "leash_grip", "leash_handover",
+                "key_collar", "coat_sleep",
             ):
                 if pid not in photos:
                     photos.append(pid)
@@ -863,6 +864,8 @@ image gallery secret_door_sleep = "gallery/secret-door-sleep.png"
 image gallery secret_water_bowl = "gallery/secret-water-bowl.png"
 image gallery secret_leash_grip = "gallery/secret-leash-grip.png"
 image gallery secret_leash_handover = "gallery/secret-leash-handover.png"
+image gallery secret_key_collar = "gallery/secret-key-collar.png"
+image gallery secret_coat_sleep = "gallery/secret-coat-sleep.png"
 image gallery secret_back_to_back = "gallery/secret-back-to-back.png"
 image gallery ending_a_back = "gallery/ending-a-back.png"
 image gallery ending_b_learning = "gallery/ending-b-learning.png"
@@ -2297,7 +2300,8 @@ transform char_office_cw_s09:
     xpos pv_x("s09_office_cw")
     ypos pv_y("s09_office_cw")
     zoom 1.0
-    xzoom pv_cz("s09_office_cw")
+    ## 站姿原圖手勢朝左；予安在右側，翻面才是對著她說
+    xzoom pv_cz("s09_office_cw", True)
     yzoom pv_cz("s09_office_cw")
 
 # S09 夜客廳：右前木凳坐姿（S04 char_chair 不動）；狗趴落地窗前地毯，面向予安（parallel 頭在左 → 翻轉）
@@ -2421,6 +2425,16 @@ transform char_left_cafe:
     ypos pv_y("s09_cafe_cw")
     zoom 1.0
     xzoom pv_cz("s09_cafe_cw")
+    yzoom pv_cz("s09_cafe_cw")
+
+# 站姿原圖手勢朝左；予安在右，說話時翻面朝她。蹲姿圖本身面向右，不要套這個。
+transform char_cafe_cw_talk:
+    xanchor 0.5
+    yanchor 1.0
+    xpos pv_x("s09_cafe_cw")
+    ypos pv_y("s09_cafe_cw")
+    zoom 1.0
+    xzoom pv_cz("s09_cafe_cw", True)
     yzoom pv_cz("s09_cafe_cw")
 
 transform char_right_cafe:
@@ -4989,7 +5003,7 @@ label section_09_almost_handoff:
     scene bg cafe_day
     with Dissolve(1.5)
     ## 進場先站著；蹲姿留到「蹲下來」那句
-    show coworker stand at char_left_cafe
+    show coworker stand at char_cafe_cw_talk
     show yuan cafe at char_right_cafe
     ## scene 會清掉玄關的狗；先停在予安左側，再走去聞同事
     show dog cafe_tense at dog_cafe_by_yuan
@@ -5089,7 +5103,7 @@ label section_09_almost_handoff:
             with Dissolve(0.4)
             ya "我不是比較會。我只是……想繼續學。"
             coworker "那就繼續。真的需要幫忙，再找我。"
-            show coworker stand at char_left_cafe
+            show coworker stand at char_cafe_cw_talk
             with Dissolve(0.4)
             "同事站起來。沒有生氣，也沒有拍手。空著的那隻手收進外套口袋，騎樓忽然寬出一小塊，風從那裡吹過來。"
             if s09_stay_from_tense:
@@ -5285,7 +5299,21 @@ label section_10_share_the_key:
         "第一個掛勾貼歪了。予安撕下來重貼，黏膠因此弱了一點；第二次還是歪，她就決定不管了，讓它歪著。"
         ya "不是每件事都要對得很準。"
         "狗看著她和牆面來回較勁，耳朵一邊立著、一邊垂著，像在判斷要不要靠近。"
-        "她把鑰匙掛在左邊，牽繩掛在右邊。"
+        ## 特寫：鑰匙與項圈同一掛勾；解鎖 key_collar（不進結局 A 整組）
+        hide yuan
+        hide dog
+        show expression Transform("gallery/secret-key-collar.png", fit="cover", xysize=(1280, 720)) as s10_mem zorder 8:
+            xalign 0.5
+            yalign 0.5
+        with Dissolve(0.7)
+        pause 1.2
+        "她把鑰匙和項圈靠在同一個歪掉的掛勾上。牽繩從項圈垂下來。"
+        $ unlock_secret_photo("key_collar")
+        pause 1.4
+        hide s10_mem
+        show yuan home_stand_pv at char_living_s10
+        show dog parallel at dog_mid
+        with Dissolve(0.4)
         show dog parallel at dog_far
         with Dissolve(0.5)
         "牽繩垂下來時，[dog_label]往後退了半步；等它徹底不動，才慢慢靠近聞了一次，確認是無害物品。"
@@ -5454,7 +5482,16 @@ label ending_ch1_handed_over:
     ya "晚上見。"
     "話說出口後，房間裡沒有誰回頭。她站了一秒，才把門關上。"
     "往後如果還想靠近，大概得隔著另一扇門，重新慢慢學一次。"
+    ## 特寫：同事第二次傳來的那張；狗趴在舊外套上。解鎖 coat_sleep（不進結局 A 整組）
+    show expression Transform("gallery/secret-coat-sleep.png", fit="cover", xysize=(1280, 720)) as s10_mem zorder 8:
+        xalign 0.5
+        yalign 0.5
+    with Dissolve(0.7)
+    pause 1.2
     "三天後，同事又傳來照片：[dog_label]睡在離新家房門兩步遠的地方，舊外套仍墊在身下，沒被換掉。"
+    $ unlock_secret_photo("coat_sleep")
+    pause 1.4
+    hide s10_mem
     "予安回了一個「收到」。她沒有要求更多證明，只把那張照片，收進一個她再也不會更新的相簿。"
     call ending_coda_finish("C", "結局 C｜送走之後", "想念還在，理由也還在。")
     return
