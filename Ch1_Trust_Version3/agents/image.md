@@ -345,6 +345,8 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 | `gallery/secret-shoe-sleep.png` | 結局 A | 鞋邊小睡 |
 | `gallery/secret-nose-touch.png` | **S07 指尖特寫**（亦隨結局 A） | 指尖碰鼻；對齊現場 `nose_tip` CU |
 | `gallery/secret-door-sleep.png` | 結局 A／S07 辦公室 | 門邊特寫：微開門縫＋地板，狗睡在門檻 |
+| `gallery/secret-leash-grip.png` | **S09 留下**（不進結局 A 整組） | 自己的手把牽繩繞回手腕 |
+| `gallery/secret-leash-handover.png` | **S09 送走**（不進結局 A 整組） | 牽繩交到另一雙手 |
 | `gallery/secret-water-bowl.png` | 結局 A | 第一次喝新水碗 |
 
 - **已移除**背對背／胸口同睡紀念照（結局 A 靜幀 `ending-a-back` 仍保留）。
@@ -388,6 +390,7 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 - [ ] 無信任數字／HUD
 - [ ] 背景：無人無狗、無文字 logo；時段 light 正確（見 image_bg）
 - [ ] 結局 A～D 睡姿／距離可區分
+- [ ] 上場尺照 `image_scale.md` §0.0：背景有透視就設 horizon／cam_h、`PV_PT` 腳底踩地面；新 PNG 量 `SPRITE_FOOT`；pose 尺只寫表（別名 `key=`），lint 無「立繪尺警告」
 - [ ] 未自動開遊戲
 
 ---
@@ -404,6 +407,11 @@ Same woman Yuan and same golden-tan mixed puppy, cohesive oil painting, Taiwanes
 - 新增：`char-yuan-farewell`、`char-yuan-cafe`、`char-coworker-cafe`、`dog-farewell`、`dog-cafe-refuse`、`dog-cafe-tense`（Cursor 生圖＋`remove_ai_bg.py`）。
 - 客廳開頭用**告別圖**（無牽繩）；玄關牽繩立繪對齊 entrance 門框；咖啡廳**不沿用** S08 蹲牽繩／舊同事站姿。
 - 朝向以劇情為準：拒絕時狗面向同事；僵住／留下時面向予安。詳見 [`section_09_almost_handoff.md`](section_09_almost_handoff.md)。
+
+### 2026-10-03｜S09 尺寸重校（透視＋腳底裁切）
+
+- S09 舊版每張背景一個固定 zoom（辦公室、咖啡廳直接抄客廳 0.36）、狗 ypos 0.87／人 0.80 同尺、立繪沒裁腳下透明、pose 尺混用不同年代的校法 → 人比門高、同事站在桌上、狗浮空、跪姿跟站姿一樣高。
+- 改成透視：`scale.rpy` `PERSP`（horizon、cam_h）＋`PV_PT`（腳底點），狗＝人×0.3346；腳底裁切 `SPRITE_FOOT`；pose 尺只寫表，同 PNG 第二把尺用別名 `key=`。完整流程與檢查清單見 [`image_scale.md`](image_scale.md) §0.0；狗尺見 `image_dog.md` §3.12。
 
 ### 2026-09-06｜S02／S04 狗 pose
 

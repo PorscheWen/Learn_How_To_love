@@ -55,7 +55,8 @@ def loadable(rel: str) -> bool:
 defined_images = set(re.findall(r"^image ([\w ]+?)\s*[:=]", ALL_RPY, re.M))
 
 used_images = set()
-for m in re.finditer(r"^\s*(?:scene|show)\s+([a-z][\w ]*?)(?:\s+at\s|\s+with\s|\s*:|\s*$)", ALL_RPY, re.M):
+## `show X Y as Z`／behind／onlayer／zorder 也是 image 名的結尾（2026-10-03：S08 scooter … as … 誤判修正）
+for m in re.finditer(r"^\s*(?:scene|show)\s+([a-z][\w ]*?)(?:\s+(?:at|with|as|behind|onlayer|zorder)\s|\s*:|\s*$)", ALL_RPY, re.M):
     name = m.group(1).strip()
     if name in ("expression", "black") or name.startswith("screen "):
         continue

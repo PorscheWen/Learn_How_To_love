@@ -312,7 +312,8 @@ if "jump section_06_corridor_third_person" not in s05:
     fail("S05 所有軟分軌都必須進 S06")
 if "show dog sniff_wire at dog_near" not in s05:
     fail("S05 開會中嗅線須維持全景 dog_near，不得改特寫")
-if "show dog sniff_wire at dog_living_wire_cu" not in s05:
+## 2026-10-03：特寫改用 sniff_wire_cu（同幀、舊尺、不裁腳；全景 sniff_wire 已改透視尺）
+if not re.search(r"show dog sniff_wire(?:_cu)? at dog_living_wire_cu", s05):
     fail("S05 會後嗅線須用 dog_living_wire_cu（只留 bg＋特寫）")
 if 'unlock_secret_photo("sniff_wire")' not in s05:
     fail("S05 會後嗅線特寫必須解鎖回憶 sniff_wire")
@@ -404,8 +405,12 @@ if "show dog nose_tip at dog_bedroom_nose_cu" not in s07:
     fail("S07 指尖須用 dog_bedroom_nose_cu（頭距＋特寫 zoom），勿用地板 near_to_yuan")
 if "show dog nose_tip at dog_bedroom_near_to_yuan" in s07:
     fail("S07 指尖禁地板尺 dog_bedroom_near_to_yuan（頭會縮小）")
-if '", 0.65' not in text.split("image dog nose_tip", 1)[-1][:240]:
-    fail("S07 image dog nose_tip 必須覆寫 0.65（頭距對齊 guard_door）")
+# 2026-10-03：pose 尺只寫在 DOG_POSE_SCALE（image 定義不寫字面值；字面值與表不同時 lint 會警告）
+_nose_def = text.split("image dog nose_tip", 1)[-1][:240]
+if not re.search(r'"dog/dog-nose-fingertip\.png":\s*0\.65\b', text) or re.search(
+    r'\.png"\s*,\s*(?!0\.65\b)[0-9]+\.[0-9]+', _nose_def
+):
+    fail("S07 nose_tip 尺須為 DOG_POSE_SCALE 0.65（頭距對齊 guard_door；image 勿寫其他字面值）")
 if 'unlock_secret_photo("nose_touch")' not in s07:
     fail("S07 指尖特寫必須解鎖回憶 nose_touch")
 if "scene bg office_night" not in s07:

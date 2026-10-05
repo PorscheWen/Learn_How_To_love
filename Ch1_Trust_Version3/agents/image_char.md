@@ -65,8 +65,8 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | `char-yuan-commute.png` | 疲憊垂眼、略駝 | 奶油開襟針織＋灰 T＋深褐寬褲；**耳機掛脖**；右手提便當塑膠袋；外出皮鞋 | **僅** 外出：S01 夜歸／超商／巷口／玄關進門、S02 後門前、S10 送走後巷口；**禁**開冰箱、倒水、白天門邊、客廳坐、S10 空屋／擺碗 |
 | `char-yuan-home-stand.png` | 進屋後空手站 | **室內裝**：燕麥寬鬆毛衣＋炭灰家居褲＋淺色襪；**不穿鞋** | S01 開冰箱；S06 **進屋玄關後**；S07 倒水；S10 脫鞋後客廳／廚房／擺碗。**禁**梯廳／走廊 |
 | `char-yuan-paper-bag.png` | 提紙袋回家 | 通勤服＋皮鞋；右手提**牛皮紙購物袋** | **僅** S10 街／玄關進門（尚未脫鞋） |
-| `char-yuan-sofa.png` | 室內沙發坐 | **室內裝**＋襪；坐姿**無椅**（疊左沙發）；滑手機 | S01 客廳吃便當；S09／S10 夜客廳（`char_left_sit`） |
-| `char-yuan-home-sit.png` | 室內坐椅 | **室內裝**＋襪；坐在小木凳上滑手機；面向左 | **S04** 書櫃前木椅（`yuan home_sit`／`char_chair`） |
+| `char-yuan-sofa.png` | 室內沙發坐 | **室內裝**＋襪；坐姿**無椅**（疊左沙發）；滑手機 | S01 客廳吃便當；S10 夜客廳（`char_left_sit`） |
+| `char-yuan-home-sit.png` | 室內坐椅 | **室內裝**＋襪；坐在小木凳上滑手機；面向左 | **S04** 書櫃前木椅（`yuan home_sit`／`char_chair`）；**S09** 三晚右木凳改 `yuan home_sit_s09`／`char_chair_s09`（別名尺 `#s09` **0.80**、foot 裁切、透視） |
 | `char-yuan-squat-side.png` | 側身蹲等 | 米白襯衫＋橄欖褲；側蹲不伸手；**無牽繩** | **S02** Dist＋；`char_backdoor_squat` zoom **0.31**（卸貨門對景） |
 | `char-yuan-carry-pup.png` | 側抱幼犬 | 米白襯衫＋橄欖褲＋**棕色樂福鞋**；側抱小7 | S02 帶走／硬抱失敗一瞬（後門 `char_backdoor_carry` **0.31**、巷口 `char_street_carry` **0.23**、急診 `char_clinic` **0.27**、客廳 `char_living` **0.32**）；**S06 梯廳**抱回屋內（`CHAR_POSE_SCALE` **1.056**） |
 | `char-yuan-headphones.png` | 專注／疏離 | 淺灰藍長袖襯衫袖捲起＋深褐褲；**耳機戴上**；外出皮鞋；**站姿** | S01／S09 **辦公室** |
@@ -76,12 +76,12 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | `char-yuan-sick-bed.png` | 發燒虛弱 | **沿床躺、看向狗**：頭在右枕（床頭），身體與床平行；面向左、視線看向門邊地板。米白棉質睡衣；腰以下蓋燕麥薄被；**無皮帶、無鞋、不畫狗** | **S07** 開場即顯示（`char_bedroom` **0.18**／xalign **0.78**／ypos **0.76**）。倒水仍 `home-stand`。舊正對鏡頭稿 `_work/char-yuan-sick-bed-facing-camera.png` |
 | `char-yuan-block.png` | 冷靜擋在中間 | 米白襯衫袖捲＋橄欖褲＋**棕色樂福鞋**；**面向左**；一臂前伸開掌擋／護（對左側鄰居） | **僅** S06 選「往前半步擋住」；梯廳外出裝；勿再當空手站姿暫代 |
 | `char-yuan-door-hold.png` | 扶門、還沒擋 | 米白襯衫袖捲＋橄欖褲＋**棕色樂福鞋**；**面向左**；一手抬到胸前像扶著門沿，低頭看狗；**不畫狗** | **S06 梯廳**開場～選前／選 C 回到門邊；外出裝＋鞋。勿用室內襪／拖鞋 |
-| `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲＋**棕色平底鞋／樂福**；側蹲；手握**棕色皮牽繩**下垂；**面向左** | S08 玄關穿帶／返家／閃避後蹲下安慰；S09 玄關。與 `walk` 同衣櫃＋鞋。尺：玄關 **0.33**×pose **0.70**、巷口蹲仍 alley **0.32**×0.70（畫布幾乎填滿，1.0 會跟人／門同高）。舊中跟稿在 `assets/char/_work/` |
+| `char-yuan-leash.png` | 蹲等／耐心 | 米白襯衫＋橄欖褲＋**棕色平底鞋／樂福**；側蹲；手握**棕色皮牽繩**下垂；**面向左** | S08 玄關穿帶／返家／閃避後蹲下安慰；S09 玄關與咖啡廳改用 `yuan leash_s09`（同 PNG、foot 裁切、透視）。與 `walk` 同衣櫃＋鞋。尺：玄關 **0.33**×pose **0.70**、巷口蹲仍 alley **0.32**×0.70（畫布幾乎填滿，1.0 會跟人／門同高）。舊中跟稿在 `assets/char/_work/` |
 | `char-yuan-walk.png` | 巷口散步 | 米白襯衫＋橄欖褲；**站姿走路**握牽繩；**面向左**；無狗同框 | **S08 巷口**（非蹲）；`char_right_walk` **0.32** |
 | `char-yuan-walk-leash-behind.png` | 牽狗、狗在身後 | 同 `walk` 衣櫃＋鞋；站姿走路；手在髖側握繩，**牽繩往身後斜下拖**；**面向左**（原生成圖面右，已鏡像） | **S08 巷口**狗在身後各拍（進場、往前半步、低信任跟、三條經過空機車、引擎拉回鞋邊、選 B 硬拖）；`image yuan walk_behind`，pose **1.0**、`foot=1476`；內容高 1436 與 `walk` 相同。2026-09-28c 綠幕去背；生成圖牽繩只到半空、角度太平，已擦掉手以下並依巷口狗位（胸背帶扣約在她身後 0.4–0.6 m、離地 0.25 m）重畫一條往下斜的牽繩。原檔 `_raw/char-yuan-walk-leash-behind_raw.png` |
-| `char-yuan-leash-yank.png` | 被牽繩帶半步 | 同 `walk` 衣櫃＋鞋；**站姿**；牽繩繃直；肩收、視線放低；**面向左**；不伸手 | **S08** 機車衝出後、蹲下前；`CHAR_POSE_SCALE` **0.75**（864 畫布對齊 walk） |
+| `char-yuan-leash-yank.png` | 被牽繩帶半步 | 同 `walk` 衣櫃＋鞋；**站姿**；牽繩繃直；肩收、視線放低；**面向左**；不伸手 | **S08** 機車衝出後、蹲下前；`CHAR_POSE_SCALE` **0.95**（2026-09-28 由 0.75 改：用內容高對齊 walk） |
 | `char-yuan-leash-pass.png` | 交繩／收回 | 站姿；**僅予安雙手**握牽繩握把（**禁**對方伸入畫面的手） | **S09** 硬分歧（期間勿疊同事全身） |
-| `char-yuan-farewell.png` | 告別／攤手 | **室內裝**＋襪；單膝下跪；手掌攤開**無牽繩**；圖檔**面向左**（遊戲內 `xzoom` 翻成面右對狗） | S09 客廳 |
+| `char-yuan-farewell.png` | 告別／攤手 | **室內裝**＋襪；單膝下跪；手掌攤開**無牽繩**；圖檔**面向左**（遊戲內 `xzoom` 翻成面右對狗） | S09 客廳；`CHAR_POSE_SCALE` **0.78**（2026-10-03；1.0 時跪著跟站著一樣高） |
 | `char-yuan-cafe.png` | 交接衝突 | 米白襯衫＋橄欖褲；**站姿**握牽繩；**面向左**（對同事／狗） | S09 咖啡廳 |
 | `char-clerk.png` | 禮貌微笑 | 年輕男店員；深藍短袖＋深色圍裙＋深褲 | S01／S02；`char_convenience` zoom 0.29（勿套客廳 `char_left`） |
 | `char-neighbor.png` | 熱心伸手 | 中年女鄰居；綠卡迪＋米上衣；**面向右**伸手（對右側予安／狗） | S06 伸手要摸 |
@@ -92,6 +92,10 @@ Centered full body (or clear readable crop). SOLID FLAT BLACK (#000000) backgrou
 | `char-coworker-cafe.png` | 蹲等聞狗 | 同上服裝；**蹲姿側身**；手留膝上／低伸；**面向右**（對女主／狗） | S09 咖啡廳 |
 
 **站位慣例：** 予安多在 `char_right`／`char_chair`（S04 面左看狗）；**S05** 予安在 `char_chair_left`（面右），狗用 `dog_near`／`mid`／`far`（不翻轉、面左）。其餘需人狗互視時，狗用 `dog_*_to_yuan` 或 `dog_chair_*`（水平翻轉面右）。合成圖（`carry_pup`／`leash_pass`／`nose_tip`）同框時先 `hide` 另一層，避免雙重手／雙重狗。S02 對景尺（門／機車／路）見 `image_bg.md` §5／§9。
+
+**S09（2026-10-03 起透視）：** 站位只寫 `scale.rpy` `PV_PT` 點名（辦公室 `s09_office_*`、客廳 `s09_lnight_*`／`s09_lday_*`、玄關 `s09_ent_*`、咖啡廳 `s09_cafe_*`），zoom 由腳底 y 算；同事改站辦公室走道、咖啡廳門前地墊（不站桌上、不站前景盆栽上）。新立繪落地先量 `SPRITE_FOOT`，再依姿勢比例（站 1.0／蹲 0.55–0.65／跪 0.72–0.75／坐凳 0.80–0.85）定 `CHAR_POSE_SCALE`；流程見 `image_scale.md` §0.0。
+
+**全場透視（2026-10-03b）：** S02 後門、S03–S08 室內、S10／結局也改 `PV_PT` 點名。共用圖在這些場一律用透視版 image（同 PNG、`foot="auto"`），原 image 留給 S01／S09／S08 巷口：`yuan commute_pv`、`home_stand_pv`、`carry_pup_pv`、`home_sit_pv`（`#pv` **0.80**，同 S09 坐凳）、`leash_pv`、`headphones_pv`、`sofa_s10`（`#s10` **0.83**）。S05 左矮凳 `headphones_sit` **0.79**／`headphones_off_sit` **0.80**（新列；對齊 home-sit#pv 坐高）。鄰居四張、`door_hold`／`block` 加 foot 裁切，尺不變。S07 病床 `char_bedroom` 0.18 不動。
 
 ---
 
@@ -170,9 +174,13 @@ No text, no logo, no trust meter UI, no scenery.
 | 2026-09-13 | S08 人尺確認：`walk` CHAR_POSE_SCALE 1.0；玄關 0.33、巷口 0.32 |
 | 2026-09-19 | S08 蹲姿 leash／squat_side CHAR_POSE_SCALE **0.70**（1.0 幾乎跟門一樣高） |
 
+| 2026-10-03 | S09 透視：`farewell` CHAR_POSE_SCALE **0.78**；`home_sit#s09` **0.80**；S09 立繪全部 foot 裁切；共用圖改用 `*_s09` image。順手更正 `leash-yank` 0.75→0.95 舊註記 |
+| 2026-10-03b | 全場透視：S02–S08 室內、S10 改 `PV_PT`；共用圖改用 `*_pv`／`sofa_s10`；`home_sit#pv` 0.80、`sofa#s10` 0.83、`headphones_sit` 0.79、`headphones_off_sit` 0.80 |
 | 2026-09-28c | S08 新增 `char-yuan-walk-leash-behind.png`（`yuan walk_behind`）：狗在身後時用；狗在身前／側前時仍用 `walk` |
 
 ---
 
-*更新：2026-09-28c｜S08 `walk_behind` 牽繩往身後*  
+*更新：2026-10-03b｜全場透視（S02–S08 室內、S10）透視版 image 與坐姿尺*  
+*前次：2026-10-03｜S09 透視站位與跪姿／坐凳尺*  
+*前次：2026-09-28c｜S08 `walk_behind` 牽繩往身後*  
 *前次：2026-09-13｜S07 病床沿床躺看狗；`char_bedroom` 0.18／ypos 0.76*

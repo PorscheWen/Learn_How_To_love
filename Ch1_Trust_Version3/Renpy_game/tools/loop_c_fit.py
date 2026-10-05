@@ -28,6 +28,9 @@ SKIP_EYE_SPAN = {
     "s08_explore",
     "s08_startle",
     "s08_resist",
+    # 紙袋那張：眼睛偵測常只抓到 1 眼、頭框吃進紙袋（2026-10-03 S09 實測建議 1.10→0.695 是假警報）
+    "paper_bag",
+    "paper_bag_s09",
 }
 
 DEPTH_SKIP = {"kitchen", "stairwell"}
@@ -86,6 +89,32 @@ TRANSFORM_RE = re.compile(r"^transform (\w+):(.*?)(?=^transform |\Z)", re.M | re
 IMAGE_YUAN_RE = re.compile(
     r'^image yuan (\w+) = char_sprite\(\s*"([^"]+)"', re.M
 )
+# 2026-10-03 透視場（scale.rpy PERSP／PV_PT）：zoom 由腳底 y 算，不讀 SCALE 固定值
+PERSP_RE = re.compile(r'"(\w+)":\s*\{"horizon":\s*(\d+),\s*"cam_h":\s*([0-9.]+)')
+PV_PT_RE = re.compile(r'"(\w+)":\s*\(\s*"(\w+)",\s*(\d+),\s*(\d+)\s*\)')
+KEY_RE = re.compile(r'\bkey\s*=\s*"([^"]+)"')
+
+
+def _const(text: str, name: str, default: float) -> float:
+    m = re.search(rf"^\s*{name}\s*=\s*([0-9.]+)", text, re.M)
+    return float(m.group(1)) if m else default
+
+
+def parse_persp(text: str) -> dict[str, tuple[int, float]]:
+    return {m.group(1): (int(m.group(2)), float(m.group(3))) for m in PERSP_RE.finditer(text)}
+
+
+def parse_pv_pt(text: str) -> dict[str, tuple[str, int, int]]:
+    return {m.group(1): (m.group(2), int(m.group(3)), int(m.group(4))) for m in PV_PT_RE.finditer(text)}
+
+
+def pv_points_used(body: str, rpy: str, pv: dict[str, tuple[str, int, int]]) -> set[str]:
+    names = set(re.findall(r'"(\w+)"', body)) & set(pv)
+    tf = {m.group(1): m.group(2) for m in TRANSFORM_RE.finditer(rpy)}
+    for _kind, _name, at in walk_shows(body):
+        if at and at in tf:
+            names |= set(re.findall(r'"(\w+)"', tf[at][:600])) & set(pv)
+    return names
 
 
 def _eval_dog(raw: str) -> float | None:
@@ -95,6 +124,20 @@ def _eval_dog(raw: str) -> float | None:
     if m:
         return round(float(m.group(1)) * PUPPY_RATIO, 3)
     return float(raw)
+
+
+def parse_s08_alley(text: str) -> dict[str, float] | None:
+    """scale.rpy S08_ALLEY 的 horizon／char_k／dog_ratio／size_y（缺任一項 → None）。"""
+    m = re.search(r"S08_ALLEY\s*=\s*\{(.*?)\n\s*\}", text, re.S)
+    if not m:
+        return None
+    out: dict[str, float] = {}
+    for k in ("horizon", "char_k", "dog_ratio", "size_y"):
+        km = re.search(r'"%s":\s*([0-9.]+)' % k, m.group(1))
+        if not km:
+            return None
+        out[k] = float(km.group(1)) if "." in km.group(1) else int(km.group(1))
+    return out
 
 
 def parse_scale_rpy(text: str) -> dict[str, dict[str, Any]]:
@@ -109,12 +152,17 @@ def parse_scale_rpy(text: str) -> dict[str, dict[str, Any]]:
     return out
 
 
+def _strip_foot_table(script: str) -> str:
+    # scale.rpy SPRITE_FOOT 也是 "dog/…": 數字 的格式（腳底列），不是 pose 尺
+    return re.sub(r"SPRITE_FOOT\s*=\s*\{.*?\n\s*\}", "", script, flags=re.S)
+
+
 def parse_pose_scales(script: str) -> dict[str, float]:
-    return {k: float(v) for k, v in POSE_SCALE_RE.findall(script)}
+    return {k: float(v) for k, v in POSE_SCALE_RE.findall(_strip_foot_table(script))}
 
 
 def parse_char_scales(script: str) -> dict[str, float]:
-    return {k: float(v) for k, v in CHAR_SCALE_RE.findall(script)}
+    return {k: float(v) for k, v in CHAR_SCALE_RE.findall(_strip_foot_table(script))}
 
 
 def parse_transforms(rpy: str) -> tuple[dict[str, str], dict[str, str]]:
@@ -133,7 +181,14 @@ def parse_transforms(rpy: str) -> tuple[dict[str, str], dict[str, str]]:
 
 
 def parse_yuan_paths(rpy: str) -> dict[str, str]:
-    return dict(IMAGE_YUAN_RE.findall(rpy))
+    out = dict(IMAGE_YUAN_RE.findall(rpy))
+    # key="路徑#別名" → 用別名查 CHAR_POSE_SCALE（resolve_png 會去掉 #別名）
+    for m in re.finditer(r"^image yuan (\w+) = char_sprite\(", rpy, re.M):
+        chunk = rpy[m.end() : m.end() + 400].split("\nimage ", 1)[0].split("\n#", 1)[0]
+        k = KEY_RE.search(chunk)
+        if k:
+            out[m.group(1)] = k.group(1)
+    return out
 
 
 def walk_shows(body: str) -> list[tuple[str, str, str | None]]:
@@ -191,7 +246,7 @@ def first_yuan_in_place(
 
 
 def resolve_png(rel: str, assets: Path, game: Path) -> Path | None:
-    rel = rel.replace("\\", "/")
+    rel = rel.replace("\\", "/").split("#", 1)[0]
     for root in (assets, game, game / "images"):
         path = root / rel
         if path.exists():
@@ -379,6 +434,7 @@ def content_vis_h(path: Path, ref: float, pose_scale: float, scene_zoom: float) 
 def pose_scale_for(rel: str, override: str | None, table: dict[str, float]) -> float:
     if override:
         return float(override)
+    rel = rel.split("#", 1)[0] if rel not in table else rel
     if rel in table:
         return table[rel]
     name = Path(rel).name
@@ -425,13 +481,44 @@ def audit_section(
     char_scale = parse_char_scales(rpy)
     dog_at, char_at = parse_transforms(rpy)
     yuan_paths = parse_yuan_paths(rpy)
+    persp = parse_persp(scale_text)
+    pv = parse_pv_pt(scale_text)
+    # 2026-10-03：透視 transform（pv_dz／pv_cz("點")）也要對到場名，否則分支線性走訪時會落到前一個 bg
+    for m in TRANSFORM_RE.finditer(rpy):
+        head = "\n".join(m.group(2).splitlines()[:24])
+        dm = re.search(r'pv_dz\("(\w+)"', head)
+        cm = re.search(r'pv_cz\("(\w+)"', head)
+        if dm and dm.group(1) in pv:
+            dog_at.setdefault(m.group(1), pv[dm.group(1)][0])
+        if cm and cm.group(1) in pv:
+            char_at.setdefault(m.group(1), pv[cm.group(1)][0])
     grouped = group_by_place(body, dog_at)
+    s08 = parse_s08_alley(scale_text)
+    pv_used = pv_points_used(body, rpy, pv)
+    person_h = _const(scale_text, "PERSON_H_M", 1.62)
+    walk_px = _const(scale_text, "WALK_PX", 1197.5)
+    dog_ratio = _const(scale_text, "DOG_PERSON_RATIO", 0.3346)
 
     for place, poses in grouped.items():
         sc = scales.get(place, {})
         fit = sc.get("fit") or ANCHORS.get(place, {}).get("fit", place)
         char_z = sc.get("char")
         dog_z = sc.get("dog")
+        feet_y = SCREEN_H * FEET_Y
+        ys = sorted(pv[n][2] for n in pv_used if pv[n][0] == place)
+        if place in persp and ys:
+            hor, cam = persp[place]
+            feet_y = ys[len(ys) // 2]
+            char_z = round(person_h / (cam * walk_px) * (feet_y - hor), 4)
+            dog_z = round(char_z * dog_ratio, 4)
+            fit = f"透視 PERSP（horizon {hor}／cam_h {cam}；本段腳底中位 y={feet_y}）"
+        elif place == "alley" and s08:
+            # S08 巷口：讀 scale.rpy S08_ALLEY（只讀不改；size_y 處的人／狗 zoom）
+            feet_y = s08["size_y"]
+            char_z = round(s08["char_k"] * (feet_y - s08["horizon"]), 4)
+            dog_z = round(char_z * s08["dog_ratio"], 4)
+            fit = (f"S08_ALLEY（horizon {s08['horizon']}／char_k {s08['char_k']}／"
+                   f"dog_ratio {s08['dog_ratio']}；size_y={feet_y}）")
         print(f"[C] 場 {place}  對景={fit}  char={char_z}  dog={dog_z}", flush=True)
 
         if place in DEPTH_SKIP or place in CU_SKIP:
@@ -447,7 +534,7 @@ def audit_section(
                 ps = char_scale.get(rel, 1.0) if rel else 1.0
                 vis = content_vis_h(png, CHAR_REF, ps, char_z)
                 if vis:
-                    head_y = SCREEN_H * FEET_Y - vis
+                    head_y = feet_y - vis
                     if anchor.get("kind") == "door":
                         door_h = anchor["bot"] - anchor["top"]
                         ratio = vis / door_h if door_h else 0
@@ -457,7 +544,8 @@ def audit_section(
                             f"人/門={ratio:.2f}  頭頂y={head_y:.0f} 楣={lintel}"
                         )
                         print(f"[C] 對景 {place}  {note}", flush=True)
-                        squat = yuan in {"leash", "squat_side"} or "squat" in yuan
+                        base = re.sub(r"_s\d\d$", "", yuan)
+                        squat = base in {"leash", "squat_side"} or "squat" in base
                         if squat:
                             if ratio > 0.72:
                                 fails.append(
@@ -519,7 +607,8 @@ def audit_section(
         if len(rows) < 2:
             continue
         mother_name = MOTHER_POSE.get(place)
-        mom = next((r for r in rows if r[0] == mother_name), None)
+        # 透視場變體（*_pv／*_s09）與母尺同 PNG → 去尾碼比對（2026-10-03）
+        mom = next((r for r in rows if re.sub(r"_(?:pv|s\d\d)$", "", r[0]) == mother_name), None)
         if mom is None:
             mom = next((r for r in rows if r[1]["eyes"] == 2), rows[0])
         print(f"[C] 頭距母尺 {place}＝{mom[0]}  screen={mom[3]:.1f}", flush=True)

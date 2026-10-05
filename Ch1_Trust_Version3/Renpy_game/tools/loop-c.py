@@ -95,12 +95,20 @@ def sprite_paths(block: str) -> list[str]:
     return loop_b.unique(SPRITE_PATH_RE.findall(block))
 
 
-def pose_scale_override(block: str) -> str | None:
+def pose_scale_override(block: str, rpy: str = "") -> str | None:
     m = re.search(
-        r'dog_sprite\(\s*"[^"]+"(?:\s*,\s*"[^"]+")?\s*,\s*([0-9.]+)\s*\)',
+        r'dog_sprite\(\s*"[^"]+"(?:\s*,\s*"[^"]+")?\s*,\s*([0-9.]+)\s*[,)]',
         block,
     )
-    return m.group(1) if m else None
+    if m:
+        return m.group(1)
+    # 2026-10-03：別名尺寫在表裡（key="路徑#別名"），image 定義不再寫數字
+    k = re.search(r'\bkey\s*=\s*"([^"]+)"', block)
+    if k and rpy:
+        table = loop_c_fit.parse_pose_scales(rpy)
+        if k.group(1) in table:
+            return str(table[k.group(1)])
+    return None
 
 
 def lock_status(md: str) -> tuple[str, str]:
@@ -329,7 +337,7 @@ def main() -> int:
     for pose in dogs:
         block = image_block(rpy, "dog", pose)
         paths = sprite_paths(block)
-        override = pose_scale_override(block)
+        override = pose_scale_override(block, rpy)
         if not paths:
             fail(f"image dog {pose} 沒有 dog_sprite 路徑")
             missing.append(f"dog {pose}")

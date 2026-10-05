@@ -22,6 +22,8 @@ init python:
         "shoe_sleep",
         "nose_touch",
         "door_sleep",
+        "leash_grip",
+        "leash_handover",
         "water_bowl",
         "back_to_back",
     ]
@@ -77,6 +79,22 @@ init python:
             "image": "gallery secret_door_sleep",
             "path": "gallery/secret-door-sleep.png",
             "button": "✓  紀念照片｜門邊小睡",
+        },
+        ## S09 留下：握繩特寫。不進結局 A 整組，只在當下解鎖。
+        "leash_grip": {
+            "title": "紀念照片｜緊握牽繩",
+            "hint": "繩還繞在自己手腕上。",
+            "image": "gallery secret_leash_grip",
+            "path": "gallery/secret-leash-grip.png",
+            "button": "✓  紀念照片｜緊握牽繩",
+        },
+        ## S09 送走：交繩特寫。不進結局 A 整組，只在當下解鎖。
+        "leash_handover": {
+            "title": "紀念照片｜交付牽繩",
+            "hint": "最後一圈從袖口鬆開。",
+            "image": "gallery secret_leash_handover",
+            "path": "gallery/secret-leash-handover.png",
+            "button": "✓  紀念照片｜交付牽繩",
         },
         "water_bowl": {
             "title": "紀念照片｜新水碗",

@@ -205,6 +205,7 @@ Centered full body (or clearly readable crop). SOLID FLAT BLACK (#000000) backgr
 | `dog guard_door`（醒著守門呼吸，pause 0.28） | `guard-door/dog-guard-door-01~05.png` | `dog-guard-door.png` | S07 |
 | `dog drink_bowl`（舔水，pause 0.10） | `drink-bowl/dog-drink-bowl-01~05.png` | `dog-drink-bowl.png` | S08 回家 |
 | `dog farewell`（尾巴貼地輕掃，pause 0.20） | `farewell/dog-farewell-01~05.png` | `dog-farewell.png` | S09 告別 |
+| `dog cafe_sniff_anim`（鼻尖低下聞兩下，pause 0.16） | `cafe-sniff/dog-cafe-sniff-01~05.png` | `dog-cafe-tense.png` | S09 咖啡廳，面朝同事的手 |
 
 呼吸動畫幀序＝吸氣淺→深（依 content bbox 高度排序），ping-pong 播放即一次完整呼吸；亮度已校正到與靜態原圖一致（模型輸出偏暗約 10%）。
 
@@ -325,6 +326,50 @@ S02 後門第一次見面用 `dog-s04-anxious`（**0.551**），不用舊 `dog-a
 
 **旁白對位（與 `section_10_share_the_key.md` 同表）：** 留下玄關 `paper_bag`＠mid → 退半步 `parallel`＠far → 客廳監工 `parallel`＠mid → 聞繩 far→near → 廚房 `kitchen_door`。結局 A `halfstep`→`back_sleep`＠near。結局 B `check_sleep`＠far → `drink_bowl`＠mid → `check_sleep`＠mid。結局 D `door_edge`＠far。C 無狗。coda A 開場 `parallel`。
 
+### 3.12 S09 告別／玄關／咖啡廳（2026-10-03｜透視重校）
+
+S09 五張背景都改透視（`PERSP`＋`PV_PT`，見 `image_scale.md` §0.0）：狗 zoom＝人 zoom×**0.3346**，跟著腳底 y 變。頭距母尺 `cafe_tense` **1.026**，其他姿勢排成一列比頭寬重校。所有 S09 狗圖都 `foot="auto"` 裁腳下透明。
+
+| 標籤 | 尺（舊→新） | 說明 |
+|------|-------------|------|
+| `farewell`（5 幀） | `ANIM_POSE_SCALE` **0.468→0.70**（靜態 `dog-farewell.png` 同） | 只 S09。舊值頭只有 cafe_tense 一半（74 px） |
+| `cafe_tense`／`cafe_sniff_anim` | **1.026**（不變） | 母尺；站姿 ≈ 人 ×0.205。sniff 幀底留白 6、tense 24 → 靠 foot 裁切對齊，不再掉 18 列 |
+| `cafe_refuse` | **1.05→0.90** | 低伏，頭對齊 tense（舊值頭大約 15%） |
+| `parallel_s09` | 別名 `dog/dog-parallel.png#s09` **0.447**（原 0.524 不動） | 夜／週六客廳 |
+| `leash_wait_s09` | 別名 `#s09` **0.74**（原 0.677 不動，S08 用） | 玄關 |
+| `paper_bag_s09` | 別名 `#s09` **1.10**（原 0.630 不動，S10 用） | 玄關聞紙袋；底留白 295（含紙袋）必裁。Loop C 不拿眼距改它（只抓到 1 眼） |
+
+站位（腳底 y）：夜客廳 560、週六遠狗 560、告別 600、玄關 571–580（在蹲著的予安左前方）、咖啡廳一律 596（by_yuan 880／hand 640·700·625／guard 900／mid 735／home 900）。
+
+### 3.13 全場透視重校（2026-10-03b｜S02–S08 室內、S10、結局）
+
+S02 後門、S03–S08 室內、S10 與結局都改透視（`image_scale.md` §2「全場透視」）：狗 zoom＝人×**0.3346**、隨腳底 y 變，全部 `foot="auto"`。pose 尺一律**頭框對齊 `cafe_tense` 1.026**（`tools/hgrid.py` 同 zoom、腳底對齊、加格線目測頭寬；Loop C 眼距只當參考）。§3.6–3.10 的「visH 鎖定」值作廢，以下表為準。
+
+| 路徑列／別名 | 舊→新 | 用在 | 備註 |
+|------|-------|------|------|
+| `dog-s04-anxious.png` | 0.551→**0.385** | S02 後門 | 頭大約 43% |
+| `dog-ear-flat.png`／`#s05` | 0.653→**0.60**／0.409→**0.60** | S02、S03／S05、S07 客廳 | #s05 ＝全域 |
+| `dog-parallel.png` | 0.524→**0.447**（＝#s09） | S03、S04、S05、S10、結局 | |
+| `dog-coat-sniff.png`／`dog-stair-watch.png` | 0.656→**0.92**／0.615→**0.82** | S03 梯廳門墊 | `#s05`（S06）也是 0.82 |
+| `dog-head-up.png`／`chair-paw`／`chair-stuck` | 0.332→**0.445**／0.401→**0.72**／0.472→**0.76** | S05 | chair-paw 後腳站，總高本來就高過站姿 |
+| `dog-chin-hover.png`／`chin-floor` | 0.558→**0.475**／0.424→**0.37** | S04、S07 | 舊值頭大 15–17% |
+| `dog-head-turn.png`／`street-tense` | 0.369→**0.49**／0.808→**1.05** | S04 | |
+| `dog-ear-perk.png` | **0.414 不動** | S04、S07 | 目測頭約 81%，但正面臉 Loop C 眼距已 +13%，兩把尺衝突 → 留原值 |
+| `dog/wag/*`（5 幀） | 0.750→**1.35** | S04 尾隨、S05 | 舊值頭只有 54% |
+| `sniff-wire`（5 幀）／`#cu` | 0.605→**0.89**／特寫 `#cu` **0.605** | S05 全景／會後特寫 `sniff_wire_cu` | 特寫框不跟著變 |
+| `dog-kitchen-door.png` | 0.577→**0.89** | S04、S10 | |
+| `dog-s06-retreat`／`flinch`／`freeze`／`behind-legs` | 0.557→**0.455**／0.38→**0.43**／0.62→**0.535**／0.38→**0.40** | S06 | retreat 舊值頭大 22% |
+| `dog-s04-anxious.png#s07_low` | 0.43→**0.37** | S07 臥室 | |
+| `dog-halfstep.png#s08` | 0.529→**0.58**（＝全域） | S08 玄關 | |
+| `dog-harness-bite`／`s08-threshold`／`s08-sniff-harness` | 0.658→**0.875**／0.449→**0.60**／0.457→**0.56** | S08 玄關 | threshold、sniff_harness 取目測與 Loop C 之間 |
+| `dog-leash-wait.png#pv` | 新別名 **0.74**（全域 0.677 不動） | S08 玄關、S10、結局（`dog leash_wait_pv`） | 全域值是 S08 巷口 `dog_ratio` 的基準，不能改 |
+| `dog-drink-bowl`（含動畫）／`shoe-sleep` | 0.84→**1.03**／0.414→**0.45** | S08、S10 結局 B | |
+| `dog-paper-bag-sniff.png`／`door-edge` | 0.630→**1.10**／0.434→**0.50** | S10、結局 | paper_bag ＝ #s09 |
+
+**不動：** S08 巷口全部（`s08_tense`／`s08_walk` 1.22／`s08_explore`／`s08_startle`／`s08_resist`、`leash_wait` 0.677）、`guard_door` 0.438、`halfstep` 0.580、`sniff_bento` 0.647（Loop C 頭框 +56% 是低頭頭框誤抓；與 halfstep 並排目測頭只大約一成，留原值）、特寫 `nose_tip`／`forehead_nudge`。
+
+**幼犬年齡：** 第一章全程用同一個狗／人比 0.3346（約 2–3 月齡短腿幼犬，坐姿頭頂約 32 cm）。劇本沒有在 Ch1 內寫明長大；之後章節若要長大，改 `DOG_PERSON_RATIO` 或加章別比例，不要回頭改 pose 尺。
+
 ---
 
 ## 4. 完整 Prompt 模板（複製）
@@ -417,11 +462,15 @@ No text, no logo, no purebred markers, no trust meter UI.
 | 2026-09-07 | S05 站姿族收到約 76px：`chair-paw` 0.401／`chair-stuck` 0.472／`s05_ear_flat` 0.409／`s05_stair_watch` 0.572；切姿收斂（一次抬頭、一次嗅線） |
 | 2026-09-07 | S04 切姿收斂（選前回到 parallel）；選 C 客廳用 `s04_low` 0.369；勿把後門 anxious 0.551 拿進客廳 |
 | 2026-09-28b | S08 巷口走位不再用坐姿 `leash_wait` 滑行，暫用 `s08_explore`；待產 `dog-s08-walk.png`（同狗同胸背帶、抬頭走姿、面左） |
-| 2026-09-28c | 落地 `dog-s08-walk.png`（`dog s08_walk`，pose 1.204，foot 1501），取代走位中的 `s08_explore` 暫代 |
+| 2026-09-28c | 落地 `dog-s08-walk.png`（`dog s08_walk`，foot 1501），取代走位中的 `s08_explore` 暫代。pose 初值 1.204，2026-09-28d 改 **1.22**（現值；1.204 已作廢） |
+| 2026-10-03 | S09 透視重校：farewell 0.468→0.70、cafe_refuse 1.05→0.90、S09 別名 parallel 0.447／leash_wait 0.74／paper_bag 1.10；全部 foot 裁切。image 定義的數字字面值全部改成 `key=` 別名列或移除（值不變），lint 會抓新的字面值。見 §3.12 |
+| 2026-10-03b | 全場透視重校（S02–S08 室內、S10、結局）：狗＝人×0.3346、全部 foot 裁切；約 30 個 pose 改頭框對齊 cafe_tense；新別名 `leash_wait#pv` 0.74、`sniff-wire #cu` 0.605。S08 巷口不動。見 §3.13 |
 | 2026-09-28e | 重產 `dog-s08-walk.png`：舊圖腿長、白襪、嘴微張，與探路／縮步不是同一隻。新圖對齊 explore／tense；內容高約 705，pose 仍 1.22，foot 1501。舊圖在 `assets/_raw/dog-s08-walk-prev.png` |
 
 ---
 
-*更新：2026-09-28e｜重產 `dog-s08-walk.png`，外型對齊探路／縮步*  
+*更新：2026-10-03b｜§3.13 全場透視重校*  
+*前次：2026-10-03｜§3.12 S09 透視重校；`s08_walk` 舊 1.204 註記更正*  
+*前次：2026-09-28e｜重產 `dog-s08-walk.png`，外型對齊探路／縮步*  
 *前次：2026-09-28b｜S08 巷口走位暫用 `s08_explore`*  
 *前次：2026-09-20｜S08 玄關站位＋`leash_wait` 頭距對齊 halfstep*
